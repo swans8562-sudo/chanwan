@@ -2083,6 +2083,35 @@
       will-change: transform, opacity;
       animation: cwFloatParticle 2.1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
     }
+  
+    /* v69 Delicate Pearl-Lavender Overall Visual Polish (Light & Dark Contrast-Safe) */
+    #chatHeaderStatusRow {
+      padding: 2px 0;
+    }
+    :root:not([data-dark="1"]) #cwQuickPhraseBar button {
+      background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%) !important;
+      color: #4b2d82 !important;
+      border: 1px solid rgba(196, 162, 232, 0.36) !important;
+      box-shadow: 0 3px 10px -5px rgba(108, 72, 178, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+    }
+    [data-dark="1"] #cwQuickPhraseBar button {
+      background: linear-gradient(180deg, rgba(46, 33, 72, 0.92) 0%, rgba(28, 20, 46, 0.96) 100%) !important;
+      color: #f3ebff !important;
+      border: 1px solid rgba(226, 192, 138, 0.28) !important;
+    }
+    /* Soft Orchid Halo on Partner Avatar */
+    .cw-msg-row > .rounded-full {
+      box-shadow: 0 4px 14px -3px rgba(168, 85, 247, 0.42), 0 0 0 2.5px rgba(255, 255, 255, 0.92) !important;
+    }
+    [data-dark="1"] .cw-msg-row > .rounded-full {
+      box-shadow: 0 4px 16px -3px rgba(168, 85, 247, 0.48), 0 0 0 2px rgba(238, 206, 154, 0.36) !important;
+    }
+    /* Crisp Elevated Active Dock Pill */
+    :root:not([data-dark="1"]) .dock-item.active {
+      background: linear-gradient(180deg, #ffffff 0%, #f6edff 100%) !important;
+      border: 1px solid rgba(196, 152, 232, 0.52) !important;
+      box-shadow: 0 8px 20px -8px rgba(108, 72, 178, 0.30), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+    }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -2947,7 +2976,7 @@
           <div class="flex items-center gap-1.5 shrink-0">
             <button id="chatRoomThemeBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition" title="대화방 테마 변경 (기본·위챗·카카오톡)" aria-label="대화방 테마"><span class="w-4 h-4 rounded-full border-2 border-white shadow-sm inline-block" id="chatRoomThemeDot" style="background: linear-gradient(135deg, #7c59bd, #9b7ae2);"></span></button>
             <button id="toggleChatSearchBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0" title="대화 검색"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="search"></span></button>
-            <button id="openChatBgBtn" type="button" class="btn-ghost w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+            <button id="openChatBgBtn" type="button" class="btn-ghost w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-royal)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.1" fill="var(--accent-royal)"/><circle cx="17.5" cy="10.5" r="1.1" fill="var(--accent-royal)"/><circle cx="8.5" cy="7.5" r="1.1" fill="var(--accent-royal)"/><circle cx="6.5" cy="12.5" r="1.1" fill="var(--accent-royal)"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-1 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9z"/></svg></button>
             <button id="openChatVaultBtn" type="button" class="btn-ghost w-7 h-7 sm:w-auto sm:px-2.5 sm:h-8 rounded-full inline-flex items-center justify-center gap-1 text-[11px] font-semibold whitespace-nowrap shrink-0" title="사진·링크 모아보기"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="archive"></span><span class="hidden sm:inline" data-i18n="chatVaultBtn">모아보기</span></button>
           </div>
         </div>
@@ -3087,26 +3116,7 @@
 
     <!-- ==================== TAB 5: 기록·일기 (일기 + 커플문답 + 타임캡슐 편지 + 메모) ==================== -->
     <section id="tab-diary" class="tab-panel space-y-4">
-      <!-- v56 Secret Time Capsule Letter Card -->
-      <div id="spaceTimeCapsuleCard" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>⏳</span> <span id="tcCardTitle">비밀 타임캡슐 편지</span></div>
-          <span id="tcCountBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">0통</span>
-        </div>
-        <div class="royal-subcard rounded-2xl p-3 space-y-2">
-          <div class="flex items-center gap-2">
-            <input id="tcTitleInput" type="text" maxlength="40" class="royal-input flex-1 min-w-0 rounded-xl px-3 py-1.5 text-xs outline-none" placeholder="편지 제목 (예: 100일 뒤의 우리에게)" />
-            <input id="tcDateInput" type="date" class="royal-input rounded-xl px-2.5 py-1.5 text-xs outline-none shrink-0" />
-          </div>
-          <textarea id="tcBodyInput" rows="2" maxlength="600" class="royal-input w-full rounded-xl px-3 py-2 text-xs outline-none resize-none" placeholder="미래의 그날까지 비밀로 봉인할 마음을 적어 보세요..."></textarea>
-          <div class="flex justify-end">
-            <button id="tcSealBtn" type="button" class="btn-royal px-3.5 py-1.5 rounded-full text-xs font-bold">🔒 편지 봉인하기</button>
-          </div>
-        </div>
-        <div id="tcListContainer" class="space-y-2"></div>
-      </div>
-
-      <div class="royal-card-gold rounded-2xl p-2.5 sm:p-3.5 space-y-2">
+<div class="royal-card-gold rounded-2xl p-2.5 sm:p-3.5 space-y-2">
         <div class="flex items-center justify-between gap-2 px-1">
           <h2 class="text-sm sm:text-base font-bold leading-tight truncate" data-i18n="coupleSpaceTitle">🦋 우리만의 커플공간</h2>
           <span class="text-[10px] text-champagne font-semibold shrink-0" data-i18n="coupleSubTag">우리의 소중한 기록</span>
@@ -4212,7 +4222,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v68</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v1</span>
           </div>
         </div>
       </div>
@@ -6535,7 +6545,7 @@
               .replace(/징찬이랑|징찬하고/g, '和靖灿')
               .replace(/징찬이?(?:한테|에게)/g, '给靖灿')
               .replace(/징찬이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '靖灿')
-              .replace(/(?:晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿')
+              .replace(/(?:俊灿|军灿|君灿|晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿').replace(/^靖灿[,，\s]+(?=.*靖灿)/, '')
               .replace(/靖灿(?:이|아|가|는|를|도|의)/g, '靖灿')
               .replace(/jing\s*chan(?:\s*i|a)?/gi, '靖灿');
           }
@@ -14052,9 +14062,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v68',
-          date: '2026-11-25',
-          koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
+          ver: 'Prime 4 · v1',
+          date: '2026-11-26',
+          koTitle: 'Prime 4 정식 출시 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI · 커플 기능 총집합',
           zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
           koItems: [
             '✨ 위챗 스타일 롱프레스 플로팅 메뉴: 말풍선(사진 포함)을 0.4초 꾹 누르면 리액션 24종·원문/번역 복사·답장·공지 고정·수정·삭제가 팝업으로 뜨고, 평소 말풍선 아래는 시간+읽음만 남겨 극강 미니멀 완성',
@@ -14074,7 +14084,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v68 更新日志' : '📜 灿完时光 Prime 3 · v68 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v1 更新日志' : '📜 灿完时光 Prime 4 · v1 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -25708,116 +25718,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         bar.appendChild(editBtn);
       }
       window.__renderQuickPhraseBar = renderQuickPhraseBar;
-
-      // 4) Secret Time Capsule Letters (Synced via state.timeCapsules)
-      function getTodayStr() {
-        const d = new Date();
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}-${m}-${day}`;
-      }
-
-      function renderTimeCapsules() {
-        const box = document.getElementById('tcListContainer');
-        const state = __st(); if (!box || !state) return;
-        const isZh = state.lang === 'zh';
-        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-        setTxt('tcCardTitle', isZh ? '秘密时光胶囊信件' : '비밀 타임캡슐 편지');
-        setTxt('tcSealBtn', isZh ? '🔒 封存信件' : '🔒 편지 봉인하기');
-        const ti = document.getElementById('tcTitleInput');
-        const bi = document.getElementById('tcBodyInput');
-        if (ti) ti.placeholder = isZh ? '信件标题（如：100天后的我们）' : '편지 제목 (예: 100일 뒤의 우리에게)';
-        if (bi) bi.placeholder = isZh ? '写下封存到那一天的悄悄话...' : '미래의 그날까지 비밀로 봉인할 마음을 적어 보세요...';
-
-        if (!Array.isArray(state.timeCapsules)) state.timeCapsules = [];
-        setTxt('tcCountBadge', isZh ? `${state.timeCapsules.length} 封` : `${state.timeCapsules.length}통`);
-        if (!state.timeCapsules.length) {
-          box.innerHTML = `<div class="text-center text-xs text-mut py-3">${isZh ? '还没有封存的时光胶囊，写下第一封吧 💌' : '아직 봉인된 타임캡슐이 없어요. 첫 편지를 남겨 보세요 💌'}</div>`;
-          return;
-        }
-        const today = getTodayStr();
-        box.innerHTML = '';
-        state.timeCapsules.slice().sort((a, b) => String(a.unlockDate || '').localeCompare(String(b.unlockDate || ''))).forEach(cap => {
-          const unlocked = !cap.unlockDate || today >= cap.unlockDate;
-          const diffMs = cap.unlockDate ? (new Date(cap.unlockDate + 'T00:00:00') - new Date(today + 'T00:00:00')) : 0;
-          const dLeft = Math.max(0, Math.ceil(diffMs / 86400000));
-          const card = document.createElement('div');
-          card.className = 'royal-subcard rounded-2xl p-3 space-y-1.5 border';
-          card.style.borderColor = unlocked ? 'rgba(200,165,110,0.48)' : 'var(--border-subtle)';
-          const authorLbl = cap.author === 'jingchan' ? '靖灿' : '수완';
-          card.innerHTML = `
-            <div class="flex items-center justify-between gap-2">
-              <div class="font-bold text-xs truncate">${unlocked ? '✨ ' : '🔒 '}${__esc(cap.title || '')}</div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" style="background:${unlocked ? 'rgba(16,185,129,0.14)' : 'var(--accent-royal-soft)'}; color:${unlocked ? '#059669' : 'var(--accent-royal)'};">${unlocked ? (isZh ? '可开启' : '열기 가능') : `D-${dLeft}`}</span>
-            </div>
-            <div class="text-[10px] text-mut flex items-center justify-between">
-              <span>${authorLbl} · ${cap.unlockDate || ''}</span>
-              <button type="button" class="tc-del-btn opacity-65 hover:opacity-100 text-[10px]" data-id="${cap.id}">${isZh ? '删除' : '삭제'}</button>
-            </div>
-            <div class="tc-body-wrap text-xs leading-relaxed whitespace-pre-wrap break-words ${unlocked && cap.opened ? '' : 'hidden'} pt-1 border-t" style="border-color: var(--border-subtle);">${__esc(cap.body || '')}</div>
-          `;
-          card.addEventListener('click', (e) => {
-            if (e.target && e.target.closest && e.target.closest('.tc-del-btn')) {
-              state.timeCapsules = state.timeCapsules.filter(x => x && x.id !== cap.id);
-              __save(true);
-              renderTimeCapsules();
-              return;
-            }
-            if (!unlocked) {
-              if (__api().showToast) {
-                __toast(isZh ? `🔒 还要等 ${dLeft} 天（${cap.unlockDate}）才能打开哦` : `🔒 ${cap.unlockDate}까지 ${dLeft}일 남았어요! 그날 열어보세요`);
-              }
-              return;
-            }
-            cap.opened = !cap.opened;
-            if (cap.opened) triggerCoupleKeywordEffect('축하해요');
-            __save(true);
-            renderTimeCapsules();
-          });
-          box.appendChild(card);
-        });
-      }
-      window.__renderTimeCapsules = renderTimeCapsules;
-
-      const dateInp = document.getElementById('tcDateInput');
-      if (dateInp && !dateInp.value) {
-        const d = new Date(Date.now() + 7 * 86400000);
-        dateInp.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      }
-      document.getElementById('tcSealBtn')?.addEventListener('click', () => {
-        const state = __st(); if (!state) return;
-        const isZh = state.lang === 'zh';
-        const ti = document.getElementById('tcTitleInput');
-        const di = document.getElementById('tcDateInput');
-        const bi = document.getElementById('tcBodyInput');
-        const body = (bi?.value || '').trim();
-        const unlockDate = (di?.value || '').trim();
-        const title = (ti?.value || '').trim() || (isZh ? '给未来的你' : '미래의 너에게');
-        if (!body) {
-          __toast(isZh ? '请先写下信件内容 💌' : '봉인할 편지 내용을 먼저 적어 주세요 💌');
-          return;
-        }
-        if (!Array.isArray(state.timeCapsules)) state.timeCapsules = [];
-        state.timeCapsules.unshift({
-          id: `tc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-          title,
-          body,
-          unlockDate,
-          author: state.myRole || 'suwan',
-          createdAt: Date.now(),
-          opened: false
-        });
-        if (ti) ti.value = '';
-        if (bi) bi.value = '';
-        __save(true);
-        renderTimeCapsules();
-        __toast(isZh ? '🔒 时光胶囊已封存并同步给对方 ✨' : '🔒 타임캡슐을 봉인했어요! 상대방에게도 동기화돼요 ✨');
-      });
-
       renderQuickPhraseBar();
-      renderTimeCapsules();
-      setTimeout(() => { renderQuickPhraseBar(); renderTimeCapsules(); }, 1000);
+      setTimeout(() => { renderQuickPhraseBar(); }, 1000);
     })();
   </script>
 
