@@ -2007,6 +2007,9 @@
     }
     #cwQuickPhraseBar::-webkit-scrollbar { display: none; }
     #cwQuickPhraseBar { -ms-overflow-style: none; scrollbar-width: none; }
+    #chatHeaderStatusRow { overflow-x: auto; flex-wrap: nowrap; -ms-overflow-style: none; scrollbar-width: none; }
+    #chatHeaderStatusRow::-webkit-scrollbar { display: none; }
+    #chatHeaderStatusRow > * { flex-shrink: 0; }
   
     /* v58 Max-Speed Mobile Optimization (0ms tap delay + 60fps scroll containment) */
     button, a, input, textarea, select, .cw-msg-bubble, .dock-item {
@@ -2018,6 +2021,180 @@
     }
     #tab-home .royal-card, #tab-diary .royal-card, #tab-settings .royal-card {
       contain: layout style;
+    }
+  
+    /* v59 Haute-Boutique Obsidian & Champagne-Gold Luxury Polish (60fps static CSS) */
+    [data-dark="1"] .royal-card,
+    [data-theme="velvet-dusk"] .royal-card,
+    [data-theme="royal-amethyst"] .royal-card {
+      background: linear-gradient(168deg, rgba(31, 22, 49, 0.95) 0%, rgba(18, 13, 30, 0.98) 100%) !important;
+      border: 1px solid rgba(224, 194, 255, 0.13) !important;
+      border-top: 1px solid rgba(238, 206, 154, 0.30) !important;
+      box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.68), inset 0 1px 0 rgba(255, 238, 210, 0.08) !important;
+    }
+    [data-dark="1"] .royal-subcard,
+    [data-theme="velvet-dusk"] .royal-subcard,
+    [data-theme="royal-amethyst"] .royal-subcard {
+      background: linear-gradient(180deg, rgba(38, 28, 58, 0.62) 0%, rgba(24, 17, 39, 0.72) 100%) !important;
+      border: 1px solid rgba(224, 194, 255, 0.10) !important;
+    }
+    /* Rich Royal Amethyst Primary Buttons in Dark Mode (replaces flat charcoal) */
+    [data-dark="1"] .btn-royal,
+    [data-theme="velvet-dusk"] .btn-royal,
+    [data-theme="royal-amethyst"] .btn-royal {
+      background: linear-gradient(135deg, #6b43b8 0%, #4b2a8c 62%, #3a1f70 100%) !important;
+      color: #fdfbff !important;
+      border: 1px solid rgba(236, 204, 152, 0.34) !important;
+      box-shadow: 0 8px 22px -6px rgba(107, 67, 184, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.30) !important;
+    }
+    /* High-Contrast Engraved Champagne-Gold Pills in Dark Mode (fixes dark text on 무료 키 받기) */
+    [data-dark="1"] .btn-gold,
+    [data-theme="velvet-dusk"] .btn-gold,
+    [data-theme="royal-amethyst"] .btn-gold {
+      background: linear-gradient(135deg, rgba(226, 188, 124, 0.24) 0%, rgba(168, 128, 68, 0.14) 100%) !important;
+      color: #f8e3ba !important;
+      border: 1px solid rgba(238, 202, 138, 0.52) !important;
+      box-shadow: 0 6px 18px -6px rgba(212, 170, 96, 0.32), inset 0 1px 0 rgba(255, 245, 224, 0.26) !important;
+    }
+    /* Refined Ghost Buttons in Dark Mode */
+    [data-dark="1"] .btn-ghost,
+    [data-theme="velvet-dusk"] .btn-ghost,
+    [data-theme="royal-amethyst"] .btn-ghost {
+      background: rgba(255, 255, 255, 0.045) !important;
+      border: 1px solid rgba(224, 194, 255, 0.14) !important;
+      color: #ede5fb !important;
+    }
+    /* Light Mode Subtle Champagne Top Rim */
+    :root:not([data-dark="1"]) .royal-card {
+      border-top: 1px solid rgba(212, 176, 120, 0.32) !important;
+    }
+    /* Sleek Bottom Dock Champagne Hairline */
+    nav.fixed.bottom-0, .cw-bottom-dock {
+      border-top: 1px solid rgba(232, 198, 138, 0.18) !important;
+    }
+    [data-dark="1"] .dock-item.active,
+    [data-theme="velvet-dusk"] .dock-item.active {
+      background: linear-gradient(160deg, rgba(98, 62, 166, 0.92) 0%, rgba(56, 33, 98, 0.96) 100%) !important;
+      border: 1px solid rgba(238, 204, 148, 0.48) !important;
+      box-shadow: 0 8px 22px -6px rgba(107, 67, 184, 0.55), inset 0 1px 0 rgba(255, 242, 218, 0.28) !important;
+    }
+  
+    /* v61 Bottom Safe-Area & Zero-Clip Fix (Android/iOS gesture bar + bottom dock clearance) */
+    body:not(.cw-chat-lock) main {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .bottom-dock, nav.bottom-dock {
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    body.cw-chat-lock #tab-translator.active {
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+    #cwQuickPhraseBar {
+      padding-top: 2px !important;
+      padding-bottom: 4px !important;
+    }
+    #chatForm {
+      padding-top: 6px !important;
+      padding-bottom: 4px !important;
+    }
+    /* Ensure bottom modals also clear Android/iOS bottom safe area */
+    #cwChatBgModal, #cwActivityPickerModal {
+      padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+  
+    /* v62 Complete Maison Luxury Suite — Every Tab, Bubble, Pill, Input & Header (60fps static CSS) */
+    header {
+      border-bottom: 1px solid rgba(226, 192, 138, 0.18) !important;
+    }
+    /* Dark Mode My Chat Bubbles: Obsidian-Amethyst Satin + Champagne Top Rim (replaces flat charcoal) */
+    [data-dark="1"] .cw-msg-row.mine .cw-msg-bubble,
+    [data-theme="velvet-dusk"] .cw-msg-row.mine .cw-msg-bubble,
+    [data-theme="royal-amethyst"] .cw-msg-row.mine .cw-msg-bubble {
+      background: linear-gradient(145deg, #4b2d82 0%, #311c59 58%, #231342 100%) !important;
+      border: 1px solid rgba(224, 194, 255, 0.20) !important;
+      border-top: 1px solid rgba(242, 210, 158, 0.42) !important;
+      box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.22) !important;
+    }
+    /* Dark Mode Partner Bubbles: Smoked Velvet Plum + Rose-Pearl Rim */
+    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
+    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble,
+    [data-theme="royal-amethyst"] .cw-msg-row.partner .cw-msg-bubble {
+      background: linear-gradient(155deg, rgba(46, 33, 69, 0.96) 0%, rgba(26, 18, 42, 0.98) 100%) !important;
+      border: 1px solid rgba(242, 198, 232, 0.18) !important;
+      border-top: 1px solid rgba(255, 224, 244, 0.24) !important;
+    }
+    /* Light Mode My Bubbles: Silky Royal Orchid + Champagne Highlight */
+    :root:not([data-dark="1"]) .cw-msg-row.mine .cw-msg-bubble {
+      border-top: 1px solid rgba(255, 242, 224, 0.48) !important;
+      box-shadow: 0 10px 24px -10px rgba(108, 66, 178, 0.42), inset 0 1px 0 rgba(255, 246, 235, 0.34) !important;
+    }
+    /* Quick Phrase Chips: Jewel-Glass Boutique Pills */
+    #cwQuickPhraseBar button {
+      border: 1px solid rgba(226, 192, 138, 0.26) !important;
+      box-shadow: 0 2px 8px -4px rgba(88, 56, 148, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+      letter-spacing: -0.01em;
+    }
+    /* Recessed Luxury Input Capsules (All Tabs) */
+    .royal-input, input[type="text"].royal-input, input[type="date"].royal-input, textarea.royal-input {
+      border: 1px solid rgba(212, 180, 244, 0.22) !important;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    [data-dark="1"] .royal-input,
+    [data-theme="velvet-dusk"] .royal-input {
+      background: rgba(16, 11, 27, 0.72) !important;
+      border-color: rgba(224, 194, 255, 0.16) !important;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    }
+    .royal-input:focus, .royal-input:focus-within {
+      border-color: rgba(232, 198, 138, 0.58) !important;
+      box-shadow: 0 0 0 3px rgba(168, 120, 232, 0.18) !important;
+    }
+    /* Refined Modals & Sheets */
+    #cwChatBgModal > div, #cwActivityPickerModal > div, #chatVaultModal > div {
+      border: 1px solid rgba(232, 198, 138, 0.28) !important;
+      box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.55) !important;
+    }
+    /* Ultra-Slim Jewel Scrollbars */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(196, 162, 232, 0.32); border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+  
+    /* v63 Zero-Clip Toggle/Status Pills & Full Dark-Theme Luxury Coverage */
+    #chatHeaderStatusRow {
+      gap: 5px !important;
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    #chatHeaderStatusRow::-webkit-scrollbar { display: none; }
+    #chatHeaderStatusRow > * {
+      flex-shrink: 0 !important;
+      max-width: none !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+    .cw-msg-bubble button, .cw-msg-bubble span.rounded-full {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nuance-toggle-btn {
+      padding-left: 8px !important;
+      padding-right: 9px !important;
+      gap: 3px !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    /* Ensure midnight-black / midnight-navy / rose-noir get the full v62 Obsidian-Amethyst + Champagne Luxury look */
+    [data-theme="midnight-black"] .cw-msg-row.mine .cw-msg-bubble,
+    [data-theme="midnight-navy"] .cw-msg-row.mine .cw-msg-bubble,
+    [data-theme="rose-noir"] .cw-msg-row.mine .cw-msg-bubble {
+      background: linear-gradient(145deg, #4b2d82 0%, #311c59 58%, #231342 100%) !important;
+      border: 1px solid rgba(224, 194, 255, 0.22) !important;
+      border-top: 1px solid rgba(242, 210, 158, 0.44) !important;
+      box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.24) !important;
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -2875,16 +3052,16 @@
         <div class="flex items-center justify-between gap-2 border-b pb-2 shrink-0" style="border-color: var(--border-subtle);">
           <div class="min-w-0 flex-1">
             <div id="chatHeaderStatusRow" class="flex items-center justify-start gap-2 min-w-0">
-              <span id="chatPartnerPresenceBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold shrink-0 whitespace-nowrap leading-none" style="background: var(--surface-2); color: var(--text-muted);">⚪ 오프라인</span>
-              <span id="chatPartnerStatusPill" class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold truncate max-w-[165px] leading-none" style="background: var(--accent-royal-soft); color: var(--accent-royal);"></span>
-              <button id="cwActivityPillBtn" type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold shrink-0 whitespace-nowrap leading-none transition active:scale-95" style="background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-subtle);" title="실시간 상태 바꾸기">✨ 상태</button>
+              <span id="chatPartnerPresenceBadge" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold shrink-0 whitespace-nowrap leading-none" style="background: var(--surface-2); color: var(--text-muted);">⚪ 오프라인</span>
+              <span id="chatPartnerStatusPill" class="hidden inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap shrink-0 leading-none" style="background: var(--accent-royal-soft); color: var(--accent-royal);"></span>
+              <button id="cwActivityPillBtn" type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold shrink-0 whitespace-nowrap leading-none transition active:scale-95" style="background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-subtle);" title="실시간 상태 바꾸기">✨ 상태</button>
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <button id="chatRoomThemeBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition" title="대화방 테마 변경 (기본·위챗·카카오톡)" aria-label="대화방 테마"><span class="w-4 h-4 rounded-full border-2 border-white shadow-sm inline-block" id="chatRoomThemeDot" style="background: linear-gradient(135deg, #7c59bd, #9b7ae2);"></span></button>
             <button id="toggleChatSearchBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0" title="대화 검색"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="search"></span></button>
-            <button id="openChatBgBtn" type="button" class="btn-ghost w-8 h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
-            <button id="openChatVaultBtn" type="button" class="btn-ghost px-2.5 h-8 rounded-full inline-flex items-center gap-1.5 text-[11px] font-semibold whitespace-nowrap" title="사진·링크 모아보기"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="archive"></span><span data-i18n="chatVaultBtn">모아보기</span></button>
+            <button id="openChatBgBtn" type="button" class="btn-ghost w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+            <button id="openChatVaultBtn" type="button" class="btn-ghost w-7 h-7 sm:w-auto sm:px-2.5 sm:h-8 rounded-full inline-flex items-center justify-center gap-1 text-[11px] font-semibold whitespace-nowrap shrink-0" title="사진·링크 모아보기"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="archive"></span><span class="hidden sm:inline" data-i18n="chatVaultBtn">모아보기</span></button>
           </div>
         </div>
 
@@ -4148,7 +4325,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v58</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v63</span>
           </div>
         </div>
       </div>
@@ -10971,7 +11148,8 @@
             const isEmojiMsg = showText && !hasMedia && !m.sticker && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim());
             const isPureLinkMsg = /^https?:\/\/\S+$/i.test(String(m.original || '').trim());
             const isVoiceBubble = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/'));
-            const isFailedTrans = showText && !isEmojiMsg && !isPureLinkMsg && !isVoiceBubble && (!m.translated || m.translated === m.original || /^\[(中文|한국어)\]\s*/.test(String(m.translated || '')));
+            const isPendingTrans = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim());
+            const isFailedTrans = !isPendingTrans && showText && !isEmojiMsg && !isPureLinkMsg && !isVoiceBubble && (!m.translated || m.translated === m.original || /^\[(中文|한국어)\]\s*/.test(String(m.translated || '')));
             const hasTrans = showText && !isEmojiMsg && !isVoiceBubble && (isFailedTrans || !!(m.translated && m.translated !== m.original));
             const accVal = Number(m.accuracy) || (isFailedTrans ? 65 : (String(m.engine || '').includes('Gemini') || String(m.engine || '').includes('큐레이션') || String(m.engine || '').includes('사전') ? 96 : (String(m.engine || '').includes('Google') || String(m.engine || '').includes('Simply') ? 92 : 86)));
             const accColor = accVal >= 90 ? '#059669' : (accVal >= 80 ? '#d97706' : '#e11d48');
@@ -13182,9 +13360,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isPureUrl = /^https?:\/\/\S+$/i.test(text);
           const isEmojiOnly = !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(text) && text.length > 0;
           const needsAsyncTrans = !isPureUrl && !isEmojiOnly;
+          const __cachedQuick = (needsAsyncTrans && typeof __getTransCache === 'function') ? __getTransCache(text) : null;
           const initRes = isPureUrl
             ? { original: text, translated: state.lang === 'zh' ? '🎬 分享了一个视频/网页链接' : '🎬 동영상·링크를 공유했어요', pronunciation: '', tone: '🎬 링크 공유', nuance: '', engine: '링크 직통', tgtLang: state.lang === 'zh' ? 'ko' : 'zh', accuracy: 100 }
-            : { original: text, translated: '', pronunciation: '', tone: '', nuance: '', engine: '', tgtLang: state.lang === 'zh' ? 'ko' : 'zh', accuracy: 0 };
+            : (__cachedQuick && __cachedQuick.translated
+                ? __cachedQuick
+                : { original: text, translated: needsAsyncTrans ? (state.lang === 'zh' ? '⏳ 正在翻译...' : '⏳ 번역 중...') : '', pronunciation: '', tone: '', nuance: '', engine: '', tgtLang: state.lang === 'zh' ? 'ko' : 'zh', accuracy: 0 });
           const _myChatRole = state.myRole || state.chat.activeSender || 'suwan';
           const senderName = _myChatRole === 'suwan' ? '수완(完)' : '靖灿(灿)';
           const autoPhotoCat = mediaData ? detectPhotoCategory(text) : '';
@@ -13966,7 +14147,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v58',
+          ver: 'Prime 3 · v63',
           date: '2026-11-25',
           koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
           zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
@@ -13988,7 +14169,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v58 更新日志' : '📜 灿完时光 Prime 3 · v58 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v63 更新日志' : '📜 灿完时光 Prime 3 · v63 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
