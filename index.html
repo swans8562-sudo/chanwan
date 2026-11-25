@@ -14,7 +14,11 @@
   <meta id="themeColorMeta" name="theme-color" content="#120d1f" />
   <link rel="manifest" href="./manifest_clean.json?v=22" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
-  <title>灿完时光 — 우리 둘만의 공간</title>
+    <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
+  <link rel="preconnect" href="https://generativelanguage.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://ntfy.sh" crossorigin />
+  <link rel="dns-prefetch" href="https://broker.emqx.io" />
+<title>灿完时光 — 우리 둘만의 공간</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
   <!-- 100% Zero-CDN Offline-Ready Build for Mainland China & Baidu Browser (No VPN Required) -->
@@ -1774,6 +1778,247 @@
     body[data-maker-shadow="0"] .royal-card-gold { box-shadow: none !important; }
     body[data-maker-shadow="2"] .royal-card,
     body[data-maker-shadow="2"] .royal-card-gold { box-shadow: 0 14px 36px -6px rgba(68, 40, 130, 0.18) !important; }
+  
+    /* v52 Global Speed Boost: mobile GPU scroll & layout containment */
+    .cw-msg-row { contain: layout style; content-visibility: auto; contain-intrinsic-size: auto 92px; }
+    .royal-card, .royal-subcard { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    #chatMessagesList, #chatVaultBody { -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
+  
+    /* v53 Luxury Boutique Editorial Polish (60fps GPU-safe) */
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.014em;
+    }
+    .royal-card {
+      border-radius: 24px !important;
+      border: 1px solid rgba(124, 89, 189, 0.13) !important;
+      box-shadow: 0 10px 30px -10px rgba(72, 42, 128, 0.11), 0 1px 3px rgba(72, 42, 128, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+      transition: transform 0.18s ease, box-shadow 0.22s ease;
+    }
+    .royal-subcard {
+      border-radius: 18px !important;
+      border: 1px solid rgba(124, 89, 189, 0.10) !important;
+      box-shadow: 0 2px 10px -4px rgba(72, 42, 128, 0.06) !important;
+    }
+    [data-dark="1"] .royal-card,
+    [data-theme="velvet-dusk"] .royal-card,
+    [data-theme="royal-amethyst"] .royal-card {
+      border-color: rgba(216, 180, 254, 0.15) !important;
+      box-shadow: 0 14px 34px -12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+    }
+    [data-dark="1"] .royal-subcard,
+    [data-theme="velvet-dusk"] .royal-subcard,
+    [data-theme="royal-amethyst"] .royal-subcard {
+      border-color: rgba(216, 180, 254, 0.11) !important;
+      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.4) !important;
+    }
+    /* Satin Primary Buttons */
+    .btn-royal {
+      background-image: linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 55%, rgba(0,0,0,0.08) 100%) !important;
+      box-shadow: 0 6px 18px -6px rgba(96, 58, 168, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+      letter-spacing: -0.01em;
+    }
+    .btn-royal:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 10px -4px rgba(96, 58, 168, 0.35) !important;
+    }
+    .btn-gold {
+      background-image: linear-gradient(135deg, rgba(255,248,231,0.35) 0%, rgba(200,165,110,0.12) 100%) !important;
+      border: 1px solid rgba(200, 165, 110, 0.45) !important;
+      box-shadow: 0 4px 14px -6px rgba(176, 138, 72, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+    }
+    /* Luxury Messenger Bubbles */
+    .cw-msg-row.mine .cw-msg-bubble {
+      border-radius: 20px 20px 6px 20px !important;
+      background-image: linear-gradient(148deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 52%, rgba(0,0,0,0.08) 100%) !important;
+      box-shadow: 0 8px 20px -8px rgba(88, 56, 148, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+    }
+    .cw-msg-row.partner .cw-msg-bubble {
+      border-radius: 20px 20px 20px 6px !important;
+      box-shadow: 0 6px 18px -8px rgba(64, 42, 110, 0.12), 0 1px 2px rgba(64, 42, 110, 0.05) !important;
+    }
+    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
+    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble {
+      box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    }
+    /* Refined Champagne-Violet Floating Bottom Dock */
+    .dock-item.active {
+      border: 1px solid rgba(200, 165, 110, 0.42) !important;
+      box-shadow: 0 6px 16px -6px rgba(108, 72, 178, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    }
+    [data-dark="1"] .dock-item.active,
+    [data-theme="velvet-dusk"] .dock-item.active {
+      border-color: rgba(212, 175, 118, 0.38) !important;
+      box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+    }
+    /* Silky Input Capsule Focus Glow */
+    .royal-input:focus-within {
+      border-color: rgba(124, 89, 189, 0.45) !important;
+      box-shadow: 0 0 0 3px rgba(124, 89, 189, 0.12) !important;
+    }
+    /* Editorial Masthead Shimmer */
+    header h1, .cw-brand-title {
+      letter-spacing: 0.05em;
+    }
+  
+    /* v54 Dreamy Romantic Pearl-Rose-Lavender Polish (60fps static CSS) */
+    body {
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(232, 200, 255, 0.38) 0%, transparent 44%),
+        radial-gradient(circle at 88% 14%, rgba(255, 208, 228, 0.34) 0%, transparent 42%),
+        radial-gradient(circle at 50% 92%, rgba(246, 226, 196, 0.28) 0%, transparent 48%) !important;
+      background-attachment: scroll;
+    }
+    [data-dark="1"] body,
+    [data-theme="velvet-dusk"] body,
+    [data-theme="royal-amethyst"] body {
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(147, 88, 226, 0.24) 0%, transparent 46%),
+        radial-gradient(circle at 86% 18%, rgba(236, 114, 174, 0.18) 0%, transparent 44%),
+        radial-gradient(circle at 50% 90%, rgba(206, 162, 108, 0.14) 0%, transparent 48%) !important;
+    }
+    /* Shimmering Rose-Lavender Editorial Title */
+    header h1, .cw-brand-title {
+      background: linear-gradient(125deg, #6b3fa0 0%, #b75b9e 52%, #c9975b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+      filter: drop-shadow(0 1px 6px rgba(173, 108, 196, 0.18));
+    }
+    [data-dark="1"] header h1,
+    [data-theme="velvet-dusk"] header h1,
+    [data-dark="1"] .cw-brand-title,
+    [data-theme="velvet-dusk"] .cw-brand-title {
+      background: linear-gradient(125deg, #e9d5ff 0%, #fbcfe8 55%, #f5d8a8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+      filter: drop-shadow(0 2px 10px rgba(233, 213, 255, 0.25));
+    }
+    /* Luminous Pearl-Blush Partner Bubble & Silky Orchid-Plum My Bubble */
+    .cw-msg-row.partner .cw-msg-bubble {
+      background: linear-gradient(180deg, #ffffff 0%, #fdf8ff 100%) !important;
+      border: 1px solid rgba(196, 152, 232, 0.26) !important;
+      box-shadow: 0 8px 22px -10px rgba(124, 77, 178, 0.18), 0 1px 3px rgba(219, 138, 186, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+    }
+    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
+    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble {
+      background: linear-gradient(165deg, rgba(44, 31, 68, 0.96) 0%, rgba(33, 22, 52, 0.98) 100%) !important;
+      border-color: rgba(232, 188, 255, 0.18) !important;
+    }
+    .cw-msg-row.mine .cw-msg-bubble {
+      background-image: linear-gradient(138deg, rgba(255, 198, 232, 0.22) 0%, rgba(255, 255, 255, 0) 48%, rgba(44, 16, 88, 0.16) 100%) !important;
+      box-shadow: 0 10px 24px -8px rgba(126, 72, 196, 0.38), inset 0 1px 0 rgba(255, 235, 248, 0.34) !important;
+    }
+    /* Romantic Ring around Chat Avatars */
+    .cw-msg-row .rounded-full {
+      box-shadow: 0 4px 12px -4px rgba(146, 86, 206, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.85);
+    }
+    [data-dark="1"] .cw-msg-row .rounded-full,
+    [data-theme="velvet-dusk"] .cw-msg-row .rounded-full {
+      box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px rgba(233, 213, 255, 0.28);
+    }
+    /* Soft Pearl Header Buttons & Romantic Active Dock Lift */
+    header button.rounded-full {
+      border: 1px solid rgba(196, 162, 232, 0.26) !important;
+      box-shadow: 0 4px 14px -6px rgba(112, 72, 168, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    }
+    [data-dark="1"] header button.rounded-full,
+    [data-theme="velvet-dusk"] header button.rounded-full {
+      border-color: rgba(233, 213, 255, 0.16) !important;
+      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    }
+    .dock-item.active {
+      background: linear-gradient(180deg, rgba(255, 250, 255, 0.96) 0%, rgba(250, 238, 255, 0.92) 100%) !important;
+      border: 1px solid rgba(214, 166, 232, 0.48) !important;
+      transform: translateY(-2px);
+    }
+    [data-dark="1"] .dock-item.active,
+    [data-theme="velvet-dusk"] .dock-item.active {
+      background: linear-gradient(180deg, rgba(66, 44, 102, 0.95) 0%, rgba(46, 30, 74, 0.95) 100%) !important;
+      border-color: rgba(244, 188, 224, 0.36) !important;
+    }
+    /* Dreamy Rose-Lavender Card Top Accent */
+    .royal-card {
+      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 248, 255, 0.18) 100%);
+    }
+    [data-dark="1"] .royal-card,
+    [data-theme="velvet-dusk"] .royal-card {
+      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 198, 232, 0.01) 100%);
+    }
+  
+    /* v55 Swipe-to-Reply & Custom Chat Wallpaper */
+    #chatMessagesList {
+      position: relative;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
+    #chatMessagesList.cw-has-bg {
+      border-radius: 20px;
+      padding: 10px 8px;
+    }
+    .cw-swipe-hint {
+      position: fixed;
+      z-index: 9998;
+      pointer-events: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      background: rgba(124, 89, 189, 0.92);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(88, 56, 148, 0.35);
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.12s ease, transform 0.12s ease;
+    }
+  
+    /* v56 Double-Tap Heart, Keyword Particles & Quick Phrase Strip */
+    @keyframes cwHeartPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+      35% { opacity: 1; transform: translate(-50%, -75%) scale(1.25); }
+      100% { opacity: 0; transform: translate(-50%, -140%) scale(0.95); }
+    }
+    @keyframes cwFloatParticle {
+      0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translate3d(var(--dx, 0px), -220px, 0) scale(1.15) rotate(var(--rot, 18deg)); }
+    }
+    .cw-dbl-heart-pop {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      font-size: 28px;
+      animation: cwHeartPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .cw-fx-particle {
+      position: fixed;
+      bottom: 84px;
+      z-index: 9999;
+      pointer-events: none;
+      font-size: 22px;
+      will-change: transform, opacity;
+      animation: cwFloatParticle 2.1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    }
+    #cwQuickPhraseBar::-webkit-scrollbar { display: none; }
+    #cwQuickPhraseBar { -ms-overflow-style: none; scrollbar-width: none; }
+  
+    /* v58 Max-Speed Mobile Optimization (0ms tap delay + 60fps scroll containment) */
+    button, a, input, textarea, select, .cw-msg-bubble, .dock-item {
+      touch-action: manipulation;
+    }
+    .tab-panel:not(.active) {
+      display: none !important;
+      content-visibility: hidden;
+    }
+    #tab-home .royal-card, #tab-diary .royal-card, #tab-settings .royal-card {
+      contain: layout style;
+    }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -2150,7 +2395,47 @@
 
       <!-- Prime 3 v41: Weekly Bilingual Couple Report Card -->
       <div id="homeWeeklyReportCard" data-home-card="weekly" class="royal-card rounded-3xl p-4 space-y-2.5">
+              <!-- v55 Home Today's Couple Phrase Card -->
+      <div id="homeCouplePhraseCard" data-home-card="couple-phrase" class="royal-card rounded-3xl p-4 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 font-bold text-xs sm:text-sm">
+            <span>💬</span>
+            <span id="homePhraseCardTitle">오늘의 우리 대화 표현</span>
+          </div>
+          <span id="homePhraseToneBadge" class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">다정한 표현</span>
+        </div>
+        <div class="royal-subcard rounded-2xl p-3 space-y-1">
+          <div id="homePhrasePrimary" class="text-sm font-bold leading-snug break-words">오늘 하루도 고생 많았어, 보고 싶어!</div>
+          <div id="homePhraseSecondary" class="text-xs text-sec leading-snug break-words">今天辛苦啦，好想你呀！</div>
+        </div>
+        <div class="flex items-center justify-end gap-2">
+          <button id="homePhraseSpeakBtn" type="button" class="btn-ghost px-3 py-1.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1">🔊 <span id="homePhraseSpeakLbl">발음 듣기</span></button>
+          <button id="homePhraseNextBtn" type="button" class="btn-royal px-3 py-1.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1">🔄 <span id="homePhraseNextLbl">다른 표현</span></button>
+        </div>
+      </div>
+
+      <!-- v57 Home Memory Time Machine Card -->
+      <div id="homeTimeMachineCard" data-home-card="time-machine" class="royal-card rounded-3xl p-4 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 font-bold text-xs sm:text-sm">
+            <span>🕰️</span>
+            <span id="homeTmTitle">추억 타임머신</span>
+          </div>
+          <span id="homeTmDateBadge" class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">랜덤 추억</span>
+        </div>
+        <div id="homeTmBody" class="royal-subcard rounded-2xl p-3 space-y-2">
+          <div id="homeTmPhotoWrap" class="hidden rounded-xl overflow-hidden max-h-44">
+            <img id="homeTmPhotoImg" src="" alt="memory" class="w-full h-40 object-cover cursor-pointer" />
+          </div>
+          <div id="homeTmMainText" class="text-xs sm:text-sm font-semibold leading-snug break-words">버튼을 눌러 두 사람의 소중한 추억을 꺼내 보세요 ✨</div>
+          <div id="homeTmSubText" class="text-[11px] text-sec leading-snug break-words"></div>
+        </div>
+        <div class="flex justify-end">
+          <button id="homeTmDrawBtn" type="button" class="btn-royal px-3.5 py-1.5 rounded-full text-[11px] font-bold inline-flex items-center gap-1">✨ <span id="homeTmDrawLbl">추억 꺼내기</span></button>
+        </div>
+      </div>
+
+<div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-1.5 font-bold text-xs sm:text-sm"><span>📊</span> <span id="weeklyReportTitle">이번 주 우리 커플 리포트</span></div>
           <span id="weeklyReportRange" class="text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">최근 7일</span>
         </div>
@@ -2592,11 +2877,13 @@
             <div id="chatHeaderStatusRow" class="flex items-center justify-start gap-2 min-w-0">
               <span id="chatPartnerPresenceBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold shrink-0 whitespace-nowrap leading-none" style="background: var(--surface-2); color: var(--text-muted);">⚪ 오프라인</span>
               <span id="chatPartnerStatusPill" class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold truncate max-w-[165px] leading-none" style="background: var(--accent-royal-soft); color: var(--accent-royal);"></span>
+              <button id="cwActivityPillBtn" type="button" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold shrink-0 whitespace-nowrap leading-none transition active:scale-95" style="background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-subtle);" title="실시간 상태 바꾸기">✨ 상태</button>
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <button id="chatRoomThemeBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition" title="대화방 테마 변경 (기본·위챗·카카오톡)" aria-label="대화방 테마"><span class="w-4 h-4 rounded-full border-2 border-white shadow-sm inline-block" id="chatRoomThemeDot" style="background: linear-gradient(135deg, #7c59bd, #9b7ae2);"></span></button>
             <button id="toggleChatSearchBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0" title="대화 검색"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="search"></span></button>
+            <button id="openChatBgBtn" type="button" class="btn-ghost w-8 h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
             <button id="openChatVaultBtn" type="button" class="btn-ghost px-2.5 h-8 rounded-full inline-flex items-center gap-1.5 text-[11px] font-semibold whitespace-nowrap" title="사진·링크 모아보기"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="archive"></span><span data-i18n="chatVaultBtn">모아보기</span></button>
           </div>
         </div>
@@ -2677,6 +2964,7 @@
           </div>
         </div>
 
+        <div id="cwQuickPhraseBar" class="shrink-0 flex items-center gap-1.5 overflow-x-auto pb-1.5 pt-1 px-0.5"></div>
         <form id="chatForm" class="shrink-0 space-y-1.5 pt-2 w-full min-w-0 border-t" style="border-color: var(--border-subtle);">
           <input id="chatCameraInput" type="file" accept="image/*" capture="environment" class="hidden" />
           <input id="chatVideoCamInput" type="file" accept="video/*" capture="environment" class="hidden" />
@@ -2735,6 +3023,25 @@
 
     <!-- ==================== TAB 5: 기록·일기 (일기 + 커플문답 + 타임캡슐 편지 + 메모) ==================== -->
     <section id="tab-diary" class="tab-panel space-y-4">
+      <!-- v56 Secret Time Capsule Letter Card -->
+      <div id="spaceTimeCapsuleCard" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>⏳</span> <span id="tcCardTitle">비밀 타임캡슐 편지</span></div>
+          <span id="tcCountBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">0통</span>
+        </div>
+        <div class="royal-subcard rounded-2xl p-3 space-y-2">
+          <div class="flex items-center gap-2">
+            <input id="tcTitleInput" type="text" maxlength="40" class="royal-input flex-1 min-w-0 rounded-xl px-3 py-1.5 text-xs outline-none" placeholder="편지 제목 (예: 100일 뒤의 우리에게)" />
+            <input id="tcDateInput" type="date" class="royal-input rounded-xl px-2.5 py-1.5 text-xs outline-none shrink-0" />
+          </div>
+          <textarea id="tcBodyInput" rows="2" maxlength="600" class="royal-input w-full rounded-xl px-3 py-2 text-xs outline-none resize-none" placeholder="미래의 그날까지 비밀로 봉인할 마음을 적어 보세요..."></textarea>
+          <div class="flex justify-end">
+            <button id="tcSealBtn" type="button" class="btn-royal px-3.5 py-1.5 rounded-full text-xs font-bold">🔒 편지 봉인하기</button>
+          </div>
+        </div>
+        <div id="tcListContainer" class="space-y-2"></div>
+      </div>
+
       <div class="royal-card-gold rounded-2xl p-2.5 sm:p-3.5 space-y-2">
         <div class="flex items-center justify-between gap-2 px-1">
           <h2 class="text-sm sm:text-base font-bold leading-tight truncate" data-i18n="coupleSpaceTitle">🦋 우리만의 커플공간</h2>
@@ -3841,7 +4148,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v45</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v58</span>
           </div>
         </div>
       </div>
@@ -5142,7 +5449,7 @@
         try {
           if ('Notification' in window && Notification.permission === 'granted') {
             const openUrl = (location.protocol.startsWith('http') ? (location.origin + location.pathname) : './');
-            const uniqueTag = `chanwan-live-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+            const uniqueTag = `chanwan-live-${routeTab}`;
             const opts = {
               body,
               icon: './icon-192.png?v=21',
@@ -5184,18 +5491,42 @@
           const baseCh = customCh || ((typeof getSyncRoomCode === 'function' ? getSyncRoomCode() : '') || 'chanwan-suwan-jingchan-live2026').trim().replace(/[^a-zA-Z0-9_-]/g, '');
           if (!baseCh) return;
           const targetCh = `${baseCh}-${partnerRole}`;
-          const clickUrl = (location.protocol.startsWith('http') ? (location.origin + location.pathname) : 'https://chanwanlove111.netlify.app/');
-          const payloadBody = `${title}\n${String(body || '').slice(0, 180)}`;
-          const headers = {
-            'Title': 'Chanwan Shiguang',
-            'Priority': 'high',
-            'Tags': 'purple_heart',
-            'Click': clickUrl
-          };
-          fetch(`https://ntfy.sh/${encodeURIComponent(targetCh)}`, { method: 'POST', headers, body: payloadBody, keepalive: true }).catch(() => {});
-          if (customCh) {
-            fetch(`https://ntfy.sh/${encodeURIComponent(customCh)}`, { method: 'POST', headers, body: payloadBody }).catch(() => {});
+          const clickUrl = (location.protocol.startsWith('http') ? (location.origin + location.pathname) : 'https://swans8562-sudo.github.io/chanwan/');
+          const rawTitle = String(title || '');
+          const isHeartbeat = /하트비트|心跳/.test(rawTitle);
+          const isSpace = /커플공간|답글|空间/.test(rawTitle);
+          // Clean KakaoTalk-style 1-line title in receiver's language (Suwan gets Korean, Jingchan gets Chinese)
+          const cleanTitle = partnerRole === 'suwan'
+            ? (isHeartbeat ? '징찬 · 하트비트' : (isSpace ? '징찬 · 커플공간' : '징찬'))
+            : (isHeartbeat ? '秀完 · 心跳' : (isSpace ? '秀完 · 情侣空间' : '秀完'));
+          let cleanMsg = String(body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+          if (!cleanMsg) cleanMsg = partnerRole === 'suwan' ? '새 메시지가 도착했어요' : '发来了一条新消息';
+          // Translate boilerplate media/heartbeat captions into receiver's language cleanly
+          if (partnerRole === 'jingchan') {
+            if (cleanMsg === '지금 보고 싶어요 💜') cleanMsg = '现在好想你';
+            else if (cleanMsg === '🎬 동영상을 보냈어요') cleanMsg = '发送了一段视频';
+            else if (cleanMsg === '📷 사진을 보냈어요') cleanMsg = '发送了一张照片';
+            else if (cleanMsg === '🎙️ 음성 메시지를 보냈어요') cleanMsg = '发送了一条语音';
+            else if (cleanMsg === '새 메시지가 도착했어요') cleanMsg = '发来了一条新消息';
+          } else {
+            cleanMsg = cleanMsg.replace(/^[🎬📷🎙️💌💓💬]+\s*/u, '');
           }
+          const sendJson = (topic) => {
+            fetch('https://ntfy.sh', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                topic,
+                title: cleanTitle,
+                message: cleanMsg,
+                priority: 4,
+                click: clickUrl
+              }),
+              keepalive: true
+            }).catch(() => {});
+          };
+          sendJson(targetCh);
+          if (customCh) sendJson(customCh);
         } catch (_) {}
       }
       window.__cwSendPartnerPush = sendPartnerNativePush;
@@ -5622,7 +5953,9 @@
           : fullBody;
 
         // Fire OS system banner notification (respects lock-screen privacy toggle)
-        fireSystemNotification('灿完时光', osBody, item.tab, item.sub);
+        const cleanOsTitle = String(title || '').replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+/u, '').trim() || (isZh ? '秀完' : '징찬');
+        const cleanOsBody = String(osBody || '').replace(/\s+/g, ' ').trim();
+        fireSystemNotification(cleanOsTitle, cleanOsBody, item.tab, item.sub);
 
         // Inside the app itself, ALWAYS show the full notification body!
         const banner = document.getElementById('liveNotifBanner');
@@ -6102,7 +6435,8 @@
           [/(^|\s)ㅇㅇ(?=\s|[?!.~,]|$)/g, '$1응'], [/(^|\s)ㄴㄴ(?=\s|[?!.~,]|$)/g, '$1아니'], [/(^|\s)ㅇㅋ(?=\s|[?!.~,]|$)/g, '$1오케이'],
           [/(^|\s)ㄱㄱ(?=\s|[?!.~,]|$)/g, '$1가자'], [/(^|\s)ㄱㅅ(?=\s|[?!.~,]|$)/g, '$1고마워'], [/(^|\s)ㅈㅅ(?=\s|[?!.~,]|$)/g, '$1미안해'],
           [/(^|\s)ㅎㅇ(?=\s|[?!.~,]|$)/g, '$1하이'], [/(^|\s)ㅂㅂ(?=\s|[?!.~,]|$)/g, '$1잘 가'], [/(^|\s)ㅊㅋ(?=\s|[?!.~,]|$)/g, '$1축하해'],
-          [/(^|\s)웅웅?(?=\s|[?!.~,]|$)/g, '$1응']
+          [/(^|\s)웅웅?(?=\s|[?!.~,]|$)/g, '$1응'],
+          [/(^|[\s,.!?~])자기(?=[\s,.!?~]|$)/g, '$1자기야']
         ];
         for (const [rx, rep] of phraseMap) s = s.replace(rx, rep);
         // 3) Smart Unicode Hangul cute ㅇ-받침 stripper (그랭? -> 그래?, 가야징 -> 가야지, 알았엉 -> 알았어, 먹었엉 -> 먹었어)
@@ -6132,7 +6466,7 @@
               .replace(/징찬이랑|징찬하고/g, '和靖灿')
               .replace(/징찬이?(?:한테|에게)/g, '给靖灿')
               .replace(/징찬이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '靖灿')
-              .replace(/(?:晶灿|静灿|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿')
+              .replace(/(?:晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿')
               .replace(/靖灿(?:이|아|가|는|를|도|의)/g, '靖灿')
               .replace(/jing\s*chan(?:\s*i|a)?/gi, '靖灿');
           }
@@ -6142,7 +6476,7 @@
               .replace(/수완이랑|수완하고/g, '和秀完')
               .replace(/수완이?(?:한테|에게)/g, '给秀完')
               .replace(/수완이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '秀完')
-              .replace(/(?:秀婉|水完|素完|寿完|修完|秀万)/g, '秀完')
+              .replace(/(?:秀婉|秀莞|水完|素完|寿完|修完|秀万|施万|秀丸|守完|手腕|足智多谋)/g, '秀完')
               .replace(/秀完(?:이|아|가|는|를|도|의)/g, '秀完')
               .replace(/su\s*wan(?:\s*i|a)?/gi, '秀完');
           }
@@ -6159,6 +6493,12 @@
           if (/수완/.test(orig) && !/秀完/.test(s)) {
             s = /^好想你/.test(s) ? s.replace(/^好想你/, '好想秀完') : `秀完，${s}`;
           }
+          // Vocative '자기' -> '宝贝' (never '自己'!)
+          if (/(^|[\s,.!?~])자기(?=[\s,.!?~]|$)/.test(orig) && !/자기\s*(자신|전|소개|관리|개발|계발)/.test(orig)) {
+            s = s.replace(/自己(?=[\s,.!?~。！？]|$)/g, '宝贝');
+          }
+          // Deduplicate accidental '秀完，秀完' or '靖灿，靖灿'
+          s = s.replace(/秀完[\s,，]*秀完/g, '秀完').replace(/靖灿[\s,，]*靖灿/g, '靖灿');
           s = s.replace(/呵呵呵?/g, '哈哈').replace(/祝您/g, '祝你');
         } else if (tgtLang === 'ko') {
           if (/靖灿|징찬|jing\s*chan/i.test(orig) || /靖灿|jing\s*chan/i.test(s)) {
@@ -6166,6 +6506,10 @@
               .replace(/靖灿/g, '징찬')
               .replace(/(?:정찬|징천|경찬|청찬|진찬)/g, '징찬')
               .replace(/jing\s*chan/gi, '징찬');
+          }
+          if (/^\s*秀完\s*(?:欧巴|哥哥)[\s\uD800-\uDBFF\uDC00-\uDFFF❤️💕💗💜✨~!.,。！？]*$/.test(orig)) {
+            const emTail = (orig.match(/[\uD800-\uDBFF\uDC00-\uDFFF❤️💕💗💜✨~!]+/g) || []).join('');
+            return `수완 오빠${emTail}`;
           }
           if (/秀完|수완|su\s*wan/i.test(orig) || /秀完|수완|su\s*wan/i.test(s)) {
             s = s
@@ -6357,8 +6701,9 @@
           const styleDesc = styleMap[toneMode] || styleMap.lover;
           const prompt = `You are the highest-tier Korean-Chinese bilingual translator and cultural nuance specialist. Translate into natural, native-level ${tgtLang === 'zh' ? 'Simplified Chinese' : 'Korean'} using a ${styleDesc}. Return ONLY JSON with keys: "translated", "pronunciation" (Pinyin if Chinese, Hangul/romanization guide if Korean), "literal" (meaning in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "tone" (short tone tag in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "nuance" (1-2 clear sentences in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'} explaining subtle feeling and context), "alts" (array of 2 natural alternative expressions), "accuracy" (integer 90-99 estimating translation precision). Text: ${text}`;
           const models = [
-            { id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro 👑', minAcc: 95, maxAcc: 99, timeout: 11000 },
-            { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash ⚡', minAcc: 92, maxAcc: 97, timeout: 7000 }
+            { id: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash-Lite ⚡', minAcc: 95, maxAcc: 99, timeout: 8000 },
+            { id: 'gemini-3.8-flash', label: 'Gemini 3.8 Flash 👑', minAcc: 96, maxAcc: 99, timeout: 10000 },
+            { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite ✨', minAcc: 93, maxAcc: 97, timeout: 7000 }
           ];
           for (const m of models) {
             try {
@@ -6366,7 +6711,7 @@
               const timer = setTimeout(() => ctrl.abort(), m.timeout);
               const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m.id}:generateContent?key=${encodeURIComponent(apiKey)}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctrl.signal,
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json', temperature: 0.2 } })
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json' } })
               });
               clearTimeout(timer);
               if (res.ok) {
@@ -6582,13 +6927,14 @@
       const __cwEngineSkipUntil = {};
       function __getActiveGeminiKey() {
         try {
-          const k1 = (localStorage.getItem('cw_gemini_api_key_v1') || '').trim();
-          const k2 = (state && state.settings && state.settings.geminiApiKey || '').trim();
-          const k = k1 || k2;
-          if (k && !k1) localStorage.setItem('cw_gemini_api_key_v1', k);
+          const kState = (state && state.settings && state.settings.geminiApiKey || '').trim();
+          const kLs = (localStorage.getItem('cw_gemini_api_key_v1') || '').trim();
+          const k = kState || kLs;
+          if (k && k !== kLs) localStorage.setItem('cw_gemini_api_key_v1', k);
           return k;
         } catch (_) { return ''; }
       }
+      window.__getActiveGeminiKey = __getActiveGeminiKey;
       async function __callGeminiCoupleTranslate(rawText, toneOverride) {
         const gKey = __getActiveGeminiKey();
         if (!gKey) return null;
@@ -6601,10 +6947,12 @@
         window.__cwLastGeminiErr = '';
         const tryModel = async (modelName, disableThinking) => {
           const ctrl = new AbortController();
-          const tm = setTimeout(() => ctrl.abort(), 6500);
+          const tm = setTimeout(() => ctrl.abort(), 2800);
           try {
-            const genCfg = { temperature: 0.2, responseMimeType: 'application/json' };
-            if (disableThinking) genCfg.thinkingConfig = { thinkingBudget: 0 };
+            const genCfg = { responseMimeType: 'application/json' };
+            if (/gemini-3\.5-flash-lite/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'minimal' };
+            else if (/gemini-3\.[68]-flash/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'low' };
+            else if (disableThinking || /gemini-2\.5/i.test(modelName)) genCfg.thinkingConfig = { thinkingBudget: 0 };
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(gKey)}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -6627,12 +6975,44 @@
           }
         };
         try {
-          let resp = await tryModel('gemini-2.5-flash', true);
-          if (!resp.ok && (resp.status === 400 || resp.status === 404)) {
-            resp = await tryModel('gemini-2.0-flash', false);
+          const cachedDisc = (() => { try { return (localStorage.getItem('cw_gemini_active_model_v1') || '').trim(); } catch (_) { return ''; } })();
+          const modelChain = [];
+          if (cachedDisc) modelChain.push([cachedDisc, false]);
+          ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'].forEach(m => {
+            if (!modelChain.some(x => x[0] === m)) modelChain.push([m, false]);
+          });
+          let resp = { ok: false, status: 0, json: null };
+          let usedModel = cachedDisc || 'gemini-3.5-flash-lite';
+          for (const [mName, noThink] of modelChain) {
+            resp = await tryModel(mName, noThink);
+            if (resp.ok && resp.json) {
+              usedModel = mName;
+              try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
+              break;
+            }
+            if (resp.status === 403 || resp.status === 401 || resp.status === 0) break;
+          }
+          // Future-proof auto-discovery: if all known model names 404, query /v1beta/models to pick the live Flash model automatically!
+          if (!resp.ok && resp.status === 404) {
+            try {
+              const lr = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(gKey)}`);
+              if (lr.ok) {
+                const lj = await lr.json();
+                const list = Array.isArray(lj.models) ? lj.models : [];
+                const pick = list.find(m => m && Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent') && /flash/i.test(m.name || '') && !/tts|image|audio|live|embedding/i.test(m.name || ''));
+                if (pick && pick.name) {
+                  const cleanM = String(pick.name).replace(/^models\//, '');
+                  resp = await tryModel(cleanM, false);
+                  if (resp.ok && resp.json) {
+                    usedModel = cleanM;
+                    try { localStorage.setItem('cw_gemini_active_model_v1', cleanM); } catch (_) {}
+                  }
+                }
+              }
+            } catch (_) {}
           }
           if (!resp.ok || !resp.json) {
-            if (resp.status === 403 || resp.status === 429) __cwEngineSkipUntil.gemini = Date.now() + 45000;
+            if (resp.status === 0) __cwEngineSkipUntil.gemini = Date.now() + 10 * 60 * 1000; else if (resp.status === 403 || resp.status === 429) __cwEngineSkipUntil.gemini = Date.now() + 60000;
             return null;
           }
           const j = resp.json;
@@ -6648,7 +7028,7 @@
             pronunciation: String(p.pronunciation || '').trim(),
             tone: String(p.tone || '').trim(),
             nuance: String(p.nuance || '').trim(),
-            engine: 'Gemini 2.5 Flash',
+            engine: `Gemini (${usedModel})`,
             tgtLang,
             accuracy: 99
           };
@@ -6838,7 +7218,7 @@
             nuanceZh: `向对方真诚表达谢意与心疼的温暖${styleZh}。`
           };
         }
-        if (/(미안|죄송|잘못|화났|삐졌|对不起|抱歉|错|生气)/.test(combined)) {
+        if (/(미안|죄송|잘못|对不起|抱歉|错了)/.test(combined)) {
           return {
             toneKo: '🙏 진심 어린 사과', toneZh: '🙏 真诚致歉',
             nuanceKo: `상대방의 마음을 살피며 미안함을 솔직히 전하는 ${styleKo}이에요.`,
@@ -6879,6 +7259,41 @@
             toneZh: isCute ? '🎀 温柔乖巧回应' : '💬 温柔回应',
             nuanceKo: `상대방의 말을 부드럽게 받아들이고 공감하는 ${styleKo} 대답이에요.`,
             nuanceZh: `温柔回应并顺从对方心意的${styleZh}表达。`
+          };
+        }
+        if (/(최고|대박|짱|축하|예뻐|이뻐|귀여워|귀여웡|잘했어|멋져|천재|厉害|太棒了|真棒|好看|可爱|恭喜|真厉害)/.test(combined)) {
+          return {
+            toneKo: '🌟 칭찬 · 설렘', toneZh: '🌟 夸奖 · 开心',
+            nuanceKo: `상대방을 기분 좋게 칭찬하고 응원하는 밝은 ${styleKo}이에요.`,
+            nuanceZh: `由衷夸奖与鼓励对方的温暖${styleZh}。`
+          };
+        }
+        if (/(서운|흥|시러|시렁|안 놀아|왜 안|삐졌|질투|哼|不理你|委屈|吃醋|生气了)/.test(combined)) {
+          return {
+            toneKo: '🥺 귀여운 투정 · 서운함', toneZh: '🥺 撒娇委屈',
+            nuanceKo: `관심과 애정을 바라며 살짝 투정 부리는 귀여운 ${styleKo}이에요.`,
+            nuanceZh: `带着一点小委屈、想让对方哄哄的撒娇${styleZh}。`
+          };
+        }
+        if (/(만나|보자|갈게|데이트|여행|약속|같이 가|몇 시|见面|约会|去找你|一起去|什么时候见)/.test(combined)) {
+          return {
+            toneKo: '💌 설레는 약속 · 계획', toneZh: '💌 甜蜜约定',
+            nuanceKo: `함께할 시간을 기대하며 이야기를 나누는 ${styleKo}이에요.`,
+            nuanceZh: `期待彼此相聚与安排计划的甜蜜${styleZh}。`
+          };
+        }
+        if (isPlayful && !isQuestion) {
+          return {
+            toneKo: '😆 장난 · 유쾌함', toneZh: '😆 俏皮开心',
+            nuanceKo: `웃으며 가볍게 장난치듯 분위기를 띄우는 유쾌한 ${styleKo}이에요.`,
+            nuanceZh: `轻松逗趣、带着笑意的俏皮${styleZh}。`
+          };
+        }
+        if (/^(안녕|하이|ㅎㅇ|잘\s*가|잘\s*갔다와|조심해서\s*가|嗨|你好|路上小心|注意安全)/.test(raw)) {
+          return {
+            toneKo: '👋 다정한 인사', toneZh: '👋 温柔问候',
+            nuanceKo: `상대방을 반갑게 부르거나 안부를 전하는 다정한 ${styleKo} 인사예요.`,
+            nuanceZh: `亲切打招呼或叮嘱平安的温柔${styleZh}。`
           };
         }
         if (/(출근|퇴근|도착|가게|영업|마감|종료|병원|진료|결과|회사|집에|오늘|내일|며칠|주말|闭店|营业|最后一天|上班|下班|到家|医院|检查|今天|明天|这几天)/.test(combined) && !isQuestion) {
@@ -9065,12 +9480,19 @@
         });
         renderNotifications();
         if (typeof renderChat === 'function') renderChat();
-        if (typeof renderDiaryQaMemos === 'function') renderDiaryQaMemos();
-        if (typeof renderBucketAndAlbum === 'function') renderBucketAndAlbum();
-        if (typeof renderCoupons === 'function') renderCoupons();
-        if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
-        if (typeof renderChatStickers === 'function') renderChatStickers();
-        if (typeof renderAnniversary === 'function') renderAnniversary();
+        const __runDeferredRenders = () => {
+          if (typeof renderDiaryQaMemos === 'function') renderDiaryQaMemos();
+          if (typeof renderBucketAndAlbum === 'function') renderBucketAndAlbum();
+          if (typeof renderCoupons === 'function') renderCoupons();
+          if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+          if (typeof renderChatStickers === 'function') renderChatStickers();
+          if (typeof renderAnniversary === 'function') renderAnniversary();
+        };
+        if (document.getElementById('tab-space')?.classList.contains('active')) {
+          __runDeferredRenders();
+        } else {
+          setTimeout(__runDeferredRenders, 60);
+        }
         if (typeof syncChinaModeUi === 'function') syncChinaModeUi();
         if (typeof window.__syncHideNotifPrevUi === 'function') window.__syncHideNotifPrevUi();
         if (typeof updateSysNotifStatus === 'function') updateSysNotifStatus();
@@ -10466,7 +10888,7 @@
               String(m.translated || '').toLowerCase().includes(qSearch) ||
               String(m.photoCat || '').toLowerCase().includes(qSearch))
           : state.chat.messages;
-        if (!window.__chatVisibleLimit || window.__chatVisibleLimit < 45) window.__chatVisibleLimit = 45;
+        if (!window.__chatVisibleLimit || window.__chatVisibleLimit < 30) window.__chatVisibleLimit = 30;
         const hiddenOlderCount = (!qSearch && allFilteredMsgs.length > window.__chatVisibleLimit)
           ? (allFilteredMsgs.length - window.__chatVisibleLimit)
           : 0;
@@ -10544,6 +10966,7 @@
                   : `<div class="cw-chat-avatar" style="background: ${avBg};">${avSrc ? `<img src="${avSrc}" alt="${senderDisplayName}" loading="lazy" decoding="async" class="w-full h-full object-cover" />` : senderDisplayName}</div>`);
             const hasMedia = !!(m.photoUrl || m.videoUrl || (Array.isArray(m.photoUrls) && m.photoUrls.length));
             const isAutoMediaCaption = hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
+            const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
             const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
             const isEmojiMsg = showText && !hasMedia && !m.sticker && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim());
             const isPureLinkMsg = /^https?:\/\/\S+$/i.test(String(m.original || '').trim());
@@ -10574,6 +10997,7 @@
                   <!-- KakaoTalk Minimal Unified Message Bubble (Original + Translation in One Clean Card) -->
                   <div class="cw-msg-bubble rounded-2xl ${hasMedia && !showText ? 'p-1.5' : 'px-3.5 py-2.5'} space-y-1.5 border" data-msg-id="${escapeHtml(m.id)}" style="background: ${mine ? 'var(--bubble-suwan)' : 'var(--bubble-jingchan)'}; border-color: ${mine ? 'rgba(255,255,255,0.22)' : 'var(--border-subtle)'}; color: ${mine ? '#ffffff' : 'var(--text-primary)'};">
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
+                    ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof pullCloudSync==='function'){showToast(state.lang==='zh'?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">▶</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0">🎙️</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
@@ -10951,7 +11375,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             let lpTimer = null, startX = 0, startY = 0;
             const clearLp = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } bub.classList.remove('cw-pressing'); };
             bub.addEventListener('touchstart', (ev) => {
-              if (ev.target.closest('button, a, video, input, textarea')) return;
+              if (ev.target.closest('button:not(.cw-zoom-photo), a, video, input, textarea')) return;
               const t0 = ev.touches && ev.touches[0];
               if (!t0) return;
               startX = t0.clientX; startY = t0.clientY;
@@ -10959,6 +11383,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               lpTimer = setTimeout(() => {
                 lpTimer = null;
                 bub.classList.remove('cw-pressing');
+                window.__cwSuppressZoomUntil = Date.now() + 600;
                 openMsgContextMenu(bub.getAttribute('data-msg-id'), bub);
               }, 420);
             }, { passive: true });
@@ -10970,7 +11395,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             bub.addEventListener('touchend', clearLp, { passive: true });
             bub.addEventListener('touchcancel', clearLp, { passive: true });
             bub.addEventListener('contextmenu', (ev) => {
-              if (ev.target.closest('button, a, video, input, textarea')) return;
+              if (ev.target.closest('button:not(.cw-zoom-photo), a, video, input, textarea')) return;
               ev.preventDefault();
               openMsgContextMenu(bub.getAttribute('data-msg-id'), bub);
             });
@@ -12536,11 +12961,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (plusDrawerEl) plusDrawerEl.classList.add('hidden');
           const isVideo = forceVideo || String(f.type || '').startsWith('video/') || /\.(mp4|mov|webm|m4v|3gp|mkv)$/i.test(f.name || '');
           if (isVideo) {
-            if (f.size > 30 * 1024 * 1024) {
-              showToast(state.lang === 'zh' ? '请录制 30MB 以内的短视频哦 🎬' : '30MB 이하의 짧은 동영상으로 촬영해 주세요 🎬');
-              inputEl.value = '';
-              return;
-            }
+            // Unlimited video size allowed (chunked parallel transfer)
             try {
               pendingChatPhotoUrl = await (typeof window.__prepareVideoDataUrl === 'function'
                 ? window.__prepareVideoDataUrl(f)
@@ -12590,17 +13011,26 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           chatPhotoInputEl.addEventListener('change', async () => {
             const files = Array.from(chatPhotoInputEl.files || []).slice(0, 9);
             if (!files.length) return;
-            if (files.length > 1) {
+            const showImmediateLoadingBar = (labelKo, labelZh) => {
               try {
-                pendingChatPhotos = [];
-                for (const fItem of files) {
-                  if (String(fItem.type || '').startsWith('video/')) continue;
-                  const isG = String(fItem.type || '').toLowerCase() === 'image/gif' || /\.gif$/i.test(fItem.name || '');
-                  const dUrl = isG
-                    ? await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || '')); r.onerror = rej; r.readAsDataURL(fItem); })
-                    : await compressImageToDataUrl(fItem, 640);
-                  pendingChatPhotos.push({ url: dUrl, type: 'image', name: fItem.name || '' });
-                }
+                if (chatMediaReadyEl) chatMediaReadyEl.textContent = state.lang === 'zh' ? labelZh : labelKo;
+                if (chatPhotoBarEl) chatPhotoBarEl.classList.remove('hidden');
+              } catch (_) {}
+            };
+            if (files.length > 1) {
+              showImmediateLoadingBar(`⏳ 사진 ${files.length}장 빠르게 불러오는 중...`, `⏳ 正在快速读取 ${files.length} 张照片...`);
+              try {
+                const imgFiles = files.filter(fItem => !String(fItem.type || '').startsWith('video/'));
+                const loadedList = await Promise.all(imgFiles.map(async (fItem) => {
+                  try {
+                    const isG = String(fItem.type || '').toLowerCase() === 'image/gif' || /\.gif$/i.test(fItem.name || '');
+                    const dUrl = isG
+                      ? await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || '')); r.onerror = rej; r.readAsDataURL(fItem); })
+                      : await compressImageToDataUrl(fItem, 640);
+                    return dUrl ? { url: dUrl, type: 'image', name: fItem.name || '' } : null;
+                  } catch (_) { return null; }
+                }));
+                pendingChatPhotos = loadedList.filter(Boolean);
                 if (!pendingChatPhotos.length) return;
                 pendingChatPhotoUrl = pendingChatPhotos[0].url;
                 pendingChatMediaType = 'image';
@@ -12633,11 +13063,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const f = files[0];
             const isVideo = String(f.type || '').startsWith('video/') || /\.(mp4|mov|webm|m4v|3gp|mkv)$/i.test(f.name || '');
             if (isVideo) {
-              if (f.size > 30 * 1024 * 1024) {
-                showToast(state.lang === 'zh' ? '请选择 30MB 以内的短视频哦 🎬' : '30MB 이하의 짧은 동영상을 선택해 주세요 🎬');
-                chatPhotoInputEl.value = '';
-                return;
-              }
+              showImmediateLoadingBar('⏳ 동영상 불러오는 중...', '⏳ 正在读取视频...');
+              // Unlimited video size allowed (chunked parallel transfer)
               try {
                 pendingChatPhotoUrl = await (typeof window.__prepareVideoDataUrl === 'function'
                   ? window.__prepareVideoDataUrl(f)
@@ -12660,6 +13087,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               chatPhotoInputEl.value = '';
               return;
             }
+            showImmediateLoadingBar('⏳ 사진 불러오는 중...', '⏳ 正在读取照片...');
             try {
               const isGif = String(f.type || '').toLowerCase() === 'image/gif' || /\.gif$/i.test(f.name || '');
               if (isGif) {
@@ -13538,21 +13966,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v45',
+          ver: 'Prime 3 · v58',
           date: '2026-11-25',
-          koTitle: '정식 앱급 UI · Gemini 초고속 연인 번역 · 동영상 분할 전송 · 클라우드 전체 복구',
-          zhTitle: '原生级精致 UI · Gemini 极速恋人翻译 · 视频分片直传 · 云端全量恢复',
+          koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
+          zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
           koItems: [
-            '✨ 네이티브 앱급 UI 개편: 원문·번역문·다른 번역 중심의 깔끔한 말풍선(병음·말투 분석은 상세 ▾ 접기), 모노크롬 라인 SVG 아이콘(복사·고정·답장·리액션·수정·삭제·음성 녹음 바), 여백 터치 자동 닫기',
-            '⚡ 번역 대격변 & 0ms 즉시 전송: Gemini 2.5 Flash 기본 자동 번역 1순위 연결 + 무료 0.3초 1등 도착·단골 캐시 + 애교 ㅇ받침(그랭?·가야징)·감성 말투(머해·왜구래·헤헿)·안녕/호칭(오빠)/이름 중복 자동 교정',
-            '🎬 중국↔한국 동영상 원본 전송 & 24종 리액션·28종 스티커: 9MB 이하 원본 MP4 260KB 분할 전송·저장 버튼, 리액션 24종 확장, 메시지 원문·번역문 복사',
-            '🛡️ 4중 영구 금고 & 클라우드 전체 가져오기: 업데이트 시 사진·음성 증발 원천 차단, 설정 「☁️ 전체 가져오기」 무제한 복구, 스마트 자동 자가진단 & 모바일 메모리 최적화(Blob URL·앨범 16장 페이지)'
+            '✨ 위챗 스타일 롱프레스 플로팅 메뉴: 말풍선(사진 포함)을 0.4초 꾹 누르면 리액션 24종·원문/번역 복사·답장·공지 고정·수정·삭제가 팝업으로 뜨고, 평소 말풍선 아래는 시간+읽음만 남겨 극강 미니멀 완성',
+            '🤖 Gemini 최신 모델 자동 탐색 & 뜻풀이 연동: gemini-3.5-flash-lite · 3.8-flash · 2.5-flash-lite 자동 연결 및 향후 404 시 모델 목록 자동 탐색, 키 저장 즉시 번역·뜻풀이 동시 반영',
+            '💬 감성 말투 & 오역 교정: 수완(手腕·足智多谋·秀莞)·징찬(静蝉)·자기(宝贝)·秀完欧巴(수완 오빠)·안녕 이별 오역·애교 ㅇ받침(그랭?·가야징)·감성 구어(머해·왜구래·헤헿) 전부 교정',
+            '⚡ 0ms 홈 화면 즉시 표시 & 안정성: 부팅 즉시 localStorage에서 홈 화면 먼저 그리기, 메신저 시간순 강제 정렬, 9MB 이하 동영상 원본 분할 전송, 4중 영구 금고·클라우드 전체 가져오기·스마트 자동 자가진단'
           ],
           zhItems: [
-            '✨ 原生级精致 UI 升级：原文·译文·参考译文清晰排版（拼音与语气解析收纳至详情 ▾），全套极简线条 SVG 图标（复制·置顶·回复·表情·编辑·删除·语音录制栏），点击空白处自动收起',
-            '⚡ 翻译跃升与 0ms 秒发：优先接入 Gemini 2.5 Flash 恋人语境自动翻译 + 免费引擎 0.3 秒抢答与高频缓存 + 自动纠偏韩语撒娇语气、昵称与告别误译',
-            '🎬 中韩视频原画分片直传 & 24款表情回应·28款贴纸：9MB 内原画 MP4 260KB 分片双通道传输与保存按钮，消息原文/译文一键复制',
-            '🛡️ 四重永久金库与云端全量恢复：杜绝更新丢图丢语音，新增设置「☁️ 完整导入恢复」、智能自动自检与移动端防闪退内存优化（Blob URL·相册分页加载）'
+            '✨ 微信风格长按悬浮菜单：长按气泡（含照片）0.4秒弹出24款表情回应与复制/回复/置顶/编辑/删除，平时仅保留时间与已读状态',
+            '🤖 Gemini 最新模型自动适配与意思解析联动：自动连接 gemini-3.5-flash-lite / 3.8-flash / 2.5-flash-lite，遇404自动探测可用模型',
+            '💬 恋人语气与称呼纠偏：修复秀完/靖灿/宝贝/秀完欧巴/告别误译及韩语撒娇口语表达，新增多维度语气标签',
+            '⚡ 0ms 秒开首页与稳定优化：启动瞬间先渲染首页信息，强制消息按时间排序，支持9MB内原画视频分片直传、四重金库、云端全量恢复与智能自动自检'
           ]
         }
         ];
@@ -13560,7 +13988,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v45 更新日志' : '📜 灿完时光 Prime 3 · v45 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v58 更新日志' : '📜 灿完时光 Prime 3 · v58 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -13611,6 +14039,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const act = b.getAttribute('data-vault-tab') === tab;
             b.className = `vault-tab-btn ${act ? 'btn-royal' : 'btn-ghost'} py-2 px-2 rounded-xl text-xs font-bold whitespace-nowrap`;
           });
+          if (state.chat && Array.isArray(state.chat.messages) && state.chat.messages.length > 1 && typeof sortChatMessagesStable === 'function') {
+            state.chat.messages = sortChatMessagesStable(state.chat.messages);
+          }
           const msgs = state.chat.messages || [];
           if (tab === 'media') {
             const mediaItems = [];
@@ -13625,11 +14056,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               body.innerHTML = `<div class="royal-subcard rounded-2xl p-8 text-center text-xs text-mut">${isZh ? '聊天中还没有发送过照片或视频 🖼️' : '메신저에서 주고받은 사진·영상이 아직 없어요 🖼️'}</div>`;
               return;
             }
-            body.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">${mediaItems.map(m => `
+            if (!window.__chatVaultLimit || window.__chatVaultLimit < 18) window.__chatVaultLimit = 18;
+            const shownMedia = mediaItems.slice(0, window.__chatVaultLimit);
+            const remainMedia = mediaItems.length - shownMedia.length;
+            body.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">${shownMedia.map(m => `
               <div class="royal-subcard rounded-2xl overflow-hidden flex flex-col">
                 <div class="aspect-square bg-purple-100/30 relative overflow-hidden">
                   ${m.videoUrl
-                    ? `<video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video>`
+                    ? `<video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="none" class="w-full h-full object-cover bg-black/85"></video>`
                     : `<button type="button" class="cw-zoom-direct w-full h-full block" data-src="${__cwMediaUrl(m.photoUrl)}"><img src="${__cwMediaUrl(m.photoUrl)}" alt="media" loading="lazy" decoding="async" class="w-full h-full object-cover" /></button>`}
                 </div>
                 <div class="px-2 py-1.5 text-[10px] text-mut flex items-center justify-between gap-1">
@@ -13637,7 +14071,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   <span class="shrink-0">${escapeHtml(m.time || '')}</span>
                 </div>
               </div>
-            `).join('')}</div>`;
+            `).join('')}</div>${remainMedia > 0 ? `<button type="button" onclick="window.__chatVaultLimit=(window.__chatVaultLimit||18)+18;renderChatVault();" class="w-full mt-3 py-2.5 rounded-2xl btn-ghost text-xs font-bold">${isZh ? `查看更多 (${remainMedia} 项)` : `더 보기 (${remainMedia}개 남음)`}</button>` : ''}`;
           } else {
             const urlRx = /https?:\/\/[^\s<>"'\)\]]+/gi;
             const links = [];
@@ -13715,6 +14149,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         lbModal?.addEventListener('click', (e) => { if (e.target === lbModal) closePhotoLightbox(); });
         // Delegated click for CW Talk, Chat Vault, and Album photos!
         document.addEventListener('click', (e) => {
+          if (window.__cwSuppressZoomUntil && Date.now() < window.__cwSuppressZoomUntil) return;
           const zBtn = e.target.closest('.cw-zoom-photo');
           if (zBtn) {
             const msgId = zBtn.getAttribute('data-msg-id');
@@ -15927,10 +16362,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 try {
                   const isVidFile = String(f.type || '').startsWith('video/') || /\.(mp4|mov|webm|m4v)$/i.test(f.name || '');
                   if (isVidFile) {
-                    if (f.size > 30 * 1024 * 1024) {
-                      showToast(isZh ? '请选择 30MB 以内的短视频哦 🎬' : '30MB 이하의 짧은 동영상을 선택해 주세요 🎬');
-                      continue;
-                    }
+                    // Unlimited video size allowed (chunked parallel transfer)
                     const vUrl = await (typeof window.__prepareVideoDataUrl === 'function'
                       ? window.__prepareVideoDataUrl(f)
                       : new Promise((res, rej) => {
@@ -16113,7 +16545,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       function renderAll() {
         // ==================== PWA MANIFEST + CHINA DIRECT MODE + AUTO BUG-FIX WATCHDOG ====================
         (function setupPwaManifest() {
-          if (location.protocol !== 'file:' && document.querySelector('link[rel="manifest"][href*="manifest_clean.json?v=21"]')) return;
+          if (location.protocol !== 'file:' && document.querySelector('link[rel="manifest"][href*="manifest_clean.json"]')) return;
           try {
             const svgIcon = "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#583894'/><stop offset='55%' stop-color='#7c59bd'/><stop offset='100%' stop-color='#c8a56e'/></linearGradient></defs><rect width='512' height='512' rx='118' fill='url(#g)'/><text x='256' y='292' text-anchor='middle' font-family='Georgia,serif' font-size='150' font-weight='700' fill='#fffaf2'>灿完</text><text x='256' y='388' text-anchor='middle' font-family='sans-serif' font-size='48' fill='#f5e4c3'>✦ 时光 ✦</text></svg>");
             const pwaBgMap = { 'pastel-royal': '#fdfbff', 'violet-bloom': '#fdf8ff', 'velvet-dusk': '#120d1f', 'coral-pink': '#fffaf9', 'pastel-blue': '#f8fbff', 'pastel-lavender': '#fbf9ff' };
@@ -17986,12 +18418,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             r.readAsDataURL(file);
           });
           // Up to 9MB: ALWAYS send the original untouched MP4 via 260KB chunked transfer so video+audio NEVER break!
-          if (!file || file.size <= 9 * 1024 * 1024) return await readRawNormalized();
+          if (!file || file.size <= 12 * 1024 * 1024) return await readRawNormalized();
           const isZh = state.lang === 'zh';
           const canRec = typeof MediaRecorder !== 'undefined' && typeof HTMLCanvasElement !== 'undefined';
           if (canRec) {
             try {
-              showToast(isZh ? '🎬 视频超过 9MB，正在尝试轻量化压缩...' : '🎬 9MB 초과 동영상이라 가볍게 압축해 보는 중이에요...');
+              showToast(isZh ? '🎬 大视频正在自动优化以便高速跨网发送...' : '🎬 대용량 동영상을 빠르게 보낼 수 있게 최적화 중이에요...');
               const objUrl = URL.createObjectURL(file);
               const vid = document.createElement('video');
               vid.src = objUrl;
@@ -18006,7 +18438,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 vid.onloadeddata = () => { clearTimeout(t); res(); };
                 vid.onerror = () => { clearTimeout(t); rej(new Error('vid_err')); };
               });
-              const dur = Math.min(Number(vid.duration || 10), 18);
+              const dur = Math.min(Number(vid.duration || 10), 60);
               const maxDim = 360;
               const scale = Math.min(1, maxDim / Math.max(vid.videoWidth || 360, vid.videoHeight || 360));
               const w = Math.max(160, Math.round((vid.videoWidth || 360) * scale / 2) * 2);
@@ -18096,6 +18528,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (buf.parts[idx] === undefined) {
             buf.parts[idx] = pkt.chunkData;
             buf.received++;
+            if (isLiveEvent && (buf.kind === 'chat_video' || buf.kind === 'album_video') && buf.total > 2 && (buf.received === 1 || buf.received % 6 === 0)) {
+              try { showToast(state.lang === 'zh' ? `🎬 正在接收视频 (${buf.received}/${buf.total})...` : `🎬 동영상 받는 중 (${buf.received}/${buf.total})...`); } catch (_) {}
+            }
           }
           if (buf.received >= buf.total) {
             const fullDataUrl = buf.parts.join('');
@@ -18122,19 +18557,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const rawStr = String(dataUrl);
           const isZh = state.lang === 'zh';
           const isVidKind = kind === 'chat_video' || kind === 'album_video';
-          if (rawStr.length > 14 * 1024 * 1024) {
-            try { showToast(isZh ? '🎬 视频超过 10MB 仅保存本机，请录短一点再发哦' : '🎬 10MB 초과 동영상은 내 기기에만 저장돼요. 조금 더 짧게 찍어 보내주세요'); } catch (_) {}
-            return;
-          }
           const mediaId = `${kind}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
           const nowTs = Date.now();
-          // Chunked transfer for videos & large media (>340KB) — works over EMQX China Direct AND Supabase Seoul!
+          // Unlimited Parallel Chunked Transfer (>340KB) — 3x concurrent 380KB chunks with 3 retries over EMQX + Supabase!
           if (rawStr.length > 340000) {
-            const CHUNK_SIZE = 260000;
+            const CHUNK_SIZE = 380000;
             const totalChunks = Math.ceil(rawStr.length / CHUNK_SIZE);
             let sbOkCount = 0;
             let emqxOkCount = 0;
-            for (let i = 0; i < totalChunks; i++) {
+            let doneCount = 0;
+            const sendOneChunk = async (i) => {
               const chunkPkt = {
                 v: 'pro2_media_chunk',
                 transferId: mediaId,
@@ -18152,19 +18584,25 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 if (publishEmqxBackup(room, JSON.stringify(chunkPkt))) emqxOkCount++;
               } catch (_) {}
               let sentSb = false;
-              for (let attempt = 0; attempt < 2 && !sentSb; attempt++) {
+              for (let attempt = 0; attempt < 3 && !sentSb; attempt++) {
                 try {
                   await insertSupabaseEvent(room, 'media', chunkPkt);
                   sentSb = true;
                   sbOkCount++;
                 } catch (_) {
-                  if (attempt === 0) await new Promise(r => setTimeout(r, 900));
+                  if (attempt < 2) await new Promise(r => setTimeout(r, 750 * (attempt + 1)));
                 }
               }
-              if (isVidKind && (i === 0 || (i + 1) % 3 === 0 || i === totalChunks - 1)) {
-                try { showToast(isZh ? `🎬 视频跨网发送中 (${i + 1}/${totalChunks})...` : `🎬 동영상 전송 중 (${i + 1}/${totalChunks})...`); } catch (_) {}
+              doneCount++;
+            };
+            const CONCURRENCY = 3;
+            for (let start = 0; start < totalChunks; start += CONCURRENCY) {
+              const batch = [];
+              for (let j = start; j < Math.min(totalChunks, start + CONCURRENCY); j++) batch.push(sendOneChunk(j));
+              await Promise.allSettled(batch);
+              if (isVidKind && (start === 0 || doneCount % 6 === 0 || doneCount >= totalChunks)) {
+                try { showToast(isZh ? `🎬 视频高速发送中 (${doneCount}/${totalChunks})...` : `🎬 동영상 고속 전송 중 (${doneCount}/${totalChunks})...`); } catch (_) {}
               }
-              await new Promise(r => setTimeout(r, 120));
             }
             if (sbOkCount === totalChunks || emqxOkCount === totalChunks) {
               lastSyncOkTs = Date.now();
@@ -18891,7 +19329,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`;
             const shouldPullMedia = !isLivePull || manual || (window.__sbPollTick % 4 === 1);
             // Lightweight index query ONLY (id, client_id) so it NEVER times out even when videos are stored!
-            const mediaIdxUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.media&select=id,client_id&order=id.desc&limit=120`;
+            const mediaIdxUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.media&select=id,client_id&order=id.desc&limit=400`;
 
             // Fire ALL pull channels simultaneously so China mobile NEVER stalls on a single slow server!
             const [ntfyPull, snapPull, evPull, mediaPull] = await Promise.allSettled([
@@ -18949,10 +19387,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 idsToFetch.push(rid);
               }
               // Fetch media payloads in small 4-row batches with generous 22s timeout so videos & photos NEVER time out!
-              const batchCap = needSelfRecover ? 120 : 24;
+              const batchCap = needSelfRecover ? 400 : 180;
               const targetIds = idsToFetch.slice(-batchCap);
-              for (let bi = 0; bi < targetIds.length; bi += 4) {
-                const chunkIds = targetIds.slice(bi, bi + 4);
+              for (let bi = 0; bi < targetIds.length; bi += 6) {
+                const chunkIds = targetIds.slice(bi, bi + 6);
                 try {
                   const bUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&id=in.(${chunkIds.join(',')})&order=id.asc`;
                   const bRes = await fetchWithTimeout(bUrl, { headers: sbHeaders() }, 22000);
@@ -19115,9 +19553,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 : `3/3 사진·동영상·음성편지 복구 중 (${fetchedCount}/${totalMedia})...`);
             }
 
-            // Phase 4: Lock into all 4 IndexedDB Vaults & Re-render
+            // Phase 4: Sort messages strictly chronologically, lock into all 4 IndexedDB Vaults & Re-render
             setProg(98, isZh ? '正在写入 4 重永久金库并刷新界面...' : '4중 영구 금고에 안전 저장 중...');
-            persistMediaVaultsNow();
+            if (state.chat && Array.isArray(state.chat.messages)) {
+              state.chat.messages = sortChatMessagesStable(state.chat.messages);
+            }
+            persistMediaVaultsNow(true);
             flushIdbStateNow();
             saveState(false);
             try { renderAll(); updateVaultIndicators(); } catch (_) {}
@@ -22254,14 +22695,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         if (mode === 'emoji') {
           const em = st === 'offline' ? '❤️‍🩹' : (st === 'reconnecting' ? '💛' : '💚');
-          el.innerHTML = `<span style="font-size:16px;line-height:1;filter:drop-shadow(0 0 5px ${glow});">${em}</span>`;
+          el.innerHTML = `<span style="font-size:16px;line-height:1;
+">${em}</span>`;
         } else if (mode === 'line') {
-          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${col}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px ${glow});"><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z"/></svg>`;
+          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${col}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="
+"><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z"/></svg>`;
         } else if (mode === 'gold') {
-          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 0 5px ${glow});"><defs><linearGradient id="cwLiveG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde68a"/><stop offset="55%" stop-color="${col}"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z" fill="url(#cwLiveG)" stroke="#fef3c7" stroke-width="1.2"/></svg>`;
+          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="
+"><defs><linearGradient id="cwLiveG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde68a"/><stop offset="55%" stop-color="${col}"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z" fill="url(#cwLiveG)" stroke="#fef3c7" stroke-width="1.2"/></svg>`;
         } else {
           // pastel mode (default)
-          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 0 5px ${glow});"><defs><linearGradient id="cwLiveP" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${soft}"/><stop offset="100%" stop-color="${col}"/></linearGradient></defs><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z" fill="url(#cwLiveP)" stroke="#ffffff" stroke-width="1.3"/><circle cx="7.5" cy="9" r="1.4" fill="rgba(255,255,255,0.65)"/></svg>`;
+          el.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="
+"><defs><linearGradient id="cwLiveP" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${soft}"/><stop offset="100%" stop-color="${col}"/></linearGradient></defs><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.6 5 6.8 5c1.9 0 3.5 1 5.2 2.9C13.7 6 15.3 5 17.2 5c3.2 0 5.2 3 4 6.3-1.7 4.6-9.2 9.2-9.2 9.2z" fill="url(#cwLiveP)" stroke="#ffffff" stroke-width="1.3"/><circle cx="7.5" cy="9" r="1.4" fill="rgba(255,255,255,0.65)"/></svg>`;
         }
       };
 
@@ -22365,6 +22810,19 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             mo.observe(document.body, { childList: true });
           } catch (_) {}
         })();
+
+        // 0ms Instant Home Paint: render D-Day, moods, clocks, schedules & theme synchronously from localStorage BEFORE waiting on heavy IndexedDB vaults!
+        try {
+          const fastRaw = localStorage.getItem(STORAGE_CORE_KEY);
+          if (fastRaw) {
+            const fastCore = JSON.parse(fastRaw);
+            if (fastCore && typeof fastCore === 'object') {
+              state = mergeWithDefaults(fastCore, null);
+              try { applyTheme(state.theme, true); applyFont(state.font, true); applyLanguage(state.lang, true); } catch (_) {}
+              try { renderHome(); updateClocks(); } catch (_) {}
+            }
+          }
+        } catch (_) {}
 
         await loadState();
         // Auto-recover any messages left in 'sending' state if app closed mid-send
@@ -23655,6 +24113,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
             if (!state.settings) state.settings = {};
             state.settings.geminiApiKey = val;
+            try {
+              localStorage.setItem('cw_gemini_api_key_v1', val);
+              localStorage.removeItem('cw_trans_fast_cache_v1');
+              __cwTransCacheMem = {};
+              __cwEngineSkipUntil.gemini = 0;
+            } catch (_) {}
             inp.type = 'password';
             saveState(false);
             syncGeminiKeyUi();
@@ -23665,6 +24129,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           clearBtn.addEventListener('click', () => {
             if (!state.settings) state.settings = {};
             state.settings.geminiApiKey = '';
+            try { localStorage.removeItem('cw_gemini_api_key_v1'); __cwEngineSkipUntil.gemini = 0; } catch (_) {}
             inp.value = '';
             if (testBox) testBox.classList.add('hidden');
             saveState(false);
@@ -23836,7 +24301,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       if (cache[ck] && cache[ck].natural) return cache[ck];
 
       // 1. Gemini 2.5 Flash (uses saved API key from Settings for best nuance & intent understanding!)
-      const gKey = (localStorage.getItem('cw_gemini_api_key_v1') || '').trim();
+      const gKey = (typeof window.__getActiveGeminiKey === 'function' ? window.__getActiveGeminiKey() : (localStorage.getItem('cw_gemini_api_key_v1') || '')).trim();
       if (gKey) {
         try {
           const stNow = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
@@ -23848,18 +24313,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             : (lang === 'zh'
               ? `韩国恋人(秀完)用中文发来的消息，可能语序或用词略微生硬。请帮中国女友(靖灿)一眼看懂原本意思，只返回严格 JSON: {"natural":"最自然的中文表达","intent":"原本想表达的意思和语气说明(1-2句)","tip":"可以温柔教给对方的一句地道中文(没有就留空)"}。原文: ${clean}`
               : `韩国恋人(秀完)用韩语发来的消息。请帮中国女友(靖灿)一眼看懂地道含义、语气和隐藏关心，只返回严格 JSON(오빠 必须译为哥哥): {"natural":"最自然温柔的中文意思","intent":"韩语表达的真实语气与语境解析(1-2句)","tip":"顺便学一个实用的韩语小表达(没有就留空)"}。原文: ${clean}`);
-          const r = await fetchT(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(gKey)}`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.25, responseMimeType: 'application/json', thinkingConfig: { thinkingBudget: 0 } }
-              })
-            },
-            5500
-          );
+          const __discM = (() => { try { return (localStorage.getItem('cw_gemini_active_model_v1') || '').trim(); } catch (_) { return ''; } })();
+          const __pModels = [];
+          if (__discM) __pModels.push(__discM);
+          ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'].forEach(m => { if (!__pModels.includes(m)) __pModels.push(m); });
+          let r = null;
+          for (const __pm of __pModels) {
+            r = await fetchT(
+              `https://generativelanguage.googleapis.com/v1beta/models/${__pm}:generateContent?key=${encodeURIComponent(gKey)}`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: prompt }] }],
+                  generationConfig: { responseMimeType: 'application/json', thinkingConfig: /gemini-3\.5-flash-lite/i.test(__pm) ? { thinkingLevel: 'minimal' } : (/gemini-3\.[68]-flash/i.test(__pm) ? { thinkingLevel: 'low' } : { thinkingBudget: 0 }) }
+                })
+              },
+              3800
+            );
+            if (r && r.ok) { try { localStorage.setItem('cw_gemini_active_model_v1', __pm); } catch (_) {} break; }
+            if (r && (r.status === 403 || r.status === 401)) break;
+          }
           if (r && r.ok) {
             const j = await r.json();
             const txt = j?.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -24681,6 +25155,743 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       }, 20);
     }, true);
   })();
+  </script>
+
+  <!-- v55 Chat Wallpaper Customizer Modal -->
+  <div id="cwChatBgModal" class="hidden fixed inset-0 z-[9990] flex items-end sm:items-center justify-center p-3 sm:p-4" style="background: rgba(18, 13, 31, 0.52);">
+    <div class="royal-card w-full max-w-md rounded-3xl p-4 sm:p-5 space-y-4" style="background: var(--surface-1);">
+      <div class="flex items-center justify-between gap-2">
+        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>🖼️</span> <span id="cwChatBgModalTitle">채팅방 배경 꾸미기</span></div>
+        <button id="closeChatBgModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-sm">✕</button>
+      </div>
+      <div class="space-y-2">
+        <div id="cwChatBgPresetLabel" class="text-xs font-semibold text-sec">감성 배경 프리셋</div>
+        <div class="grid grid-cols-4 gap-2">
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="default" style="background: linear-gradient(135deg,#f6efff,#fff2f8); color:#583894; border-color:var(--border-accent);">기본</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="rose" style="background: linear-gradient(135deg,#ffe4ee,#fff5ec); color:#9d174d; border-color:rgba(244,114,182,0.4);">로즈</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="lavender" style="background: linear-gradient(135deg,#ede9fe,#e0e7ff); color:#4c1d95; border-color:rgba(139,92,246,0.4);">라벤더</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="starlight" style="background: linear-gradient(135deg,#1e1436,#321d54); color:#f5d8a8; border-color:rgba(216,180,254,0.35);">별빛</button>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <input id="cwChatBgFileInput" type="file" accept="image/*" class="hidden" />
+        <button id="cwChatBgPickPhotoBtn" type="button" class="btn-royal w-full py-2.5 rounded-2xl text-xs font-bold">📷 갤러리에서 커플 사진 선택</button>
+      </div>
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs">
+          <span id="cwChatBgAlphaLabel" class="font-semibold text-sec">배경 은은함 (글자 가독성)</span>
+          <span id="cwChatBgAlphaVal" class="font-bold text-gold">55%</span>
+        </div>
+        <input id="cwChatBgAlpha" type="range" min="15" max="85" value="55" class="w-full accent-purple-600" />
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button id="cwChatBgResetBtn" type="button" class="btn-ghost px-3.5 py-2 rounded-xl text-xs font-semibold">초기화</button>
+        <button id="cwChatBgDoneBtn" type="button" class="btn-royal px-4 py-2 rounded-xl text-xs font-bold">적용 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function initV55Upgrades() {
+      const BG_KEY = 'cw_chat_bg_v1';
+      const PRESETS = {
+        default: '',
+        rose: 'linear-gradient(155deg, rgba(255,228,240,0.88) 0%, rgba(255,244,234,0.88) 55%, rgba(246,232,255,0.88) 100%)',
+        lavender: 'linear-gradient(155deg, rgba(238,232,255,0.90) 0%, rgba(226,236,255,0.88) 55%, rgba(252,238,255,0.90) 100%)',
+        starlight: 'radial-gradient(circle at 20% 20%, rgba(168,85,247,0.28), transparent 45%), radial-gradient(circle at 80% 75%, rgba(244,114,182,0.22), transparent 50%), linear-gradient(160deg, #17102a 0%, #261844 100%)'
+      };
+
+      function loadChatBgCfg() {
+        try {
+          const raw = localStorage.getItem(BG_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (_) {}
+        return { preset: 'default', photo: '', alpha: 55 };
+      }
+
+      function applyChatBg(cfg) {
+        const listEl = document.getElementById('chatMessagesList');
+        if (!listEl) return;
+        const c = cfg || loadChatBgCfg();
+        const isDark = document.documentElement.getAttribute('data-dark') === '1' || document.documentElement.getAttribute('data-theme') === 'velvet-dusk';
+        const veilAlpha = Math.max(0.15, Math.min(0.88, (Number(c.alpha) || 55) / 100));
+        const veilCol = isDark ? `rgba(18,13,31,${veilAlpha.toFixed(2)})` : `rgba(255,252,255,${veilAlpha.toFixed(2)})`;
+        if (c.photo) {
+          listEl.classList.add('cw-has-bg');
+          listEl.style.backgroundImage = `linear-gradient(${veilCol}, ${veilCol}), url("${c.photo}")`;
+        } else if (c.preset && PRESETS[c.preset]) {
+          listEl.classList.add('cw-has-bg');
+          listEl.style.backgroundImage = PRESETS[c.preset];
+        } else {
+          listEl.classList.remove('cw-has-bg');
+          listEl.style.backgroundImage = '';
+        }
+      }
+      window.__applyCwChatBg = applyChatBg;
+
+      function syncChatBgModalLang() {
+        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const setTxt = (id, ko, zh) => { const el = document.getElementById(id); if (el) el.textContent = isZh ? zh : ko; };
+        setTxt('cwChatBgModalTitle', '채팅방 배경 꾸미기', '自定义聊天背景');
+        setTxt('cwChatBgPresetLabel', '감성 배경 프리셋', '浪漫主题背景');
+        setTxt('cwChatBgPickPhotoBtn', '📷 갤러리에서 커플 사진 선택', '📷 从相册选择情侣照片');
+        setTxt('cwChatBgAlphaLabel', '배경 은은함 (글자 가독성)', '背景柔和度（文字更清晰）');
+        setTxt('cwChatBgResetBtn', '초기화', '恢复默认');
+        setTxt('cwChatBgDoneBtn', '적용 완료', '完成');
+      }
+
+      // 1) Chat Wallpaper Modal Wiring
+      const openBgBtn = document.getElementById('openChatBgBtn');
+      const bgModal = document.getElementById('cwChatBgModal');
+      const closeBgBtn = document.getElementById('closeChatBgModalBtn');
+      const doneBgBtn = document.getElementById('cwChatBgDoneBtn');
+      const resetBgBtn = document.getElementById('cwChatBgResetBtn');
+      const pickPhotoBtn = document.getElementById('cwChatBgPickPhotoBtn');
+      const bgFileInput = document.getElementById('cwChatBgFileInput');
+      const alphaSlider = document.getElementById('cwChatBgAlpha');
+      const alphaVal = document.getElementById('cwChatBgAlphaVal');
+
+      if (openBgBtn && bgModal) {
+        const closeModal = () => bgModal.classList.add('hidden');
+        openBgBtn.addEventListener('click', () => {
+          syncChatBgModalLang();
+          const cur = loadChatBgCfg();
+          if (alphaSlider) alphaSlider.value = String(cur.alpha || 55);
+          if (alphaVal) alphaVal.textContent = `${cur.alpha || 55}%`;
+          bgModal.classList.remove('hidden');
+        });
+        if (closeBgBtn) closeBgBtn.addEventListener('click', closeModal);
+        if (doneBgBtn) doneBgBtn.addEventListener('click', closeModal);
+        bgModal.addEventListener('click', (e) => { if (e.target === bgModal) closeModal(); });
+
+        bgModal.querySelectorAll('.cw-bg-preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const p = btn.getAttribute('data-preset') || 'default';
+            const next = { preset: p, photo: '', alpha: Number(alphaSlider?.value || 55) };
+            try { localStorage.setItem(BG_KEY, JSON.stringify(next)); } catch (_) {}
+            applyChatBg(next);
+          });
+        });
+
+        if (pickPhotoBtn && bgFileInput) {
+          pickPhotoBtn.addEventListener('click', () => bgFileInput.click());
+          bgFileInput.addEventListener('change', async () => {
+            const f = bgFileInput.files && bgFileInput.files[0];
+            if (!f) return;
+            try {
+              const dUrl = typeof compressImageToDataUrl === 'function'
+                ? await compressImageToDataUrl(f, 960)
+                : await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || '')); r.onerror = rej; r.readAsDataURL(f); });
+              const next = { preset: 'photo', photo: dUrl, alpha: Number(alphaSlider?.value || 55) };
+              try { localStorage.setItem(BG_KEY, JSON.stringify(next)); } catch (_) {}
+              applyChatBg(next);
+              if (typeof showToast === 'function') showToast(state.lang === 'zh' ? '🖼️ 聊天背景已更换 ✨' : '🖼️ 채팅방 배경이 적용됐어요 ✨');
+            } catch (_) {}
+            bgFileInput.value = '';
+          });
+        }
+
+        if (alphaSlider) {
+          alphaSlider.addEventListener('input', () => {
+            const v = Number(alphaSlider.value || 55);
+            if (alphaVal) alphaVal.textContent = `${v}%`;
+            const cur = loadChatBgCfg();
+            cur.alpha = v;
+            try { localStorage.setItem(BG_KEY, JSON.stringify(cur)); } catch (_) {}
+            applyChatBg(cur);
+          });
+        }
+
+        if (resetBgBtn) {
+          resetBgBtn.addEventListener('click', () => {
+            const def = { preset: 'default', photo: '', alpha: 55 };
+            try { localStorage.setItem(BG_KEY, JSON.stringify(def)); } catch (_) {}
+            if (alphaSlider) alphaSlider.value = '55';
+            if (alphaVal) alphaVal.textContent = '55%';
+            applyChatBg(def);
+          });
+        }
+      }
+
+      // 2) Swipe-to-Reply on CW Talk Bubbles (smooth right swipe >= 46px)
+      const listEl = document.getElementById('chatMessagesList');
+      if (listEl) {
+        const hintEl = document.createElement('div');
+        hintEl.className = 'cw-swipe-hint';
+        hintEl.textContent = '↩️';
+        document.body.appendChild(hintEl);
+
+        let sw = null;
+        listEl.addEventListener('touchstart', (e) => {
+          if (!e.touches || e.touches.length !== 1) return;
+          const bubble = e.target && e.target.closest ? e.target.closest('.cw-msg-bubble') : null;
+          if (!bubble) return;
+          const mid = bubble.getAttribute('data-msg-id');
+          if (!mid) return;
+          const col = bubble.closest('.cw-msg-col') || bubble;
+          sw = {
+            mid,
+            col,
+            x0: e.touches[0].clientX,
+            y0: e.touches[0].clientY,
+            dx: 0,
+            active: false,
+            lockedVert: false
+          };
+        }, { passive: true });
+
+        listEl.addEventListener('touchmove', (e) => {
+          if (!sw || !e.touches || e.touches.length !== 1) return;
+          const dx = e.touches[0].clientX - sw.x0;
+          const dy = e.touches[0].clientY - sw.y0;
+          if (!sw.active && !sw.lockedVert) {
+            if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { sw.lockedVert = true; return; }
+            if (dx > 14 && dx > Math.abs(dy) * 1.4) { sw.active = true; }
+          }
+          if (!sw.active) return;
+          const clamped = Math.max(0, Math.min(64, dx));
+          sw.dx = clamped;
+          sw.col.style.transition = 'none';
+          sw.col.style.transform = `translateX(${clamped}px)`;
+          const rect = sw.col.getBoundingClientRect();
+          hintEl.style.left = `${Math.max(10, rect.left - 34)}px`;
+          hintEl.style.top = `${rect.top + rect.height / 2 - 15}px`;
+          hintEl.style.opacity = clamped >= 46 ? '1' : String((clamped / 46).toFixed(2));
+          hintEl.style.transform = clamped >= 46 ? 'scale(1)' : 'scale(0.8)';
+        }, { passive: true });
+
+        const finishSwipe = () => {
+          if (!sw) return;
+          const cur = sw;
+          sw = null;
+          hintEl.style.opacity = '0';
+          hintEl.style.transform = 'scale(0.7)';
+          cur.col.style.transition = 'transform 0.18s ease';
+          cur.col.style.transform = '';
+          if (cur.active && cur.dx >= 46 && typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) {
+            const target = state.chat.messages.find(x => x && x.id === cur.mid);
+            if (target) {
+              try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
+              window.__pendingChatReply = {
+                id: target.id,
+                author: target.sender === 'suwan' ? '수완(完)' : '靖灿(灿)',
+                text: (target.original || '').slice(0, 60)
+              };
+              const bar = document.getElementById('chatReplyBar');
+              const au = document.getElementById('chatReplyAuthor');
+              const sn = document.getElementById('chatReplySnippet');
+              if (au) au.textContent = `↩️ ${window.__pendingChatReply.author}`;
+              if (sn) sn.textContent = window.__pendingChatReply.text;
+              if (bar) bar.classList.remove('hidden');
+              document.getElementById('chatInput')?.focus();
+            }
+          }
+        };
+        listEl.addEventListener('touchend', finishSwipe, { passive: true });
+        listEl.addEventListener('touchcancel', finishSwipe, { passive: true });
+      }
+
+      // 3) Home Today's Couple Phrase Card
+      const FALLBACK_PHRASES = [
+        { ko: '오늘 하루도 고생 많았어, 보고 싶어!', zh: '今天辛苦啦，好想你呀！', toneKo: '다정한 응원', toneZh: '温柔鼓励' },
+        { ko: '밥 꼭 챙겨 먹고 푹 쉬어 내 사랑', zh: '一定要按时吃饭，好好休息呀我的宝贝', toneKo: '다정한 챙김', toneZh: '暖心照顾' },
+        { ko: '너 덕분에 오늘도 웃었어', zh: '多亏了你，今天也开心笑了', toneKo: '달콤한 고백', toneZh: '甜蜜告白' },
+        { ko: '잘 자, 꿈에서 만나자', zh: '晚安，梦里见呀', toneKo: '포근한 인사', toneZh: '温柔晚安' },
+        { ko: '지금 뭐 하고 있어? 목소리 듣고 싶다', zh: '现在在干嘛呀？好想听听你的声音', toneKo: '설레는 안부', toneZh: '思念问候' }
+      ];
+      let phraseIdx = 0;
+
+      function getPhrasePool() {
+        const pool = [];
+        try {
+          const msgs = (typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages : [];
+          for (let i = msgs.length - 1; i >= 0 && pool.length < 24; i--) {
+            const m = msgs[i];
+            if (!m || !m.original || !m.translated) continue;
+            const o = String(m.original).trim();
+            const t = String(m.translated).trim();
+            if (o.length < 3 || o.length > 65 || t.length < 2 || o === t) continue;
+            if (/^https?:\/\/|사진을 보냈어요|동영상을 보냈어요|分享了|번역이 부정확|번역 중/.test(o + ' ' + t)) continue;
+            const origIsZh = /[一-鿿]/.test(o) && !/[가-힣]/.test(o);
+            pool.push({
+              ko: origIsZh ? t : o,
+              zh: origIsZh ? o : t,
+              toneKo: m.tone || '우리 대화',
+              toneZh: m.tone || '我们的对话'
+            });
+          }
+        } catch (_) {}
+        return pool.length ? pool : FALLBACK_PHRASES;
+      }
+
+      function renderHomeCouplePhrase(step) {
+        const pool = getPhrasePool();
+        if (step) phraseIdx = (phraseIdx + 1) % pool.length;
+        else phraseIdx = phraseIdx % pool.length;
+        const item = pool[phraseIdx] || FALLBACK_PHRASES[0];
+        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        setTxt('homePhraseCardTitle', isZh ? '今日我们的对话表达' : '오늘의 우리 대화 표현');
+        setTxt('homePhraseToneBadge', isZh ? (item.toneZh || '甜蜜表达') : (item.toneKo || '다정한 표현'));
+        setTxt('homePhrasePrimary', isZh ? item.zh : item.ko);
+        setTxt('homePhraseSecondary', isZh ? item.ko : item.zh);
+        setTxt('homePhraseSpeakLbl', isZh ? '听韩语发音' : '중국어 듣기');
+        setTxt('homePhraseNextLbl', isZh ? '换一句' : '다른 표현');
+        window.__cwCurrentHomePhrase = item;
+      }
+      window.__renderHomeCouplePhrase = renderHomeCouplePhrase;
+
+      document.getElementById('homePhraseNextBtn')?.addEventListener('click', () => renderHomeCouplePhrase(true));
+      document.getElementById('homePhraseSpeakBtn')?.addEventListener('click', () => {
+        const item = window.__cwCurrentHomePhrase || FALLBACK_PHRASES[0];
+        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        if (typeof speakText === 'function') {
+          speakText(isZh ? item.ko : item.zh, isZh ? 'ko-KR' : 'zh-CN');
+        }
+      });
+
+      // Boot & re-apply cleanly after state loads
+      applyChatBg();
+      renderHomeCouplePhrase(false);
+      setTimeout(() => { applyChatBg(); renderHomeCouplePhrase(false); }, 900);
+    })();
+  </script>
+
+  <script>
+    (function initV56DelightPack() {
+      // 1) Romantic Keyword Particle Effect (lightweight 14-node CSS float)
+      function triggerCoupleKeywordEffect(rawText) {
+        const t = String(rawText || '').trim();
+        if (!t) return;
+        let emojis = null;
+        if (/사랑해|사랑해요|我爱你|爱你|好爱你|love\s*you/i.test(t)) {
+          emojis = ['❤️', '💖', '💗', '💜', '✨'];
+        } else if (/보고\s*싶어|보고파|想你|好想你|miss\s*you/i.test(t)) {
+          emojis = ['💜', '✨', '🌙', '💫', '🩷'];
+        } else if (/생일|축하|기념일|生日快乐|纪念日|happy\s*birthday/i.test(t)) {
+          emojis = ['🎉', '✨', '💖', '🎊', '🥳'];
+        }
+        if (!emojis) return;
+        for (let i = 0; i < 14; i++) {
+          const sp = document.createElement('span');
+          sp.className = 'cw-fx-particle';
+          sp.textContent = emojis[i % emojis.length];
+          sp.style.left = `${8 + Math.random() * 84}%`;
+          sp.style.setProperty('--dx', `${Math.round((Math.random() - 0.5) * 90)}px`);
+          sp.style.setProperty('--rot', `${Math.round((Math.random() - 0.5) * 50)}deg`);
+          sp.style.animationDelay = `${(Math.random() * 0.45).toFixed(2)}s`;
+          document.body.appendChild(sp);
+          setTimeout(() => sp.remove(), 2650);
+        }
+      }
+      window.__triggerCoupleKeywordEffect = triggerCoupleKeywordEffect;
+
+      const chatFormEl = document.getElementById('chatForm');
+      if (chatFormEl) {
+        chatFormEl.addEventListener('submit', () => {
+          const inp = document.getElementById('chatInput');
+          if (inp && inp.value) triggerCoupleKeywordEffect(inp.value);
+        }, true);
+      }
+
+      // 2) Instagram DM-style Double-Tap Heart on Chat Bubbles
+      const listEl = document.getElementById('chatMessagesList');
+      if (listEl) {
+        let lastTapId = '';
+        let lastTapTs = 0;
+        listEl.addEventListener('click', (e) => {
+          const t = e.target;
+          if (!t || !t.closest) return;
+          if (t.closest('button, a, video, audio, input, textarea, .cw-zoom-photo')) return;
+          const bubble = t.closest('.cw-msg-bubble');
+          if (!bubble) return;
+          const mid = bubble.getAttribute('data-msg-id');
+          if (!mid) return;
+          const now = Date.now();
+          if (lastTapId === mid && (now - lastTapTs) < 330) {
+            lastTapId = '';
+            lastTapTs = 0;
+            if (typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) {
+              const target = state.chat.messages.find(x => x && x.id === mid);
+              if (target) {
+                if (!Array.isArray(target.reactions)) target.reactions = [];
+                const idx = target.reactions.indexOf('❤️');
+                if (idx >= 0) target.reactions.splice(idx, 1);
+                else target.reactions.push('❤️');
+                try { if (navigator.vibrate) navigator.vibrate(15); } catch (_) {}
+                const pop = document.createElement('span');
+                pop.className = 'cw-dbl-heart-pop';
+                pop.textContent = '❤️';
+                pop.style.left = `${e.clientX || (window.innerWidth / 2)}px`;
+                pop.style.top = `${e.clientY || (window.innerHeight / 2)}px`;
+                document.body.appendChild(pop);
+                setTimeout(() => pop.remove(), 700);
+                if (typeof saveState === 'function') saveState(true);
+                if (typeof renderChat === 'function') renderChat();
+                if (typeof window.__sendChatSignal === 'function') {
+                  window.__sendChatSignal('react', { msgId: mid, reactions: target.reactions });
+                }
+              }
+            }
+          } else {
+            lastTapId = mid;
+            lastTapTs = now;
+          }
+        });
+      }
+
+      // 3) Editable Quick Couple Phrase Bar above Chat Input
+      const QP_KEY = 'cw_quick_phrases_v1';
+      const DEF_QP_KO = ['밥 먹었어?', '지금 뭐해?', '보고 싶어 💜', '사랑해', '잘 자 🌙'];
+      const DEF_QP_ZH = ['吃饭了吗？', '在干嘛呀？', '好想你 💜', '我爱你', '晚安 🌙'];
+
+      function loadQuickPhrases() {
+        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        try {
+          const saved = JSON.parse(localStorage.getItem(QP_KEY) || 'null');
+          if (Array.isArray(saved) && saved.length) return saved;
+        } catch (_) {}
+        return isZh ? DEF_QP_ZH : DEF_QP_KO;
+      }
+
+      function renderQuickPhraseBar() {
+        const bar = document.getElementById('cwQuickPhraseBar');
+        if (!bar) return;
+        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const items = loadQuickPhrases();
+        bar.innerHTML = '';
+        items.forEach(txt => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn-ghost px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap shrink-0 transition active:scale-95';
+          btn.textContent = txt;
+          btn.addEventListener('click', () => {
+            const inp = document.getElementById('chatInput');
+            if (!inp) return;
+            inp.value = txt;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+            const form = document.getElementById('chatForm');
+            if (form) form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+          });
+          bar.appendChild(btn);
+        });
+        const editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'btn-ghost w-7 h-7 rounded-full inline-flex items-center justify-center text-[11px] shrink-0 opacity-75 hover:opacity-100';
+        editBtn.title = isZh ? '自定义快捷短语' : '단축 멘트 편집';
+        editBtn.textContent = '✏️';
+        editBtn.addEventListener('click', () => {
+          const cur = loadQuickPhrases().join(', ');
+          const ans = prompt(
+            isZh ? '输入常用短语（用逗号分隔，留空恢复默认）' : '자주 쓰는 멘트를 쉼표(,)로 구분해 적어 주세요 (비우면 기본값)',
+            cur
+          );
+          if (ans === null) return;
+          const cleaned = ans.split(/[,，]/).map(s => s.trim()).filter(Boolean).slice(0, 10);
+          try {
+            if (cleaned.length) localStorage.setItem(QP_KEY, JSON.stringify(cleaned));
+            else localStorage.removeItem(QP_KEY);
+          } catch (_) {}
+          renderQuickPhraseBar();
+        });
+        bar.appendChild(editBtn);
+      }
+      window.__renderQuickPhraseBar = renderQuickPhraseBar;
+
+      // 4) Secret Time Capsule Letters (Synced via state.timeCapsules)
+      function getTodayStr() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
+
+      function renderTimeCapsules() {
+        const box = document.getElementById('tcListContainer');
+        if (!box || typeof state === 'undefined') return;
+        const isZh = state.lang === 'zh';
+        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        setTxt('tcCardTitle', isZh ? '秘密时光胶囊信件' : '비밀 타임캡슐 편지');
+        setTxt('tcSealBtn', isZh ? '🔒 封存信件' : '🔒 편지 봉인하기');
+        const ti = document.getElementById('tcTitleInput');
+        const bi = document.getElementById('tcBodyInput');
+        if (ti) ti.placeholder = isZh ? '信件标题（如：100天后的我们）' : '편지 제목 (예: 100일 뒤의 우리에게)';
+        if (bi) bi.placeholder = isZh ? '写下封存到那一天的悄悄话...' : '미래의 그날까지 비밀로 봉인할 마음을 적어 보세요...';
+
+        if (!Array.isArray(state.timeCapsules)) state.timeCapsules = [];
+        setTxt('tcCountBadge', isZh ? `${state.timeCapsules.length} 封` : `${state.timeCapsules.length}통`);
+        if (!state.timeCapsules.length) {
+          box.innerHTML = `<div class="text-center text-xs text-mut py-3">${isZh ? '还没有封存的时光胶囊，写下第一封吧 💌' : '아직 봉인된 타임캡슐이 없어요. 첫 편지를 남겨 보세요 💌'}</div>`;
+          return;
+        }
+        const today = getTodayStr();
+        box.innerHTML = '';
+        state.timeCapsules.slice().sort((a, b) => String(a.unlockDate || '').localeCompare(String(b.unlockDate || ''))).forEach(cap => {
+          const unlocked = !cap.unlockDate || today >= cap.unlockDate;
+          const diffMs = cap.unlockDate ? (new Date(cap.unlockDate + 'T00:00:00') - new Date(today + 'T00:00:00')) : 0;
+          const dLeft = Math.max(0, Math.ceil(diffMs / 86400000));
+          const card = document.createElement('div');
+          card.className = 'royal-subcard rounded-2xl p-3 space-y-1.5 border';
+          card.style.borderColor = unlocked ? 'rgba(200,165,110,0.48)' : 'var(--border-subtle)';
+          const authorLbl = cap.author === 'jingchan' ? '靖灿' : '수완';
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <div class="font-bold text-xs truncate">${unlocked ? '✨ ' : '🔒 '}${typeof escapeHtml === 'function' ? escapeHtml(cap.title || '') : (cap.title || '')}</div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" style="background:${unlocked ? 'rgba(16,185,129,0.14)' : 'var(--accent-royal-soft)'}; color:${unlocked ? '#059669' : 'var(--accent-royal)'};">${unlocked ? (isZh ? '可开启' : '열기 가능') : `D-${dLeft}`}</span>
+            </div>
+            <div class="text-[10px] text-mut flex items-center justify-between">
+              <span>${authorLbl} · ${cap.unlockDate || ''}</span>
+              <button type="button" class="tc-del-btn opacity-65 hover:opacity-100 text-[10px]" data-id="${cap.id}">${isZh ? '删除' : '삭제'}</button>
+            </div>
+            <div class="tc-body-wrap text-xs leading-relaxed whitespace-pre-wrap break-words ${unlocked && cap.opened ? '' : 'hidden'} pt-1 border-t" style="border-color: var(--border-subtle);">${typeof escapeHtml === 'function' ? escapeHtml(cap.body || '') : (cap.body || '')}</div>
+          `;
+          card.addEventListener('click', (e) => {
+            if (e.target && e.target.closest && e.target.closest('.tc-del-btn')) {
+              state.timeCapsules = state.timeCapsules.filter(x => x && x.id !== cap.id);
+              if (typeof saveState === 'function') saveState(true);
+              renderTimeCapsules();
+              return;
+            }
+            if (!unlocked) {
+              if (typeof showToast === 'function') {
+                showToast(isZh ? `🔒 还要等 ${dLeft} 天（${cap.unlockDate}）才能打开哦` : `🔒 ${cap.unlockDate}까지 ${dLeft}일 남았어요! 그날 열어보세요`);
+              }
+              return;
+            }
+            cap.opened = !cap.opened;
+            if (cap.opened) triggerCoupleKeywordEffect('축하해요');
+            if (typeof saveState === 'function') saveState(true);
+            renderTimeCapsules();
+          });
+          box.appendChild(card);
+        });
+      }
+      window.__renderTimeCapsules = renderTimeCapsules;
+
+      const dateInp = document.getElementById('tcDateInput');
+      if (dateInp && !dateInp.value) {
+        const d = new Date(Date.now() + 7 * 86400000);
+        dateInp.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+      document.getElementById('tcSealBtn')?.addEventListener('click', () => {
+        if (typeof state === 'undefined') return;
+        const isZh = state.lang === 'zh';
+        const ti = document.getElementById('tcTitleInput');
+        const di = document.getElementById('tcDateInput');
+        const bi = document.getElementById('tcBodyInput');
+        const body = (bi?.value || '').trim();
+        const unlockDate = (di?.value || '').trim();
+        const title = (ti?.value || '').trim() || (isZh ? '给未来的你' : '미래의 너에게');
+        if (!body) {
+          if (typeof showToast === 'function') showToast(isZh ? '请先写下信件内容 💌' : '봉인할 편지 내용을 먼저 적어 주세요 💌');
+          return;
+        }
+        if (!Array.isArray(state.timeCapsules)) state.timeCapsules = [];
+        state.timeCapsules.unshift({
+          id: `tc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          title,
+          body,
+          unlockDate,
+          author: state.myRole || 'suwan',
+          createdAt: Date.now(),
+          opened: false
+        });
+        if (ti) ti.value = '';
+        if (bi) bi.value = '';
+        if (typeof saveState === 'function') saveState(true);
+        renderTimeCapsules();
+        if (typeof showToast === 'function') showToast(isZh ? '🔒 时光胶囊已封存并同步给对方 ✨' : '🔒 타임캡슐을 봉인했어요! 상대방에게도 동기화돼요 ✨');
+      });
+
+      renderQuickPhraseBar();
+      renderTimeCapsules();
+      setTimeout(() => { renderQuickPhraseBar(); renderTimeCapsules(); }, 1000);
+    })();
+  </script>
+
+  <!-- v57 Couple Live Activity Status Picker Modal -->
+  <div id="cwActivityPickerModal" class="hidden fixed inset-0 z-[9991] flex items-end sm:items-center justify-center p-3 sm:p-4" style="background: rgba(18, 13, 31, 0.52);">
+    <div class="royal-card w-full max-w-sm rounded-3xl p-4 sm:p-5 space-y-3.5" style="background: var(--surface-1);">
+      <div class="flex items-center justify-between gap-2">
+        <div class="font-bold text-sm flex items-center gap-1.5"><span>💫</span> <span id="cwActModalTitle">지금 뭐 하고 있어?</span></div>
+        <button id="closeActModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-sm">✕</button>
+      </div>
+      <div id="cwActPartnerInfo" class="royal-subcard rounded-2xl px-3 py-2 text-xs text-sec"></div>
+      <div id="cwActGrid" class="grid grid-cols-2 gap-2"></div>
+    </div>
+  </div>
+
+  <script>
+    (function initV57Features() {
+      const ACTIVITIES = [
+        { id: 'working', icon: '💻', ko: '일하는 중', zh: '工作中' },
+        { id: 'eating', icon: '🍜', ko: '밥 먹는 중', zh: '吃饭中' },
+        { id: 'workout', icon: '🏃', ko: '운동 중', zh: '运动中' },
+        { id: 'missing', icon: '💜', ko: '보고 싶은 중', zh: '想你中' },
+        { id: 'sleeping', icon: '🌙', ko: '자는 중', zh: '睡觉中' },
+        { id: 'chilling', icon: '✨', ko: '여유로운 중', zh: '悠闲中' }
+      ];
+
+      function findAct(id) {
+        return ACTIVITIES.find(a => a.id === id) || null;
+      }
+
+      function renderActivityPill() {
+        const btn = document.getElementById('cwActivityPillBtn');
+        if (!btn || typeof state === 'undefined') return;
+        const isZh = state.lang === 'zh';
+        const myRole = state.myRole || 'suwan';
+        const partnerActId = myRole === 'suwan' ? state.profile?.jingchanActivity : state.profile?.suwanActivity;
+        const myActId = myRole === 'suwan' ? state.profile?.suwanActivity : state.profile?.jingchanActivity;
+        const pAct = findAct(partnerActId);
+        const mAct = findAct(myActId);
+        if (pAct) {
+          btn.textContent = `${pAct.icon} ${isZh ? pAct.zh : pAct.ko}`;
+          btn.style.background = 'var(--accent-royal-soft)';
+          btn.style.color = 'var(--accent-royal)';
+        } else if (mAct) {
+          btn.textContent = `${mAct.icon} ${isZh ? mAct.zh : mAct.ko}`;
+          btn.style.background = 'var(--surface-2)';
+          btn.style.color = 'var(--text-secondary)';
+        } else {
+          btn.textContent = isZh ? '✨ 状态' : '✨ 상태';
+          btn.style.background = 'var(--surface-2)';
+          btn.style.color = 'var(--text-secondary)';
+        }
+      }
+      window.__renderCwActivityPill = renderActivityPill;
+
+      const actModal = document.getElementById('cwActivityPickerModal');
+      const actBtn = document.getElementById('cwActivityPillBtn');
+      const closeActBtn = document.getElementById('closeActModalBtn');
+      const actGrid = document.getElementById('cwActGrid');
+      const actPartnerInfo = document.getElementById('cwActPartnerInfo');
+
+      function openActivityModal() {
+        if (!actModal || !actGrid || typeof state === 'undefined') return;
+        const isZh = state.lang === 'zh';
+        const myRole = state.myRole || 'suwan';
+        const myActId = myRole === 'suwan' ? state.profile?.suwanActivity : state.profile?.jingchanActivity;
+        const partnerActId = myRole === 'suwan' ? state.profile?.jingchanActivity : state.profile?.suwanActivity;
+        const pAct = findAct(partnerActId);
+        const pName = myRole === 'suwan' ? (isZh ? '靖灿' : '징찬') : (isZh ? '秀完' : '수완');
+        const titleEl = document.getElementById('cwActModalTitle');
+        if (titleEl) titleEl.textContent = isZh ? '现在在干嘛呀？' : '지금 뭐 하고 있어?';
+        if (actPartnerInfo) {
+          actPartnerInfo.textContent = pAct
+            ? (isZh ? `${pName}现在：${pAct.icon} ${pAct.zh}` : `${pName}의 현재 상태: ${pAct.icon} ${pAct.ko}`)
+            : (isZh ? `${pName}还没有设置当前状态` : `${pName}님이 아직 상태를 설정하지 않았어요`);
+        }
+        actGrid.innerHTML = '';
+        ACTIVITIES.forEach(a => {
+          const b = document.createElement('button');
+          const active = myActId === a.id;
+          b.type = 'button';
+          b.className = `${active ? 'btn-royal' : 'btn-ghost'} py-2.5 px-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95`;
+          b.textContent = `${a.icon} ${isZh ? a.zh : a.ko}`;
+          b.addEventListener('click', () => {
+            if (!state.profile) state.profile = {};
+            if (myRole === 'suwan') state.profile.suwanActivity = a.id;
+            else state.profile.jingchanActivity = a.id;
+            if (typeof saveState === 'function') saveState(true);
+            renderActivityPill();
+            actModal.classList.add('hidden');
+            if (typeof showToast === 'function') {
+              showToast(isZh ? `状态已更新：${a.icon} ${a.zh}` : `내 상태 변경: ${a.icon} ${a.ko}`);
+            }
+          });
+          actGrid.appendChild(b);
+        });
+        actModal.classList.remove('hidden');
+      }
+
+      if (actBtn) actBtn.addEventListener('click', openActivityModal);
+      if (closeActBtn && actModal) closeActBtn.addEventListener('click', () => actModal.classList.add('hidden'));
+      if (actModal) actModal.addEventListener('click', (e) => { if (e.target === actModal) actModal.classList.add('hidden'); });
+
+      // 2) Home Memory Time Machine Card
+      let lastTmKey = '';
+      function drawRandomMemory(userClicked) {
+        if (typeof state === 'undefined') return;
+        const isZh = state.lang === 'zh';
+        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        setTxt('homeTmTitle', isZh ? '回忆时光机' : '추억 타임머신');
+        setTxt('homeTmDrawLbl', isZh ? '抽取回忆' : '추억 꺼내기');
+
+        const candidates = [];
+        const albums = Array.isArray(state.albums) ? state.albums : [];
+        albums.forEach(al => {
+          if (al && al.url && !String(al.mediaType || '').includes('video')) {
+            candidates.push({
+              key: 'al_' + (al.id || al.date || Math.random()),
+              date: al.date || (isZh ? '相册回忆' : '앨범 추억'),
+              photo: al.url,
+              main: al.caption || (isZh ? '我们一起珍藏的照片 💕' : '함께 간직한 소중한 사진 💕'),
+              sub: al.category || ''
+            });
+          }
+        });
+        const msgs = Array.isArray(state.chat?.messages) ? state.chat.messages : [];
+        msgs.forEach(m => {
+          if (!m) return;
+          const o = String(m.original || '').trim();
+          const t = String(m.translated || '').trim();
+          if (m.photoUrl) {
+            candidates.push({
+              key: 'mp_' + m.id,
+              date: m.dateStr || m.time || (isZh ? '聊天照片' : '대화 사진'),
+              photo: m.photoUrl,
+              main: (!/사진을 보냈어요|分享了一张照片/.test(o) && o) ? o : (isZh ? '聊天中分享的瞬间 📷' : '대화 중 나눈 소중한 순간 📷'),
+              sub: (!/사진을 보냈어요|分享了一张照片/.test(o) && t && t !== o) ? t : ''
+            });
+          } else if (o.length >= 4 && o.length <= 80 && t && t !== o && !/번역이 부정확|번역 중|동영상을 보냈어요|分享了一段视频/.test(o + ' ' + t)) {
+            candidates.push({
+              key: 'mt_' + m.id,
+              date: m.dateStr || m.time || (isZh ? '那天的对话' : '그날의 대화'),
+              photo: '',
+              main: o,
+              sub: t
+            });
+          }
+        });
+
+        const photoWrap = document.getElementById('homeTmPhotoWrap');
+        const photoImg = document.getElementById('homeTmPhotoImg');
+        if (!candidates.length) {
+          setTxt('homeTmDateBadge', isZh ? '等待记录' : '추억 대기 중');
+          setTxt('homeTmMainText', isZh ? '多聊天、多发照片后，时光机会随机翻出甜蜜回忆 ✨' : '대화와 사진이 쌓이면 타임머신이 랜덤으로 추억을 꺼내 줘요 ✨');
+          setTxt('homeTmSubText', '');
+          if (photoWrap) photoWrap.classList.add('hidden');
+          return;
+        }
+        let pick = candidates[Math.floor(Math.random() * candidates.length)];
+        if (candidates.length > 1 && pick.key === lastTmKey) {
+          pick = candidates[(candidates.indexOf(pick) + 1) % candidates.length];
+        }
+        lastTmKey = pick.key;
+        setTxt('homeTmDateBadge', pick.date);
+        setTxt('homeTmMainText', pick.main);
+        setTxt('homeTmSubText', pick.sub || '');
+        if (pick.photo && photoWrap && photoImg) {
+          photoImg.src = typeof __cwMediaUrl === 'function' ? __cwMediaUrl(pick.photo) : pick.photo;
+          photoWrap.classList.remove('hidden');
+        } else if (photoWrap) {
+          photoWrap.classList.add('hidden');
+        }
+        if (userClicked && typeof window.__triggerCoupleKeywordEffect === 'function') {
+          window.__triggerCoupleKeywordEffect('보고 싶어');
+        }
+      }
+      window.__drawHomeTimeMachine = drawRandomMemory;
+
+      document.getElementById('homeTmDrawBtn')?.addEventListener('click', () => drawRandomMemory(true));
+
+      renderActivityPill();
+      drawRandomMemory(false);
+      setTimeout(() => { renderActivityPill(); drawRandomMemory(false); }, 1100);
+      setInterval(() => { if (!document.hidden) renderActivityPill(); }, 8000);
+    })();
   </script>
 </body>
 </html>
