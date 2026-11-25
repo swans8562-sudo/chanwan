@@ -1912,11 +1912,11 @@
       box-shadow: 0 10px 24px -8px rgba(126, 72, 196, 0.38), inset 0 1px 0 rgba(255, 235, 248, 0.34) !important;
     }
     /* Romantic Ring around Chat Avatars */
-    .cw-msg-row .rounded-full {
+    .cw-msg-row > .rounded-full {
       box-shadow: 0 4px 12px -4px rgba(146, 86, 206, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.85);
     }
-    [data-dark="1"] .cw-msg-row .rounded-full,
-    [data-theme="velvet-dusk"] .cw-msg-row .rounded-full {
+    [data-dark="1"] .cw-msg-row > .rounded-full,
+    [data-theme="velvet-dusk"] .cw-msg-row > .rounded-full {
       box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px rgba(233, 213, 255, 0.28);
     }
     /* Soft Pearl Header Buttons & Romantic Active Dock Lift */
@@ -2195,6 +2195,24 @@
       border: 1px solid rgba(224, 194, 255, 0.22) !important;
       border-top: 1px solid rgba(242, 210, 158, 0.44) !important;
       box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.24) !important;
+    }
+  
+    /* v65 Zero-Clip Delivery Badges (전송됨/안 읽음/읽음) & Clean Pill Spacing */
+    .cw-msg-row {
+      overflow: visible !important;
+      padding-bottom: 2px;
+    }
+    .cw-delivery-badge, .cw-delivery-badge > span {
+      box-shadow: none !important;
+      line-height: 1.35 !important;
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      overflow: visible !important;
+    }
+    #chatMessagesList {
+      padding-bottom: 14px !important;
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -4325,7 +4343,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v63</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v65</span>
           </div>
         </div>
       </div>
@@ -8748,6 +8766,16 @@
       ]);
 
       let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      window.__cwApi = {
+        getState: () => state,
+        saveState: (sync) => { try { return typeof saveState === 'function' ? saveState(sync) : undefined; } catch (_) {} },
+        renderChat: () => { try { return typeof renderChat === 'function' ? renderChat() : undefined; } catch (_) {} },
+        showToast: (msg) => { try { return typeof showToast === 'function' ? showToast(msg) : undefined; } catch (_) {} },
+        speakText: (t, l, s) => { try { return typeof speakText === 'function' ? speakText(t, l, s) : undefined; } catch (_) {} },
+        escapeHtml: (s) => { try { return typeof escapeHtml === 'function' ? escapeHtml(s) : String(s || ''); } catch (_) { return String(s || ''); } },
+        compressImageToDataUrl: (f, maxW) => (typeof compressImageToDataUrl === 'function' ? compressImageToDataUrl(f, maxW) : Promise.reject(new Error('no_comp'))),
+        mediaUrl: (u, mime) => { try { return typeof __cwMediaUrl === 'function' ? __cwMediaUrl(u, mime) : u; } catch (_) { return u; } }
+      };
       let activeAvatarTarget = 'suwan';
       let activeCityTarget = 'suwan';
       let activeMoodTarget = 'suwan';
@@ -14147,7 +14175,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v63',
+          ver: 'Prime 3 · v65',
           date: '2026-11-25',
           koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
           zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
@@ -14169,7 +14197,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v63 更新日志' : '📜 灿完时光 Prime 3 · v63 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v65 更新日志' : '📜 灿完时光 Prime 3 · v65 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -25374,6 +25402,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
   <script>
     (function initV55Upgrades() {
+      const __api = () => window.__cwApi || {};
+      const __st = () => (__api().getState ? __api().getState() : null);
+      const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
+      const __renderChat = () => { if (__api().renderChat) __api().renderChat(); };
+      const __toast = (m) => { if (__api().showToast) __api().showToast(m); };
+      const __speak = (t, l, s) => { if (__api().speakText) __api().speakText(t, l, s); };
+      const __esc = (s) => (__api().escapeHtml ? __api().escapeHtml(s) : String(s || ''));
+      const __mediaUrl = (u, mime) => (__api().mediaUrl ? __api().mediaUrl(u, mime) : u);
+
       const BG_KEY = 'cw_chat_bg_v1';
       const PRESETS = {
         default: '',
@@ -25411,7 +25448,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       window.__applyCwChatBg = applyChatBg;
 
       function syncChatBgModalLang() {
-        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const isZh = (__st() && __st().lang === 'zh');
         const setTxt = (id, ko, zh) => { const el = document.getElementById(id); if (el) el.textContent = isZh ? zh : ko; };
         setTxt('cwChatBgModalTitle', '채팅방 배경 꾸미기', '自定义聊天背景');
         setTxt('cwChatBgPresetLabel', '감성 배경 프리셋', '浪漫主题背景');
@@ -25460,13 +25497,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const f = bgFileInput.files && bgFileInput.files[0];
             if (!f) return;
             try {
-              const dUrl = typeof compressImageToDataUrl === 'function'
-                ? await compressImageToDataUrl(f, 960)
+              const dUrl = __api().compressImageToDataUrl
+                ? await __api().compressImageToDataUrl(f, 960)
                 : await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || '')); r.onerror = rej; r.readAsDataURL(f); });
               const next = { preset: 'photo', photo: dUrl, alpha: Number(alphaSlider?.value || 55) };
               try { localStorage.setItem(BG_KEY, JSON.stringify(next)); } catch (_) {}
               applyChatBg(next);
-              if (typeof showToast === 'function') showToast(state.lang === 'zh' ? '🖼️ 聊天背景已更换 ✨' : '🖼️ 채팅방 배경이 적용됐어요 ✨');
+              if (__api().showToast) __toast((__st()?.lang === 'zh') ? '🖼️ 聊天背景已更换 ✨' : '🖼️ 채팅방 배경이 적용됐어요 ✨');
             } catch (_) {}
             bgFileInput.value = '';
           });
@@ -25549,8 +25586,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           hintEl.style.transform = 'scale(0.7)';
           cur.col.style.transition = 'transform 0.18s ease';
           cur.col.style.transform = '';
-          if (cur.active && cur.dx >= 46 && typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) {
-            const target = state.chat.messages.find(x => x && x.id === cur.mid);
+          if (cur.active && cur.dx >= 46 && (__st() && __st().chat && Array.isArray(__st().chat.messages))) {
+            const target = (__st()?.chat?.messages || []).find(x => x && x.id === cur.mid);
             if (target) {
               try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
               window.__pendingChatReply = {
@@ -25585,7 +25622,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       function getPhrasePool() {
         const pool = [];
         try {
-          const msgs = (typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages : [];
+          const msgs = ((__st() && __st().chat && Array.isArray(__st().chat.messages))) ? state.chat.messages : [];
           for (let i = msgs.length - 1; i >= 0 && pool.length < 24; i--) {
             const m = msgs[i];
             if (!m || !m.original || !m.translated) continue;
@@ -25610,7 +25647,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         if (step) phraseIdx = (phraseIdx + 1) % pool.length;
         else phraseIdx = phraseIdx % pool.length;
         const item = pool[phraseIdx] || FALLBACK_PHRASES[0];
-        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const isZh = (__st() && __st().lang === 'zh');
         const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
         setTxt('homePhraseCardTitle', isZh ? '今日我们的对话表达' : '오늘의 우리 대화 표현');
         setTxt('homePhraseToneBadge', isZh ? (item.toneZh || '甜蜜表达') : (item.toneKo || '다정한 표현'));
@@ -25625,9 +25662,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       document.getElementById('homePhraseNextBtn')?.addEventListener('click', () => renderHomeCouplePhrase(true));
       document.getElementById('homePhraseSpeakBtn')?.addEventListener('click', () => {
         const item = window.__cwCurrentHomePhrase || FALLBACK_PHRASES[0];
-        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
-        if (typeof speakText === 'function') {
-          speakText(isZh ? item.ko : item.zh, isZh ? 'ko-KR' : 'zh-CN');
+        const isZh = (__st() && __st().lang === 'zh');
+        if (__api().speakText) {
+          __speak(isZh ? item.ko : item.zh, isZh ? 'ko-KR' : 'zh-CN');
         }
       });
 
@@ -25640,6 +25677,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
   <script>
     (function initV56DelightPack() {
+      const __api = () => window.__cwApi || {};
+      const __st = () => (__api().getState ? __api().getState() : null);
+      const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
+      const __renderChat = () => { if (__api().renderChat) __api().renderChat(); };
+      const __toast = (m) => { if (__api().showToast) __api().showToast(m); };
+      const __speak = (t, l, s) => { if (__api().speakText) __api().speakText(t, l, s); };
+      const __esc = (s) => (__api().escapeHtml ? __api().escapeHtml(s) : String(s || ''));
+      const __mediaUrl = (u, mime) => (__api().mediaUrl ? __api().mediaUrl(u, mime) : u);
+
       // 1) Romantic Keyword Particle Effect (lightweight 14-node CSS float)
       function triggerCoupleKeywordEffect(rawText) {
         const t = String(rawText || '').trim();
@@ -25692,8 +25738,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (lastTapId === mid && (now - lastTapTs) < 330) {
             lastTapId = '';
             lastTapTs = 0;
-            if (typeof state !== 'undefined' && state.chat && Array.isArray(state.chat.messages)) {
-              const target = state.chat.messages.find(x => x && x.id === mid);
+            if ((__st() && __st().chat && Array.isArray(__st().chat.messages))) {
+              const target = (__st()?.chat?.messages || []).find(x => x && x.id === mid);
               if (target) {
                 if (!Array.isArray(target.reactions)) target.reactions = [];
                 const idx = target.reactions.indexOf('❤️');
@@ -25707,8 +25753,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 pop.style.top = `${e.clientY || (window.innerHeight / 2)}px`;
                 document.body.appendChild(pop);
                 setTimeout(() => pop.remove(), 700);
-                if (typeof saveState === 'function') saveState(true);
-                if (typeof renderChat === 'function') renderChat();
+                __save(true);
+                __renderChat();
                 if (typeof window.__sendChatSignal === 'function') {
                   window.__sendChatSignal('react', { msgId: mid, reactions: target.reactions });
                 }
@@ -25727,7 +25773,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const DEF_QP_ZH = ['吃饭了吗？', '在干嘛呀？', '好想你 💜', '我爱你', '晚安 🌙'];
 
       function loadQuickPhrases() {
-        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const isZh = (__st() && __st().lang === 'zh');
         try {
           const saved = JSON.parse(localStorage.getItem(QP_KEY) || 'null');
           if (Array.isArray(saved) && saved.length) return saved;
@@ -25738,7 +25784,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       function renderQuickPhraseBar() {
         const bar = document.getElementById('cwQuickPhraseBar');
         if (!bar) return;
-        const isZh = typeof state !== 'undefined' && state.lang === 'zh';
+        const isZh = (__st() && __st().lang === 'zh');
         const items = loadQuickPhrases();
         bar.innerHTML = '';
         items.forEach(txt => {
@@ -25790,7 +25836,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       function renderTimeCapsules() {
         const box = document.getElementById('tcListContainer');
-        if (!box || typeof state === 'undefined') return;
+        const state = __st(); if (!box || !state) return;
         const isZh = state.lang === 'zh';
         const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
         setTxt('tcCardTitle', isZh ? '秘密时光胶囊信件' : '비밀 타임캡슐 편지');
@@ -25818,31 +25864,31 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const authorLbl = cap.author === 'jingchan' ? '靖灿' : '수완';
           card.innerHTML = `
             <div class="flex items-center justify-between gap-2">
-              <div class="font-bold text-xs truncate">${unlocked ? '✨ ' : '🔒 '}${typeof escapeHtml === 'function' ? escapeHtml(cap.title || '') : (cap.title || '')}</div>
+              <div class="font-bold text-xs truncate">${unlocked ? '✨ ' : '🔒 '}${__esc(cap.title || '')}</div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" style="background:${unlocked ? 'rgba(16,185,129,0.14)' : 'var(--accent-royal-soft)'}; color:${unlocked ? '#059669' : 'var(--accent-royal)'};">${unlocked ? (isZh ? '可开启' : '열기 가능') : `D-${dLeft}`}</span>
             </div>
             <div class="text-[10px] text-mut flex items-center justify-between">
               <span>${authorLbl} · ${cap.unlockDate || ''}</span>
               <button type="button" class="tc-del-btn opacity-65 hover:opacity-100 text-[10px]" data-id="${cap.id}">${isZh ? '删除' : '삭제'}</button>
             </div>
-            <div class="tc-body-wrap text-xs leading-relaxed whitespace-pre-wrap break-words ${unlocked && cap.opened ? '' : 'hidden'} pt-1 border-t" style="border-color: var(--border-subtle);">${typeof escapeHtml === 'function' ? escapeHtml(cap.body || '') : (cap.body || '')}</div>
+            <div class="tc-body-wrap text-xs leading-relaxed whitespace-pre-wrap break-words ${unlocked && cap.opened ? '' : 'hidden'} pt-1 border-t" style="border-color: var(--border-subtle);">${__esc(cap.body || '')}</div>
           `;
           card.addEventListener('click', (e) => {
             if (e.target && e.target.closest && e.target.closest('.tc-del-btn')) {
               state.timeCapsules = state.timeCapsules.filter(x => x && x.id !== cap.id);
-              if (typeof saveState === 'function') saveState(true);
+              __save(true);
               renderTimeCapsules();
               return;
             }
             if (!unlocked) {
-              if (typeof showToast === 'function') {
-                showToast(isZh ? `🔒 还要等 ${dLeft} 天（${cap.unlockDate}）才能打开哦` : `🔒 ${cap.unlockDate}까지 ${dLeft}일 남았어요! 그날 열어보세요`);
+              if (__api().showToast) {
+                __toast(isZh ? `🔒 还要等 ${dLeft} 天（${cap.unlockDate}）才能打开哦` : `🔒 ${cap.unlockDate}까지 ${dLeft}일 남았어요! 그날 열어보세요`);
               }
               return;
             }
             cap.opened = !cap.opened;
             if (cap.opened) triggerCoupleKeywordEffect('축하해요');
-            if (typeof saveState === 'function') saveState(true);
+            __save(true);
             renderTimeCapsules();
           });
           box.appendChild(card);
@@ -25856,7 +25902,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         dateInp.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       }
       document.getElementById('tcSealBtn')?.addEventListener('click', () => {
-        if (typeof state === 'undefined') return;
+        const state = __st(); if (!state) return;
         const isZh = state.lang === 'zh';
         const ti = document.getElementById('tcTitleInput');
         const di = document.getElementById('tcDateInput');
@@ -25865,7 +25911,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         const unlockDate = (di?.value || '').trim();
         const title = (ti?.value || '').trim() || (isZh ? '给未来的你' : '미래의 너에게');
         if (!body) {
-          if (typeof showToast === 'function') showToast(isZh ? '请先写下信件内容 💌' : '봉인할 편지 내용을 먼저 적어 주세요 💌');
+          __toast(isZh ? '请先写下信件内容 💌' : '봉인할 편지 내용을 먼저 적어 주세요 💌');
           return;
         }
         if (!Array.isArray(state.timeCapsules)) state.timeCapsules = [];
@@ -25880,9 +25926,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         });
         if (ti) ti.value = '';
         if (bi) bi.value = '';
-        if (typeof saveState === 'function') saveState(true);
+        __save(true);
         renderTimeCapsules();
-        if (typeof showToast === 'function') showToast(isZh ? '🔒 时光胶囊已封存并同步给对方 ✨' : '🔒 타임캡슐을 봉인했어요! 상대방에게도 동기화돼요 ✨');
+        __toast(isZh ? '🔒 时光胶囊已封存并同步给对方 ✨' : '🔒 타임캡슐을 봉인했어요! 상대방에게도 동기화돼요 ✨');
       });
 
       renderQuickPhraseBar();
@@ -25905,6 +25951,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
   <script>
     (function initV57Features() {
+      const __api = () => window.__cwApi || {};
+      const __st = () => (__api().getState ? __api().getState() : null);
+      const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
+      const __renderChat = () => { if (__api().renderChat) __api().renderChat(); };
+      const __toast = (m) => { if (__api().showToast) __api().showToast(m); };
+      const __speak = (t, l, s) => { if (__api().speakText) __api().speakText(t, l, s); };
+      const __esc = (s) => (__api().escapeHtml ? __api().escapeHtml(s) : String(s || ''));
+      const __mediaUrl = (u, mime) => (__api().mediaUrl ? __api().mediaUrl(u, mime) : u);
+
       const ACTIVITIES = [
         { id: 'working', icon: '💻', ko: '일하는 중', zh: '工作中' },
         { id: 'eating', icon: '🍜', ko: '밥 먹는 중', zh: '吃饭中' },
@@ -25920,7 +25975,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       function renderActivityPill() {
         const btn = document.getElementById('cwActivityPillBtn');
-        if (!btn || typeof state === 'undefined') return;
+        const state = __st(); if (!btn || !state) return;
         const isZh = state.lang === 'zh';
         const myRole = state.myRole || 'suwan';
         const partnerActId = myRole === 'suwan' ? state.profile?.jingchanActivity : state.profile?.suwanActivity;
@@ -25950,7 +26005,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const actPartnerInfo = document.getElementById('cwActPartnerInfo');
 
       function openActivityModal() {
-        if (!actModal || !actGrid || typeof state === 'undefined') return;
+        const state = __st(); if (!actModal || !actGrid || !state) return;
         const isZh = state.lang === 'zh';
         const myRole = state.myRole || 'suwan';
         const myActId = myRole === 'suwan' ? state.profile?.suwanActivity : state.profile?.jingchanActivity;
@@ -25975,11 +26030,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (!state.profile) state.profile = {};
             if (myRole === 'suwan') state.profile.suwanActivity = a.id;
             else state.profile.jingchanActivity = a.id;
-            if (typeof saveState === 'function') saveState(true);
+            __save(true);
             renderActivityPill();
             actModal.classList.add('hidden');
-            if (typeof showToast === 'function') {
-              showToast(isZh ? `状态已更新：${a.icon} ${a.zh}` : `내 상태 변경: ${a.icon} ${a.ko}`);
+            if (__api().showToast) {
+              __toast(isZh ? `状态已更新：${a.icon} ${a.zh}` : `내 상태 변경: ${a.icon} ${a.ko}`);
             }
           });
           actGrid.appendChild(b);
@@ -25994,7 +26049,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       // 2) Home Memory Time Machine Card
       let lastTmKey = '';
       function drawRandomMemory(userClicked) {
-        if (typeof state === 'undefined') return;
+        const state = __st(); if (!state) return;
         const isZh = state.lang === 'zh';
         const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
         setTxt('homeTmTitle', isZh ? '回忆时光机' : '추억 타임머신');
@@ -26003,11 +26058,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         const candidates = [];
         const albums = Array.isArray(state.albums) ? state.albums : [];
         albums.forEach(al => {
-          if (al && al.url && !String(al.mediaType || '').includes('video')) {
+          const __aUrl = al && (al.dataUrl || al.url); if (__aUrl && !String(al.mediaType || '').includes('video')) {
             candidates.push({
               key: 'al_' + (al.id || al.date || Math.random()),
               date: al.date || (isZh ? '相册回忆' : '앨범 추억'),
-              photo: al.url,
+              photo: __aUrl,
               main: al.caption || (isZh ? '我们一起珍藏的照片 💕' : '함께 간직한 소중한 사진 💕'),
               sub: al.category || ''
             });
@@ -26055,7 +26110,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         setTxt('homeTmMainText', pick.main);
         setTxt('homeTmSubText', pick.sub || '');
         if (pick.photo && photoWrap && photoImg) {
-          photoImg.src = typeof __cwMediaUrl === 'function' ? __cwMediaUrl(pick.photo) : pick.photo;
+          photoImg.src = __mediaUrl(pick.photo);
           photoWrap.classList.remove('hidden');
         } else if (photoWrap) {
           photoWrap.classList.add('hidden');
