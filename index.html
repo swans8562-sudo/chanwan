@@ -1779,239 +1779,14 @@
     body[data-maker-shadow="2"] .royal-card,
     body[data-maker-shadow="2"] .royal-card-gold { box-shadow: 0 14px 36px -6px rgba(68, 40, 130, 0.18) !important; }
   
-    /* v52 Global Speed Boost: mobile GPU scroll & layout containment */
-    .cw-msg-row { contain: layout style; content-visibility: auto; contain-intrinsic-size: auto 92px; }
-    .royal-card, .royal-subcard { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
-    #chatMessagesList, #chatVaultBody { -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
-  
-    /* v53 Luxury Boutique Editorial Polish (60fps GPU-safe) */
+    /* ==================== v66 CONSOLIDATED LUXURY + MAX-SPEED + ZERO-CLIP CSS ==================== */
+    /* 1. Max-Speed Mobile GPU & 0ms Tap */
     body {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       letter-spacing: -0.014em;
+      background-attachment: scroll !important;
     }
-    .royal-card {
-      border-radius: 24px !important;
-      border: 1px solid rgba(124, 89, 189, 0.13) !important;
-      box-shadow: 0 10px 30px -10px rgba(72, 42, 128, 0.11), 0 1px 3px rgba(72, 42, 128, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
-      transition: transform 0.18s ease, box-shadow 0.22s ease;
-    }
-    .royal-subcard {
-      border-radius: 18px !important;
-      border: 1px solid rgba(124, 89, 189, 0.10) !important;
-      box-shadow: 0 2px 10px -4px rgba(72, 42, 128, 0.06) !important;
-    }
-    [data-dark="1"] .royal-card,
-    [data-theme="velvet-dusk"] .royal-card,
-    [data-theme="royal-amethyst"] .royal-card {
-      border-color: rgba(216, 180, 254, 0.15) !important;
-      box-shadow: 0 14px 34px -12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
-    }
-    [data-dark="1"] .royal-subcard,
-    [data-theme="velvet-dusk"] .royal-subcard,
-    [data-theme="royal-amethyst"] .royal-subcard {
-      border-color: rgba(216, 180, 254, 0.11) !important;
-      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.4) !important;
-    }
-    /* Satin Primary Buttons */
-    .btn-royal {
-      background-image: linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 55%, rgba(0,0,0,0.08) 100%) !important;
-      box-shadow: 0 6px 18px -6px rgba(96, 58, 168, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
-      letter-spacing: -0.01em;
-    }
-    .btn-royal:active {
-      transform: scale(0.97);
-      box-shadow: 0 3px 10px -4px rgba(96, 58, 168, 0.35) !important;
-    }
-    .btn-gold {
-      background-image: linear-gradient(135deg, rgba(255,248,231,0.35) 0%, rgba(200,165,110,0.12) 100%) !important;
-      border: 1px solid rgba(200, 165, 110, 0.45) !important;
-      box-shadow: 0 4px 14px -6px rgba(176, 138, 72, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
-    }
-    /* Luxury Messenger Bubbles */
-    .cw-msg-row.mine .cw-msg-bubble {
-      border-radius: 20px 20px 6px 20px !important;
-      background-image: linear-gradient(148deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 52%, rgba(0,0,0,0.08) 100%) !important;
-      box-shadow: 0 8px 20px -8px rgba(88, 56, 148, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
-    }
-    .cw-msg-row.partner .cw-msg-bubble {
-      border-radius: 20px 20px 20px 6px !important;
-      box-shadow: 0 6px 18px -8px rgba(64, 42, 110, 0.12), 0 1px 2px rgba(64, 42, 110, 0.05) !important;
-    }
-    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
-    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble {
-      box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-    }
-    /* Refined Champagne-Violet Floating Bottom Dock */
-    .dock-item.active {
-      border: 1px solid rgba(200, 165, 110, 0.42) !important;
-      box-shadow: 0 6px 16px -6px rgba(108, 72, 178, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
-    }
-    [data-dark="1"] .dock-item.active,
-    [data-theme="velvet-dusk"] .dock-item.active {
-      border-color: rgba(212, 175, 118, 0.38) !important;
-      box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
-    }
-    /* Silky Input Capsule Focus Glow */
-    .royal-input:focus-within {
-      border-color: rgba(124, 89, 189, 0.45) !important;
-      box-shadow: 0 0 0 3px rgba(124, 89, 189, 0.12) !important;
-    }
-    /* Editorial Masthead Shimmer */
-    header h1, .cw-brand-title {
-      letter-spacing: 0.05em;
-    }
-  
-    /* v54 Dreamy Romantic Pearl-Rose-Lavender Polish (60fps static CSS) */
-    body {
-      background-image:
-        radial-gradient(circle at 12% 8%, rgba(232, 200, 255, 0.38) 0%, transparent 44%),
-        radial-gradient(circle at 88% 14%, rgba(255, 208, 228, 0.34) 0%, transparent 42%),
-        radial-gradient(circle at 50% 92%, rgba(246, 226, 196, 0.28) 0%, transparent 48%) !important;
-      background-attachment: scroll;
-    }
-    [data-dark="1"] body,
-    [data-theme="velvet-dusk"] body,
-    [data-theme="royal-amethyst"] body {
-      background-image:
-        radial-gradient(circle at 15% 10%, rgba(147, 88, 226, 0.24) 0%, transparent 46%),
-        radial-gradient(circle at 86% 18%, rgba(236, 114, 174, 0.18) 0%, transparent 44%),
-        radial-gradient(circle at 50% 90%, rgba(206, 162, 108, 0.14) 0%, transparent 48%) !important;
-    }
-    /* Shimmering Rose-Lavender Editorial Title */
-    header h1, .cw-brand-title {
-      background: linear-gradient(125deg, #6b3fa0 0%, #b75b9e 52%, #c9975b 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent !important;
-      filter: drop-shadow(0 1px 6px rgba(173, 108, 196, 0.18));
-    }
-    [data-dark="1"] header h1,
-    [data-theme="velvet-dusk"] header h1,
-    [data-dark="1"] .cw-brand-title,
-    [data-theme="velvet-dusk"] .cw-brand-title {
-      background: linear-gradient(125deg, #e9d5ff 0%, #fbcfe8 55%, #f5d8a8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent !important;
-      filter: drop-shadow(0 2px 10px rgba(233, 213, 255, 0.25));
-    }
-    /* Luminous Pearl-Blush Partner Bubble & Silky Orchid-Plum My Bubble */
-    .cw-msg-row.partner .cw-msg-bubble {
-      background: linear-gradient(180deg, #ffffff 0%, #fdf8ff 100%) !important;
-      border: 1px solid rgba(196, 152, 232, 0.26) !important;
-      box-shadow: 0 8px 22px -10px rgba(124, 77, 178, 0.18), 0 1px 3px rgba(219, 138, 186, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
-    }
-    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
-    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble {
-      background: linear-gradient(165deg, rgba(44, 31, 68, 0.96) 0%, rgba(33, 22, 52, 0.98) 100%) !important;
-      border-color: rgba(232, 188, 255, 0.18) !important;
-    }
-    .cw-msg-row.mine .cw-msg-bubble {
-      background-image: linear-gradient(138deg, rgba(255, 198, 232, 0.22) 0%, rgba(255, 255, 255, 0) 48%, rgba(44, 16, 88, 0.16) 100%) !important;
-      box-shadow: 0 10px 24px -8px rgba(126, 72, 196, 0.38), inset 0 1px 0 rgba(255, 235, 248, 0.34) !important;
-    }
-    /* Romantic Ring around Chat Avatars */
-    .cw-msg-row > .rounded-full {
-      box-shadow: 0 4px 12px -4px rgba(146, 86, 206, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.85);
-    }
-    [data-dark="1"] .cw-msg-row > .rounded-full,
-    [data-theme="velvet-dusk"] .cw-msg-row > .rounded-full {
-      box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px rgba(233, 213, 255, 0.28);
-    }
-    /* Soft Pearl Header Buttons & Romantic Active Dock Lift */
-    header button.rounded-full {
-      border: 1px solid rgba(196, 162, 232, 0.26) !important;
-      box-shadow: 0 4px 14px -6px rgba(112, 72, 168, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
-    }
-    [data-dark="1"] header button.rounded-full,
-    [data-theme="velvet-dusk"] header button.rounded-full {
-      border-color: rgba(233, 213, 255, 0.16) !important;
-      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-    }
-    .dock-item.active {
-      background: linear-gradient(180deg, rgba(255, 250, 255, 0.96) 0%, rgba(250, 238, 255, 0.92) 100%) !important;
-      border: 1px solid rgba(214, 166, 232, 0.48) !important;
-      transform: translateY(-2px);
-    }
-    [data-dark="1"] .dock-item.active,
-    [data-theme="velvet-dusk"] .dock-item.active {
-      background: linear-gradient(180deg, rgba(66, 44, 102, 0.95) 0%, rgba(46, 30, 74, 0.95) 100%) !important;
-      border-color: rgba(244, 188, 224, 0.36) !important;
-    }
-    /* Dreamy Rose-Lavender Card Top Accent */
-    .royal-card {
-      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 248, 255, 0.18) 100%);
-    }
-    [data-dark="1"] .royal-card,
-    [data-theme="velvet-dusk"] .royal-card {
-      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 198, 232, 0.01) 100%);
-    }
-  
-    /* v55 Swipe-to-Reply & Custom Chat Wallpaper */
-    #chatMessagesList {
-      position: relative;
-      background-size: cover !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-    }
-    #chatMessagesList.cw-has-bg {
-      border-radius: 20px;
-      padding: 10px 8px;
-    }
-    .cw-swipe-hint {
-      position: fixed;
-      z-index: 9998;
-      pointer-events: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      background: rgba(124, 89, 189, 0.92);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(88, 56, 148, 0.35);
-      opacity: 0;
-      transform: scale(0.7);
-      transition: opacity 0.12s ease, transform 0.12s ease;
-    }
-  
-    /* v56 Double-Tap Heart, Keyword Particles & Quick Phrase Strip */
-    @keyframes cwHeartPop {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
-      35% { opacity: 1; transform: translate(-50%, -75%) scale(1.25); }
-      100% { opacity: 0; transform: translate(-50%, -140%) scale(0.95); }
-    }
-    @keyframes cwFloatParticle {
-      0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg); }
-      18% { opacity: 1; }
-      100% { opacity: 0; transform: translate3d(var(--dx, 0px), -220px, 0) scale(1.15) rotate(var(--rot, 18deg)); }
-    }
-    .cw-dbl-heart-pop {
-      position: fixed;
-      z-index: 9999;
-      pointer-events: none;
-      font-size: 28px;
-      animation: cwHeartPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    .cw-fx-particle {
-      position: fixed;
-      bottom: 84px;
-      z-index: 9999;
-      pointer-events: none;
-      font-size: 22px;
-      will-change: transform, opacity;
-      animation: cwFloatParticle 2.1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
-    }
-    #cwQuickPhraseBar::-webkit-scrollbar { display: none; }
-    #cwQuickPhraseBar { -ms-overflow-style: none; scrollbar-width: none; }
-    #chatHeaderStatusRow { overflow-x: auto; flex-wrap: nowrap; -ms-overflow-style: none; scrollbar-width: none; }
-    #chatHeaderStatusRow::-webkit-scrollbar { display: none; }
-    #chatHeaderStatusRow > * { flex-shrink: 0; }
-  
-    /* v58 Max-Speed Mobile Optimization (0ms tap delay + 60fps scroll containment) */
     button, a, input, textarea, select, .cw-msg-bubble, .dock-item {
       touch-action: manipulation;
     }
@@ -2019,149 +1794,158 @@
       display: none !important;
       content-visibility: hidden;
     }
+    .cw-msg-row {
+      contain: layout style;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 92px;
+      overflow: visible !important;
+      padding-bottom: 2px;
+    }
+    .royal-card, .royal-subcard {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
     #tab-home .royal-card, #tab-diary .royal-card, #tab-settings .royal-card {
       contain: layout style;
     }
-  
-    /* v59 Haute-Boutique Obsidian & Champagne-Gold Luxury Polish (60fps static CSS) */
-    [data-dark="1"] .royal-card,
-    [data-theme="velvet-dusk"] .royal-card,
-    [data-theme="royal-amethyst"] .royal-card {
+    #chatMessagesList, #chatVaultBody {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+    }
+
+    /* 2. Dreamy Ambient Background Aura (Light & Dark) */
+    body {
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(232, 200, 255, 0.34) 0%, transparent 44%),
+        radial-gradient(circle at 88% 14%, rgba(255, 208, 228, 0.30) 0%, transparent 42%),
+        radial-gradient(circle at 50% 92%, rgba(246, 226, 196, 0.24) 0%, transparent 48%);
+    }
+    [data-dark="1"] body,
+    [data-theme="velvet-dusk"] body,
+    [data-theme="royal-amethyst"] body,
+    [data-theme="midnight-black"] body,
+    [data-theme="midnight-navy"] body,
+    [data-theme="rose-noir"] body {
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(147, 88, 226, 0.22) 0%, transparent 46%),
+        radial-gradient(circle at 86% 18%, rgba(236, 114, 174, 0.16) 0%, transparent 44%),
+        radial-gradient(circle at 50% 90%, rgba(206, 162, 108, 0.12) 0%, transparent 48%);
+    }
+
+    /* 3. Editorial Header & Title */
+    header {
+      border-bottom: 1px solid rgba(226, 192, 138, 0.18) !important;
+    }
+    header h1, .cw-brand-title {
+      letter-spacing: 0.05em;
+      background: linear-gradient(125deg, #6b3fa0 0%, #b75b9e 52%, #c9975b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+    }
+    [data-dark="1"] header h1,
+    [data-dark="1"] .cw-brand-title {
+      background: linear-gradient(125deg, #e9d5ff 0%, #fbcfe8 55%, #f5d8a8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+    }
+    header button.rounded-full {
+      border: 1px solid rgba(196, 162, 232, 0.26) !important;
+      box-shadow: 0 4px 14px -6px rgba(112, 72, 168, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+    }
+    [data-dark="1"] header button.rounded-full {
+      border-color: rgba(233, 213, 255, 0.16) !important;
+      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* 4. Luxury Cards (Light preserves theme fill; Dark uses smoked obsidian-velvet) */
+    .royal-card {
+      border-radius: 24px !important;
+      border: 1px solid rgba(124, 89, 189, 0.13) !important;
+      border-top: 1px solid rgba(212, 176, 120, 0.34) !important;
+      box-shadow: 0 10px 28px -10px rgba(72, 42, 128, 0.11), 0 1px 3px rgba(72, 42, 128, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+    }
+    .royal-subcard {
+      border-radius: 18px !important;
+      border: 1px solid rgba(124, 89, 189, 0.10) !important;
+      box-shadow: 0 2px 10px -4px rgba(72, 42, 128, 0.06) !important;
+    }
+    [data-dark="1"] .royal-card {
       background: linear-gradient(168deg, rgba(31, 22, 49, 0.95) 0%, rgba(18, 13, 30, 0.98) 100%) !important;
       border: 1px solid rgba(224, 194, 255, 0.13) !important;
       border-top: 1px solid rgba(238, 206, 154, 0.30) !important;
       box-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.68), inset 0 1px 0 rgba(255, 238, 210, 0.08) !important;
     }
-    [data-dark="1"] .royal-subcard,
-    [data-theme="velvet-dusk"] .royal-subcard,
-    [data-theme="royal-amethyst"] .royal-subcard {
+    [data-dark="1"] .royal-subcard {
       background: linear-gradient(180deg, rgba(38, 28, 58, 0.62) 0%, rgba(24, 17, 39, 0.72) 100%) !important;
       border: 1px solid rgba(224, 194, 255, 0.10) !important;
+      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.4) !important;
     }
-    /* Rich Royal Amethyst Primary Buttons in Dark Mode (replaces flat charcoal) */
-    [data-dark="1"] .btn-royal,
-    [data-theme="velvet-dusk"] .btn-royal,
-    [data-theme="royal-amethyst"] .btn-royal {
+
+    /* 5. Buttons — NEVER wipe Light Mode background-image! Add depth & Dark Mode contrast only */
+    .btn-royal {
+      box-shadow: 0 6px 18px -6px rgba(96, 58, 168, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+      letter-spacing: -0.01em;
+    }
+    .btn-royal:active { transform: scale(0.97); }
+    .btn-gold {
+      border: 1px solid rgba(200, 165, 110, 0.48) !important;
+      box-shadow: 0 4px 14px -6px rgba(176, 138, 72, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+    }
+    [data-dark="1"] .btn-royal {
       background: linear-gradient(135deg, #6b43b8 0%, #4b2a8c 62%, #3a1f70 100%) !important;
       color: #fdfbff !important;
       border: 1px solid rgba(236, 204, 152, 0.34) !important;
       box-shadow: 0 8px 22px -6px rgba(107, 67, 184, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.30) !important;
     }
-    /* High-Contrast Engraved Champagne-Gold Pills in Dark Mode (fixes dark text on 무료 키 받기) */
-    [data-dark="1"] .btn-gold,
-    [data-theme="velvet-dusk"] .btn-gold,
-    [data-theme="royal-amethyst"] .btn-gold {
+    [data-dark="1"] .btn-gold {
       background: linear-gradient(135deg, rgba(226, 188, 124, 0.24) 0%, rgba(168, 128, 68, 0.14) 100%) !important;
       color: #f8e3ba !important;
       border: 1px solid rgba(238, 202, 138, 0.52) !important;
       box-shadow: 0 6px 18px -6px rgba(212, 170, 96, 0.32), inset 0 1px 0 rgba(255, 245, 224, 0.26) !important;
     }
-    /* Refined Ghost Buttons in Dark Mode */
-    [data-dark="1"] .btn-ghost,
-    [data-theme="velvet-dusk"] .btn-ghost,
-    [data-theme="royal-amethyst"] .btn-ghost {
+    [data-dark="1"] .btn-ghost {
       background: rgba(255, 255, 255, 0.045) !important;
       border: 1px solid rgba(224, 194, 255, 0.14) !important;
       color: #ede5fb !important;
     }
-    /* Light Mode Subtle Champagne Top Rim */
-    :root:not([data-dark="1"]) .royal-card {
-      border-top: 1px solid rgba(212, 176, 120, 0.32) !important;
+
+    /* 6. Chat Bubbles — Light Mode preserves var(--bubble-suwan) with 100% readable white text! */
+    .cw-msg-row.mine .cw-msg-bubble {
+      border-radius: 20px 20px 6px 20px !important;
+      border-top: 1px solid rgba(255, 244, 228, 0.42) !important;
+      box-shadow: 0 10px 24px -10px rgba(96, 56, 168, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
     }
-    /* Sleek Bottom Dock Champagne Hairline */
-    nav.fixed.bottom-0, .cw-bottom-dock {
-      border-top: 1px solid rgba(232, 198, 138, 0.18) !important;
+    .cw-msg-row.partner .cw-msg-bubble {
+      border-radius: 20px 20px 20px 6px !important;
+      background: linear-gradient(180deg, #ffffff 0%, #fdf8ff 100%) !important;
+      border: 1px solid rgba(196, 152, 232, 0.26) !important;
+      box-shadow: 0 8px 20px -10px rgba(124, 77, 178, 0.16), 0 1px 3px rgba(219, 138, 186, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
     }
-    [data-dark="1"] .dock-item.active,
-    [data-theme="velvet-dusk"] .dock-item.active {
-      background: linear-gradient(160deg, rgba(98, 62, 166, 0.92) 0%, rgba(56, 33, 98, 0.96) 100%) !important;
-      border: 1px solid rgba(238, 204, 148, 0.48) !important;
-      box-shadow: 0 8px 22px -6px rgba(107, 67, 184, 0.55), inset 0 1px 0 rgba(255, 242, 218, 0.28) !important;
-    }
-  
-    /* v61 Bottom Safe-Area & Zero-Clip Fix (Android/iOS gesture bar + bottom dock clearance) */
-    body:not(.cw-chat-lock) main {
-      padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
-    }
-    .bottom-dock, nav.bottom-dock {
-      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    }
-    body.cw-chat-lock #tab-translator.active {
-      min-height: 0 !important;
-      overflow: hidden !important;
-    }
-    #cwQuickPhraseBar {
-      padding-top: 2px !important;
-      padding-bottom: 4px !important;
-    }
-    #chatForm {
-      padding-top: 6px !important;
-      padding-bottom: 4px !important;
-    }
-    /* Ensure bottom modals also clear Android/iOS bottom safe area */
-    #cwChatBgModal, #cwActivityPickerModal {
-      padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
-    }
-  
-    /* v62 Complete Maison Luxury Suite — Every Tab, Bubble, Pill, Input & Header (60fps static CSS) */
-    header {
-      border-bottom: 1px solid rgba(226, 192, 138, 0.18) !important;
-    }
-    /* Dark Mode My Chat Bubbles: Obsidian-Amethyst Satin + Champagne Top Rim (replaces flat charcoal) */
-    [data-dark="1"] .cw-msg-row.mine .cw-msg-bubble,
-    [data-theme="velvet-dusk"] .cw-msg-row.mine .cw-msg-bubble,
-    [data-theme="royal-amethyst"] .cw-msg-row.mine .cw-msg-bubble {
+    [data-dark="1"] .cw-msg-row.mine .cw-msg-bubble {
       background: linear-gradient(145deg, #4b2d82 0%, #311c59 58%, #231342 100%) !important;
-      border: 1px solid rgba(224, 194, 255, 0.20) !important;
-      border-top: 1px solid rgba(242, 210, 158, 0.42) !important;
-      box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.22) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(224, 194, 255, 0.22) !important;
+      border-top: 1px solid rgba(242, 210, 158, 0.44) !important;
+      box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.24) !important;
     }
-    /* Dark Mode Partner Bubbles: Smoked Velvet Plum + Rose-Pearl Rim */
-    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble,
-    [data-theme="velvet-dusk"] .cw-msg-row.partner .cw-msg-bubble,
-    [data-theme="royal-amethyst"] .cw-msg-row.partner .cw-msg-bubble {
+    [data-dark="1"] .cw-msg-row.partner .cw-msg-bubble {
       background: linear-gradient(155deg, rgba(46, 33, 69, 0.96) 0%, rgba(26, 18, 42, 0.98) 100%) !important;
+      color: #f5f3ff !important;
       border: 1px solid rgba(242, 198, 232, 0.18) !important;
       border-top: 1px solid rgba(255, 224, 244, 0.24) !important;
+      box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
     }
-    /* Light Mode My Bubbles: Silky Royal Orchid + Champagne Highlight */
-    :root:not([data-dark="1"]) .cw-msg-row.mine .cw-msg-bubble {
-      border-top: 1px solid rgba(255, 242, 224, 0.48) !important;
-      box-shadow: 0 10px 24px -10px rgba(108, 66, 178, 0.42), inset 0 1px 0 rgba(255, 246, 235, 0.34) !important;
+    /* Avatar Ring ONLY on direct avatar circle (NEVER on delivery/tone pills!) */
+    .cw-msg-row > .rounded-full {
+      box-shadow: 0 4px 12px -4px rgba(146, 86, 206, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.85);
     }
-    /* Quick Phrase Chips: Jewel-Glass Boutique Pills */
-    #cwQuickPhraseBar button {
-      border: 1px solid rgba(226, 192, 138, 0.26) !important;
-      box-shadow: 0 2px 8px -4px rgba(88, 56, 148, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-      letter-spacing: -0.01em;
+    [data-dark="1"] .cw-msg-row > .rounded-full {
+      box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px rgba(233, 213, 255, 0.28);
     }
-    /* Recessed Luxury Input Capsules (All Tabs) */
-    .royal-input, input[type="text"].royal-input, input[type="date"].royal-input, textarea.royal-input {
-      border: 1px solid rgba(212, 180, 244, 0.22) !important;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06) !important;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
-    }
-    [data-dark="1"] .royal-input,
-    [data-theme="velvet-dusk"] .royal-input {
-      background: rgba(16, 11, 27, 0.72) !important;
-      border-color: rgba(224, 194, 255, 0.16) !important;
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-    }
-    .royal-input:focus, .royal-input:focus-within {
-      border-color: rgba(232, 198, 138, 0.58) !important;
-      box-shadow: 0 0 0 3px rgba(168, 120, 232, 0.18) !important;
-    }
-    /* Refined Modals & Sheets */
-    #cwChatBgModal > div, #cwActivityPickerModal > div, #chatVaultModal > div {
-      border: 1px solid rgba(232, 198, 138, 0.28) !important;
-      box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.55) !important;
-    }
-    /* Ultra-Slim Jewel Scrollbars */
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-thumb { background: rgba(196, 162, 232, 0.32); border-radius: 9999px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-  
-    /* v63 Zero-Clip Toggle/Status Pills & Full Dark-Theme Luxury Coverage */
+
+    /* 7. Zero-Clip Header Pills, Delivery Badges & Bottom Safe Area */
     #chatHeaderStatusRow {
       gap: 5px !important;
       overflow-x: auto !important;
@@ -2187,21 +1971,6 @@
       white-space: nowrap !important;
       overflow: visible !important;
     }
-    /* Ensure midnight-black / midnight-navy / rose-noir get the full v62 Obsidian-Amethyst + Champagne Luxury look */
-    [data-theme="midnight-black"] .cw-msg-row.mine .cw-msg-bubble,
-    [data-theme="midnight-navy"] .cw-msg-row.mine .cw-msg-bubble,
-    [data-theme="rose-noir"] .cw-msg-row.mine .cw-msg-bubble {
-      background: linear-gradient(145deg, #4b2d82 0%, #311c59 58%, #231342 100%) !important;
-      border: 1px solid rgba(224, 194, 255, 0.22) !important;
-      border-top: 1px solid rgba(242, 210, 158, 0.44) !important;
-      box-shadow: 0 10px 26px -10px rgba(88, 52, 158, 0.52), inset 0 1px 0 rgba(255, 240, 214, 0.24) !important;
-    }
-  
-    /* v65 Zero-Clip Delivery Badges (전송됨/안 읽음/읽음) & Clean Pill Spacing */
-    .cw-msg-row {
-      overflow: visible !important;
-      padding-bottom: 2px;
-    }
     .cw-delivery-badge, .cw-delivery-badge > span {
       box-shadow: none !important;
       line-height: 1.35 !important;
@@ -2212,7 +1981,107 @@
       overflow: visible !important;
     }
     #chatMessagesList {
+      position: relative;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
       padding-bottom: 14px !important;
+    }
+    #chatMessagesList.cw-has-bg {
+      border-radius: 20px;
+      padding: 10px 8px 14px 8px;
+    }
+    body:not(.cw-chat-lock) main {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .bottom-dock, nav.bottom-dock, nav.fixed.bottom-0 {
+      border-top: 1px solid rgba(232, 198, 138, 0.18) !important;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    body.cw-chat-lock #tab-translator.active {
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+    .dock-item.active {
+      background: linear-gradient(180deg, rgba(255, 250, 255, 0.96) 0%, rgba(250, 238, 255, 0.92) 100%) !important;
+      border: 1px solid rgba(214, 166, 232, 0.48) !important;
+      box-shadow: 0 6px 16px -6px rgba(108, 72, 178, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+      transform: translateY(-2px);
+    }
+    [data-dark="1"] .dock-item.active {
+      background: linear-gradient(160deg, rgba(98, 62, 166, 0.92) 0%, rgba(56, 33, 98, 0.96) 100%) !important;
+      border: 1px solid rgba(238, 204, 148, 0.48) !important;
+      box-shadow: 0 8px 22px -6px rgba(107, 67, 184, 0.55), inset 0 1px 0 rgba(255, 242, 218, 0.28) !important;
+    }
+
+    /* 8. Inputs, Quick Chips, Modals, Swipe & FX Animations */
+    #cwQuickPhraseBar {
+      padding-top: 2px !important;
+      padding-bottom: 4px !important;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    #cwQuickPhraseBar::-webkit-scrollbar { display: none; }
+    #cwQuickPhraseBar button {
+      border: 1px solid rgba(206, 172, 128, 0.30) !important;
+      box-shadow: 0 2px 8px -4px rgba(88, 56, 148, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+      letter-spacing: -0.01em;
+    }
+    #chatForm {
+      padding-top: 6px !important;
+      padding-bottom: 4px !important;
+    }
+    .royal-input, input[type="text"].royal-input, input[type="date"].royal-input, textarea.royal-input {
+      border: 1px solid rgba(196, 164, 232, 0.28) !important;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    [data-dark="1"] .royal-input {
+      background: rgba(16, 11, 27, 0.72) !important;
+      border-color: rgba(224, 194, 255, 0.16) !important;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    }
+    .royal-input:focus, .royal-input:focus-within {
+      border-color: rgba(232, 198, 138, 0.58) !important;
+      box-shadow: 0 0 0 3px rgba(168, 120, 232, 0.16) !important;
+    }
+    #cwChatBgModal, #cwActivityPickerModal {
+      padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    #cwChatBgModal > div, #cwActivityPickerModal > div, #chatVaultModal > div {
+      border: 1px solid rgba(232, 198, 138, 0.28) !important;
+      box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.55) !important;
+    }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(196, 162, 232, 0.32); border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    .cw-swipe-hint {
+      position: fixed; z-index: 9998; pointer-events: none;
+      width: 30px; height: 30px; border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
+      background: rgba(124, 89, 189, 0.92); color: #ffffff;
+      box-shadow: 0 4px 12px rgba(88, 56, 148, 0.35);
+      opacity: 0; transform: scale(0.7); transition: opacity 0.12s ease, transform 0.12s ease;
+    }
+    @keyframes cwHeartPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+      35% { opacity: 1; transform: translate(-50%, -75%) scale(1.25); }
+      100% { opacity: 0; transform: translate(-50%, -140%) scale(0.95); }
+    }
+    @keyframes cwFloatParticle {
+      0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.6) rotate(0deg); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translate3d(var(--dx, 0px), -220px, 0) scale(1.15) rotate(var(--rot, 18deg)); }
+    }
+    .cw-dbl-heart-pop {
+      position: fixed; z-index: 9999; pointer-events: none; font-size: 28px;
+      animation: cwHeartPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .cw-fx-particle {
+      position: fixed; bottom: 84px; z-index: 9999; pointer-events: none; font-size: 22px;
+      will-change: transform, opacity;
+      animation: cwFloatParticle 2.1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -4343,7 +4212,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v65</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v67</span>
           </div>
         </div>
       </div>
@@ -5647,7 +5516,6 @@
             const uniqueTag = `chanwan-live-${routeTab}`;
             const opts = {
               body,
-              icon: './icon-192.png?v=21',
               badge: './badge-96.png?v=23',
               vibrate: [160, 80, 160],
               tag: uniqueTag,
@@ -6144,12 +6012,18 @@
         const title = isZh ? item.titleZh : item.titleKo;
         const fullBody = isZh ? item.bodyZh : item.bodyKo;
         const osBody = hidePrev
-          ? (isZh ? '收到一条新消息 💌' : '새 메시지가 왔습니다 💌')
+          ? (isZh ? '收到一条新消息' : '새 메시지가 도착했어요')
           : fullBody;
 
-        // Fire OS system banner notification (respects lock-screen privacy toggle)
-        const cleanOsTitle = String(title || '').replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+/u, '').trim() || (isZh ? '秀完' : '징찬');
-        const cleanOsBody = String(osBody || '').replace(/\s+/g, ' ').trim();
+        // Fire OS system banner notification (clean 1-line KakaoTalk-style title & body, no duplicate icon/text!)
+        let cleanOsTitle = String(title || '').replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+/u, '').trim();
+        cleanOsTitle = cleanOsTitle
+          .replace(/의\s*새\s*메시지.*$/, '')
+          .replace(/님의\s*새\s*메시지.*$/, '')
+          .replace(/发来的新消息.*$/, '')
+          .replace(/的新消息.*$/, '')
+          .trim() || (isZh ? '秀完' : '징찬');
+        const cleanOsBody = String(osBody || '').replace(/[💌💜✨]+$/u, '').replace(/\s+/g, ' ').trim();
         fireSystemNotification(cleanOsTitle, cleanOsBody, item.tab, item.sub);
 
         // Inside the app itself, ALWAYS show the full notification body!
@@ -14175,7 +14049,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v65',
+          ver: 'Prime 3 · v67',
           date: '2026-11-25',
           koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
           zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
@@ -14197,7 +14071,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v65 更新日志' : '📜 灿完时光 Prime 3 · v65 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v67 更新日志' : '📜 灿完时光 Prime 3 · v67 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
