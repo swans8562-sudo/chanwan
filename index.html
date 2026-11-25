@@ -4212,7 +4212,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v67</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 3 · v68</span>
           </div>
         </div>
       </div>
@@ -8683,7 +8683,8 @@
             const m = __mList[i];
             if (m && (m.photoUrl || m.videoUrl || m.audioUrl || (Array.isArray(m.photoUrls) && m.photoUrls.length))) __cmCnt++;
           }
-          const __sig = `${__aLen}:${__vLen}:${__cmCnt}:${(state.deletedAlbumIds || []).length}:${(state.deletedVoiceIds || []).length}`;
+          const __albCatTs = Array.isArray(state.albums) ? state.albums.reduce((acc, a) => acc + Number((a && a.categoryUpdatedAt) || 0), 0) : 0;
+          const __sig = `${__aLen}:${__vLen}:${__cmCnt}:${(state.deletedAlbumIds || []).length}:${(state.deletedVoiceIds || []).length}:${__albCatTs}`;
           if (!force && __sig === __cwLastMediaVaultSig) return;
           __cwLastMediaVaultSig = __sig;
           // Never wipe non-empty IDB vaults with accidental empty arrays unless explicit deletions exist
@@ -12223,6 +12224,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const ph = (state.albums || []).find(x => x.id === sel.getAttribute('data-id'));
             if (!ph) return;
             ph.category = sel.value;
+            ph.categoryUpdatedAt = Date.now();
+            try { if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow(true); } catch (_) {}
             saveState(true); renderBucketAndAlbum();
             showToast(state.lang === 'zh' ? `📁 已移动到「${sel.value}」` : `📁 「${sel.value}」 폴더로 이동했어요`);
           });
@@ -14049,7 +14052,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 3 · v67',
+          ver: 'Prime 3 · v68',
           date: '2026-11-25',
           koTitle: '위챗 롱프레스 메뉴 · Gemini 최신 모델 자동 연결 · 0ms 홈 부팅 · 오역 5종 수정',
           zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
@@ -14071,7 +14074,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v67 更新日志' : '📜 灿完时光 Prime 3 · v67 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 3 · v68 更新日志' : '📜 灿完时光 Prime 3 · v68 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17814,7 +17817,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!am || !am.id) return;
               const curA = albMap.get(am.id);
               if (!curA) return;
-              if (am.category && am.category !== curA.category) { curA.category = am.category; changed = true; }
+              const incCatTs = Number(am.categoryUpdatedAt || 0);
+              const curCatTs = Number(curA.categoryUpdatedAt || 0);
+              if (am.category && am.category !== curA.category && (incCatTs > curCatTs || (incCatTs === 0 && curCatTs === 0))) {
+                curA.category = am.category;
+                if (incCatTs > 0) curA.categoryUpdatedAt = incCatTs;
+                changed = true;
+                try { if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow(true); } catch (_) {}
+              }
               if (Array.isArray(am.comments) && am.comments.length) {
                 if (!Array.isArray(curA.comments)) curA.comments = [];
                 const seenAc = new Set(curA.comments.map(c => (c && (c.id || (c.author + ':' + c.text)))));
@@ -19175,7 +19185,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             rpsGame: coreObj.rpsGame || null,
             truthDare: coreObj.truthDare || null,
             customFoods: (coreObj.customFoods || []).slice(0, 40),
-            albumMeta: (state.albums || []).slice(0, 60).map(a => ({ id: a.id, category: a.category || '', comments: Array.isArray(a.comments) ? a.comments.slice(-15) : [] }))
+            albumMeta: (state.albums || []).slice(0, 250).map(a => ({ id: a.id, category: a.category || '', categoryUpdatedAt: Number(a.categoryUpdatedAt || 0), comments: Array.isArray(a.comments) ? a.comments.slice(-15) : [] }))
           };
         }
 
