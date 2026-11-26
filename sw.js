@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v17';
+const SW_VER = 'chanwan-sw-prime4-v18';
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', (e) => {
