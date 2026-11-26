@@ -1,0 +1,39 @@
+name: Build Chanwan Shiguang APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android-apk/**'
+      - '.github/workflows/build-apk.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build Debug APK
+        run: gradle -p android-apk assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: cp android-apk/app/build/outputs/apk/debug/app-debug.apk android-apk/chanwan-shiguang.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chanwan-shiguang-apk
+          path: android-apk/chanwan-shiguang.apk
+          retention-days: 30
