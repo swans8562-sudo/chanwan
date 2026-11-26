@@ -2277,7 +2277,25 @@
       background: rgba(255, 255, 255, 0.22) !important;
       opacity: 1 !important;
     }
-  </style>
+  
+    /* Prime 4 v27 Turbo Responsiveness */
+    html, body, button, a, input, textarea, select, [role="button"], .dock-item, .cw-quick-chip {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .dock-item, .cw-quick-chip, .btn-royal, .btn-gold, .btn-ghost {
+      transition-duration: 90ms !important;
+    }
+    #chatMessagesList {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      contain: layout style;
+    }
+
+    /* Prime 4 v30: Collapsible Quick Phrase Bar */
+    #cwQuickPhraseBar.cw-qp-collapsed { display: none !important; }
+    #cwQuickPhraseToggleBtn.cw-qp-on { color: var(--accent-royal, #7c3aed); opacity: 1 !important; }
+</style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
 <body style="padding-bottom: 0 !important;">
@@ -3233,6 +3251,7 @@
 
             <div class="royal-input flex-1 min-w-0 rounded-2xl px-3 py-1.5 flex items-center gap-1.5" style="min-height: 38px;">
               <textarea id="chatInput" rows="1" data-i18n-placeholder="phChat" class="flex-1 min-w-0 w-full bg-transparent border-0 outline-none text-sm leading-snug resize-none py-0.5 max-h-24 overflow-y-auto" placeholder="" autocomplete="off"></textarea>
+              <button id="cwQuickPhraseToggleBtn" type="button" class="w-7 h-7 rounded-full flex items-center justify-center opacity-60 hover:opacity-100 shrink-0 transition" title="단축 멘트 숨기기/켜기" aria-label="단축 멘트 숨기기/켜기"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></button>
               <button id="chatMicBtn" type="button" class="w-7 h-7 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 shrink-0 transition" title="음성인식 (말하면 글자로 입력)" aria-label="음성인식"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="mic"></span></button>
             </div>
 
@@ -3815,6 +3834,9 @@
               </button>
             </div>
             <div id="balanceStatusBanner" class="rounded-2xl p-3 text-xs text-center font-semibold" style="background: var(--surface-2);"></div>
+            <div class="flex justify-center pt-0.5">
+              <button id="balancePokeBtn" type="button" class="btn-royal px-4 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 shadow-sm transition active:scale-95">👉 상대방 콕 찌르기</button>
+            </div>
           </div>
         </div>
         <div class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
@@ -4386,7 +4408,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v26</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v32</span>
           </div>
         </div>
       </div>
@@ -5731,13 +5753,14 @@
           const clickUrl = (location.protocol.startsWith('http') ? (location.origin + location.pathname) : 'https://swans8562-sudo.github.io/chanwan/');
           const rawTitle = String(title || '');
           const isHeartbeat = /하트비트|心跳/.test(rawTitle);
+          const isGame = /밸런스|게임|콕|默契|游戏|戳/.test(rawTitle);
           const isSpace = /커플공간|답글|空间/.test(rawTitle);
           const isMood = /기분|心情/.test(rawTitle);
           const isAct = /상태|状态/.test(rawTitle);
           // Clean KakaoTalk-style 1-line title in receiver's language (Suwan gets Korean, Jingchan gets Chinese)
           const cleanTitle = partnerRole === 'suwan'
-            ? (isHeartbeat ? '징찬 · 하트비트' : (isMood ? '징찬 · 기분' : (isAct ? '징찬 · 상태' : (isSpace ? '징찬 · 커플공간' : '징찬'))))
-            : (isHeartbeat ? '秀完 · 心跳' : (isMood ? '秀完 · 心情' : (isAct ? '秀完 · 状态' : (isSpace ? '秀完 · 情侣空间' : '秀完'))));
+            ? (isGame ? '징찬 · 밸런스 게임' : (isHeartbeat ? '징찬 · 하트비트' : (isMood ? '징찬 · 기분' : (isAct ? '징찬 · 상태' : (isSpace ? '징찬 · 커플공간' : '징찬')))))
+            : (isGame ? '秀完 · 默契游戏' : (isHeartbeat ? '秀完 · 心跳' : (isMood ? '秀完 · 心情' : (isAct ? '秀完 · 状态' : (isSpace ? '秀完 · 情侣空间' : '秀完')))));
           let cleanMsg = String(body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
           if (!cleanMsg) cleanMsg = partnerRole === 'suwan' ? '새 메시지가 도착했어요' : '发来了一条新消息';
           // Translate boilerplate media/heartbeat captions into receiver's language cleanly
@@ -5750,7 +5773,7 @@
           } else {
             cleanMsg = cleanMsg.replace(/^[🎬📷🎙️💌💓💬]+\s*/u, '');
           }
-          const sendJson = (topic) => {
+          const sendJson = (topic, attempt = 0) => {
             fetch('https://ntfy.sh', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -5758,11 +5781,15 @@
                 topic,
                 title: cleanTitle,
                 message: cleanMsg,
-                priority: 4,
+                priority: 5,
                 click: clickUrl
               }),
-              keepalive: true
-            }).catch(() => {});
+              keepalive: attempt === 0
+            }).then((r) => {
+              if (!r || !r.ok) throw new Error('ntfy_http_' + (r ? r.status : 0));
+            }).catch(() => {
+              if (attempt < 2) setTimeout(() => sendJson(topic, attempt + 1), attempt === 0 ? 1200 : 3500);
+            });
           };
           sendJson(targetCh);
           if (customCh) sendJson(customCh);
@@ -7226,11 +7253,11 @@
           : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 위챗 대화입니다. 한국어 카톡 애교체(ㅇ받침, 줄임말, 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 과장 없이 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개","pronunciation":"병음","tone":"짧은 감정 태그","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`;
         window.__cwLastGeminiErr = '';
         const __gemStartTs = Date.now();
-        const tryModel = async (modelName, disableThinking, timeoutMs = 3800) => {
+        const tryModel = async (modelName, disableThinking, timeoutMs = 2800) => {
           const ctrl = new AbortController();
           const tm = setTimeout(() => ctrl.abort(), timeoutMs);
           try {
-            const genCfg = { responseMimeType: 'application/json' };
+            const genCfg = { responseMimeType: 'application/json', maxOutputTokens: 220 };
             if (/gemini-3\.5-flash-lite/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'minimal' };
             else if (/gemini-3\.[68]-flash/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'low' };
             else if (disableThinking || /gemini-2\.5/i.test(modelName)) genCfg.thinkingConfig = { thinkingBudget: 0 };
@@ -7265,9 +7292,9 @@
           let resp = { ok: false, status: 0, json: null };
           let usedModel = cachedDisc || 'gemini-3.5-flash-lite';
           for (let __mi = 0; __mi < modelChain.length; __mi++) {
-            if (__mi > 0 && (Date.now() - __gemStartTs) > 5200) break;
+            if (__mi > 0 && (Date.now() - __gemStartTs) > 4200) break;
             const [mName, noThink] = modelChain[__mi];
-            resp = await tryModel(mName, noThink, __mi === 0 ? 3800 : 2600);
+            resp = await tryModel(mName, noThink, __mi === 0 ? 2800 : 2000);
             if (resp.ok && resp.json) {
               usedModel = mName;
               window.__cwGemToCnt = 0; try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
@@ -7357,12 +7384,12 @@
         const nowTs = Date.now();
         const jobs = [];
         if (firstSkip !== 'google' && !(__cwEngineSkipUntil.google && nowTs < __cwEngineSkipUntil.google)) {
-          jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'mymemory', _isRetry: true }), 1900).then(r => { if (!isValidRes(r)) __cwEngineSkipUntil.google = Date.now() + 600000; return r; }));
+          jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'mymemory', _isRetry: true }), 1400).then(r => { if (!isValidRes(r)) __cwEngineSkipUntil.google = Date.now() + 600000; return r; }));
         }
         if (firstSkip !== 'mymemory') {
-          jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'google', _isRetry: true }), 2200));
+          jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'google', _isRetry: true }), 1600));
         }
-        if (!jobs.length) jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride), 2200));
+        if (!jobs.length) jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride), 1600));
         const collected = [];
         await new Promise((resolve) => {
           let done = false;
@@ -7374,7 +7401,7 @@
               collected.push(r);
               if (collected.length >= 2) return finish();
               // 1st valid translation arrived fast! Give 2nd engine max 450ms to provide '다른 번역(altTranslated)'
-              if (!graceTimer) graceTimer = setTimeout(finish, 450);
+              if (!graceTimer) graceTimer = setTimeout(finish, 200);
             }
             pending--;
             if (pending <= 0) finish();
@@ -9945,7 +9972,7 @@
       }
 
       function switchTab(tab, swipeDir) {
-        try { if (tab) localStorage.setItem('cw_last_active_tab', tab); } catch (_) {}
+        if (tab) setTimeout(() => { try { localStorage.setItem('cw_last_active_tab', tab); } catch (_) {} }, 0);
         if (typeof window.__closeNotifPanel === 'function') window.__closeNotifPanel();
         const lockChat = (tab === 'translator');
         if (lockChat && Array.isArray(state.notifications)) {
@@ -11250,6 +11277,10 @@
         document.getElementById('senderJingchanBtn').className = `px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${!isSuwan ? 'btn-gold' : 'btn-ghost'}`;
 
         const listEl = document.getElementById('chatMessagesList');
+        const __cwHadMsgs = listEl && listEl.children.length > 0;
+        const __cwPrevScrollTop = listEl ? listEl.scrollTop : 0;
+        const __cwPrevDistBottom = listEl ? (listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight) : 0;
+        const __cwWasReadingOlder = __cwHadMsgs && listEl.clientHeight > 0 && __cwPrevDistBottom > 120;
         const qSearch = String(window.__chatSearchQuery || '').trim().toLowerCase();
         const allFilteredMsgs = qSearch
           ? state.chat.messages.filter(m =>
@@ -11271,13 +11302,16 @@
           const viewerTz = (state.cities && state.cities[viewerRoleTz] && state.cities[viewerRoleTz].tz)
             || (viewerRoleTz === 'jingchan' ? 'Asia/Shanghai' : 'Asia/Seoul');
           const viewerLocale = state.lang === 'zh' ? 'zh-CN' : 'ko-KR';
-          const kstKeyFmt = new Intl.DateTimeFormat('en-CA', { timeZone: viewerTz });
-          const prettyDateFmt = new Intl.DateTimeFormat(viewerLocale, {
-            timeZone: viewerTz, year: 'numeric', month: 'long', day: 'numeric', weekday: 'short'
-          });
-          const msgTimeFmt = new Intl.DateTimeFormat(viewerLocale, {
-            timeZone: viewerTz, hour: '2-digit', minute: '2-digit'
-          });
+          const __fmtKey = viewerTz + '|' + viewerLocale;
+          if (!window.__cwChatFmtCache || window.__cwChatFmtCache.key !== __fmtKey) {
+            window.__cwChatFmtCache = {
+              key: __fmtKey,
+              kstKeyFmt: new Intl.DateTimeFormat('en-CA', { timeZone: viewerTz }),
+              prettyDateFmt: new Intl.DateTimeFormat(viewerLocale, { timeZone: viewerTz, year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }),
+              msgTimeFmt: new Intl.DateTimeFormat(viewerLocale, { timeZone: viewerTz, hour: '2-digit', minute: '2-digit' })
+            };
+          }
+          const { kstKeyFmt, prettyDateFmt, msgTimeFmt } = window.__cwChatFmtCache;
           const formatMsgLocalTime = (msgObj) => {
             if (!msgObj) return '';
             let epoch = Number(msgObj.ts || 0);
@@ -11473,8 +11507,18 @@
             });
           });
           if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, listEl);
-          if (typeof window.__cwPreserveChatScroll === 'number') { listEl.scrollTop = window.__cwPreserveChatScroll; } else if (typeof window.__scrollChatToBottom === 'function') window.__scrollChatToBottom(false);
-          else listEl.scrollTop = listEl.scrollHeight;
+          const __cwForceBot = !!window.__cwForceScrollBottom;
+          window.__cwForceScrollBottom = false;
+          if (typeof window.__cwPreserveChatScroll === 'number') {
+            listEl.scrollTop = window.__cwPreserveChatScroll;
+          } else if (__cwWasReadingOlder && !__cwForceBot) {
+            listEl.scrollTop = __cwPrevScrollTop;
+            requestAnimationFrame(() => { listEl.scrollTop = __cwPrevScrollTop; });
+          } else if (typeof window.__scrollChatToBottom === 'function') {
+            window.__scrollChatToBottom(false);
+          } else {
+            listEl.scrollTop = listEl.scrollHeight;
+          }
           listEl.querySelectorAll('.cw-voice-play-btn').forEach(btn => {
             btn.addEventListener('click', (ev) => {
               ev.stopPropagation();
@@ -13591,10 +13635,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           };
           // 0ms Optimistic Instant Send: display bubble & push to EMQX/ntfy IMMEDIATELY without blocking on translation!
           state.chat.messages.push(newMsgObj);
-          try {
-            const __who = _myChatRole === 'jingchan' ? '靖灿' : '수완';
-            sendPartnerNativePush(`💌 ${__who}님의 새 메시지`, text || (mediaData ? (isVid ? '🎬 동영상을 보냈어요' : '📷 사진을 보냈어요') : '새 메시지가 도착했어요'));
-          } catch (_) {}
+          const __who = _myChatRole === 'jingchan' ? '靖灿' : '수완';
+          const __pushFallbackBody = text || (mediaData ? (isVid ? '🎬 동영상을 보냈어요' : '📷 사진을 보냈어요') : '새 메시지가 도착했어요');
+          let __nativePushSent = false;
+          const __fireTranslatedPushOnce = (pushBody) => {
+            if (__nativePushSent) return;
+            __nativePushSent = true;
+            try { sendPartnerNativePush(`💌 ${__who}님의 새 메시지`, pushBody || __pushFallbackBody); } catch (_) {}
+          };
+          if (!needsAsyncTrans) {
+            __fireTranslatedPushOnce(__pushFallbackBody);
+          } else if (__cachedQuick && __cachedQuick.translated) {
+            __fireTranslatedPushOnce(__cachedQuick.translated);
+          } else {
+            setTimeout(() => __fireTranslatedPushOnce(__pushFallbackBody), 3200);
+          }
           window.__pendingChatReply = null;
           document.getElementById('chatReplyBar')?.classList.add('hidden');
           if (batchPhotos.length) {
@@ -13639,6 +13694,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               ? (state.lang === 'zh' ? `🎬 视频已自动分类存入相册 (${autoPhotoCat})` : `🎬 동영상이 커플앨범 「${autoPhotoCat}」에 자동 저장됐어요!`)
               : (state.lang === 'zh' ? `🖼️ 照片已自动分类存入相册 (${autoPhotoCat})` : `🖼️ 사진이 커플앨범 「${autoPhotoCat}」에 자동 저장됐어요!`));
           }
+          window.__cwForceScrollBottom = true;
           renderChat();
           saveState(true);
           try { if (inputEl && document.activeElement !== inputEl) inputEl.focus({ preventScroll: true }); } catch (_) {}
@@ -13650,7 +13706,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!res || !res.translated) {
                 res = await _coreTranslate(text, activeToneMode || 'lover').catch(() => null);
               }
-              if (!res || !res.translated) return;
+              if (!res || !res.translated) { __fireTranslatedPushOnce(__pushFallbackBody); return; }
+              __fireTranslatedPushOnce(res.translated);
               const liveM = (state.chat?.messages || []).find(x => x && x.id === newMsgId);
               if (!liveM) return;
               liveM.translated = res.translated || '';
@@ -14354,7 +14411,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v26',
+          ver: 'Prime 4 · v32',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14376,7 +14433,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v26 更新日志' : '📜 灿完时光 Prime 4 · v26 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v32 更新日志' : '📜 灿完时光 Prime 4 · v32 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -18349,8 +18406,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               const trPanel = document.getElementById('tab-translator');
               if (trPanel && trPanel.classList.contains('active') && !document.hidden) {
                 if (typeof window.__emitChatReadIfVisible === 'function') window.__emitChatReadIfVisible(false);
-                if (typeof window.__scrollChatToBottom === 'function') window.__scrollChatToBottom(true);
-
+                const __mlCheck = document.getElementById('chatMessagesList');
+                const __nearBot = !__mlCheck || (__mlCheck.scrollHeight - __mlCheck.scrollTop - __mlCheck.clientHeight) < 160;
+                if (__nearBot && typeof window.__scrollChatToBottom === 'function') window.__scrollChatToBottom(true);
               }
             }
           }
@@ -21297,6 +21355,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       ];
 
       function renderBalanceGame() {
+        if (typeof syncBalancePokeBtnLabel === 'function') syncBalancePokeBtnLabel();
         const card = document.getElementById('balanceQuestionCard');
         if (!card) return;
         if (!state.balanceGame) state.balanceGame = { currentIdx: 0, answers: {}, updatedAt: 0 };
@@ -21417,22 +21476,79 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
       }
 
+      function syncBalancePokeBtnLabel() {
+        const pokeBtn = document.getElementById('balancePokeBtn');
+        if (!pokeBtn) return;
+        const isZh = state.lang === 'zh';
+        const partnerName = (state.myRole === 'jingchan') ? (isZh ? '秀完' : '수완님') : (isZh ? '靖灿' : '징찬님');
+        pokeBtn.textContent = isZh ? `👉 戳一戳${partnerName}来做这题` : `👉 ${partnerName} 콕 찌르기 (알림 보내기)`;
+      }
+
+      let __lastBalancePokeTs = 0;
+      function pokePartnerBalanceGame() {
+        const now = Date.now();
+        const isZh = state.lang === 'zh';
+        if (now - __lastBalancePokeTs < 5000) {
+          showToast(isZh ? '⏳ 刚刚戳过了，5秒后再试哦' : '⏳ 방금 콕 찔렀어요! 5초 뒤에 다시 눌러주세요');
+          return;
+        }
+        __lastBalancePokeTs = now;
+        const idx = ((Number(state.balanceGame?.currentIdx) || 0) % BALANCE_QUESTIONS.length + BALANCE_QUESTIONS.length) % BALANCE_QUESTIONS.length;
+        const q = BALANCE_QUESTIONS[idx] || BALANCE_QUESTIONS[0];
+        const myRole = state.myRole || 'suwan';
+        const partnerRole = myRole === 'suwan' ? 'jingchan' : 'suwan';
+        const koMsg = `👉 징찬님이 콕 찔렀어요! Q${idx + 1} 「${q.qKo}」 같이 골라요`;
+        const zhMsg = `👉 秀完戳了你一下！快来选第${idx + 1}题「${q.qZh}」吧`;
+        try {
+          if (typeof sendPartnerNativePush === 'function') {
+            sendPartnerNativePush('밸런스 게임 콕 찌르기', partnerRole === 'jingchan' ? zhMsg : koMsg);
+          }
+        } catch (_) {}
+        try {
+          pushNotification('👉', '밸런스 게임 콕 찌르기', '默契游戏戳一戳', koMsg, zhMsg, 'diary', 'balance', 'balance', false, myRole);
+          saveState(true);
+        } catch (_) {}
+        showToast(isZh ? '👉 已戳一戳对方，发送了横幅通知！' : '👉 상대방을 콕 찔러 알림 배너를 보냈어요!');
+      }
+      window.__pokePartnerBalanceGame = pokePartnerBalanceGame;
+      const __bPokeEl = document.getElementById('balancePokeBtn');
+      if (__bPokeEl && !__bPokeEl.dataset.cwBound) {
+        __bPokeEl.dataset.cwBound = '1';
+        __bPokeEl.addEventListener('click', pokePartnerBalanceGame);
+      }
+
       function pickBalanceOption(opt) {
         if (!state.balanceGame) state.balanceGame = { currentIdx: 0, answers: {}, updatedAt: 0 };
         if (!state.balanceGame.answers) state.balanceGame.answers = {};
-        const q = BALANCE_QUESTIONS[state.balanceGame.currentIdx || 0];
+        const idx = Number(state.balanceGame.currentIdx || 0);
+        const q = BALANCE_QUESTIONS[idx];
         if (!q) return;
         const role = state.myRole || 'suwan';
+        const partnerRole = role === 'suwan' ? 'jingchan' : 'suwan';
         const cur = state.balanceGame.answers[q.id] || { suwan: '', jingchan: '', updatedAt: 0 };
         cur[role] = opt;
         cur.updatedAt = Date.now();
         state.balanceGame.answers[q.id] = cur;
         state.balanceGame.updatedAt = Date.now();
         addLavenderBonusXp('balance', 5);
+        const bothDone = !!(cur.suwan && cur.jingchan);
+        const same = bothDone && cur.suwan === cur.jingchan;
+        const koPush = bothDone
+          ? (same ? `💜 Q${idx + 1} 마음이 똑같아요! 둘 다 ${opt} 선택` : `😆 Q${idx + 1} 서로 다른 걸 골랐어요! 결과 확인해보세요`)
+          : `⚖️ 징찬님이 Q${idx + 1} 「${q.qKo}」을 골랐어요! 내 답도 선택해보세요`;
+        const zhPush = bothDone
+          ? (same ? `💜 第${idx + 1}题心有灵犀！我们都选了 ${opt}` : `😆 第${idx + 1}题我们选得不一样，快来看看吧！`)
+          : `⚖️ 秀完刚选了第${idx + 1}题「${q.qZh}」，快来选你的答案吧！`;
+        try {
+          if (typeof sendPartnerNativePush === 'function') {
+            sendPartnerNativePush('밸런스 게임', partnerRole === 'jingchan' ? zhPush : koPush);
+          }
+          pushNotification('⚖️', '밸런스 게임 알림', '默契游戏提醒', koPush, zhPush, 'diary', 'balance', 'balance', false, role);
+        } catch (_) {}
         saveState(true);
         renderBalanceGame();
         renderLavenderPot();
-        showToast(state.lang === 'zh' ? `⚖️ 已选择 ${opt}！` : `⚖️ ${opt} 선택 완료!`);
+        showToast(state.lang === 'zh' ? `⚖️ 已选择 ${opt} 并通知对方！` : `⚖️ ${opt} 선택 완료 · 상대방에게 알림을 보냈어요!`);
       }
 
       // ---- 5) Korea <-> China Date Stamp Map ----
@@ -26069,8 +26185,43 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           renderQuickPhraseBar();
         });
         bar.appendChild(editBtn);
+        const hideBtn = document.createElement('button');
+        hideBtn.type = 'button';
+        hideBtn.className = 'btn-ghost w-7 h-7 rounded-full inline-flex items-center justify-center text-[12px] shrink-0 opacity-75 hover:opacity-100';
+        hideBtn.title = isZh ? '隐藏快捷短语栏' : '단축 멘트 숨기기';
+        hideBtn.textContent = '▾';
+        hideBtn.addEventListener('click', () => setQuickPhraseVisible(false));
+        bar.appendChild(hideBtn);
+        applyQuickPhraseVisibility();
+      }
+      const QP_HIDE_KEY = 'cw_qp_hidden_v1';
+      function isQuickPhraseHidden() {
+        try { return localStorage.getItem(QP_HIDE_KEY) === '1'; } catch (_) { return false; }
+      }
+      function applyQuickPhraseVisibility() {
+        const bar = document.getElementById('cwQuickPhraseBar');
+        const tBtn = document.getElementById('cwQuickPhraseToggleBtn');
+        const hidden = isQuickPhraseHidden();
+        if (bar) bar.classList.toggle('cw-qp-collapsed', hidden);
+        if (tBtn) {
+          const isZh = (__st() && __st().lang === 'zh');
+          tBtn.classList.toggle('cw-qp-on', !hidden);
+          tBtn.title = hidden
+            ? (isZh ? '显示快捷短语栏' : '단축 멘트 켜기')
+            : (isZh ? '隐藏快捷短语栏' : '단축 멘트 숨기기');
+        }
+      }
+      function setQuickPhraseVisible(visible) {
+        try { localStorage.setItem(QP_HIDE_KEY, visible ? '0' : '1'); } catch (_) {}
+        applyQuickPhraseVisibility();
+      }
+      const __qpToggleBtn = document.getElementById('cwQuickPhraseToggleBtn');
+      if (__qpToggleBtn && !__qpToggleBtn.dataset.cwBound) {
+        __qpToggleBtn.dataset.cwBound = '1';
+        __qpToggleBtn.addEventListener('click', () => setQuickPhraseVisible(isQuickPhraseHidden()));
       }
       window.__renderQuickPhraseBar = renderQuickPhraseBar;
+      window.__toggleQuickPhraseBar = () => setQuickPhraseVisible(isQuickPhraseHidden());
       renderQuickPhraseBar();
       setTimeout(() => { renderQuickPhraseBar(); }, 1000);
     })();
