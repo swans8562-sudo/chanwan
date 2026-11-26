@@ -2308,6 +2308,16 @@
       backdrop-filter: blur(3px) !important;
       -webkit-backdrop-filter: blur(3px) !important;
     }
+
+    /* Prime 4 v38: Adjustable Chat Bubble Size (sm / md / lg) */
+    html[data-bubblesize="sm"] .cw-msg-col { max-width: 74% !important; }
+    html[data-bubblesize="sm"] .cw-msg-bubble { padding: 6px 10px !important; }
+    html[data-bubblesize="sm"] .cw-msg-bubble .text-\[0\.93rem\] { font-size: 13.5px !important; line-height: 1.38 !important; }
+    html[data-bubblesize="sm"] .cw-msg-bubble .text-\[0\.86rem\] { font-size: 12.5px !important; line-height: 1.35 !important; }
+    html[data-bubblesize="lg"] .cw-msg-col { max-width: 88% !important; }
+    html[data-bubblesize="lg"] .cw-msg-bubble { padding: 11px 15px !important; }
+    html[data-bubblesize="lg"] .cw-msg-bubble .text-\[0\.93rem\] { font-size: 16.5px !important; line-height: 1.48 !important; }
+    html[data-bubblesize="lg"] .cw-msg-bubble .text-\[0\.86rem\] { font-size: 15px !important; line-height: 1.44 !important; }
 </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -4421,7 +4431,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v36</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v38</span>
           </div>
         </div>
       </div>
@@ -5819,7 +5829,8 @@
         const box = document.getElementById('sysNotifBannerBox');
         const btn = document.getElementById('enableSysNotifBtn');
         const txt = document.getElementById('sysNotifStatusText');
-        if (box) box.classList.toggle('hidden', ('Notification' in window) && Notification.permission === 'granted');
+        const __isNativeApk = typeof window.ChanwanNative !== 'undefined';
+        if (box) box.classList.toggle('hidden', __isNativeApk || (('Notification' in window) && Notification.permission === 'granted'));
         const sBadge = document.getElementById('settingsNotifStatusBadge');
         const sDesc = document.getElementById('settingsNotifStatusDesc');
         const sBtn = document.getElementById('settingsNotifPermBtn');
@@ -5828,6 +5839,14 @@
         if (sSoundCb) sSoundCb.checked = state.soundEnabled !== false;
         if (sSoundSt) sSoundSt.textContent = state.soundEnabled !== false ? (isZh ? '开启' : 'ON') : (isZh ? '关闭' : 'OFF');
 
+        if (__isNativeApk) {
+          if (txt) txt.textContent = isZh ? '灿完时光专属 APP 后台爱心横幅已开启 💜' : '灿完时光 전용 앱 백그라운드 하트 배너가 작동 중이에요 💜';
+          if (btn) btn.textContent = isZh ? '已开启' : '작동 중';
+          if (sBadge) sBadge.textContent = isZh ? '🟢 专属APP已开启' : '🟢 전용 앱 ON';
+          if (sDesc) sDesc.textContent = isZh ? '无需浏览器权限，后台实时接收中文横幅与状态栏爱心提醒 💜' : '전용 앱 백그라운드 서비스로 실시간 하트 배너가 켜져 있어요 💜';
+          if (sBtn) sBtn.classList.add('hidden');
+          return;
+        }
         if (!('Notification' in window)) {
           if (txt) txt.textContent = isZh ? '当前浏览器不支持系统横幅通知。' : '이 브라우저는 브라우저 배너 알림을 지원하지 않아요.';
           if (btn) btn.textContent = isZh ? '不支持' : '미지원';
@@ -14456,7 +14475,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v36',
+          ver: 'Prime 4 · v38',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14478,7 +14497,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v36 更新日志' : '📜 灿完时光 Prime 4 · v36 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v38 更新日志' : '📜 灿完时光 Prime 4 · v38 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -25850,6 +25869,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         </div>
         <input id="cwChatBgAlpha" type="range" min="15" max="85" value="55" class="w-full accent-purple-600" />
       </div>
+      <div class="space-y-1.5">
+        <div id="cwBubbleSizeLabel" class="text-xs font-semibold text-sec">💬 말풍선 크기</div>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="sm">작게</button>
+          <button type="button" class="cw-bubble-size-btn btn-royal rounded-xl py-1.5 text-xs font-bold" data-bsize="md">보통</button>
+          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="lg">크게</button>
+        </div>
+      </div>
       <div class="flex items-center justify-end gap-2 pt-1">
         <button id="cwChatBgResetBtn" type="button" class="btn-ghost px-3.5 py-2 rounded-xl text-xs font-semibold">초기화</button>
         <button id="cwChatBgDoneBtn" type="button" class="btn-royal px-4 py-2 rounded-xl text-xs font-bold">적용 완료</button>
@@ -25869,6 +25896,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const __mediaUrl = (u, mime) => (__api().mediaUrl ? __api().mediaUrl(u, mime) : u);
 
       const BG_KEY = 'cw_chat_bg_v1';
+      const BUBBLE_SIZE_KEY = 'cw_bubble_size_v1';
+      function applyBubbleSize(sz) {
+        const clean = (sz === 'sm' || sz === 'lg') ? sz : 'md';
+        document.documentElement.setAttribute('data-bubblesize', clean);
+        try { localStorage.setItem(BUBBLE_SIZE_KEY, clean); } catch (_) {}
+        document.querySelectorAll('.cw-bubble-size-btn').forEach(b => {
+          const isAct = b.getAttribute('data-bsize') === clean;
+          b.className = 'cw-bubble-size-btn rounded-xl py-1.5 text-xs font-bold ' + (isAct ? 'btn-royal' : 'btn-ghost');
+        });
+      }
+      try { applyBubbleSize(localStorage.getItem(BUBBLE_SIZE_KEY) || 'md'); } catch (_) {}
+      document.querySelectorAll('.cw-bubble-size-btn').forEach(b => {
+        b.addEventListener('click', () => applyBubbleSize(b.getAttribute('data-bsize')));
+      });
       const PRESETS = {
         default: '',
         rose: 'linear-gradient(155deg, rgba(255,228,240,0.88) 0%, rgba(255,244,234,0.88) 55%, rgba(246,232,255,0.88) 100%)',
@@ -25913,6 +25954,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         setTxt('cwChatBgAlphaLabel', '배경 은은함 (글자 가독성)', '背景柔和度（文字更清晰）');
         setTxt('cwChatBgResetBtn', '초기화', '恢复默认');
         setTxt('cwChatBgDoneBtn', '적용 완료', '完成');
+        setTxt('cwBubbleSizeLabel', '💬 말풍선 크기', '💬 气泡大小');
+        document.querySelectorAll('.cw-bubble-size-btn').forEach(b => {
+          const sz = b.getAttribute('data-bsize');
+          if (sz === 'sm') b.textContent = isZh ? '紧凑' : '작게';
+          else if (sz === 'md') b.textContent = isZh ? '标准' : '보통';
+          else if (sz === 'lg') b.textContent = isZh ? '宽松' : '크게';
+        });
         const presetMap = { default: ['기본', '默认'], rose: ['로즈', '玫瑰'], lavender: ['라벤더', '薰衣草'], starlight: ['별빛', '星夜'] };
         document.querySelectorAll('.cw-bg-preset-btn').forEach(b => {
           const p = b.getAttribute('data-preset');
