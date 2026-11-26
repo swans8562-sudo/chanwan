@@ -1687,8 +1687,8 @@
     }
     .header-icon-btn:active { transform: scale(0.93) !important; }
     /* Ultra-Fast 60fps Mobile Paint Virtualization */
-    #chatMessages > div { content-visibility: auto; contain-intrinsic-size: 0 108px; }
-    #albumGrid > div { content-visibility: auto; contain-intrinsic-size: 0 260px; }
+    #chatMessages > div { }
+    #albumGrid > div { }
     .cw-msg-bubble { contain: layout style; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
     .cw-msg-bubble.cw-pressing { transform: scale(0.975); transition: transform 0.16s ease; }
     #cwMsgContextMenu { animation: cwCtxPop 0.16s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -1800,8 +1800,6 @@
     }
     .cw-msg-row {
       contain: layout style;
-      content-visibility: auto;
-      contain-intrinsic-size: auto 92px;
       overflow: visible !important;
       padding-bottom: 2px;
     }
@@ -2265,10 +2263,19 @@
       display: flex !important;
       align-items: center !important;
     }
-    /* Fix dark text on purple mine bubble tone pills (다정한 연인체 / 다정한 챙김) */
-    .cw-msg-row.mine .cw-mine-pill {
+    /* Prime 4 v20: Force crisp white text on ALL pills & buttons inside dark purple mine bubbles (even with 🟡 Kakao theme!) */
+    [data-dark="1"] .cw-msg-row.mine .cw-msg-bubble {
+      --bubble-mine-text: #ffffff !important;
+      --bubble-mine-pill-bg: rgba(255, 255, 255, 0.22) !important;
+      --bubble-mine-muted: rgba(255, 255, 255, 0.92) !important;
+    }
+    html body .cw-msg-row.mine .cw-msg-bubble .cw-mine-pill,
+    html body .cw-msg-row.mine .cw-msg-bubble .retrans-msg-btn,
+    html body .cw-msg-row.mine .cw-msg-bubble .cw-msg-polish-btn,
+    html body .cw-msg-row.mine .cw-msg-bubble .nuance-toggle-btn {
       color: #ffffff !important;
-      background: rgba(255, 255, 255, 0.20) !important;
+      background: rgba(255, 255, 255, 0.22) !important;
+      opacity: 1 !important;
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -4380,7 +4387,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v18</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v21</span>
           </div>
         </div>
       </div>
@@ -7221,7 +7228,7 @@
         window.__cwLastGeminiErr = '';
         const tryModel = async (modelName, disableThinking) => {
           const ctrl = new AbortController();
-          const tm = setTimeout(() => ctrl.abort(), 2800);
+          const tm = setTimeout(() => ctrl.abort(), 4800);
           try {
             const genCfg = { responseMimeType: 'application/json' };
             if (/gemini-3\.5-flash-lite/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'minimal' };
@@ -7261,7 +7268,7 @@
             resp = await tryModel(mName, noThink);
             if (resp.ok && resp.json) {
               usedModel = mName;
-              try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
+              window.__cwGemToCnt = 0; try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
               break;
             }
             if (resp.status === 403 || resp.status === 401 || resp.status === 0) break;
@@ -7286,7 +7293,7 @@
             } catch (_) {}
           }
           if (!resp.ok || !resp.json) {
-            if (resp.status === 0) __cwEngineSkipUntil.gemini = Date.now() + 10 * 60 * 1000; else if (resp.status === 403 || resp.status === 429) __cwEngineSkipUntil.gemini = Date.now() + 60000;
+            if (resp.status === 0) { window.__cwGemToCnt = (window.__cwGemToCnt || 0) + 1; if (window.__cwGemToCnt >= 2) __cwEngineSkipUntil.gemini = Date.now() + 5 * 60 * 1000; } else if (resp.status === 403 || resp.status === 429) __cwEngineSkipUntil.gemini = Date.now() + 60000;
             return null;
           }
           const j = resp.json;
@@ -11323,7 +11330,8 @@
                   ? `<div style="width:40px;min-width:40px;flex-shrink:0;"></div>`
                   : `<div class="cw-chat-avatar" style="background: ${avBg};">${avSrc ? `<img src="${avSrc}" alt="${senderDisplayName}" loading="lazy" decoding="async" class="w-full h-full object-cover" />` : senderDisplayName}</div>`);
             const hasMedia = !!(m.photoUrl || m.videoUrl || (Array.isArray(m.photoUrls) && m.photoUrls.length));
-            const isAutoMediaCaption = hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
+            const isAutoVoiceCap = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/')) && /^(🎙️\s*)?(음성 메시지|语音消息)(\s*🎙️)?$/.test(String(m.original || '').trim());
+            const isAutoMediaCaption = isAutoVoiceCap || (hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim()));
             const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
             const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
             const isEmojiMsg = showText && !hasMedia && !m.sticker && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim());
@@ -14338,7 +14346,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v18',
+          ver: 'Prime 4 · v21',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14360,7 +14368,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v18 更新日志' : '📜 灿完时光 Prime 4 · v18 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v21 更新日志' : '📜 灿完时光 Prime 4 · v21 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
