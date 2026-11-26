@@ -2112,6 +2112,74 @@
       border: 1px solid rgba(196, 152, 232, 0.52) !important;
       box-shadow: 0 8px 20px -8px rgba(108, 72, 178, 0.30), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
     }
+  
+    /* Prime 4 v8: Theme-Matched Chat Canvas Contrast & Crisp 15px Message Readability */
+    #chatMessagesList:not(.cw-has-bg) {
+      background-color: #f2ecfb !important;
+      border-radius: 20px;
+      padding: 10px 8px 14px 8px !important;
+    }
+    [data-theme="coral-pink"] #chatMessagesList:not(.cw-has-bg) {
+      background-color: #fdf0f4 !important;
+    }
+    [data-theme="pastel-blue"] #chatMessagesList:not(.cw-has-bg) {
+      background-color: #edf4fd !important;
+    }
+    [data-dark="1"] #chatMessagesList:not(.cw-has-bg),
+    [data-theme="velvet-dusk"] #chatMessagesList:not(.cw-has-bg),
+    [data-theme="midnight-black"] #chatMessagesList:not(.cw-has-bg) {
+      background-color: #0e0a18 !important;
+    }
+    [data-theme="midnight-navy"] #chatMessagesList:not(.cw-has-bg) {
+      background-color: #091020 !important;
+    }
+    [data-theme="rose-noir"] #chatMessagesList:not(.cw-has-bg) {
+      background-color: #140b12 !important;
+    }
+    /* Larger, Crisper Message Body Typography & Subtler Meta Badges */
+    .cw-msg-bubble {
+      padding: 9px 13px !important;
+    }
+    .cw-msg-bubble .text-sm,
+    .cw-msg-bubble .text-\[0\.83rem\],
+    .cw-msg-bubble .text-\[13px\] {
+      font-size: 15px !important;
+      line-height: 1.46 !important;
+    }
+    .cw-msg-bubble .cw-mine-pill,
+    .cw-msg-bubble .cw-msg-polish-btn,
+    .cw-msg-bubble .nuance-toggle-btn {
+      font-size: 10px !important;
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+      opacity: 0.88;
+    }
+    .cw-msg-row {
+      margin-bottom: 2px;
+    }
+    /* Clean borderless theme emoji (🥀 🖤 ☀️ 🌙 etc.) with ZERO inner oval box! */
+    #themeIcon, #themeIcon * {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+    }
+  
+    .cw-msg-row.mine .cw-msg-polish-box {
+      background: rgba(255, 255, 255, 0.94) !important;
+      color: #2b1b47 !important;
+      border-color: rgba(255, 255, 255, 0.45) !important;
+    }
+    [data-dark="1"] .cw-msg-row.mine .cw-msg-polish-box {
+      background: rgba(18, 13, 32, 0.88) !important;
+      color: #f3ebff !important;
+      border-color: rgba(232, 198, 138, 0.28) !important;
+    }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -4222,7 +4290,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v1</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v10</span>
           </div>
         </div>
       </div>
@@ -5568,10 +5636,12 @@
           const rawTitle = String(title || '');
           const isHeartbeat = /하트비트|心跳/.test(rawTitle);
           const isSpace = /커플공간|답글|空间/.test(rawTitle);
+          const isMood = /기분|心情/.test(rawTitle);
+          const isAct = /상태|状态/.test(rawTitle);
           // Clean KakaoTalk-style 1-line title in receiver's language (Suwan gets Korean, Jingchan gets Chinese)
           const cleanTitle = partnerRole === 'suwan'
-            ? (isHeartbeat ? '징찬 · 하트비트' : (isSpace ? '징찬 · 커플공간' : '징찬'))
-            : (isHeartbeat ? '秀完 · 心跳' : (isSpace ? '秀完 · 情侣空间' : '秀完'));
+            ? (isHeartbeat ? '징찬 · 하트비트' : (isMood ? '징찬 · 기분' : (isAct ? '징찬 · 상태' : (isSpace ? '징찬 · 커플공간' : '징찬'))))
+            : (isHeartbeat ? '秀完 · 心跳' : (isMood ? '秀完 · 心情' : (isAct ? '秀完 · 状态' : (isSpace ? '秀完 · 情侣空间' : '秀完'))));
           let cleanMsg = String(body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
           if (!cleanMsg) cleanMsg = partnerRole === 'suwan' ? '새 메시지가 도착했어요' : '发来了一条新消息';
           // Translate boilerplate media/heartbeat captions into receiver's language cleanly
@@ -6539,13 +6609,13 @@
         if (!s) return s;
         const orig = String(origText || '');
         if (tgtLang === 'zh') {
-          if (/징찬|靖灿|jing\s*chan/i.test(orig) || /징찬|jing\s*chan|晶灿|静灿|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅/i.test(s)) {
+          if (/징찬|장찬|정찬|진찬|靖灿|jing\s*chan/i.test(orig) || /징찬|장찬|jing\s*chan|张灿|章灿|长灿|俊灿|晶灿|静灿|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅/i.test(s)) {
             s = s
               .replace(/징찬아/g, '靖灿呀')
               .replace(/징찬이랑|징찬하고/g, '和靖灿')
               .replace(/징찬이?(?:한테|에게)/g, '给靖灿')
               .replace(/징찬이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '靖灿')
-              .replace(/(?:俊灿|军灿|君灿|晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿').replace(/^靖灿[,，\s]+(?=.*靖灿)/, '')
+              .replace(/(?:张灿|章灿|长灿|俊灿|军灿|君灿|晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿').replace(/^靖灿[,，\s]+(?=.*靖灿)/, '')
               .replace(/靖灿(?:이|아|가|는|를|도|의)/g, '靖灿')
               .replace(/jing\s*chan(?:\s*i|a)?/gi, '靖灿');
           }
@@ -7021,8 +7091,8 @@
         const isOrigZh = /[一-鿿]/.test(rawText) && !/[가-힣]/.test(rawText);
         const tgtLang = isOrigZh ? 'ko' : 'zh';
         const prompt = isOrigZh
-          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 연인 대화입니다. 중국어 원문을 가장 자연스러운 한국어 연인 반말로 번역하세요. 규칙: 哥/哥哥/欧巴는 절대 형/형님/동생으로 번역하지 말고 무조건 '오빠'로 번역. 嘿嘿->헤헤, 嘻嘻->히히. JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","tone":"짧은 감정 태그(예: 다정한 챙김)","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`
-          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 연인 대화입니다. 한국어 카톡 애교체(ㅇ받침, 줄임말, 오타, 헤헤/헤헿->嘿嘿)를 정확히 이해해 가장 자연스러운 중국어 연인 구어체로 번역하세요. 규칙: 수완->秀完, 징찬->靖灿(절대 静蝉 등 오역·중복 금지), 인사 '안녕/안녕 내사랑'은 절대 再见/拜拜 금지(嗨/你好呀 사용). JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개","pronunciation":"병음","tone":"짧은 감정 태그","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`;
+          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 카톡 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭(우리 애기 등)이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역. 嘿嘿->헤헤, 嘻嘻->히히. JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","tone":"짧은 감정 태그(예: 다정한 챙김)","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`
+          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 위챗 대화입니다. 한국어 카톡 애교체(ㅇ받침, 줄임말, 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 과장 없이 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개","pronunciation":"병음","tone":"짧은 감정 태그","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`;
         window.__cwLastGeminiErr = '';
         const tryModel = async (modelName, disableThinking) => {
           const ctrl = new AbortController();
@@ -8660,6 +8730,42 @@
         compressImageToDataUrl: (f, maxW) => (typeof compressImageToDataUrl === 'function' ? compressImageToDataUrl(f, maxW) : Promise.reject(new Error('no_comp'))),
         mediaUrl: (u, mime) => { try { return typeof __cwMediaUrl === 'function' ? __cwMediaUrl(u, mime) : u; } catch (_) { return u; } }
       };
+        // Prime 4 v5: Auto-resolve any partner/own message stuck on '⏳ 正在翻译...' / '⏳ 번역 중...'
+        const __cwTranslatingIds = new Set();
+        async function autoResolvePendingTranslations() {
+          try {
+            const msgs = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages.slice(-12) : [];
+            const now = Date.now();
+            for (const m of msgs) {
+              if (!m || !m.id || !m.original || __cwTranslatingIds.has(m.id)) continue;
+              const tr = String(m.translated || '').trim();
+              const isStuck = (!tr || tr === '⏳ 正在翻译...' || tr === '⏳ 번역 중...') && (now - Number(m.ts || 0)) > 3200;
+              if (!isStuck) continue;
+              if (!/[a-zA-Z가-힣一-鿿]/.test(m.original) || /^https?:\/\/\S+$/i.test(m.original)) continue;
+              __cwTranslatingIds.add(m.id);
+              (async (targetMsg) => {
+                try {
+                  const res = await geminiTranslate(targetMsg.original, 'lover');
+                  if (res && res.translated) {
+                    targetMsg.translated = res.translated;
+                    if (res.altTranslated) targetMsg.altTranslated = res.altTranslated;
+                    targetMsg.pronunciation = res.pronunciation || '';
+                    targetMsg.tone = res.tone || targetMsg.tone || '';
+                    targetMsg.nuance = res.nuance || targetMsg.nuance || '';
+                    targetMsg.engine = res.engine || '';
+                    targetMsg.accuracy = Number(res.accuracy) || 95;
+                    saveState(true);
+                    renderChat();
+                  }
+                } catch (_) {} finally {
+                  setTimeout(() => __cwTranslatingIds.delete(targetMsg.id), 15000);
+                }
+              })(m);
+            }
+          } catch (_) {}
+        }
+        setInterval(() => { if (!document.hidden) autoResolvePendingTranslations(); }, 4500);
+
       let activeAvatarTarget = 'suwan';
       let activeCityTarget = 'suwan';
       let activeMoodTarget = 'suwan';
@@ -9526,7 +9632,11 @@
         if (document.body) document.body.style.backgroundColor = bgHex;
         const iconEl = document.getElementById('themeIcon');
         const themeBtn = document.getElementById('cycleThemeBtn');
-        if (iconEl) { delete iconEl.dataset.origEmoji; iconEl.textContent = valid.icon; }
+        if (iconEl) {
+          delete iconEl.dataset.origEmoji;
+          iconEl.classList.add('cw-keep-native-emoji');
+          iconEl.textContent = valid.icon;
+        }
         if (themeBtn) themeBtn.title = state.lang === 'zh' ? valid.labelZh : valid.labelKo;
         const hdrThIco = document.getElementById('headerThemeToggleIcon');
         if (hdrThIco) { delete hdrThIco.dataset.origEmoji; hdrThIco.textContent = isDarkTheme ? '☀️' : '🌙'; }
@@ -9678,6 +9788,23 @@
         if (typeof renderBalanceGame === 'function') renderBalanceGame();
         if (typeof renderDateStampMap === 'function') renderDateStampMap();
         if (typeof renderHome === 'function') renderHome();
+        if (typeof window.__renderHomeCouplePhrase === 'function') window.__renderHomeCouplePhrase(false);
+        if (typeof window.__drawHomeTimeMachine === 'function') window.__drawHomeTimeMachine(false);
+        if (typeof window.__renderQuickPhraseBar === 'function') window.__renderQuickPhraseBar();
+        if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
+        const __zh = state.lang === 'zh';
+        const __setI18nId = (id, ko, zh) => { const el = document.getElementById(id); if (el) el.textContent = __zh ? zh : ko; };
+        __setI18nId('hideNotifPrevTitle', '🔒 알림 메시지 미리보기 끄기', '🔒 隐藏通知内容预览');
+        __setI18nId('hideNotifPrevDesc', '켜두면 상단 배너에 내용 대신 "새 메시지가 도착했어요"만 떠요.', '开启后通知横幅仅显示“收到一条新消息”，保护隐私。');
+        __setI18nId('e2eeTitleLabel', '🔐 둘만의 종단간 암호화 (AES-256 E2EE)', '🔐 专属端到端加密 (AES-256 E2EE)');
+        __setI18nId('e2eeDescLabel', '두 사람 폰에 똑같은 비밀 암호키를 입력하면 모든 사진·대화·음성·일기가 AES-256으로 암호화되어 전송돼요.', '两台手机输入相同密钥后，聊天、照片、语音与日记将全程 AES-256 加密传输。');
+        __setI18nId('e2eeSaveBtn', '암호화 켜기', '开启加密');
+        __setI18nId('e2eeClearBtn', '해제', '关闭');
+        __setI18nId('customSoundToneBtn', '🎙️ 내 알림음', '🎙️ 自定义铃声');
+        const __ahEl = document.getElementById('autoHealLastRunText');
+        if (__ahEl && /부팅·재연결|启动与重连/.test(__ahEl.textContent || '')) {
+          __ahEl.textContent = __zh ? '启动与重连时自动轻量自检（流畅不卡顿）' : '부팅·재연결 시 가벼운 항목만 자동 점검해요 (버벅거림 없음)';
+        }
         if (!silent) { saveState(); showToast(state.lang === 'zh' ? '已切换为中文界面 ✨' : '한국어 화면으로 전환되었어요 ✨'); }
       }
 
@@ -9685,6 +9812,20 @@
         try { if (tab) localStorage.setItem('cw_last_active_tab', tab); } catch (_) {}
         if (typeof window.__closeNotifPanel === 'function') window.__closeNotifPanel();
         const lockChat = (tab === 'translator');
+        if (lockChat && Array.isArray(state.notifications)) {
+          let __clearedAny = false;
+          state.notifications.forEach(n => {
+            if (n && n.unread && (n.tab === 'translator' || n.category === 'chat' || n.category === 'mood' || !n.tab)) {
+              n.unread = false;
+              __clearedAny = true;
+            }
+          });
+          if (__clearedAny) {
+            try { renderNotifications(); } catch (_) {}
+            try { saveState(false); } catch (_) {}
+          }
+          try { if (typeof clearAllAppBadgesAndOsNotifs === 'function') clearAllAppBadgesAndOsNotifs(); } catch (_) {}
+        }
         document.documentElement.classList.toggle('cw-chat-lock', lockChat);
         document.body.classList.toggle('cw-chat-lock', lockChat);
         if (!lockChat) {
@@ -11118,7 +11259,7 @@
                                   : (m.tone ? localizeSavedToneOrNuance(m.tone, 'tone') : (sTone ? (state.lang === 'zh' ? sTone.toneZh : sTone.toneKo) : '')));
                               return toneDisp ? `<span class="${mine ? 'cw-mine-pill ' : ''}inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};">${escapeHtml(toneDisp)}</span>` : '';
                             })()}
-                            ${(!mine && showText) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: var(--accent-royal-soft); color: var(--accent-royal);" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
+                            ${(showText && !isEmojiMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
                             ${m.editedAt ? `<span class="opacity-75 px-0.5">${state.lang === 'zh' ? '已编辑' : '수정됨'}</span>` : ''}
                           </div>
                           <div class="flex items-center gap-1.5 ml-auto shrink-0">
@@ -12535,7 +12676,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (!document.hidden) {
             const _myR2 = (state && state.myRole) || 'suwan';
             const _uCnt2 = (Array.isArray(state && state.notifications) ? state.notifications : []).filter(n => n && n.unread && n.fromRole !== _myR2).length;
-            if (_uCnt2 === 0) clearAllAppBadgesAndOsNotifs();
+            const __onChatNow = document.getElementById('tab-translator')?.classList.contains('active');
+            if (__onChatNow && Array.isArray(state.notifications)) {
+              let __cVis = false;
+              state.notifications.forEach(n => { if (n && n.unread && (n.tab === 'translator' || n.category === 'chat' || n.category === 'mood' || !n.tab)) { n.unread = false; __cVis = true; } });
+              if (__cVis) { try { renderNotifications(); saveState(false); } catch (_) {} }
+            }
+            if (_uCnt2 === 0 || __onChatNow) clearAllAppBadgesAndOsNotifs();
           }
         });
 
@@ -12731,6 +12878,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
           saveState(true); renderHome();
           pushNotification('💜', '수완의 기분 변경', '秀完更新了心情', state.profile.suwanMood, state.profile.suwanMood, 'home', '', 'post', false, 'suwan');
+          try { if (typeof sendPartnerNativePush === 'function') sendPartnerNativePush('기분 변경', String(state.profile.suwanMood || '').split('·').pop().trim() || state.profile.suwanMood); } catch (_) {}
         });
         document.getElementById('jingchanMoodSelect').addEventListener('change', (e) => {
           if ((state.myRole || 'suwan') !== 'jingchan') {
@@ -12752,6 +12900,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
           saveState(true); renderHome();
           pushNotification('🌸', '징찬의 기분 변경', '靖灿更新了心情', state.profile.jingchanMood, state.profile.jingchanMood, 'home', '', 'post', false, 'jingchan');
+          try { if (typeof sendPartnerNativePush === 'function') sendPartnerNativePush('기분 변경', String(state.profile.jingchanMood || '').split('·')[0].trim() || state.profile.jingchanMood); } catch (_) {}
         });
 
         // Gentle bilingual status/mood reminder toast when user hasn't updated status for 3+ hours
@@ -14062,21 +14211,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v1',
+          ver: 'Prime 4 · v10',
           date: '2026-11-26',
-          koTitle: 'Prime 4 정식 출시 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI · 커플 기능 총집합',
-          zhTitle: '微信长按菜单 · Gemini 最新模型自动适配 · 0ms 秒开首页 · 纠偏5项误译',
+          koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
+          zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
-            '✨ 위챗 스타일 롱프레스 플로팅 메뉴: 말풍선(사진 포함)을 0.4초 꾹 누르면 리액션 24종·원문/번역 복사·답장·공지 고정·수정·삭제가 팝업으로 뜨고, 평소 말풍선 아래는 시간+읽음만 남겨 극강 미니멀 완성',
-            '🤖 Gemini 최신 모델 자동 탐색 & 뜻풀이 연동: gemini-3.5-flash-lite · 3.8-flash · 2.5-flash-lite 자동 연결 및 향후 404 시 모델 목록 자동 탐색, 키 저장 즉시 번역·뜻풀이 동시 반영',
-            '💬 감성 말투 & 오역 교정: 수완(手腕·足智多谋·秀莞)·징찬(静蝉)·자기(宝贝)·秀完欧巴(수완 오빠)·안녕 이별 오역·애교 ㅇ받침(그랭?·가야징)·감성 구어(머해·왜구래·헤헿) 전부 교정',
-            '⚡ 0ms 홈 화면 즉시 표시 & 안정성: 부팅 즉시 localStorage에서 홈 화면 먼저 그리기, 메신저 시간순 강제 정렬, 9MB 이하 동영상 원본 분할 전송, 4중 영구 금고·클라우드 전체 가져오기·스마트 자동 자가진단'
+            '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
+            '🎬 무제한 병렬 동영상 & 사진첩 폴더 영구 저장: 10MB·30MB 제한 해제, 3배속 병렬 분할 전송, 말풍선 동영상 불러오기, 사진첩 폴더 이동 리셋 버그 완전 해결',
+            '💬 커플 메신저 확장: 말풍선 스와이프 답장·더블탭 하트·사랑해/보고싶어 이펙트·퀵 멘트 바·커플 배경 꾸미기·실시간 상태 배지(양쪽 동기화)·추억 타임머신',
+            '✨ 명품 부티크 UI & 안정성: 라이트/다크 전 테마 가독성 통일, 잘림 없는 툴바·배지·하단 여백, 깔끔한 1줄 알림 배너, 앱 재실행 시 항상 홈 시작, 한↔中 전체 즉시 전환'
           ],
           zhItems: [
-            '✨ 微信风格长按悬浮菜单：长按气泡（含照片）0.4秒弹出24款表情回应与复制/回复/置顶/编辑/删除，平时仅保留时间与已读状态',
-            '🤖 Gemini 最新模型自动适配与意思解析联动：自动连接 gemini-3.5-flash-lite / 3.8-flash / 2.5-flash-lite，遇404自动探测可用模型',
-            '💬 恋人语气与称呼纠偏：修复秀完/靖灿/宝贝/秀完欧巴/告别误译及韩语撒娇口语表达，新增多维度语气标签',
-            '⚡ 0ms 秒开首页与稳定优化：启动瞬间先渲染首页信息，强制消息按时间排序，支持9MB内原画视频分片直传、四重金库、云端全量恢复与智能自动自检'
+            '⚡ 极速 Gemini 3.5 Flash-Lite 翻译：极简推理与 0ms 缓存秒翻，全面纠偏秀完/靖灿/宝贝/欧巴等恋人称呼与撒娇口语',
+            '🎬 无限容量并行视频与相册文件夹永久同步：解除 10MB/30MB 限制，3倍速分片直传，支持气泡一键加载视频，彻底修复相册移动重置问题',
+            '💬 情侣互动全新升级：气泡右滑回复、双击点赞红心、想你/我爱你全屏特效、快捷短语栏、自定义聊天背景、双方实时状态徽章与回忆时光机',
+            '✨ 精品奢华界面与流畅体验：浅色/深色全主题高对比度、零裁切状态栏与底部安全区、极简通知横幅、重启直达首页、中韩界面一键全量切换'
           ]
         }
         ];
@@ -14084,7 +14233,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v1 更新日志' : '📜 灿完时光 Prime 4 · v1 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v10 更新日志' : '📜 灿完时光 Prime 4 · v10 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -16903,7 +17052,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         renderCoupons();
 
-        if (!window.__cwBootedTab) { window.__cwBootedTab = true; const savedTab = localStorage.getItem('cw_last_active_tab'); switchTab(savedTab && document.getElementById('tab-' + savedTab) ? savedTab : 'home'); }
+        if (!window.__cwBootedTab) { window.__cwBootedTab = true; const __urlTab = new URLSearchParams(location.search).get('tab'); switchTab(__urlTab && document.getElementById('tab-' + __urlTab) ? __urlTab : 'home'); }
         // ==================== v12.0 MY ROLE MODE (SUWAN / JINGCHAN) & AUTO NOTIFICATION PROMPT ====================
         if (!state.myRole) {
           try {
@@ -17377,7 +17526,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const existingMap = new Map((state.chat.messages || []).map(x => [x && x.id, x]));
             for (const cm of cleanIncomingMsgs) {
               const ex = existingMap.get(cm.id);
-              if (ex && cm.translated && cm.translated !== ex.translated && (!ex.translated || Number(cm.accuracy || 0) >= Number(ex.accuracy || 0) || (cm.editedAt && cm.editedAt > (ex.editedAt || 0)))) {
+              const __cmIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(cm.translated || '').trim());
+              const __exIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(ex.translated || '').trim());
+              if (cm.translated && !__cmIsPending && (!ex.translated || __exIsPending || Number(cm.accuracy || 0) >= Number(ex.accuracy || 0) || (cm.editedAt && cm.editedAt > (ex.editedAt || 0)))) {
                 ex.original = cm.original || ex.original;
                 ex.translated = cm.translated;
                 if (cm.altTranslated) ex.altTranslated = cm.altTranslated;
@@ -17394,6 +17545,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const filteredCur = (state.chat.messages || []).filter(m => m && m.id && !delSet.has(m.id));
             state.chat.messages = sortChatMessagesStable(mergeById(filteredCur, cleanIncomingMsgs, false, true));
             if (state.chat.messages.length !== beforeCount) changed = true;
+            setTimeout(() => { if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations(); }, 600);
           }
           const __incPartnerRole = inc.myRole || '';
           const __isFromPartner = !!(__incPartnerRole && __incPartnerRole !== (state.myRole || 'suwan'));
@@ -17582,6 +17734,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           }
           if (inc.profile) {
+            const __incSwActTs = Number(inc.profile.suwanActivityUpdatedAt || 0);
+            const __curSwActTs = Number(state.profile.suwanActivityUpdatedAt || 0);
+            if (inc.profile.suwanActivity && inc.profile.suwanActivity !== state.profile.suwanActivity && (__incSwActTs >= __curSwActTs || __curSwActTs === 0)) {
+              state.profile.suwanActivity = inc.profile.suwanActivity;
+              if (__incSwActTs > 0) state.profile.suwanActivityUpdatedAt = __incSwActTs;
+              changed = true;
+              if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
+              if (isLiveEvent && (state.myRole || 'suwan') !== 'suwan') {
+                const __am = { working:['💻 일하는 중','💻 工作中'], eating:['🍜 밥 먹는 중','🍜 吃饭中'], workout:['🏃 운동 중','🏃 运动中'], missing:['💜 보고 싶은 중','💜 想你中'], sleeping:['🌙 자는 중','🌙 睡觉中'], chilling:['✨ 여유로운 중','✨ 悠闲中'] }[inc.profile.suwanActivity] || [inc.profile.suwanActivity, inc.profile.suwanActivity];
+                pushNotification('✨', '수완 · 상태', '秀完 · 状态', __am[0], __am[1], 'translator', 'messenger', 'mood', false, 'suwan');
+              }
+            }
+            const __incJcActTs = Number(inc.profile.jingchanActivityUpdatedAt || 0);
+            const __curJcActTs = Number(state.profile.jingchanActivityUpdatedAt || 0);
+            if (inc.profile.jingchanActivity && inc.profile.jingchanActivity !== state.profile.jingchanActivity && (__incJcActTs >= __curJcActTs || __curJcActTs === 0)) {
+              state.profile.jingchanActivity = inc.profile.jingchanActivity;
+              if (__incJcActTs > 0) state.profile.jingchanActivityUpdatedAt = __incJcActTs;
+              changed = true;
+              if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
+              if (isLiveEvent && (state.myRole || 'suwan') !== 'jingchan') {
+                const __am = { working:['💻 일하는 중','💻 工作中'], eating:['🍜 밥 먹는 중','🍜 吃饭中'], workout:['🏃 운동 중','🏃 运动中'], missing:['💜 보고 싶은 중','💜 想你中'], sleeping:['🌙 자는 중','🌙 睡觉中'], chilling:['✨ 여유로운 중','✨ 悠闲中'] }[inc.profile.jingchanActivity] || [inc.profile.jingchanActivity, inc.profile.jingchanActivity];
+                pushNotification('✨', '징찬 · 상태', '靖灿 · 状态', __am[0], __am[1], 'translator', 'messenger', 'mood', false, 'jingchan');
+              }
+            }
             const __incSwMoodTs = Number(inc.profile.suwanMoodUpdatedAt || inc.updatedAt || 0);
             const __curSwMoodTs = Number(state.profile.suwanMoodUpdatedAt || 0);
             const __allowSwMood = inc.profile.suwanMood && inc.profile.suwanMood !== state.profile.suwanMood && (
@@ -18251,6 +18427,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             profile: {
               suwanMood: coreObj.profile?.suwanMood,
               jingchanMood: coreObj.profile?.jingchanMood,
+              suwanActivity: coreObj.profile?.suwanActivity || '',
+              jingchanActivity: coreObj.profile?.jingchanActivity || '',
+              suwanActivityUpdatedAt: Number(coreObj.profile?.suwanActivityUpdatedAt || 0),
+              jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
@@ -18325,6 +18505,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               jingchanMood: coreObj.profile?.jingchanMood,
               suwanMoodUpdatedAt: Number(coreObj.profile?.suwanMoodUpdatedAt || 0),
               jingchanMoodUpdatedAt: Number(coreObj.profile?.jingchanMoodUpdatedAt || 0),
+              suwanActivity: coreObj.profile?.suwanActivity || '',
+              jingchanActivity: coreObj.profile?.jingchanActivity || '',
+              suwanActivityUpdatedAt: Number(coreObj.profile?.suwanActivityUpdatedAt || 0),
+              jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
               suwanLastSeen: Number(coreObj.profile?.suwanLastSeen || 0),
               jingchanLastSeen: Number(coreObj.profile?.jingchanLastSeen || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
@@ -19154,6 +19338,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               jingchanMood: coreObj.profile?.jingchanMood,
               suwanMoodUpdatedAt: Number(coreObj.profile?.suwanMoodUpdatedAt || 0),
               jingchanMoodUpdatedAt: Number(coreObj.profile?.jingchanMoodUpdatedAt || 0),
+              suwanActivity: coreObj.profile?.suwanActivity || '',
+              jingchanActivity: coreObj.profile?.jingchanActivity || '',
+              suwanActivityUpdatedAt: Number(coreObj.profile?.suwanActivityUpdatedAt || 0),
+              jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
               suwanLastSeen: Number(coreObj.profile?.suwanLastSeen || 0),
               jingchanLastSeen: Number(coreObj.profile?.jingchanLastSeen || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
@@ -20244,7 +20432,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __suppressHistoryPush = false;
         const origSwitchTabRef = switchTab;
         function closeTopOverlayIfAny() {
-          const overlayIds = ['photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'voiceRecorderModal', 'confirmModal'];
+          const overlayIds = ['cwChatBgModal', 'cwActivityPickerModal', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'voiceRecorderModal', 'confirmModal'];
           for (const oid of overlayIds) {
             const el = document.getElementById(oid);
             if (el && !el.classList.contains('hidden')) { el.classList.add('hidden'); return true; }
@@ -20613,7 +20801,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         applyMyRole(state.myRole, true);
         applyLanguage(state.lang, true);
         // Preserve active or last-saved tab — NEVER force-jump back to Home!
-        const __curOrSavedTab = (localStorage.getItem('cw_last_active_tab')) || (document.querySelector('.tab-panel.active')?.id?.replace('tab-', '')) || 'home';
+        const __curOrSavedTab = (document.querySelector('.tab-panel.active')?.id?.replace('tab-', '')) || 'home';
         switchTab(document.getElementById('tab-' + __curOrSavedTab) ? __curOrSavedTab : 'home');
         applyTheme(state.theme, true);
         applyFont(state.font, true);
@@ -24376,7 +24564,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
   (function initPartnerIntentPolish() {
     if (window.__cwPartnerPolishReady) return;
     window.__cwPartnerPolishReady = true;
-    const CACHE_KEY = 'cw_polish_cache_v1';
+    const CACHE_KEY = 'cw_polish_cache_v2';
 
     function loadCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') || {}; } catch (_) { return {}; } }
     function saveCache(obj) {
@@ -25350,6 +25538,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         setTxt('cwChatBgAlphaLabel', '배경 은은함 (글자 가독성)', '背景柔和度（文字更清晰）');
         setTxt('cwChatBgResetBtn', '초기화', '恢复默认');
         setTxt('cwChatBgDoneBtn', '적용 완료', '完成');
+        const presetMap = { default: ['기본', '默认'], rose: ['로즈', '玫瑰'], lavender: ['라벤더', '薰衣草'], starlight: ['별빛', '星夜'] };
+        document.querySelectorAll('.cw-bg-preset-btn').forEach(b => {
+          const p = b.getAttribute('data-preset');
+          if (presetMap[p]) b.textContent = isZh ? presetMap[p][1] : presetMap[p][0];
+        });
       }
 
       // 1) Chat Wallpaper Modal Wiring
@@ -25814,9 +26007,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           b.textContent = `${a.icon} ${isZh ? a.zh : a.ko}`;
           b.addEventListener('click', () => {
             if (!state.profile) state.profile = {};
-            if (myRole === 'suwan') state.profile.suwanActivity = a.id;
-            else state.profile.jingchanActivity = a.id;
+            if (myRole === 'suwan') { state.profile.suwanActivity = a.id; state.profile.suwanActivityUpdatedAt = Date.now(); }
+            else { state.profile.jingchanActivity = a.id; state.profile.jingchanActivityUpdatedAt = Date.now(); }
             __save(true);
+            try {
+              if (typeof window.__cwSendPartnerPush === 'function') {
+                const msgForPartner = myRole === 'suwan' ? `${a.icon} ${a.zh}` : `${a.icon} ${a.ko}`;
+                window.__cwSendPartnerPush('상태 변경', msgForPartner);
+              }
+            } catch (_) {}
             renderActivityPill();
             actModal.classList.add('hidden');
             if (__api().showToast) {
@@ -25908,6 +26107,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       window.__drawHomeTimeMachine = drawRandomMemory;
 
       document.getElementById('homeTmDrawBtn')?.addEventListener('click', () => drawRandomMemory(true));
+      document.getElementById('homeTmPhotoImg')?.addEventListener('click', () => {
+        const img = document.getElementById('homeTmPhotoImg');
+        const lb = document.getElementById('photoLightboxModal');
+        const lbImg = document.getElementById('lightboxImg');
+        const lbVid = document.getElementById('lightboxVideo');
+        if (img && img.src && lb && lbImg) {
+          if (lbVid) { lbVid.pause?.(); lbVid.classList.add('hidden'); }
+          lbImg.src = img.src;
+          lbImg.classList.remove('hidden');
+          lb.classList.remove('hidden');
+        }
+      });
 
       renderActivityPill();
       drawRandomMemory(false);
