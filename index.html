@@ -4386,7 +4386,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v25</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v26</span>
           </div>
         </div>
       </div>
@@ -7225,9 +7225,10 @@
           ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 카톡 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭(우리 애기 등)이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역. 嘿嘿->헤헤, 嘻嘻->히히. JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","tone":"짧은 감정 태그(예: 다정한 챙김)","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`
           : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 위챗 대화입니다. 한국어 카톡 애교체(ㅇ받침, 줄임말, 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 과장 없이 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개","pronunciation":"병음","tone":"짧은 감정 태그","nuance":"1문장 뉘앙스"}. 원문: ${rawText}`;
         window.__cwLastGeminiErr = '';
-        const tryModel = async (modelName, disableThinking) => {
+        const __gemStartTs = Date.now();
+        const tryModel = async (modelName, disableThinking, timeoutMs = 3800) => {
           const ctrl = new AbortController();
-          const tm = setTimeout(() => ctrl.abort(), 4800);
+          const tm = setTimeout(() => ctrl.abort(), timeoutMs);
           try {
             const genCfg = { responseMimeType: 'application/json' };
             if (/gemini-3\.5-flash-lite/i.test(modelName)) genCfg.thinkingConfig = { thinkingLevel: 'minimal' };
@@ -7263,8 +7264,10 @@
           });
           let resp = { ok: false, status: 0, json: null };
           let usedModel = cachedDisc || 'gemini-3.5-flash-lite';
-          for (const [mName, noThink] of modelChain) {
-            resp = await tryModel(mName, noThink);
+          for (let __mi = 0; __mi < modelChain.length; __mi++) {
+            if (__mi > 0 && (Date.now() - __gemStartTs) > 5200) break;
+            const [mName, noThink] = modelChain[__mi];
+            resp = await tryModel(mName, noThink, __mi === 0 ? 3800 : 2600);
             if (resp.ok && resp.json) {
               usedModel = mName;
               window.__cwGemToCnt = 0; try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
@@ -8861,23 +8864,26 @@
         compressImageToDataUrl: (f, maxW) => (typeof compressImageToDataUrl === 'function' ? compressImageToDataUrl(f, maxW) : Promise.reject(new Error('no_comp'))),
         mediaUrl: (u, mime) => { try { return typeof __cwMediaUrl === 'function' ? __cwMediaUrl(u, mime) : u; } catch (_) { return u; } }
       };
-        // Prime 4 v5: Auto-resolve any partner/own message stuck on '⏳ 正在翻译...' / '⏳ 번역 중...'
+        // Prime 4 v26: Fast zero-stuck auto-resolver for any message on '⏳ 正在翻译...' / '⏳ 번역 중...'
         const __cwTranslatingIds = new Set();
         async function autoResolvePendingTranslations() {
           try {
-            const msgs = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages.slice(-12) : [];
+            const msgs = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages.slice(-15) : [];
             const now = Date.now();
             for (const m of msgs) {
               if (!m || !m.id || !m.original || __cwTranslatingIds.has(m.id)) continue;
               const tr = String(m.translated || '').trim();
-              const isStuck = (!tr || tr === '⏳ 正在翻译...' || tr === '⏳ 번역 중...') && (now - Number(m.ts || 0)) > 3200;
+              const isStuck = (!tr || tr === '⏳ 正在翻译...' || tr === '⏳ 번역 중...') && (now - Number(m.ts || 0)) > 2600;
               if (!isStuck) continue;
               if (!/[a-zA-Z가-힣一-鿿]/.test(m.original) || /^https?:\/\/\S+$/i.test(m.original)) continue;
               __cwTranslatingIds.add(m.id);
               (async (targetMsg) => {
                 try {
-                  const res = await geminiTranslate(targetMsg.original, 'lover');
-                  if (res && res.translated) {
+                  let res = await geminiTranslate(targetMsg.original, 'lover');
+                  if (!res || !res.translated) {
+                    res = await _coreTranslate(targetMsg.original, 'lover').catch(() => null);
+                  }
+                  if (res && res.translated && !/^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(res.translated).trim())) {
                     targetMsg.translated = res.translated;
                     if (res.altTranslated) targetMsg.altTranslated = res.altTranslated;
                     targetMsg.pronunciation = res.pronunciation || '';
@@ -8889,13 +8895,13 @@
                     renderChat();
                   }
                 } catch (_) {} finally {
-                  setTimeout(() => __cwTranslatingIds.delete(targetMsg.id), 15000);
+                  setTimeout(() => __cwTranslatingIds.delete(targetMsg.id), 5000);
                 }
               })(m);
             }
           } catch (_) {}
         }
-        setInterval(() => { if (!document.hidden) autoResolvePendingTranslations(); }, 4500);
+        setInterval(() => { if (!document.hidden) autoResolvePendingTranslations(); }, 3000);
 
       let activeAvatarTarget = 'suwan';
       let activeCityTarget = 'suwan';
@@ -11396,7 +11402,7 @@
                             ${m.editedAt ? `<span class="opacity-75 px-0.5">${state.lang === 'zh' ? '已编辑' : '수정됨'}</span>` : ''}
                           </div>
                           <div class="flex items-center gap-1.5 ml-auto shrink-0">
-                            ${isFailedTrans ? `<button type="button" class="retrans-msg-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.2)' : 'var(--surface-2)'}; color: ${mine ? '#ffffff' : 'var(--text-secondary)'};" data-id="${escapeHtml(m.id)}">${retransLabel}</button>` : ''}
+                            ${(isFailedTrans || (isPendingTrans && (Date.now() - Number(m.ts || 0)) > 3500)) ? `<button type="button" class="retrans-msg-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.2)' : 'var(--surface-2)'}; color: ${mine ? '#ffffff' : 'var(--text-secondary)'};" data-id="${escapeHtml(m.id)}">${retransLabel}</button>` : ''}
                             <button type="button" class="cw-toggle-detail-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; color: ${mine ? '#ffffff' : 'var(--text-secondary)'};" data-id="${escapeHtml(m.id)}">🔎 ${state.lang === 'zh' ? '详情 ▾' : '상세 ▾'}</button>
                           </div>
                         </div>
@@ -13557,7 +13563,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isPureUrl = /^https?:\/\/\S+$/i.test(text);
           const isEmojiOnly = !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(text) && text.length > 0;
           const needsAsyncTrans = !isPureUrl && !isEmojiOnly;
-          const __cachedQuick = (needsAsyncTrans && typeof __getTransCache === 'function') ? __getTransCache(text) : null;
+          const __cachedQuick = (needsAsyncTrans && typeof __getTransCache === 'function') ? (__getTransCache()[`${activeToneMode || 'lover'}|${text}`] || null) : null;
           const initRes = isPureUrl
             ? { original: text, translated: state.lang === 'zh' ? '🎬 分享了一个视频/网页链接' : '🎬 동영상·링크를 공유했어요', pronunciation: '', tone: '🎬 링크 공유', nuance: '', engine: '링크 직통', tgtLang: state.lang === 'zh' ? 'ko' : 'zh', accuracy: 100 }
             : (__cachedQuick && __cachedQuick.translated
@@ -13638,9 +13644,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try { if (inputEl && document.activeElement !== inputEl) inputEl.focus({ preventScroll: true }); } catch (_) {}
           pushNotification(isVid ? '🎬' : (mediaData ? '📷' : '💌'), `${senderName}의 새 ${isVid ? '동영상 메시지' : (mediaData ? '사진 메시지' : '메시지')}`, `${senderName}发来新${isVid ? '视频消息' : (mediaData ? '照片消息' : '消息')}`, text, text, 'translator', 'messenger', 'post', false, _myChatRole);
           // Background non-blocking translation -> updates bubble & syncs silently as soon as ready!
-          if (needsAsyncTrans) {
-            translateWithAutoRetry(text, activeToneMode || 'lover').then((res) => {
-              if (!res) return;
+          if (needsAsyncTrans && !(__cachedQuick && __cachedQuick.translated)) {
+            (async () => {
+              let res = await translateWithAutoRetry(text, activeToneMode || 'lover').catch(() => null);
+              if (!res || !res.translated) {
+                res = await _coreTranslate(text, activeToneMode || 'lover').catch(() => null);
+              }
+              if (!res || !res.translated) return;
               const liveM = (state.chat?.messages || []).find(x => x && x.id === newMsgId);
               if (!liveM) return;
               liveM.translated = res.translated || '';
@@ -13654,7 +13664,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               saveState(true);
               const trPanel = document.getElementById('tab-translator');
               if (trPanel && trPanel.classList.contains('active')) renderChat();
-            }).catch(() => {});
+            })().catch(() => {});
           }
         });
                 // WeChat-Style Couple Sticker Pack, Quick Voice Bubble, Typing & Read Signals
@@ -14344,7 +14354,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v25',
+          ver: 'Prime 4 · v26',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14366,7 +14376,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v25 更新日志' : '📜 灿完时光 Prime 4 · v25 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v26 更新日志' : '📜 灿完时光 Prime 4 · v26 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
