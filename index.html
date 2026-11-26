@@ -2047,10 +2047,10 @@
       border-color: rgba(232, 198, 138, 0.58) !important;
       box-shadow: 0 0 0 3px rgba(168, 120, 232, 0.16) !important;
     }
-    #cwChatBgModal, #cwActivityPickerModal {
+    #cwChatBgModal {
       padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
     }
-    #cwChatBgModal > div, #cwActivityPickerModal > div, #chatVaultModal > div {
+    #cwChatBgModal > div, #chatVaultModal > div {
       border: 1px solid rgba(232, 198, 138, 0.28) !important;
       box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.55) !important;
     }
@@ -4386,7 +4386,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v24</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v25</span>
           </div>
         </div>
       </div>
@@ -14344,7 +14344,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v24',
+          ver: 'Prime 4 · v25',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14366,7 +14366,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v24 更新日志' : '📜 灿完时光 Prime 4 · v24 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v25 更新日志' : '📜 灿完时光 Prime 4 · v25 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `

@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v24';
+const SW_VER = 'chanwan-sw-prime4-v25';
 const PRECACHE_URLS = ['./', './index.html', './manifest_clean.json?v=22', './icon-192.png?v=21', './badge-96.png?v=23'];
 
 self.addEventListener('install', (e) => {
@@ -17,6 +17,13 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+function isHtmlResponse(res) {
+  try {
+    const ct = (res && res.headers && res.headers.get('content-type')) || '';
+    return ct.toLowerCase().includes('text/html');
+  } catch (_) { return false; }
+}
+
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   let url;
@@ -25,14 +32,14 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;
 
   const isNav = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('/index.html');
-  const forceFresh = url.searchParams.has('v');
+  const forceFresh = isNav && url.searchParams.has('v');
 
-  // Explicit ?v= update URL: Network-First so version updates land immediately
+  // Explicit ?v= update URL on HTML navigation ONLY: Network-First
   if (forceFresh) {
     e.respondWith(
       fetch(e.request, { cache: 'no-cache' })
         .then((res) => {
-          if (res && res.ok) {
+          if (res && res.ok && isHtmlResponse(res)) {
             const copy = res.clone();
             caches.open(SW_VER).then((c) => {
               c.put('./index.html', copy.clone()).catch(() => {});
@@ -46,23 +53,40 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Normal launch: Stale-While-Revalidate (0.05s instant cache open + silent background refresh!)
-  const cacheKey = isNav ? './index.html' : e.request;
+  // Non-navigation static assets (manifest_clean.json?v=22, icon-192.png?v=21, etc.): cache by exact request URL ONLY!
+  if (!isNav) {
+    e.respondWith(
+      caches.open(SW_VER).then((cache) =>
+        cache.match(e.request).then((cached) => {
+          const net = fetch(e.request).then((res) => {
+            if (res && res.ok) cache.put(e.request, res.clone()).catch(() => {});
+            return res;
+          }).catch(() => cached);
+          if (cached) { e.waitUntil(net.catch(() => {})); return cached; }
+          return net;
+        })
+      )
+    );
+    return;
+  }
+
+  // Normal HTML navigation launch: Stale-While-Revalidate with strict HTML content-type check!
   e.respondWith(
     caches.open(SW_VER).then((cache) =>
-      cache.match(cacheKey).then((cached) => {
+      cache.match('./index.html').then((cached) => {
+        const safeCached = (cached && isHtmlResponse(cached)) ? cached : null;
         const netPromise = fetch(e.request, { cache: 'no-cache' })
           .then((res) => {
-            if (res && res.ok) {
-              cache.put(cacheKey, res.clone()).catch(() => {});
-              if (isNav) cache.put('./', res.clone()).catch(() => {});
+            if (res && res.ok && isHtmlResponse(res)) {
+              cache.put('./index.html', res.clone()).catch(() => {});
+              cache.put('./', res.clone()).catch(() => {});
             }
             return res;
           })
-          .catch(() => cached);
-        if (cached) {
+          .catch(() => safeCached);
+        if (safeCached) {
           e.waitUntil(netPromise.catch(() => {}));
-          return cached;
+          return safeCached;
         }
         return netPromise;
       })
