@@ -2295,6 +2295,19 @@
     /* Prime 4 v30: Collapsible Quick Phrase Bar */
     #cwQuickPhraseBar.cw-qp-collapsed { display: none !important; }
     #cwQuickPhraseToggleBtn.cw-qp-on { color: var(--accent-royal, #7c3aed); opacity: 1 !important; }
+
+    /* Prime 4 v36: Global Mobile GPU & Layout Containment Turbo */
+    .tab-panel, .royal-card, .royal-card-gold, .royal-subcard, .cw-msg-row {
+      contain: layout style;
+    }
+    header, .dock-pill, .cw-dock-pill, #bottomNavDock {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .modal-backdrop {
+      backdrop-filter: blur(3px) !important;
+      -webkit-backdrop-filter: blur(3px) !important;
+    }
 </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -4288,7 +4301,7 @@
           <div class="min-w-0 flex-1">
             <div class="text-xs font-bold flex items-center gap-1.5">
               <span data-i18n="pinLockTitle">🔒 4자리 PIN 앱 잠금 (내 기기 전용)</span>
-              <span id="pinLockStatusBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--surface-2); color: var(--text-muted);">OFF</span>
+              <span id="pinLockStatusBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0" style="background: var(--surface-2); color: var(--text-muted);">OFF</span>
             </div>
             <div class="text-[11px] text-mut mt-0.5 leading-snug" data-i18n="pinLockDesc">둘만의 대화와 기록을 안전하게 보호해요. 설정한 기기에서만 잠금 화면이 열려요.</div>
           </div>
@@ -4408,7 +4421,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v33</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v36</span>
           </div>
         </div>
       </div>
@@ -11436,7 +11449,7 @@
                                   : (m.tone ? localizeSavedToneOrNuance(m.tone, 'tone') : (sTone ? (state.lang === 'zh' ? sTone.toneZh : sTone.toneKo) : '')));
                               return toneDisp ? `<span class="${mine ? 'cw-mine-pill ' : ''}inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};">${escapeHtml(toneDisp)}</span>` : '';
                             })()}
-                            ${(showText && !isEmojiMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
+                            ${(showText && !isEmojiMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button><button type="button" class="cw-save-study-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--surface-2)'}; color: ${mine ? '#ffffff' : 'var(--text-secondary)'};" data-id="${escapeHtml(m.id)}">📌 ${state.lang === 'zh' ? '存词本' : '단어장'}</button>` : ''}
                             ${m.editedAt ? `<span class="opacity-75 px-0.5">${state.lang === 'zh' ? '已编辑' : '수정됨'}</span>` : ''}
                           </div>
                           <div class="flex items-center gap-1.5 ml-auto shrink-0">
@@ -11523,6 +11536,34 @@
           } else {
             listEl.scrollTop = listEl.scrollHeight;
           }
+          listEl.querySelectorAll('.cw-save-study-btn').forEach(btn => {
+            btn.addEventListener('click', (ev) => {
+              ev.stopPropagation();
+              const mid = btn.getAttribute('data-id');
+              const target = (state.chat.messages || []).find(x => x && x.id === mid);
+              if (!target || !target.original) return;
+              if (!state.learn || typeof state.learn !== 'object') state.learn = { xp: 0, solved: 0, streak: 0, currentLevel: 'starter', quizIdx: 0, wrongNotes: [] };
+              if (!Array.isArray(state.learn.wrongNotes)) state.learn.wrongNotes = [];
+              const orig = String(target.original || '').trim();
+              const tr = String(target.translated || '').trim();
+              const isZh = state.lang === 'zh';
+              if (state.learn.wrongNotes.some(w => w && (w.q === orig || String(w.q || '').includes(orig)))) {
+                showToast(isZh ? '📌 词本里已经有这句话啦' : '📌 이미 단어장에 저장된 표현이에요');
+                return;
+              }
+              state.learn.wrongNotes.unshift({
+                id: 'cw_chat_' + Date.now(),
+                level: isZh ? '💬 聊天收藏' : '💬 대화 저장',
+                q: orig,
+                answer: tr || orig,
+                exp: target.pronunciation ? `[${target.pronunciation}] ${target.nuance || ''}`.trim() : (target.nuance || '')
+              });
+              saveState(true);
+              if (typeof renderWrongNotes === 'function') renderWrongNotes();
+              btn.textContent = isZh ? '✅ 已存' : '✅ 저장됨';
+              showToast(isZh ? '📌 已保存到 Study 复习本！' : '📌 Study 복습 단어장에 저장했어요!');
+            });
+          });
           listEl.querySelectorAll('.cw-voice-play-btn').forEach(btn => {
             btn.addEventListener('click', (ev) => {
               ev.stopPropagation();
@@ -12235,18 +12276,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         if (mList) {
           mList.innerHTML = state.memos.length ? state.memos.map(m => `
             <div class="royal-card rounded-2xl p-3.5 space-y-2">
-              <div class="flex items-start justify-between gap-3">
-                <label class="flex items-start gap-3 cursor-pointer flex-1 min-w-0">
-                  <input type="checkbox" class="toggle-memo-cb mt-1 accent-purple-500 shrink-0" style="width:14px;height:14px;min-width:14px;" data-id="${escapeHtml(m.id)}" ${m.done ? 'checked' : ''} />
-                  <div class="min-w-0 flex-1 ${m.done ? 'line-through opacity-50' : ''}">
-                    <div class="flex items-center gap-1.5 mb-1">
-                      <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">${state.lang === 'zh' ? '📝 备忘' : '📝 메모'}</span>
-                      ${m.author ? `<span class="text-[10px] text-mut">${escapeHtml(m.author)}</span>` : ''}
-                    </div>
-                    ${renderBilingualCard(m.text, m.translated, m.pronunciation, true)}
-                  </div>
-                </label>
-                <div class="flex items-center gap-1.5 shrink-0"><button type="button" class="cw-retrans-item-btn btn-ghost px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap" data-rtype="memo" data-rid="${escapeHtml(m.id)}">🔄 ${state.lang === 'zh' ? '重译' : '재번역'}</button><button type="button" class="cw-share-chat-item-btn btn-ghost px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap" data-stype="memo" data-sid="${escapeHtml(m.id)}">💬 ${state.lang === 'zh' ? '发聊天' : '톡 공유'}</button>${isMyAuthoredItem(m) ? `<button type="button" class="del-memo-btn text-xs text-mut hover:text-rose-400 shrink-0" data-id="${escapeHtml(m.id)}">✕</button>` : ''}</div>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="flex items-center gap-2 cursor-pointer min-w-0">
+                    <input type="checkbox" class="toggle-memo-cb accent-purple-500 shrink-0" style="width:14px;height:14px;min-width:14px;" data-id="${escapeHtml(m.id)}" ${m.done ? 'checked' : ''} />
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0" style="background: var(--accent-royal-soft); color: var(--accent-royal);">${state.lang === 'zh' ? '📝 备忘' : '📝 메모'}</span>
+                    ${m.author ? `<span class="text-[10px] text-mut truncate">${escapeHtml(m.author)}</span>` : ''}
+                  </label>
+                  <div class="flex items-center gap-1.5 shrink-0"><button type="button" class="cw-retrans-item-btn btn-ghost px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap" data-rtype="memo" data-rid="${escapeHtml(m.id)}">🔄 ${state.lang === 'zh' ? '重译' : '재번역'}</button><button type="button" class="cw-share-chat-item-btn btn-ghost px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap" data-stype="memo" data-sid="${escapeHtml(m.id)}">💬 ${state.lang === 'zh' ? '发聊天' : '톡 공유'}</button>${isMyAuthoredItem(m) ? `<button type="button" class="del-memo-btn text-xs text-mut hover:text-rose-400 shrink-0" data-id="${escapeHtml(m.id)}">✕</button>` : ''}</div>
+                </div>
+                <div class="min-w-0 ${m.done ? 'line-through opacity-50' : ''}">${renderBilingualCard(m.text, m.translated, m.pronunciation, true)}</div>
               </div>
               <div class="pt-1.5 border-t space-y-1.5" style="border-color: var(--border-subtle);">
                 ${(m.comments || []).map(c => `
@@ -12661,9 +12700,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               const ctx = canvas.getContext('2d');
               if (!ctx) throw new Error('no_ctx');
               ctx.drawImage(img, 0, 0, w, h);
-              let out = canvas.toDataURL('image/jpeg', 0.82);
-              if (out.length > 180000) out = canvas.toDataURL('image/jpeg', 0.72);
-              if (out.length > 180000) out = canvas.toDataURL('image/jpeg', 0.60);
+              const __webpTest = canvas.toDataURL('image/webp', 0.82);
+              const __mimeOut = (__webpTest && __webpTest.startsWith('data:image/webp')) ? 'image/webp' : 'image/jpeg';
+              let out = __mimeOut === 'image/webp' ? __webpTest : canvas.toDataURL('image/jpeg', 0.82);
+              if (out.length > 180000) out = canvas.toDataURL(__mimeOut, 0.72);
+              if (out.length > 180000) out = canvas.toDataURL(__mimeOut, 0.60);
               if (out.length > 180000) {
                 const scale = Math.min(0.72, 720 / Math.max(w, h));
                 const c2 = document.createElement('canvas');
@@ -14415,7 +14456,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v33',
+          ver: 'Prime 4 · v36',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14437,7 +14478,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v33 更新日志' : '📜 灿完时光 Prime 4 · v33 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v36 更新日志' : '📜 灿完时光 Prime 4 · v36 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -23150,7 +23191,61 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (typeof window.__connectEmqxNow === 'function') window.__connectEmqxNow();
           triggerInstantResumeSync();
         };
-        window.addEventListener('focus', wakeAndSyncAll);
+        // Prime 4 v34: Auto-flush failed/stuck messages when LTE/Wi-Fi returns + Daily Anniversary Morning Banner
+        const autoFlushFailedMessages = () => {
+          try {
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+            const msgs = state.chat && Array.isArray(state.chat.messages) ? state.chat.messages : [];
+            const now = Date.now();
+            let retried = 0;
+            msgs.forEach(m => {
+              if (!m) return;
+              if (m.deliveryStatus === 'failed' || (m.deliveryStatus === 'sending' && m.ts && (now - Number(m.ts)) > 15000)) {
+                m.deliveryStatus = 'sending';
+                retried++;
+              }
+            });
+            if (retried > 0) {
+              if (typeof renderChat === 'function') renderChat();
+              if (typeof flushSyncOutbox === 'function') flushSyncOutbox();
+              if (typeof window.__pushFullCloudSync === 'function') window.__pushFullCloudSync();
+            }
+          } catch (_) {}
+        };
+        window.addEventListener('online', () => { wakeAndSyncAll(); autoFlushFailedMessages(); });
+        setTimeout(autoFlushFailedMessages, 3500);
+
+        const checkDailyAnniversaryPush = () => {
+          try {
+            const todayK = typeof getKstDateString === 'function' ? getKstDateString() : '';
+            if (!todayK) return;
+            const sentKey = 'cw_anniv_push_date_v1';
+            if (localStorage.getItem(sentKey) === todayK) return;
+            const mmdd = todayK.slice(5);
+            const hits = [];
+            (state.anniversaries || []).forEach(a => {
+              if (a && a.date && String(a.date).slice(5) === mmdd) hits.push(a.title || a.name || '기념일');
+            });
+            const startStr = state.profile && state.profile.startDate;
+            if (startStr) {
+              const diffDays = Math.floor((new Date(todayK + 'T00:00:00+09:00') - new Date(startStr + 'T00:00:00+09:00')) / 86400000) + 1;
+              if ([100, 200, 300, 365, 500, 730, 1000, 1500, 2000].includes(diffDays)) {
+                hits.push(`D+${diffDays}`);
+              }
+            }
+            if (!hits.length) return;
+            localStorage.setItem(sentKey, todayK);
+            const label = hits.join(' · ');
+            const koMsg = `🎉 오늘은 특별한 날(${label})이에요! 서로에게 다정한 한마디를 남겨보세요 💜`;
+            const zhMsg = `🎉 今天是特别的日子（${label}）！给彼此发一句甜甜的话吧 💜`;
+            if (typeof pushNotification === 'function') {
+              pushNotification('🎉', '오늘의 기념일 축하', '今日纪念日快乐', koMsg, zhMsg, 'diary', 'anniversary', 'anniversary', false, state.myRole || 'suwan');
+            }
+          } catch (_) {}
+        };
+        setTimeout(checkDailyAnniversaryPush, 4500);
+
+        window.addEventListener('focus', () => { wakeAndSyncAll(); autoFlushFailedMessages(); });
         window.addEventListener('pageshow', wakeAndSyncAll);
         document.addEventListener('visibilitychange', () => { if (!document.hidden) wakeAndSyncAll(); });
       })();
@@ -24074,7 +24169,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (document.hidden) return;
           renderPresenceBadges();
           broadcastPresence(true, false);
-        }, 5000);
+        }, 12000);
         document.addEventListener('visibilitychange', () => {
           broadcastPresence(!document.hidden, !document.hidden);
           renderPresenceBadges();
