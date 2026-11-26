@@ -2197,6 +2197,79 @@
       padding-top: 6px !important;
       padding-bottom: 4px !important;
     }
+  
+    /* Prime 4 v14: Perfectly Round Zero-Clip Theme Icon & Cohesive Luxury Home Polish */
+    #cycleThemeBtn {
+      overflow: hidden !important;
+      border-radius: 9999px !important;
+      padding: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    #themeIcon {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 9999px !important;
+      overflow: hidden !important;
+      font-size: 16px !important;
+      line-height: 1 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transform: translateY(0.5px);
+    }
+    /* Turn harsh light-grey icon boxes on Dark Mode Home cards into smoked amethyst-glass jewel tiles */
+    [data-dark="1"] #tab-home .royal-card div.rounded-2xl.shrink-0,
+    [data-dark="1"] #tab-home .royal-card div.rounded-xl.shrink-0 {
+      background: linear-gradient(145deg, rgba(107, 67, 184, 0.32) 0%, rgba(30, 20, 52, 0.82) 100%) !important;
+      border: 1px solid rgba(236, 204, 152, 0.24) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 240, 214, 0.14), 0 6px 16px -6px rgba(0, 0, 0, 0.55) !important;
+    }
+    /* Elevate Twin Profile Cards (수완 / 징찬) with delicate champagne top rim */
+    #suwanMoodCard, #jingchanMoodCard {
+      border-top: 1px solid rgba(232, 198, 138, 0.28) !important;
+    }
+    [data-dark="1"] #suwanMoodCard,
+    [data-dark="1"] #jingchanMoodCard {
+      background: linear-gradient(170deg, rgba(36, 26, 58, 0.72) 0%, rgba(20, 14, 34, 0.88) 100%) !important;
+      border-color: rgba(224, 194, 255, 0.14) !important;
+      border-top-color: rgba(238, 206, 154, 0.34) !important;
+    }
+    /* Soften Home Card Pill Badges with refined hairline border */
+    [data-dark="1"] #tab-home .royal-card-gold {
+      background: linear-gradient(168deg, rgba(33, 24, 54, 0.94) 0%, rgba(17, 12, 29, 0.98) 100%) !important;
+      border: 1px solid rgba(238, 206, 154, 0.26) !important;
+      box-shadow: 0 20px 44px -16px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 240, 214, 0.10) !important;
+    }
+  
+    /* Prime 4 v15: Dead-Center Bottom Chat Bar Alignment & Crisp White Tone Pills on My Bubbles */
+    #cwQuickPhraseBar {
+      margin-top: 4px !important;
+      margin-bottom: 4px !important;
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+    }
+    #chatForm {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+    #chatForm > .cw-input-bar-row {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    /* Fix dark text on purple mine bubble tone pills (다정한 연인체 / 다정한 챙김) */
+    .cw-msg-row.mine .cw-mine-pill {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.20) !important;
+    }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -4307,7 +4380,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v12</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v15</span>
           </div>
         </div>
       </div>
@@ -9229,7 +9302,7 @@
       ,
         { id: 'pastel-blue', icon: '🩵', labelKo: '파스텔 블루', labelZh: '粉彩晴空蓝' },
         { id: 'pastel-lavender', icon: '🔮', labelKo: '파스텔 보라', labelZh: '粉彩薰衣草紫' },
-        { id: 'midnight-navy', icon: '🌌', labelKo: '미드나잇 네이비', labelZh: '午夜深蓝' },
+        { id: 'midnight-navy', icon: '✨', labelKo: '미드나잇 네이비', labelZh: '午夜深蓝' },
         { id: 'rose-noir', icon: '🥀', labelKo: '로즈 누아르', labelZh: '黑玫瑰酒红' },
         { id: 'midnight-black', icon: '🖤', labelKo: '미드나잇 블랙', labelZh: '午夜纯黑' }
       ];
@@ -10259,7 +10332,7 @@
           ? `<img src="${state.profile.jingchanAvatar}" alt="징찬" class="w-full h-full object-cover" />` : (state.lang === 'zh' ? '靖灿' : '징찬');
 
         const keySet = !!(state.settings && state.settings.geminiApiKey);
-        const badgeLabel = keySet ? 'Gemini 2.5 Live' : 'Google Gemini 2.5 Pro';
+        const badgeLabel = keySet ? 'Gemini 3.5 Live' : 'Google Neural AI';
         document.getElementById('engineBadgeHome').textContent = badgeLabel;
         document.getElementById('engineBadgeStudio').textContent = badgeLabel;
 
@@ -14230,7 +14303,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v12',
+          ver: 'Prime 4 · v15',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14252,7 +14325,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v12 更新日志' : '📜 灿完时光 Prime 4 · v12 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v15 更新日志' : '📜 灿完时光 Prime 4 · v15 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -24110,7 +24183,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // 1-Tap Self-Heal Everything Fixable Inside the App (Prime 3 v36: Full 8-Point Report + Forced Icon Reapply)
         if (runBtn) {
           runBtn.addEventListener('click', async () => {
+            if (runBtn.dataset.busy === '1') return;
+            runBtn.dataset.busy = '1';
             const isZh = state && state.lang === 'zh';
+            const origBtnTxt = runBtn.textContent;
+            runBtn.textContent = isZh ? '⚡ 正在快速自检...' : '⚡ 빠르게 점검 중...';
+            if (reportEl) {
+              reportEl.classList.remove('hidden');
+              reportEl.innerHTML = `<div class="text-[11px] font-semibold opacity-80">${isZh ? '⚡ 正在执行全项自检与修复...' : '⚡ 자가 복구 점검을 진행하고 있어요...'}</div>`;
+            }
+            await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
             const rows = [];
             try {
               // 1. Data integrity
@@ -24171,7 +24253,6 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 : (isZh ? '3. ✅ 正常 · 情侣空间记录完整无重复' : '3. ✅ 정상 · 커플공간(일기·메모·진실·도전 등) 정상'));
 
               // 4. Voices, Photo/Voice Vaults & Deleted Ghost Sweep
-              if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow();
               let ghostAlbRemoved = 0;
               if (Array.isArray(state.albums) && Array.isArray(state.deletedAlbumIds) && state.deletedAlbumIds.length) {
                 const delSetH = new Set(state.deletedAlbumIds);
@@ -24179,18 +24260,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.albums = state.albums.filter(a => a && !delSetH.has(a.id));
                 ghostAlbRemoved = Math.max(0, beforeH - state.albums.length);
               }
-              if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow();
-              if (typeof flushIdbStateNow === 'function') flushIdbStateNow();
-              saveState(true);
+              // Run heavy IDB + cloud I/O asynchronously right after paint so the UI responds in 0ms!
+              setTimeout(() => {
+                try { if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow(); } catch (_) {}
+                try { if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow(); } catch (_) {}
+                try { if (typeof flushIdbStateNow === 'function') flushIdbStateNow(); } catch (_) {}
+                try { saveState(true); } catch (_) {}
+                try { if (typeof window.__connectEmqxNow === 'function') window.__connectEmqxNow(); } catch (_) {}
+                try { if (typeof window.__flushSyncOutbox === 'function') window.__flushSyncOutbox(); } catch (_) {}
+                try { if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false); } catch (_) {}
+                try { if (typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
+              }, 35);
               rows.push(ghostAlbRemoved > 0
                 ? (isZh ? `4. 🔧 修复 · 永久金库已保存并清理残留已删照片 ${ghostAlbRemoved} 张` : `4. 🔧 복구 · 영구 금고 재저장 및 삭제된 사진 잔재 ${ghostAlbRemoved}건 정리`)
                 : (isZh ? '4. ✅ 正常 · 照片/语音永久金库与全部数据已重新保存' : '4. ✅ 정상 · 사진·음성 영구 금고 및 전체 상태 재저장 완료'));
 
-              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence
-              if (typeof window.__connectEmqxNow === 'function') window.__connectEmqxNow();
-              if (typeof window.__flushSyncOutbox === 'function') window.__flushSyncOutbox();
-              if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false);
-              if (typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true);
+              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence (queued non-blocking above)
               rows.push(isZh ? '5. 🔧 同步 · EMQX直连重连·云端拉取·在线状态已刷新' : '5. 🔧 복구 · EMQX·미전송 재전송·클라우드·접속 상태 재동기화');
 
               // 6. Samsung/Android App Badge & Stray OS Notification Cleanup
@@ -24236,6 +24321,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
               // 10. Stuck UI Drawers/Modals & Mood Guard Sync
               ['chatStickerTray', 'chatPlusDrawer'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+              ['chatForm', 'cwQuickPhraseBar'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.marginTop = ''; el.style.marginBottom = ''; el.style.transform = ''; } });
+              if (typeof window.__syncChatKeyboardViewport === 'function') window.__syncChatKeyboardViewport();
               const curR = state.myRole || 'suwan';
               const curMood = curR === 'suwan' ? state.profile?.suwanMood : state.profile?.jingchanMood;
               if (curMood) {
@@ -24250,6 +24337,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               reportEl.innerHTML = `<div class="font-bold mb-1.5" style="color:#059669;">${isZh ? '✅ 应用内 10 项自检修复报告：' : '✅ 앱 자가 복구 10개 항목 점검 리포트:'}</div>` +
                 rows.map(x => `<div class="py-0.5">${escapeHtml(x)}</div>`).join('');
             }
+            runBtn.dataset.busy = '0';
+            runBtn.textContent = origBtnTxt;
             renderErrorMemoUi();
             showToast(isZh ? '🛠️ 10项自检修复完成！' : '🛠️ 자가 복구 10개 항목 점검·복구가 완료됐어요!');
           });
