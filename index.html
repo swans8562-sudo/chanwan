@@ -4408,7 +4408,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v32</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v33</span>
           </div>
         </div>
       </div>
@@ -5757,10 +5757,10 @@
           const isSpace = /커플공간|답글|空间/.test(rawTitle);
           const isMood = /기분|心情/.test(rawTitle);
           const isAct = /상태|状态/.test(rawTitle);
-          // Clean KakaoTalk-style 1-line title in receiver's language (Suwan gets Korean, Jingchan gets Chinese)
+          // Pretty couple-app style title in receiver's language (Suwan gets Korean, Jingchan gets Chinese)
           const cleanTitle = partnerRole === 'suwan'
-            ? (isGame ? '징찬 · 밸런스 게임' : (isHeartbeat ? '징찬 · 하트비트' : (isMood ? '징찬 · 기분' : (isAct ? '징찬 · 상태' : (isSpace ? '징찬 · 커플공간' : '징찬')))))
-            : (isGame ? '秀完 · 默契游戏' : (isHeartbeat ? '秀完 · 心跳' : (isMood ? '秀完 · 心情' : (isAct ? '秀完 · 状态' : (isSpace ? '秀完 · 情侣空间' : '秀完')))));
+            ? (isGame ? '⚖️ 징찬 · 밸런스 게임' : (isHeartbeat ? '💓 징찬 · 하트비트' : (isMood ? '🌸 징찬 · 기분' : (isAct ? '✨ 징찬 · 상태' : (isSpace ? '💜 징찬 · 커플공간' : '💜 징찬')))))
+            : (isGame ? '⚖️ 秀完 · 默契游戏' : (isHeartbeat ? '💓 秀完 · 心跳' : (isMood ? '🌸 秀完 · 心情' : (isAct ? '✨ 秀完 · 状态' : (isSpace ? '💜 秀完 · 情侣空间' : '💜 秀完')))));
           let cleanMsg = String(body || '').replace(/\s+/g, ' ').trim().slice(0, 140);
           if (!cleanMsg) cleanMsg = partnerRole === 'suwan' ? '새 메시지가 도착했어요' : '发来了一条新消息';
           // Translate boilerplate media/heartbeat captions into receiver's language cleanly
@@ -5773,6 +5773,8 @@
           } else {
             cleanMsg = cleanMsg.replace(/^[🎬📷🎙️💌💓💬]+\s*/u, '');
           }
+          const appIconUrl = 'https://swans8562-sudo.github.io/chanwan/icon-192.png?v=21';
+          const openBtnLabel = partnerRole === 'suwan' ? (isGame ? '⚖️ 게임 열기' : '💬 대화 열기') : (isGame ? '⚖️ 打开游戏' : '💬 打开聊天');
           const sendJson = (topic, attempt = 0) => {
             fetch('https://ntfy.sh', {
               method: 'POST',
@@ -5782,7 +5784,9 @@
                 title: cleanTitle,
                 message: cleanMsg,
                 priority: 5,
-                click: clickUrl
+                icon: appIconUrl,
+                click: clickUrl,
+                actions: [{ action: 'view', label: openBtnLabel, url: clickUrl, clear: true }]
               }),
               keepalive: attempt === 0
             }).then((r) => {
@@ -12374,7 +12378,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               const cnt = (state.albums || []).filter(ph => (ph.category || detectPhotoCategory(ph.caption)) === f).length;
               const isSel = activeAlbumCat === f;
               return `<span class="inline-flex items-center gap-0.5 rounded-full ${isSel ? 'pr-1' : ''}" style="${isSel ? 'background: var(--accent-royal-soft);' : ''}">
-                <button type="button" class="album-cat-btn ${isSel ? 'btn-royal' : 'btn-ghost'} px-3 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap" data-cat="${escapeHtml(f)}">${escapeHtml(f)}${cnt ? ` (${cnt})` : ''}</button>
+                <button type="button" class="cw-keep-native-emoji album-cat-btn ${isSel ? 'btn-royal' : 'btn-ghost'} px-3 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap" data-cat="${escapeHtml(f)}">${escapeHtml(f)}${cnt ? ` (${cnt})` : ''}</button>
                 ${isSel ? `<button type="button" class="rename-folder-btn text-[11px] px-1 py-0.5 hover:opacity-80" data-folder="${escapeHtml(f)}" title="${isZh ? '重命名文件夹' : '폴더 이름 수정'}">✏️</button>${allFolders.length > 1 ? `<button type="button" class="del-folder-btn text-[11px] text-rose-500 px-1 py-0.5 hover:opacity-80" data-folder="${escapeHtml(f)}" title="${isZh ? '删除文件夹' : '폴더 삭제'}">✕</button>` : ''}` : ''}
               </span>`;
             }),
@@ -12456,7 +12460,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           <div class="royal-card rounded-2xl overflow-hidden flex flex-col">
             <div class="aspect-square overflow-hidden bg-purple-100/40 relative">
               ${ph.mediaType === 'video' ? `<video src="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><a href="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" download="chanwan_album_${escapeHtml(ph.id)}.mp4" class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a>` : `<img src="${__cwMediaUrl(ph.dataUrl)}" alt="${escapeHtml(ph.caption)}" loading="lazy" decoding="async" class="cw-zoom-direct w-full h-full object-cover cursor-pointer" data-src="${__cwMediaUrl(ph.dataUrl)}" />`}
-              <span class="absolute top-1.5 left-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: rgba(25, 16, 44, 0.72); color: #fffaf2;">${escapeHtml(catLabel)}</span>
+              <span class="cw-keep-native-emoji absolute top-1.5 left-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: rgba(25, 16, 44, 0.72); color: #fffaf2;">${escapeHtml(catLabel)}</span>
             </div>
             <div class="p-2.5 space-y-1 flex-1 flex flex-col justify-between">
               <div class="space-y-1">
@@ -14411,7 +14415,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v32',
+          ver: 'Prime 4 · v33',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14433,7 +14437,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v32 更新日志' : '📜 灿完时光 Prime 4 · v32 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v33 更新日志' : '📜 灿完时光 Prime 4 · v33 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
