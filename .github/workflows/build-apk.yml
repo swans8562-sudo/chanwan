@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - 'chanwan_apk_github_kit*.zip'
       - 'android-apk/**'
       - '.github/workflows/build-apk.yml'
 
@@ -13,6 +14,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Unpack APK Kit ZIP
+        run: |
+          for z in chanwan_apk_github_kit*.zip; do
+            [ -f "$z" ] && unzip -o "$z" -d .
+          done
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
