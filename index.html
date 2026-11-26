@@ -1792,7 +1792,11 @@
     }
     .tab-panel:not(.active) {
       display: none !important;
-      content-visibility: hidden;
+    }
+    .cw-anim-from-right, .cw-anim-from-left {
+      animation-duration: 0.13s !important;
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+      will-change: transform, opacity;
     }
     .cw-msg-row {
       contain: layout style;
@@ -2179,6 +2183,19 @@
       background: rgba(18, 13, 32, 0.88) !important;
       color: #f3ebff !important;
       border-color: rgba(232, 198, 138, 0.28) !important;
+    }
+  
+    /* Prime 4 v11: Tight, Cohesive Bottom Composer Spacing (zero awkward gap above chatForm) */
+    #cwQuickPhraseBar {
+      margin-top: 4px !important;
+      margin-bottom: -6px !important;
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+    }
+    #chatForm {
+      margin-top: 0 !important;
+      padding-top: 6px !important;
+      padding-bottom: 4px !important;
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
@@ -4290,7 +4307,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v10</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v12</span>
           </div>
         </div>
       </div>
@@ -9813,18 +9830,20 @@
         if (typeof window.__closeNotifPanel === 'function') window.__closeNotifPanel();
         const lockChat = (tab === 'translator');
         if (lockChat && Array.isArray(state.notifications)) {
-          let __clearedAny = false;
-          state.notifications.forEach(n => {
-            if (n && n.unread && (n.tab === 'translator' || n.category === 'chat' || n.category === 'mood' || !n.tab)) {
-              n.unread = false;
-              __clearedAny = true;
+          setTimeout(() => {
+            let __clearedAny = false;
+            state.notifications.forEach(n => {
+              if (n && n.unread && (n.tab === 'translator' || n.category === 'chat' || n.category === 'mood' || !n.tab)) {
+                n.unread = false;
+                __clearedAny = true;
+              }
+            });
+            if (__clearedAny) {
+              try { renderNotifications(); } catch (_) {}
+              try { saveState(false); } catch (_) {}
             }
-          });
-          if (__clearedAny) {
-            try { renderNotifications(); } catch (_) {}
-            try { saveState(false); } catch (_) {}
-          }
-          try { if (typeof clearAllAppBadgesAndOsNotifs === 'function') clearAllAppBadgesAndOsNotifs(); } catch (_) {}
+            try { if (typeof clearAllAppBadgesAndOsNotifs === 'function') clearAllAppBadgesAndOsNotifs(); } catch (_) {}
+          }, 50);
         }
         document.documentElement.classList.toggle('cw-chat-lock', lockChat);
         document.body.classList.toggle('cw-chat-lock', lockChat);
@@ -9864,7 +9883,7 @@
           p.classList.toggle('active', isTarget);
           if (isTarget && swipeDir) {
             p.classList.add(swipeDir === 'left' ? 'cw-anim-from-right' : 'cw-anim-from-left');
-            setTimeout(() => { p.classList.remove('cw-anim-from-right', 'cw-anim-from-left'); }, 230);
+            setTimeout(() => { p.classList.remove('cw-anim-from-right', 'cw-anim-from-left'); }, 140);
           }
         });
         if (!lockChat) { const mEl = document.querySelector('main'); if (mEl) mEl.scrollTop = 0; window.scrollTo(0, 0); }
@@ -9877,7 +9896,7 @@
                 window.syncAllTabIconsToStyle(null, panelEl);
                 panelEl.dataset.cwIconSynced = curIconMode;
               }
-            }, swipeDir ? 230 : 30);
+            }, 20);
           }
         }
         if (window.__cwDirtyTabs && window.__cwDirtyTabs.has(tab)) {
@@ -14211,7 +14230,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v10',
+          ver: 'Prime 4 · v12',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14233,7 +14252,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v10 更新日志' : '📜 灿完时光 Prime 4 · v10 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v12 更新日志' : '📜 灿完时光 Prime 4 · v12 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
