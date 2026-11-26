@@ -3135,7 +3135,6 @@
             <div id="chatHeaderStatusRow" class="flex items-center justify-start gap-2 min-w-0">
               <span id="chatPartnerPresenceBadge" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold shrink-0 whitespace-nowrap leading-none" style="background: var(--surface-2); color: var(--text-muted);">⚪ 오프라인</span>
               <span id="chatPartnerStatusPill" class="hidden inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap shrink-0 leading-none" style="background: var(--accent-royal-soft); color: var(--accent-royal);"></span>
-              <button id="cwActivityPillBtn" type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold shrink-0 whitespace-nowrap leading-none transition active:scale-95" style="background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border-subtle);" title="실시간 상태 바꾸기">✨ 상태</button>
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
@@ -4387,7 +4386,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v21</span>
+            <span class="px-2 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v24</span>
           </div>
         </div>
       </div>
@@ -9923,7 +9922,6 @@
         if (typeof window.__renderHomeCouplePhrase === 'function') window.__renderHomeCouplePhrase(false);
         if (typeof window.__drawHomeTimeMachine === 'function') window.__drawHomeTimeMachine(false);
         if (typeof window.__renderQuickPhraseBar === 'function') window.__renderQuickPhraseBar();
-        if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
         const __zh = state.lang === 'zh';
         const __setI18nId = (id, ko, zh) => { const el = document.getElementById(id); if (el) el.textContent = __zh ? zh : ko; };
         __setI18nId('hideNotifPrevTitle', '🔒 알림 메시지 미리보기 끄기', '🔒 隐藏通知内容预览');
@@ -11364,7 +11362,7 @@
                   <!-- KakaoTalk Minimal Unified Message Bubble (Original + Translation in One Clean Card) -->
                   <div class="cw-msg-bubble rounded-2xl ${hasMedia && !showText ? 'p-1.5' : 'px-3.5 py-2.5'} space-y-1.5 border" data-msg-id="${escapeHtml(m.id)}" style="background: ${mine ? 'var(--bubble-suwan)' : 'var(--bubble-jingchan)'}; border-color: ${mine ? 'rgba(255,255,255,0.22)' : 'var(--border-subtle)'}; color: ${mine ? '#ffffff' : 'var(--text-primary)'};">
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
-                    ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof pullCloudSync==='function'){showToast(state.lang==='zh'?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
+                    ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof window.__pullCloudSync==='function'){if(window.__cwApi&&window.__cwApi.showToast)window.__cwApi.showToast((window.__cwApi.getState&&window.__cwApi.getState()?.lang==='zh')?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');window.__pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">▶</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0">🎙️</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
@@ -14346,7 +14344,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v21',
+          ver: 'Prime 4 · v24',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -14368,7 +14366,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v21 更新日志' : '📜 灿完时光 Prime 4 · v21 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v24 更新日志' : '📜 灿完时光 Prime 4 · v24 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -14410,6 +14408,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           renderChat();
         });
 
+        window.renderChatVault = renderChatVault;
         function renderChatVault() {
           const body = document.getElementById('chatVaultBody');
           if (!body) return;
@@ -17876,7 +17875,6 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.profile.suwanActivity = inc.profile.suwanActivity;
               if (__incSwActTs > 0) state.profile.suwanActivityUpdatedAt = __incSwActTs;
               changed = true;
-              if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
               if (isLiveEvent && (state.myRole || 'suwan') !== 'suwan') {
                 const __am = { working:['💻 일하는 중','💻 工作中'], eating:['🍜 밥 먹는 중','🍜 吃饭中'], workout:['🏃 운동 중','🏃 运动中'], missing:['💜 보고 싶은 중','💜 想你中'], sleeping:['🌙 자는 중','🌙 睡觉中'], chilling:['✨ 여유로운 중','✨ 悠闲中'] }[inc.profile.suwanActivity] || [inc.profile.suwanActivity, inc.profile.suwanActivity];
                 pushNotification('✨', '수완 · 상태', '秀完 · 状态', __am[0], __am[1], 'translator', 'messenger', 'mood', false, 'suwan');
@@ -17888,7 +17886,6 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.profile.jingchanActivity = inc.profile.jingchanActivity;
               if (__incJcActTs > 0) state.profile.jingchanActivityUpdatedAt = __incJcActTs;
               changed = true;
-              if (typeof window.__renderCwActivityPill === 'function') window.__renderCwActivityPill();
               if (isLiveEvent && (state.myRole || 'suwan') !== 'jingchan') {
                 const __am = { working:['💻 일하는 중','💻 工作中'], eating:['🍜 밥 먹는 중','🍜 吃饭中'], workout:['🏃 운동 중','🏃 运动中'], missing:['💜 보고 싶은 중','💜 想你中'], sleeping:['🌙 자는 중','🌙 睡觉中'], chilling:['✨ 여유로운 중','✨ 悠闲中'] }[inc.profile.jingchanActivity] || [inc.profile.jingchanActivity, inc.profile.jingchanActivity];
                 pushNotification('✨', '징찬 · 상태', '靖灿 · 状态', __am[0], __am[1], 'translator', 'messenger', 'mood', false, 'jingchan');
@@ -20568,7 +20565,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __suppressHistoryPush = false;
         const origSwitchTabRef = switchTab;
         function closeTopOverlayIfAny() {
-          const overlayIds = ['cwChatBgModal', 'cwActivityPickerModal', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'voiceRecorderModal', 'confirmModal'];
+          const overlayIds = ['cwChatBgModal', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'voiceRecorderModal', 'confirmModal'];
           for (const oid of overlayIds) {
             const el = document.getElementById(oid);
             if (el && !el.classList.contains('hidden')) { el.classList.add('hidden'); return true; }
@@ -23204,7 +23201,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const ALLOWED_IDS = new Set([
             "liveNotifBanner", "notifBackdrop", "notifPanel", "avatarFileInput", "cityModal", "customMoodModal",
             "patchNotesModal", "chatVaultModal", "pinLockOverlay", "photoLightboxModal",
-            "confirmModal", "toastBox", "cwUniversalEmojiWrap", "voiceRecorderModal", "speechPracticeModal", "makerModeDrawer", "autoNightNoticeModal", "cwMsgContextBackdrop", "cwMsgContextMenu", "cwChatBgModal", "cwActivityPickerModal"
+            "confirmModal", "toastBox", "cwUniversalEmojiWrap", "voiceRecorderModal", "speechPracticeModal", "makerModeDrawer", "autoNightNoticeModal", "cwMsgContextBackdrop", "cwMsgContextMenu", "cwChatBgModal"
           ]);
           const sweep = () => {
             try {
@@ -23215,6 +23212,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 }
               });
               Array.from(document.body.children).forEach(el => {
+                if (el && String(el.className || '').includes('cw-')) return;
                 if (!el) return;
                 if (ALLOWED_TAGS.has(el.tagName)) return;
                 if (el.id && ALLOWED_IDS.has(el.id)) return;
@@ -26068,18 +26066,6 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     })();
   </script>
 
-  <!-- v57 Couple Live Activity Status Picker Modal -->
-  <div id="cwActivityPickerModal" class="hidden fixed inset-0 z-[9991] flex items-end sm:items-center justify-center p-3 sm:p-4" style="background: rgba(18, 13, 31, 0.52);">
-    <div class="royal-card w-full max-w-sm rounded-3xl p-4 sm:p-5 space-y-3.5" style="background: var(--surface-1);">
-      <div class="flex items-center justify-between gap-2">
-        <div class="font-bold text-sm flex items-center gap-1.5"><span>💫</span> <span id="cwActModalTitle">지금 뭐 하고 있어?</span></div>
-        <button id="closeActModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-sm">✕</button>
-      </div>
-      <div id="cwActPartnerInfo" class="royal-subcard rounded-2xl px-3 py-2 text-xs text-sec"></div>
-      <div id="cwActGrid" class="grid grid-cols-2 gap-2"></div>
-    </div>
-  </div>
-
   <script>
     (function initV57Features() {
       const __api = () => window.__cwApi || {};
@@ -26090,98 +26076,6 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const __speak = (t, l, s) => { if (__api().speakText) __api().speakText(t, l, s); };
       const __esc = (s) => (__api().escapeHtml ? __api().escapeHtml(s) : String(s || ''));
       const __mediaUrl = (u, mime) => (__api().mediaUrl ? __api().mediaUrl(u, mime) : u);
-
-      const ACTIVITIES = [
-        { id: 'working', icon: '💻', ko: '일하는 중', zh: '工作中' },
-        { id: 'eating', icon: '🍜', ko: '밥 먹는 중', zh: '吃饭中' },
-        { id: 'workout', icon: '🏃', ko: '운동 중', zh: '运动中' },
-        { id: 'missing', icon: '💜', ko: '보고 싶은 중', zh: '想你中' },
-        { id: 'sleeping', icon: '🌙', ko: '자는 중', zh: '睡觉中' },
-        { id: 'chilling', icon: '✨', ko: '여유로운 중', zh: '悠闲中' }
-      ];
-
-      function findAct(id) {
-        return ACTIVITIES.find(a => a.id === id) || null;
-      }
-
-      function renderActivityPill() {
-        const btn = document.getElementById('cwActivityPillBtn');
-        const state = __st(); if (!btn || !state) return;
-        const isZh = state.lang === 'zh';
-        const myRole = state.myRole || 'suwan';
-        const partnerActId = myRole === 'suwan' ? state.profile?.jingchanActivity : state.profile?.suwanActivity;
-        const myActId = myRole === 'suwan' ? state.profile?.suwanActivity : state.profile?.jingchanActivity;
-        const pAct = findAct(partnerActId);
-        const mAct = findAct(myActId);
-        if (pAct) {
-          btn.textContent = `${pAct.icon} ${isZh ? pAct.zh : pAct.ko}`;
-          btn.style.background = 'var(--accent-royal-soft)';
-          btn.style.color = 'var(--accent-royal)';
-        } else if (mAct) {
-          btn.textContent = `${mAct.icon} ${isZh ? mAct.zh : mAct.ko}`;
-          btn.style.background = 'var(--surface-2)';
-          btn.style.color = 'var(--text-secondary)';
-        } else {
-          btn.textContent = isZh ? '✨ 状态' : '✨ 상태';
-          btn.style.background = 'var(--surface-2)';
-          btn.style.color = 'var(--text-secondary)';
-        }
-      }
-      window.__renderCwActivityPill = renderActivityPill;
-
-      const actModal = document.getElementById('cwActivityPickerModal');
-      const actBtn = document.getElementById('cwActivityPillBtn');
-      const closeActBtn = document.getElementById('closeActModalBtn');
-      const actGrid = document.getElementById('cwActGrid');
-      const actPartnerInfo = document.getElementById('cwActPartnerInfo');
-
-      function openActivityModal() {
-        const state = __st(); if (!actModal || !actGrid || !state) return;
-        const isZh = state.lang === 'zh';
-        const myRole = state.myRole || 'suwan';
-        const myActId = myRole === 'suwan' ? state.profile?.suwanActivity : state.profile?.jingchanActivity;
-        const partnerActId = myRole === 'suwan' ? state.profile?.jingchanActivity : state.profile?.suwanActivity;
-        const pAct = findAct(partnerActId);
-        const pName = myRole === 'suwan' ? (isZh ? '靖灿' : '징찬') : (isZh ? '秀完' : '수완');
-        const titleEl = document.getElementById('cwActModalTitle');
-        if (titleEl) titleEl.textContent = isZh ? '现在在干嘛呀？' : '지금 뭐 하고 있어?';
-        if (actPartnerInfo) {
-          actPartnerInfo.textContent = pAct
-            ? (isZh ? `${pName}现在：${pAct.icon} ${pAct.zh}` : `${pName}의 현재 상태: ${pAct.icon} ${pAct.ko}`)
-            : (isZh ? `${pName}还没有设置当前状态` : `${pName}님이 아직 상태를 설정하지 않았어요`);
-        }
-        actGrid.innerHTML = '';
-        ACTIVITIES.forEach(a => {
-          const b = document.createElement('button');
-          const active = myActId === a.id;
-          b.type = 'button';
-          b.className = `${active ? 'btn-royal' : 'btn-ghost'} py-2.5 px-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95`;
-          b.textContent = `${a.icon} ${isZh ? a.zh : a.ko}`;
-          b.addEventListener('click', () => {
-            if (!state.profile) state.profile = {};
-            if (myRole === 'suwan') { state.profile.suwanActivity = a.id; state.profile.suwanActivityUpdatedAt = Date.now(); }
-            else { state.profile.jingchanActivity = a.id; state.profile.jingchanActivityUpdatedAt = Date.now(); }
-            __save(true);
-            try {
-              if (typeof window.__cwSendPartnerPush === 'function') {
-                const msgForPartner = myRole === 'suwan' ? `${a.icon} ${a.zh}` : `${a.icon} ${a.ko}`;
-                window.__cwSendPartnerPush('상태 변경', msgForPartner);
-              }
-            } catch (_) {}
-            renderActivityPill();
-            actModal.classList.add('hidden');
-            if (__api().showToast) {
-              __toast(isZh ? `状态已更新：${a.icon} ${a.zh}` : `내 상태 변경: ${a.icon} ${a.ko}`);
-            }
-          });
-          actGrid.appendChild(b);
-        });
-        actModal.classList.remove('hidden');
-      }
-
-      if (actBtn) actBtn.addEventListener('click', openActivityModal);
-      if (closeActBtn && actModal) closeActBtn.addEventListener('click', () => actModal.classList.add('hidden'));
-      if (actModal) actModal.addEventListener('click', (e) => { if (e.target === actModal) actModal.classList.add('hidden'); });
 
       // 2) Home Memory Time Machine Card
       let lastTmKey = '';
@@ -26272,10 +26166,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
       });
 
-      renderActivityPill();
       drawRandomMemory(false);
-      setTimeout(() => { renderActivityPill(); drawRandomMemory(false); }, 1100);
-      setInterval(() => { if (!document.hidden) renderActivityPill(); }, 8000);
+      setTimeout(() => { drawRandomMemory(false); }, 1100);
+      
     })();
   </script>
 </body>
