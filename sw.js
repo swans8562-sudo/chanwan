@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v52';
+const SW_VER = 'chanwan-sw-prime4-v57';
 const PRECACHE_URLS = ['./', './index.html', './manifest_clean.json?v=22', './icon-192.png?v=21', './badge-96.png?v=23'];
 
 self.addEventListener('install', (e) => {
@@ -24,71 +24,60 @@ function isHtmlResponse(res) {
   } catch (_) { return false; }
 }
 
+function fetchHtmlWithTimeout(req, ms) {
+  return new Promise((resolve, reject) => {
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const t = setTimeout(() => {
+      if (ctrl) { try { ctrl.abort(); } catch (_) {} }
+      reject(new Error('nav_timeout'));
+    }, ms);
+    fetch(req, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then((res) => { clearTimeout(t); resolve(res); })
+      .catch((err) => { clearTimeout(t); reject(err); });
+  });
+}
+
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   let url;
   try { url = new URL(e.request.url); } catch (_) { return; }
-  // NEVER intercept external APIs (Supabase, Gemini, EMQX, ntfy, Google Translate, fonts)
   if (url.origin !== self.location.origin) return;
 
   const isNav = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('/index.html');
-  const forceFresh = isNav && url.searchParams.has('v');
 
-  // Explicit ?v= update URL on HTML navigation ONLY: Network-First
-  if (forceFresh) {
+  if (isNav) {
     e.respondWith(
-      fetch(e.request, { cache: 'no-cache' })
+      fetchHtmlWithTimeout(e.request, 3200)
         .then((res) => {
           if (res && res.ok && isHtmlResponse(res)) {
-            const copy = res.clone();
+            const copy1 = res.clone();
+            const copy2 = res.clone();
             caches.open(SW_VER).then((c) => {
-              c.put('./index.html', copy.clone()).catch(() => {});
-              c.put('./', copy).catch(() => {});
+              c.put('./index.html', copy1).catch(() => {});
+              c.put('./', copy2).catch(() => {});
             }).catch(() => {});
-          }
-          return res;
-        })
-        .catch(() => caches.match('./index.html').then((r) => r || caches.match(e.request)))
-    );
-    return;
-  }
-
-  // Non-navigation static assets (manifest_clean.json?v=22, icon-192.png?v=21, etc.): cache by exact request URL ONLY!
-  if (!isNav) {
-    e.respondWith(
-      caches.open(SW_VER).then((cache) =>
-        cache.match(e.request).then((cached) => {
-          const net = fetch(e.request).then((res) => {
-            if (res && res.ok) cache.put(e.request, res.clone()).catch(() => {});
             return res;
-          }).catch(() => cached);
-          if (cached) { e.waitUntil(net.catch(() => {})); return cached; }
-          return net;
+          }
+          throw new Error('bad_html');
         })
-      )
+        .catch(() =>
+          caches.open(SW_VER).then((c) =>
+            c.match('./index.html').then((r) => r || c.match('./') || caches.match(e.request))
+          )
+        )
     );
     return;
   }
 
-  // Normal HTML navigation launch: Stale-While-Revalidate with strict HTML content-type check!
   e.respondWith(
     caches.open(SW_VER).then((cache) =>
-      cache.match('./index.html').then((cached) => {
-        const safeCached = (cached && isHtmlResponse(cached)) ? cached : null;
-        const netPromise = fetch(e.request, { cache: 'no-cache' })
-          .then((res) => {
-            if (res && res.ok && isHtmlResponse(res)) {
-              cache.put('./index.html', res.clone()).catch(() => {});
-              cache.put('./', res.clone()).catch(() => {});
-            }
-            return res;
-          })
-          .catch(() => safeCached);
-        if (safeCached) {
-          e.waitUntil(netPromise.catch(() => {}));
-          return safeCached;
-        }
-        return netPromise;
+      cache.match(e.request).then((cached) => {
+        const net = fetch(e.request).then((res) => {
+          if (res && res.ok) cache.put(e.request, res.clone()).catch(() => {});
+          return res;
+        }).catch(() => cached);
+        if (cached) { e.waitUntil(net.catch(() => {})); return cached; }
+        return net;
       })
     )
   );
