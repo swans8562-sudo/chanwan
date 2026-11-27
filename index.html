@@ -2511,7 +2511,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v62: App-Wide Couture Boutique Elevation
+       Prime 4 · v63: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2702,7 +2702,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v62: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v63: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4945,7 +4945,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v62</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v63</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
           </div>
         </div>
@@ -9947,6 +9947,21 @@
       }
       window.__normalizeAudioDataUrl = normalizeAudioDataUrl;
 
+      async function requestSafeAudioStream() {
+        if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+          throw new Error('NO_MEDIA_DEVICES');
+        }
+        try {
+          return await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (_) {
+          // Android WebView fallback when MODIFY_AUDIO_SETTINGS is absent: disable hardware AEC/AGC/NS so raw RECORD_AUDIO succeeds!
+          return await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+          });
+        }
+      }
+      window.__requestSafeAudioStream = requestSafeAudioStream;
+
       // Lightweight Blob ObjectURL cache: replaces multi-MB base64 strings in DOM with 50-byte blob: URLs (prevents Android OOM crashes!)
       const __cwBlobUrlMap = new Map();
       function __cwMediaUrl(raw, fallbackMime) {
@@ -10543,7 +10558,7 @@
         if (dot) dot.style.background = '#f59e0b';
 
         try {
-          const micPromise = navigator.mediaDevices.getUserMedia({ audio: true });
+          const micPromise = requestSafeAudioStream();
           const waitMs = isEmbedded ? 2500 : 25000;
           const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('MIC_TIMEOUT')), waitMs));
           const stream = await Promise.race([micPromise, timeoutPromise]);
@@ -15977,7 +15992,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           cmConnecting = true;
           if (chatVoiceBtn) chatVoiceBtn.innerHTML = '<svg class="animate-spin" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9" opacity="0.25"/><path d="M21 12a9 9 0 0 0-9-9"/></svg>';
           try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await requestSafeAudioStream();
             document.getElementById('cwMicPermModal')?.classList.add('hidden');
             cmConnecting = false; cmStream = stream; cmIsRec = true; cmStartTs = Date.now();
             const buildLiveRecHtml = (tLabel) => `<span class="inline-flex items-center gap-1.5">${CW_MEDIA_SVG.stopBadge}<svg viewBox="0 0 15 16" width="13" height="13" fill="none"><line class="cw-wave-bar" x1="2.5" y1="4" x2="2.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b2" x1="7.5" y1="2" x2="7.5" y2="14" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b3" x1="12.5" y1="4" x2="12.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></svg><span class="text-[10.5px] font-bold tabular-nums leading-none">${tLabel}</span></span>`;
@@ -16037,8 +16052,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               src.connect(cmPcmProc); cmPcmProc.connect(cmPcmCtx.destination);
             }
             cmMax = setTimeout(() => { if (cmIsRec) stopCmRec(); }, 45000);
-          } catch (_) {
+          } catch (recErr) {
             cmCleanup();
+            if (fromModalRetry) {
+              const isZhR = state.lang === 'zh';
+              const natInp = document.getElementById('cwNativeVoiceCaptureInput');
+              showToast(isZhR
+                ? '📱 正在打开手机录音机（安装最新 v43 APK 即可应用内一键直录）'
+                : '📱 기본 녹음기를 열어요! (권한이 꺼져 있다면 앱 권한에서 마이크를 켜거나 최신 v43 APK를 설치해 주세요)');
+              if (natInp) { try { natInp.click(); return; } catch (_) {} }
+            }
             openCwMicPermModal();
           }
         };
@@ -16046,50 +16069,75 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         if (chatVoiceBtn) {
           chatVoiceBtn.addEventListener('click', () => startCmVoiceRecording(false));
         }
-        document.getElementById('cwMicModalCloseBtn')?.addEventListener('click', () => {
-          document.getElementById('cwMicPermModal')?.classList.add('hidden');
-        });
-        document.getElementById('cwMicPermModal')?.addEventListener('click', (e) => {
-          if (e.target && e.target.id === 'cwMicPermModal') e.target.classList.add('hidden');
-        });
-        document.getElementById('cwMicRequestNowBtn')?.addEventListener('click', async () => {
-          if (window.ChanwanNative && typeof window.ChanwanNative.requestMicPermission === 'function') {
-            try { window.ChanwanNative.requestMicPermission(); } catch (_) {}
-            await new Promise(r => setTimeout(r, 700));
+        // Delegated listeners so #cwMicPermModal buttons (✕, backdrop, 허용하고 녹음하기, 권한 설정 열기, 기본 녹음기) ALWAYS respond in 0ms regardless of DOM order!
+        document.addEventListener('click', (e) => {
+          const t = e.target;
+          if (!t || !t.closest) return;
+          if (t.id === 'cwMicPermModal' || t.closest('#cwMicModalCloseBtn')) {
+            document.getElementById('cwMicPermModal')?.classList.add('hidden');
+            return;
           }
-          startCmVoiceRecording(true);
-        });
-        document.getElementById('cwMicOpenSettingsBtn')?.addEventListener('click', () => {
-          if (window.ChanwanNative && typeof window.ChanwanNative.openAppSettings === 'function') {
-            try { window.ChanwanNative.openAppSettings(); } catch (_) {}
+          if (t.closest('#cwMicOpenSettingsBtn')) {
+            document.getElementById('cwMicPermModal')?.classList.add('hidden');
+            if (window.ChanwanNative && typeof window.ChanwanNative.openAppSettings === 'function') {
+              try { window.ChanwanNative.openAppSettings(); } catch (_) {}
+            } else {
+              showToast(state.lang === 'zh' ? '请在手机系统设置中开启浏览器麦克风权限' : '휴대폰 설정 → 애플리케이션 → 권한에서 마이크를 허용해 주세요');
+            }
+            return;
+          }
+          if (t.closest('#cwMicNativeRecBtn')) {
+            const natInp = document.getElementById('cwNativeVoiceCaptureInput');
+            if (natInp) natInp.click();
+            return;
+          }
+          if (t.closest('#cwMicRequestNowBtn')) {
+            document.getElementById('cwMicPermModal')?.classList.add('hidden');
+            const hasNat = !!(window.ChanwanNative && typeof window.ChanwanNative.requestMicPermission === 'function');
+            const alreadyGranted = hasNat && typeof window.ChanwanNative.hasMicPermission === 'function'
+              ? !!window.ChanwanNative.hasMicPermission()
+              : true;
+            if (alreadyGranted) {
+              // Call synchronously inside user tap gesture so Chromium WebView never blocks getUserMedia!
+              startCmVoiceRecording(true);
+            } else {
+              try { window.ChanwanNative.requestMicPermission(); } catch (_) {}
+              showToast(state.lang === 'zh' ? '🎙️ 请在系统弹窗点「允许」，授权后自动开始录音！' : '🎙️ 시스템 팝업에서 「허용」을 누르면 바로 녹음이 시작돼요!');
+              let polls = 0;
+              const waitTimer = setInterval(() => {
+                polls++;
+                let grantedNow = false;
+                try { grantedNow = !!(window.ChanwanNative && window.ChanwanNative.hasMicPermission && window.ChanwanNative.hasMicPermission()); } catch (_) {}
+                if (grantedNow) {
+                  clearInterval(waitTimer);
+                  startCmVoiceRecording(true);
+                } else if (polls >= 32) {
+                  clearInterval(waitTimer);
+                }
+              }, 250);
+            }
           }
         });
-        const __natVoiceInp = document.getElementById('cwNativeVoiceCaptureInput');
-        document.getElementById('cwMicNativeRecBtn')?.addEventListener('click', () => {
-          __natVoiceInp?.click();
-        });
-        __natVoiceInp?.addEventListener('change', () => {
-          const f = __natVoiceInp.files && __natVoiceInp.files[0];
+        document.addEventListener('change', (e) => {
+          const inp = e.target;
+          if (!inp || inp.id !== 'cwNativeVoiceCaptureInput') return;
+          const f = inp.files && inp.files[0];
           if (!f) return;
           document.getElementById('cwMicPermModal')?.classList.add('hidden');
           const r = new FileReader();
           r.onloadend = () => {
-            let dUrl = String(r.result || '');
-            if (dUrl.startsWith('data:video/') || dUrl.startsWith('data:application/octet-stream')) {
-              const comma = dUrl.indexOf(',');
-              if (comma > 0) dUrl = 'data:audio/mp4;base64,' + dUrl.slice(comma + 1);
-            }
+            const dUrl = normalizeAudioDataUrl(String(r.result || ''));
             openVoiceConfirmBar(dUrl, Math.max(2, Math.round((f.size || 16000) / 8000)));
           };
           r.readAsDataURL(f);
-          __natVoiceInp.value = '';
+          inp.value = '';
         });
 
 
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v62',
+          ver: 'Prime 4 · v63',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16111,7 +16159,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v62 更新日志' : '📜 灿完时光 Prime 4 · v62 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v63 更新日志' : '📜 灿完时光 Prime 4 · v63 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -18196,7 +18244,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const waitMs = isEmb ? 2500 : 25000;
               const stream = await Promise.race([
-                navigator.mediaDevices.getUserMedia({ audio: true }),
+                requestSafeAudioStream(),
                 new Promise((_, rej) => setTimeout(() => rej(new Error('MIC_TIMEOUT')), waitMs))
               ]);
               vlConnecting = false; vlStream = stream; vlIsRec = true; vlStartTs = Date.now();
@@ -25852,8 +25900,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v62)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v62';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v63)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v63';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
