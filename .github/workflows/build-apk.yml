@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'chanwan_apk_github_kit*.zip'
       - 'android-apk/**'
+      - 'chanwan_apk_github_kit*.zip'
       - '.github/workflows/build-apk.yml'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -14,11 +17,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: Unpack APK Kit ZIP
+      - name: Unpack highest-version APK kit zip if present
         run: |
-          for z in chanwan_apk_github_kit*.zip; do
-            [ -f "$z" ] && unzip -o "$z" -d .
+          shopt -s nullglob
+          zips=(chanwan_apk_github_kit*.zip)
+          if [ ${#zips[@]} -gt 0 ]; then
+            latest_zip=$(printf '%s\n' "${zips[@]}" | sort -V | tail -n 1)
+            echo "Unpacking highest version zip: $latest_zip"
+            unzip -o "$latest_zip"
+            rm -f chanwan_apk_github_kit*.zip
+          fi
+          mkdir -p android-apk/app/src/main/assets/www
+          for f in index.html sw.js manifest_clean.json icon-192.png icon-512.png badge-96.png; do
+            if [ -f "$f" ]; then cp -f "$f" android-apk/app/src/main/assets/www/; fi
           done
 
       - name: Set up JDK 17
@@ -32,11 +46,19 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Build Debug APK
+      - name: Build Signed APK
         run: gradle -p android-apk assembleDebug --no-daemon
 
-      - name: Rename APK
-        run: cp android-apk/app/build/outputs/apk/debug/app-debug.apk android-apk/chanwan-shiguang.apk
+      - name: Publish Signed APK to Repo Root (Enables 1-Tap In-App Update Button!)
+        run: |
+          cp -f android-apk/app/build/outputs/apk/debug/app-debug.apk android-apk/chanwan-shiguang.apk
+          cp -f android-apk/app/build/outputs/apk/debug/app-debug.apk ./chanwan-shiguang.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Publish signed chanwan-shiguang.apk to root [skip ci]"
+          git pull --rebase origin main || true
+          git push origin HEAD:main || true
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
