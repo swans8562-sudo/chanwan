@@ -2511,7 +2511,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v63: App-Wide Couture Boutique Elevation
+       Prime 4 · v64: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2702,7 +2702,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v63: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v64: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4945,7 +4945,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v63</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v64</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
           </div>
         </div>
@@ -7052,7 +7052,9 @@
             }
           });
         } catch (_) {}
-        const unreadCount = all.filter(n => n.unread).length;
+        const __notifMyRole = state.myRole || 'suwan';
+        const __nowNotifTs = Date.now();
+        const unreadCount = all.filter(n => n && n.unread && n.fromRole !== __notifMyRole && (!n.createdAt || (__nowNotifTs - Number(n.createdAt)) < 86400000)).length;
         const badge = document.getElementById('notifBadgeCount');
         if (badge) {
           if (unreadCount > 0) {
@@ -7435,7 +7437,10 @@
           [/([가-힣]+)(?:잘께|자껭|잘껭|잘겡)(?=요|[\s,.!?~ㅎㅋㅠㅜ]|$)/g, '$1잘게'],
           [/(^|[\s,.!?~]|먼저\s*)(?:자께|잘께|자껭|잘껭|잘겡)(?=요|[\s,.!?~ㅎㅋㅠㅜ]|$)/g, '$1잘게'],
           [/먹을께|먹을껭|먹을겡/g, '먹을게'], [/보낼께|보내께|보낼껭|보내껭/g, '보낼게'],
-          [/기다릴께|기다리께|기다릴껭|기다리껭/g, '기다릴게'], [/살께|살껭/g, '살게']
+          [/기다릴께|기다리께|기다릴껭|기다리껭/g, '기다릴게'], [/살께|살껭/g, '살게'],
+          // Korean location + copula ('아직 가게에요??' -> '아직 가게에 있어요??', never '店里还在吗'!)
+          [/(아직도?|지금도?|여전히)\s*(가게|매장|회사|집|학교|밖|식당|카페|일터|사무실|숙소|방|병원|헬스장|공항|역)(?:에요|예요|이요|야|이야|인가요|니|냐)(?=[?!.~,\sㅋㅎㅠㅜ]|$)/g, '$1 $2에 있어요'],
+          [/(^|[\s,.!?~])(가게|매장|회사|사무실|일터|숙소)(?:에요|예요|야|인가요)(?=\s*\?)/g, '$1지금 $2에 있어요']
         ];
         for (const [rx, rep] of phraseMap) s = s.replace(rx, rep);
         // 3) Smart Unicode Hangul cute ㅇ-받침 stripper (zero false positives on Sino-Korean nouns like 태양/수영/내용/식당!)
@@ -7461,23 +7466,24 @@
         if (!s) return s;
         const orig = String(origText || '');
         if (tgtLang === 'zh') {
-          if (/징찬|장찬|정찬|진찬|靖灿|jing\s*chan/i.test(orig) || /징찬|장찬|jing\s*chan|张灿|章灿|长灿|俊灿|晶灿|静灿|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅/i.test(s)) {
+          if (/징찬|장찬|정찬|진찬|靖灿|jing\s*chan/i.test(orig) || /징찬|장찬|jing\s*chan|[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][灿赞禅蝉璨粲婵参]/i.test(s)) {
             s = s
               .replace(/징찬아/g, '靖灿呀')
               .replace(/징찬이랑|징찬하고/g, '和靖灿')
               .replace(/징찬이?(?:한테|에게)/g, '给靖灿')
               .replace(/징찬이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '靖灿')
-              .replace(/(?:张灿|章灿|长灿|俊灿|军灿|君灿|晶灿|静灿|静蝉|京灿|景灿|精灿|正灿|青灿|清灿|金灿|敬灿|竞灿|净灿|贞灿|郑灿|靖赞|静赞|静禅|静灿伊|靖灿伊)/g, '靖灿').replace(/^靖灿[,，\s]+(?=.*靖灿)/, '')
+              .replace(/(?:[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][灿赞禅蝉璨粲婵参]|静灿伊|靖灿伊)/g, '靖灿')
+              .replace(/^靖灿[,，、\s]+(?=.*靖灿)/, '')
               .replace(/靖灿(?:이|아|가|는|를|도|의)/g, '靖灿')
               .replace(/jing\s*chan(?:\s*i|a)?/gi, '靖灿');
           }
-          if (/수완|秀完|su\s*wan/i.test(orig) || /수완|su\s*wan|秀婉|水完|素完|寿完|修完|秀万/i.test(s)) {
+          if (/수완|秀完|su\s*wan/i.test(orig) || /수완|su\s*wan|[秀水素寿修施守手首][完婉莞万丸腕湾]/i.test(s)) {
             s = s
               .replace(/수완아/g, '秀完呀')
               .replace(/수완이랑|수완하고/g, '和秀完')
               .replace(/수완이?(?:한테|에게)/g, '给秀完')
               .replace(/수완이?(?:는|은|가|를|을|도|의|만|님|씨)?/g, '秀完')
-              .replace(/(?:秀婉|秀莞|水完|素完|寿完|修完|秀万|施万|秀丸|守完|手腕|足智多谋)/g, '秀完')
+              .replace(/(?:[秀水素寿修施守手首][完婉莞万丸腕湾]|足智多谋)/g, '秀完')
               .replace(/秀完(?:이|아|가|는|를|도|의)/g, '秀完')
               .replace(/su\s*wan(?:\s*i|a)?/gi, '秀完');
           }
@@ -7534,9 +7540,12 @@
         let __pOut = String(outText || '');
         const __pOrig = String(origText || '');
         if (tgtLang === 'zh') {
-          // Eliminate duplicated Jingchan homophones (e.g. '靖灿, 静蝉, 吃饭吧' -> '靖灿，吃饭吧')
-          __pOut = __pOut.replace(/靖灿[\s,，]*(静蝉|景灿|晶灿|静灿|金灿|青灿)/g, '靖灿');
-          __pOut = __pOut.replace(/(静蝉|景灿|晶灿|静灿|金灿|青灿)/g, (m) => (/징찬/.test(__pOrig) ? '靖灿' : m));
+          // Eliminate duplicated Jingchan homophones (e.g. '靖灿，靖禅你在做什么？' -> '靖灿，在干嘛呀？')
+          __pOut = __pOut.replace(/靖灿[\s,，、]*(?:[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][灿赞禅蝉璨粲婵参])/g, '靖灿');
+          __pOut = __pOut.replace(/[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][灿赞禅蝉璨粲婵参]/g, (m) => (/징찬/.test(__pOrig) ? '靖灿' : m));
+          if (/가게|매장/.test(__pOrig) && /店里还在吗/.test(__pOut)) {
+            __pOut = __pOut.replace(/店里还在吗/g, '还在店里吗');
+          }
           // Never translate greeting '안녕' as '再见/拜拜' unless farewell context
           if (/^안녕([~!.\s,]|$)/.test(__pOrig.trim()) && !/(잘\s*가|잘가|이따\s*봐|헤어|작별|바이)/.test(__pOrig)) {
             __pOut = __pOut.replace(/^(再见了?|拜拜了?)/, '嗨，').replace(/嗨，[\s,，]+/, '嗨，');
@@ -7547,14 +7556,15 @@
           if (/(오구|우쭈쭈)/.test(__pOrig)) {
             __pOut = __pOut.replace(/奥古|五九|乌鸦/g, '哎哟');
           }
-          // Cute laughs & leftover Korean jamo KO -> ZH
+          // Cute laughs & leftover Korean jamo KO -> ZH (preserve single ㅠ/ㅜ as 呜呜 too!)
           __pOut = __pOut
             .replace(/ㅎ{3,}/g, '哈哈哈')
             .replace(/ㅎ{2}/g, '嘿嘿')
             .replace(/ㅋ{3,}/g, '哈哈哈')
             .replace(/ㅋ{2}/g, '哈哈')
+            .replace(/(?<![가-힣])[ㅠㅜ]+(?![가-힣])/g, '呜呜')
             .replace(/[ㅠㅜ]{2,}/g, '呜呜')
-            .replace(/(?<![가-힣])[ㅎㅋㅠㅜ]+(?![가-힣])/g, '');
+            .replace(/(?<![가-힣])[ㅎㅋ]+(?![가-힣])/g, '');
           if (/^(헤헤헤+|헤헿+)$/.test(__pOrig.trim())) __pOut = '嘿嘿嘿';
           else if (/^헤헤$/.test(__pOrig.trim())) __pOut = '嘿嘿';
           else if (/헤헿|헤헤/.test(__pOrig) && !/嘿嘿/.test(__pOut)) __pOut = __pOut.replace(/呵呵|哈哈|嗯哼/g, '嘿嘿');
@@ -7608,15 +7618,17 @@
           }
           if (toneMode === 'lover' || toneMode === 'cute' || toneMode === 'warm' || toneMode === 'playful') {
             s = s
-              .replace(/^你在做什么？?$/, '在干嘛呀？')
+              .replace(/^(靖灿[，,\s]*)?你在(?:做什么|干什么)[？?]*$/, '$1在干嘛呀？')
+              .replace(/你在干什么([？?]*)$/g, '在干嘛呀$1')
+              .replace(/你在做什么([？?]*)$/g, '在干嘛呀$1')
               .replace(/^你吃饭了吗？?$/, '吃饭了吗？')
               .replace(/^我很想你。?$/, '好想你呀')
               .replace(/^我爱你。?$/, '我爱你呀')
               .replace(/^辛苦了。?$/, '辛苦啦')
               .replace(/^这是什么原因[？?]*$/, '为什么呀？');
           }
-          if (/[ㅠㅜ]{2,}/.test(origStr) && !/呜呜/.test(s)) {
-            s = '呜呜 ' + s.replace(/^[嘿黑]嘿\s*/, '');
+          if (/(?:^|\s)[ㅠㅜ]+(?:\s|[?!.~]|$)|[ㅠㅜ]{2,}/.test(origStr) && !/呜呜/.test(s)) {
+            s = /[？?]+$/.test(s) ? s.replace(/[？?]+$/, '呜呜') : (s + ' 呜呜');
           }
           if (toneMode === 'cute') {
             s = s.replace(/好想你呀?。?$/, '超级想你嘛~ 🥰').replace(/我爱你呀?。?$/, '最爱你啦~ 💕');
@@ -7692,6 +7704,7 @@
           ? origRawText
               .replace(/ㅎ{2,}/g, ' 하하')
               .replace(/ㅋ{2,}/g, ' 하하하')
+              .replace(/(?<![가-힣])[ㅠㅜ]+(?![가-힣])/g, ' 흑흑')
               .replace(/[ㅠㅜ]{2,}/g, ' 흑흑')
               .replace(/(?<![가-힣])ㅇㅇ(?![가-힣])/g, '응응')
               .replace(/(?<![가-힣])ㅇㅋ(?![가-힣])/g, '오케이')
@@ -7772,12 +7785,18 @@
           { rx: /^(?:오빠\s*|나\s*|이거\s*|잠깐\s*)?하고\s*(?:오께|올께|올게|오껭|올껭)요?$/, zh: '我去弄一下马上回来呀', py: 'Wǒ qù nòng yīxià mǎshàng huílái ya', alt: '我先忙完就回来', tone: '💬 다정한 일상 공유' },
           { rx: /^(?:나\s*|얼른\s*|잠깐\s*)?(?:씻고|샤워하고)\s*(?:오께|올께|올게|오껭)요?$/, zh: '我去洗漱一下马上回来呀', py: 'Wǒ qù xǐshù yīxià mǎshàng huílái ya', alt: '我去洗个澡就回来', tone: '💬 다정한 일상 공유' },
           { rx: /^(?:나\s*|얼른\s*)?(?:밥\s*먹고|먹고)\s*(?:오께|올께|올게|오껭)요?$/, zh: '我去吃个饭马上回来呀', py: 'Wǒ qù chī gè fàn mǎshàng huílái ya', alt: '我先去吃饭，吃完就来', tone: '💬 다정한 일상 공유' },
-          { rx: /^(?:나\s*|잠깐\s*|얼른\s*)?(?:다녀|갔다|나갔다)\s*(?:오께|올께|올게|오껭)요?$/, zh: '我去去就回呀', py: 'Wǒ qù qù jiù huí ya', alt: '我出去一下马上回来', tone: '💬 다정한 일상 공유' }
+          { rx: /^(?:나\s*|잠깐\s*|얼른\s*)?(?:다녀|갔다|나갔다)\s*(?:오께|올께|올게|오껭)요?$/, zh: '我去去就回呀', py: 'Wǒ qù qù jiù huí ya', alt: '我出去一下马上回来', tone: '💬 다정한 일상 공유' },
+          { rx: /^(?:뭐|머|모)\s*(?:해|하고\s*있어|해요|하구\s*있어|하니)[,\s]*징찬(?:아|이)?$/, zh: '靖灿，在干嘛呀？', py: 'Jìngcàn, zài gànmá ya?', alt: '靖灿，你在忙什么呢？', tone: '💬 다정한 안부' },
+          { rx: /^징찬(?:아|이)?[,\s]*(?:뭐|머|모)\s*(?:해|하고\s*있어|해요|하구\s*있어|하니)$/, zh: '靖灿，在干嘛呀？', py: 'Jìngcàn, zài gànmá ya?', alt: '靖灿，你在忙什么呢？', tone: '💬 다정한 안부' },
+          { rx: /^(?:뭐|머|모)\s*(?:해|하고\s*있어|해요)\s*[ㅠㅜ]+$/, zh: '在干嘛呀呜呜', py: 'Zài gànmá ya wūwū', alt: '你在忙什么呀呜呜', tone: '🥺 보고 싶은 애교 · 안부' },
+          { rx: /^(?:뭐|머|모)\s*(?:해|해요|하구\s*있어|하고\s*있어)$/, zh: '在干嘛呀？', py: 'Zài gànmá ya?', alt: '你在忙什么呢？', tone: '💬 다정한 안부' },
+          { rx: /^아직도?\s*(?:가게|매장)(?:에\s*있어요|에\s*있어|에요|예요|이요|야|인가요)$/, zh: '还在店里吗？', py: 'Hái zài diàn lǐ ma?', alt: '还在店里忙吗？', tone: '💬 다정한 안부 · 걱정' }
         ];
         for (const cc of COLLOQUIAL_COUPLE_EXACT) {
           if (cc.rx.test(rawNorm)) {
+            const zhWithQ = (/\?{2,}$/.test(origRawText.trim()) && /[？?]$/.test(cc.zh)) ? cc.zh.replace(/[？?]$/, '？？') : cc.zh;
             return {
-              original: origRawText, translated: cc.zh, altTranslated: cc.alt, srcLang: 'ko', tgtLang: 'zh',
+              original: origRawText, translated: zhWithQ, altTranslated: cc.alt, srcLang: 'ko', tgtLang: 'zh',
               pronunciation: cc.py, literal: cc.zh, tone: cc.tone, toneKo: cc.tone, toneZh: '🥰 宠溺夸奖 · 日常',
               nuance: '연인 사이에서 다정하게 예뻐하거나 잠시 다녀온다고 말할 때 쓰는 자연스러운 표현이에요.',
               nuanceKo: '연인 사이에서 다정하게 예뻐하거나 잠시 다녀온다고 말할 때 쓰는 자연스러운 표현이에요.',
@@ -9660,9 +9679,43 @@
       };
         // Prime 4 v26: Fast zero-stuck auto-resolver for any message on '⏳ 正在翻译...' / '⏳ 번역 중...'
         const __cwTranslatingIds = new Set();
+        const __cwRepairedV64Ids = new Set();
         async function autoResolvePendingTranslations() {
           try {
-            const msgs = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages.slice(-15) : [];
+            const allRecent = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages.slice(-30) : [];
+            let repairedAny = false;
+            for (const rm of allRecent) {
+              if (!rm || !rm.id || __cwRepairedV64Ids.has(rm.id)) continue;
+              __cwRepairedV64Ids.add(rm.id);
+              const origS = String(rm.original || '').trim();
+              const trS = String(rm.translated || '').trim();
+              if (!origS || !trS) continue;
+              let fixedTr = trS;
+              if (/[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][禅蝉璨粲婵]/.test(fixedTr) && /징찬/.test(origS)) {
+                fixedTr = fixedTr
+                  .replace(/靖灿[\s,，、]*[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][禅蝉璨粲婵]/g, '靖灿')
+                  .replace(/[靖静晶京景精正青清金敬竞净贞郑俊军君张章长陈真珍][禅蝉璨粲婵]/g, '靖灿')
+                  .replace(/靖灿\s*(?=你在|在干嘛)/g, '靖灿，')
+                  .replace(/你在(?:做什么|干什么)([？?]*)$/g, '在干嘛呀$1');
+              }
+              if (/가게|매장/.test(origS) && /店里还在吗/.test(fixedTr)) {
+                fixedTr = fixedTr.replace(/店里还在吗/g, '还在店里吗');
+              }
+              if (/^(?:뭐|머|모)\s*해\s*[ㅠㅜ]+[!?.~\s]*$/.test(origS) && /^你在(?:干什么|做什么)[？?]*$/.test(fixedTr)) {
+                fixedTr = '在干嘛呀呜呜';
+              } else if (/^(?:뭐|머|모)\s*해[?!.~\s]*$/.test(origS) && /^你在(?:干什么|做什么)[？?]*$/.test(fixedTr)) {
+                fixedTr = '在干嘛呀？';
+              }
+              if (fixedTr !== trS) {
+                rm.translated = fixedTr;
+                repairedAny = true;
+              }
+            }
+            if (repairedAny) {
+              saveState(true);
+              if (typeof renderChat === 'function') renderChat();
+            }
+            const msgs = allRecent.slice(-15);
             const now = Date.now();
             for (const m of msgs) {
               if (!m || !m.id || !m.original || __cwTranslatingIds.has(m.id)) continue;
@@ -12438,12 +12491,13 @@
             const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
             const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
             const isPureWcMsg = showText && !hasMedia && !m.sticker && typeof window.isPureWechatEmoticonMsg === 'function' && window.isPureWechatEmoticonMsg(String(m.original || '').trim());
-            const isEmojiMsg = isPureWcMsg || (showText && !hasMedia && !m.sticker && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim()));
+            const isPurePunctMsg = showText && !hasMedia && !m.sticker && !isPureWcMsg && /^[?!.,~…·\-_:;'"()[\]{}+=/*\\|\s？！？。，、]+$/.test(String(m.original || '').trim());
+            const isEmojiMsg = isPureWcMsg || (showText && !hasMedia && !m.sticker && !isPurePunctMsg && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim()));
             const isPureLinkMsg = /^https?:\/\/\S+$/i.test(String(m.original || '').trim());
             const isVoiceBubble = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/'));
-            const isPendingTrans = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim());
-            const isFailedTrans = !isPendingTrans && showText && !isEmojiMsg && !isPureLinkMsg && !isVoiceBubble && (!m.translated || m.translated === m.original || /^\[(中文|한국어)\]\s*/.test(String(m.translated || '')));
-            const hasTrans = showText && !isEmojiMsg && !isVoiceBubble && (isFailedTrans || !!(m.translated && m.translated !== m.original));
+            const isPendingTrans = !isPurePunctMsg && /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim());
+            const isFailedTrans = !isPendingTrans && showText && !isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg && !isVoiceBubble && (!m.translated || m.translated === m.original || /^\[(中文|한국어)\]\s*/.test(String(m.translated || '')));
+            const hasTrans = showText && !isEmojiMsg && !isPurePunctMsg && !isVoiceBubble && (isFailedTrans || !!(m.translated && m.translated !== m.original));
             const accVal = Number(m.accuracy) || (isFailedTrans ? 65 : (String(m.engine || '').includes('Gemini') || String(m.engine || '').includes('큐레이션') || String(m.engine || '').includes('사전') ? 96 : (String(m.engine || '').includes('Google') || String(m.engine || '').includes('Simply') ? 92 : 86)));
             const accColor = accVal >= 90 ? '#059669' : (accVal >= 80 ? '#d97706' : '#e11d48');
             const accBg = accVal >= 90 ? 'rgba(16,185,129,0.12)' : (accVal >= 80 ? 'rgba(245,158,11,0.14)' : 'rgba(244,63,94,0.14)');
@@ -12477,7 +12531,7 @@
                       : (m.videoUrl ? `<div class="cw-photo-single relative"><video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><div class="absolute top-1.5 right-1.5 flex items-center gap-1"><a href="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" download="chanwan_video_${escapeHtml(m.id)}.mp4" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a><button type="button" class="cw-zoom-video px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" data-src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" title="전체화면">⛶</button></div></div>`
                         : (m.photoUrl ? `<button type="button" class="${isGifMedia ? 'cw-gif-single' : 'cw-photo-single'} cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="0"><img src="${__cwMediaUrl(m.photoUrl)}" alt="photo" loading="lazy" decoding="async" /></button>` : ''))}
                     ${showText ? renderChatLinkEmbed(m.original, mine) : ''}
-                    ${showText ? `<div class="flex items-start justify-between gap-2"><div class="min-w-0 flex-1 cw-keep-native-emoji ${isEmojiMsg ? 'text-3xl leading-normal py-1 flex items-center justify-center flex-wrap gap-1 text-center' : (mine ? 'cw-orig-main text-[0.98rem] font-bold leading-snug break-words tracking-[-0.01em]' : 'cw-orig-sub text-[0.84rem] font-medium opacity-80 leading-snug break-words tracking-[-0.01em]')} ${m.sticker ? 'text-center font-bold text-xs' : ''}">${window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml(m.original), isPureWcMsg ? 42 : 22) : escapeHtml(m.original)}</div>${(!isEmojiMsg && !isPureLinkMsg && !isVoiceBubble) ? `<button type="button" class="speak-btn opacity-65 hover:opacity-100 shrink-0 pt-0.5 inline-flex items-center" data-text="${escapeHtml(m.original)}" data-lang="${origLang}" title="${state.lang === 'zh' ? 'AI 原文朗读' : '원문 듣기'}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>` : ''}</div>` : ''}
+                    ${showText ? `<div class="flex items-start justify-between gap-2"><div class="min-w-0 flex-1 cw-keep-native-emoji ${isEmojiMsg ? 'text-3xl leading-normal py-1 flex items-center justify-center flex-wrap gap-1 text-center' : (mine ? 'cw-orig-main text-[0.98rem] font-bold leading-snug break-words tracking-[-0.01em]' : 'cw-orig-sub text-[0.84rem] font-medium opacity-80 leading-snug break-words tracking-[-0.01em]')} ${m.sticker ? 'text-center font-bold text-xs' : ''}">${window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml(m.original), isPureWcMsg ? 42 : 22) : escapeHtml(m.original)}</div>${(!isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg && !isVoiceBubble) ? `<button type="button" class="speak-btn opacity-65 hover:opacity-100 shrink-0 pt-0.5 inline-flex items-center" data-text="${escapeHtml(m.original)}" data-lang="${origLang}" title="${state.lang === 'zh' ? 'AI 原文朗读' : '원문 듣기'}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>` : ''}</div>` : ''}
                     ${hasTrans ? `
                       <div class="pt-1.5 mt-1 space-y-1.5" style="border-top: 1px solid ${mine ? 'rgba(255,255,255,0.2)' : 'rgba(139,92,246,0.12)'};">
                         <div class="flex items-start justify-between gap-2">
@@ -12508,7 +12562,7 @@
                               }
                               return toneDisp ? `<span class="${mine ? 'cw-mine-pill ' : ''}inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};">${escapeHtml(toneDisp)}</span>` : '';
                             })()}
-                            ${(showText && !isEmojiMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
+                            ${(showText && !isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
                             ${m.editedAt ? `<span class="opacity-75 px-0.5">${state.lang === 'zh' ? '已编辑' : '수정됨'}</span>` : ''}
                           </div>
                           <div class="flex items-center gap-1.5 ml-auto shrink-0">
@@ -16137,7 +16191,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v63',
+          ver: 'Prime 4 · v64',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16159,7 +16213,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v63 更新日志' : '📜 灿完时光 Prime 4 · v63 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v64 更新日志' : '📜 灿完时光 Prime 4 · v64 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -21256,7 +21310,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (Array.isArray(state.notifications)) {
               let clearedNotif = false;
               state.notifications.forEach(n => {
-                if (n && n.unread && (n.tab === 'translator' || !n.tab)) {
+                if (n && n.unread && (n.tab === 'translator' || n.fromRole === (state.myRole || 'suwan') || !n.tab || (n.createdAt && (Date.now() - Number(n.createdAt)) >= 86400000))) {
                   n.unread = false;
                   clearedNotif = true;
                 }
@@ -25900,8 +25954,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v63)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v63';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v64)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v64';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
@@ -25921,6 +25975,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         window.__forcePurgeCacheAndUpdate = forcePurgeCacheAndUpdate;
         document.getElementById('forceAppUpdateBtn')?.addEventListener('click', () => forcePurgeCacheAndUpdate(true));
+        document.getElementById('notifBellBtn')?.addEventListener('click', () => {
+          setTimeout(() => {
+            const panel = document.getElementById('notifPanel');
+            if (panel && !panel.classList.contains('hidden') && Array.isArray(state.notifications)) {
+              let changed = false;
+              state.notifications.forEach(n => { if (n && n.unread) { n.unread = false; changed = true; } });
+              if (changed) { saveState(false); if (typeof renderNotifications === 'function') renderNotifications(); }
+            }
+          }, 120);
+        });
         if (location.protocol.startsWith('http')) {
           setTimeout(async () => {
             try {
