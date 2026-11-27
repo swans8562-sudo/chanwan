@@ -2489,7 +2489,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v57: App-Wide Couture Boutique Elevation
+       Prime 4 · v58: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2680,7 +2680,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v57: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v58: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4924,7 +4924,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v57</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v58</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
           </div>
         </div>
@@ -9752,6 +9752,19 @@
           }
         } catch (_) {}
       }
+      function normalizeAudioDataUrl(raw) {
+        if (!raw || typeof raw !== 'string') return '';
+        if (raw.startsWith('data:audio/')) return raw;
+        if (/^data:(video\/(mp4|webm|ogg|3gpp)|application\/octet-stream|);base64,/i.test(raw)) {
+          const m = raw.match(/^data:([^;]*);base64,/i);
+          const sub = m && m[1] ? m[1].toLowerCase() : '';
+          const targetMime = sub.includes('webm') ? 'audio/webm' : (sub.includes('ogg') ? 'audio/ogg' : 'audio/mp4');
+          return raw.replace(/^data:[^;]*;base64,/i, `data:${targetMime};base64,`);
+        }
+        return raw;
+      }
+      window.__normalizeAudioDataUrl = normalizeAudioDataUrl;
+
       // Lightweight Blob ObjectURL cache: replaces multi-MB base64 strings in DOM with 50-byte blob: URLs (prevents Android OOM crashes!)
       const __cwBlobUrlMap = new Map();
       function __cwMediaUrl(raw, fallbackMime) {
@@ -13335,9 +13348,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               </div>
             </div>
           </div>`;
-        }).join('') : `<div class="col-span-full royal-card rounded-2xl p-8 text-center text-xs text-mut">${state.lang === 'zh' ? '该分类暂无照片，在聊天室发照片也会自动分类保存哦 🖼️' : '해당 카테고리에 사진이 없어요. 메신저에서 사진을 보내도 자동 분류되어 저장돼요 🖼️'}</div>`;
+        }).join('') : `<div class="col-span-full royal-card rounded-2xl p-7 text-center text-xs text-mut space-y-3">
+          <div>${state.lang === 'zh' ? '该分类暂无照片，在聊天室发照片也会自动分类保存哦 🖼️' : '해당 카테고리에 사진이 없어요. 메신저에서 사진을 보내도 자동 분류되어 저장돼요 🖼️'}</div>
+          ${(state.albums || []).length === 0 ? `<div class="pt-1 space-y-1.5">
+            <button type="button" class="cw-inline-vault-restore-btn btn-royal px-4 py-2 rounded-full text-xs font-bold shadow-sm">${state.lang === 'zh' ? '☁️ 从云端 · 对方手机一键恢复相册与语音' : '☁️ 서버 · 상대방 폰에서 사진·음성편지 복구하기'}</button>
+            <div class="text-[10.5px] text-mut">${state.lang === 'zh' ? '若重装过 App，对方打开网页或点此即可自动找回全部照片' : '앱 재설치 후 사진이 비어 있다면, 징찬이 앱이 켜져 있을 때 누르면 직통 복구돼요'}</div>
+          </div>` : ''}
+        </div>`;
 
         if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, aGrid);
+        aGrid.querySelectorAll('.cw-inline-vault-restore-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (typeof window.__runFullCloudDataRestore === 'function') window.__runFullCloudDataRestore(false);
+          });
+        });
         // Prime 3 v41: Retranslate button & auto-fix broken [한국어]/[中文] fallback captions
         document.querySelectorAll('.retrans-album-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
@@ -15442,7 +15466,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             else if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, chatVoiceBtn);
           }
         };
-        const sendQuickVoiceBubble = (audioDataUrl) => {
+        const sendQuickVoiceBubble = (rawAudioDataUrl) => {
+          const audioDataUrl = normalizeAudioDataUrl(rawAudioDataUrl);
           if (!audioDataUrl) return;
           const sender = state.myRole || state.chat.activeSender || 'suwan';
           const senderName = sender === 'suwan' ? '수완(完)' : '靖灿(灿)';
@@ -15717,7 +15742,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v57',
+          ver: 'Prime 4 · v58',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -15739,7 +15764,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v57 更新日志' : '📜 灿完时光 Prime 4 · v57 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v58 更新日志' : '📜 灿完时光 Prime 4 · v58 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17698,8 +17723,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             </div>`;
 
           if (!items.length) {
-            list.innerHTML = filterHtml + `<div class="royal-card rounded-2xl p-8 text-center text-xs text-mut">${isZh ? '还没有收藏的语音哦 🎙️' : '아직 보관된 음성이 없어요 🎙️'}</div>`;
+            list.innerHTML = filterHtml + `<div class="royal-card rounded-2xl p-7 text-center text-xs text-mut space-y-3">
+              <div>${isZh ? '还没有收藏的语音哦 🎙️' : '아직 보관된 음성이 없어요 🎙️'}</div>
+              ${allItems.length === 0 ? `<div class="pt-1 space-y-1.5">
+                <button type="button" class="cw-inline-vault-restore-btn btn-royal px-4 py-2 rounded-full text-xs font-bold shadow-sm">${isZh ? '☁️ 从云端 · 对方手机一键恢复语音信与相册' : '☁️ 서버 · 상대방 폰에서 음성편지·사진 복구하기'}</button>
+                <div class="text-[10.5px] text-mut">${isZh ? '对方打开网页时点击即可实时同步找回所有录音与照片' : '징찬이 웹앱(또는 이전 브라우저)이 켜지면 영구 금고로 자동 복구돼요'}</div>
+              </div>` : ''}
+            </div>`;
             list.querySelectorAll('.vl-filter-btn').forEach(b => b.addEventListener('click', () => { window.__vlFilter = b.getAttribute('data-vlf') || 'all'; renderVoiceLetters(); }));
+            list.querySelectorAll('.cw-inline-vault-restore-btn').forEach(b => b.addEventListener('click', () => { if (typeof window.__runFullCloudDataRestore === 'function') window.__runFullCloudDataRestore(false); }));
             return;
           }
           list.innerHTML = filterHtml + items.map(v => `
@@ -17712,7 +17744,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 </div>
                 <button type="button" class="del-vl-btn text-xs text-mut hover:text-rose-400" data-id="${escapeHtml(v.id)}">✕</button>
               </div>
-              ${v.audioUrl ? `<audio controls src="${v.audioUrl}" class="w-full h-10"></audio>` : ''}
+              ${v.audioUrl ? `<audio controls preload="metadata" src="${__cwMediaUrl(normalizeAudioDataUrl(v.audioUrl), 'audio/mp4')}" class="w-full h-10"></audio>` : ''}
               ${v.note ? renderBilingualCard(v.note, v.translated || '', '', true) : ''}
             </article>
           `).join('');
@@ -17746,7 +17778,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
 
         function vlSetPreview(url) {
-          vlPendingAudioUrl = url || '';
+          vlPendingAudioUrl = normalizeAudioDataUrl(url || '');
           const wrap = document.getElementById('vlPreviewWrap');
           const aud = document.getElementById('vlPreviewAudio');
           const sendBtn = document.getElementById('vlSendBtn');
@@ -18711,7 +18743,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             const raw = localStorage.getItem(SYNC_OUTBOX_KEY);
             const arr = raw ? JSON.parse(raw) : [];
-            return Array.isArray(arr) ? arr : [];
+            if (!Array.isArray(arr)) return [];
+            const cleaned = arr.filter(x => x && x.kind !== 'signal' && (x.tries || 0) < (x.kind === 'media' ? 4 : 2));
+            if (cleaned.length !== arr.length) {
+              try { localStorage.setItem(SYNC_OUTBOX_KEY, JSON.stringify(cleaned)); } catch (_) {}
+            }
+            return cleaned;
           } catch (_) {
             return [];
           }
@@ -18952,9 +18989,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             .map(x => x.m);
         }
 
-        function mergeIncomingCoupleData(inc, isLiveEvent) {
+        function mergeIncomingCoupleData(inc, isLiveEvent, allowSelfReplay) {
           if (!inc || typeof inc !== 'object') return false;
-          if (inc.clientId && inc.clientId === myDeviceClientId) return false;
+          if (inc.clientId && inc.clientId === myDeviceClientId && !allowSelfReplay) return false;
           if (isLiveEvent && ((Date.now() - __cwBootEpoch) < 3500 || (inc.ts && (Date.now() - Number(inc.ts)) > 90000))) { isLiveEvent = false; }
           let changed = false;
           let chatChanged = false;
@@ -20179,7 +20216,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return res;
         }
 
+        let __sbEventsUnavailable = false;
         async function insertSupabaseEvent(room, kind, payloadObj) {
+          if (__sbEventsUnavailable) return false;
           const wirePayload = await e2eeWrapPayload(payloadObj);
           const timeoutVal = kind === 'media' ? Math.max(SYNC_FETCH_TIMEOUT_MS, 20000) : SYNC_FETCH_TIMEOUT_MS;
           const postBody = (includeKind) => JSON.stringify(includeKind
@@ -20205,6 +20244,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try { localStorage.setItem('cw_sb_has_kind_col_v1', '1'); } catch (_) {}
           }
 
+          if ([400, 401, 403, 404, 422].includes(res.status)) {
+            __sbEventsUnavailable = true;
+            return false;
+          }
           if (!res.ok) throw new Error('sb_insert_' + res.status);
           sbLastOkTs = Date.now();
           lastSyncOkTs = Date.now();
@@ -20217,7 +20260,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return true;
         }
 
-        async function upsertSupabaseStateSnapshot(room, payloadObj) {
+        async function upsertSupabaseStateSnapshot(room, payloadObj, customTimeoutMs) {
           const wirePayload = await e2eeWrapPayload(payloadObj);
           const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?on_conflict=room_id`, {
             method: 'POST',
@@ -20227,11 +20270,212 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               payload: wirePayload,
               updated_at: Date.now()
             })
-          }, SYNC_FETCH_TIMEOUT_MS);
+          }, customTimeoutMs || SYNC_FETCH_TIMEOUT_MS);
           if (!res.ok) throw new Error('sb_upsert_' + res.status);
           sbLastOkTs = Date.now();
           lastSyncOkTs = Date.now();
           return true;
+        }
+
+        // ==================== Prime 4 v58: Schema-Proof Permanent Cloud Media Vault inside couple_sync_state ====================
+        // Uses proven couple_sync_state (room_id PK + payload JSONB) so albums, voice letters, avatars & chat media NEVER vanish even if couple_sync_events fails!
+        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v58';
+        function getUploadedVaultSet() {
+          try {
+            const arr = JSON.parse(localStorage.getItem(CW_VM_UPLOADED_KEY) || '[]');
+            return new Set(Array.isArray(arr) ? arr : []);
+          } catch (_) { return new Set(); }
+        }
+        function markVaultKeyUploaded(vKey) {
+          if (!vKey) return;
+          try {
+            const s = getUploadedVaultSet();
+            s.add(vKey);
+            const arr = Array.from(s).slice(-500);
+            localStorage.setItem(CW_VM_UPLOADED_KEY, JSON.stringify(arr));
+          } catch (_) {}
+        }
+        function cwSafeVaultKey(rawKey) {
+          return String(rawKey || '').replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 72) || ('vk_' + Date.now());
+        }
+        function deriveDeterministicVaultKey(kind, meta, fallbackId) {
+          const m = meta || {};
+          if (kind === 'album_photo' || kind === 'album_video') return cwSafeVaultKey('alb_' + (m.albumId || fallbackId));
+          if (kind === 'voice_letter') return cwSafeVaultKey('vl_' + (m.id || fallbackId));
+          if (kind === 'avatar') return cwSafeVaultKey('av_' + (m.target || 'suwan'));
+          if (kind === 'custom_voice') {
+            let h = 0;
+            const s = String(m.phrase || fallbackId || '');
+            for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+            return cwSafeVaultKey('cv_' + Math.abs(h).toString(36));
+          }
+          if (kind === 'chat_photo' || kind === 'chat_video' || kind === 'chat_voice') {
+            return cwSafeVaultKey('cm_' + (m.msgId || fallbackId) + (m.batchIdx !== undefined ? '_' + m.batchIdx : ''));
+          }
+          return cwSafeVaultKey(kind + '_' + fallbackId);
+        }
+
+        let __cwManifestQueue = Promise.resolve();
+        async function fetchCloudVaultManifest(room) {
+          const mRoom = `${room}__vault_manifest_v1`;
+          try {
+            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(mRoom)}&select=payload,updated_at`, { headers: sbHeaders() }, 10000);
+            if (!res.ok) return [];
+            const arr = await res.json();
+            if (Array.isArray(arr) && arr[0] && arr[0].payload) {
+              const dec = await e2eeUnwrapPayload(arr[0].payload);
+              if (dec && Array.isArray(dec.items)) return dec.items;
+            }
+          } catch (_) {}
+          return [];
+        }
+
+        function appendCloudVaultManifest(room, entry) {
+          __cwManifestQueue = __cwManifestQueue.then(async () => {
+            try {
+              const curItems = await fetchCloudVaultManifest(room);
+              const map = new Map();
+              for (const it of curItems) {
+                if (it && it.key) map.set(it.key, it);
+              }
+              map.set(entry.key, entry);
+              const merged = Array.from(map.values()).sort((a, b) => Number(a.ts || 0) - Number(b.ts || 0)).slice(-450);
+              await upsertSupabaseStateSnapshot(`${room}__vault_manifest_v1`, {
+                v: 'cw_vault_manifest_v1',
+                updatedAt: Date.now(),
+                items: merged
+              }, 12000);
+            } catch (_) {}
+          }).catch(() => {});
+          return __cwManifestQueue;
+        }
+
+        async function saveVaultItemToCloudState(room, itemKey, kind, meta, rawDataUrl) {
+          if (!room || !itemKey || !rawDataUrl || !String(rawDataUrl).startsWith('data:')) return false;
+          const safeKey = cwSafeVaultKey(itemKey);
+          const dataStr = (kind === 'voice_letter' || kind === 'chat_voice' || kind === 'custom_voice')
+            ? normalizeAudioDataUrl(String(rawDataUrl))
+            : String(rawDataUrl);
+          const CHUNK_LEN = 220000;
+          const totalChunks = Math.max(1, Math.ceil(dataStr.length / CHUNK_LEN));
+          const nowTs = Date.now();
+          const roleNow = (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan';
+          try {
+            if (totalChunks === 1) {
+              await upsertSupabaseStateSnapshot(`${room}__vm__${safeKey}`, {
+                v: 'cw_vm_v1',
+                itemKey: safeKey,
+                kind,
+                myRole: roleNow,
+                meta: meta || {},
+                dataUrl: dataStr,
+                ts: nowTs
+              }, 18000);
+            } else {
+              for (let c = 0; c < totalChunks; c += 3) {
+                const jobs = [];
+                for (let j = c; j < Math.min(totalChunks, c + 3); j++) {
+                  jobs.push(upsertSupabaseStateSnapshot(`${room}__vm__${safeKey}__c${j}`, {
+                    v: 'cw_vm_chunk_v1',
+                    itemKey: safeKey,
+                    idx: j,
+                    total: totalChunks,
+                    data: dataStr.slice(j * CHUNK_LEN, (j + 1) * CHUNK_LEN)
+                  }, 20000));
+                }
+                const resList = await Promise.allSettled(jobs);
+                if (resList.some(r => r.status !== 'fulfilled')) throw new Error('vm_chunk_failed');
+              }
+              await upsertSupabaseStateSnapshot(`${room}__vm__${safeKey}`, {
+                v: 'cw_vm_head_v1',
+                itemKey: safeKey,
+                kind,
+                myRole: roleNow,
+                meta: meta || {},
+                chunks: totalChunks,
+                ts: nowTs
+              }, 15000);
+            }
+            await appendCloudVaultManifest(room, { key: safeKey, kind, chunks: totalChunks, ts: nowTs });
+            markVaultKeyUploaded(safeKey);
+            return true;
+          } catch (_) {
+            return false;
+          }
+        }
+
+        function isVaultEntryAlreadyLocal(entry) {
+          if (!entry || !entry.key) return false;
+          const k = entry.key;
+          const delAlb = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
+          const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
+          if (entry.kind === 'album_photo' || entry.kind === 'album_video') {
+            const rawId = k.replace(/^alb_/, '');
+            if (delAlb.has(rawId)) return true;
+            return (state.albums || []).some(a => a && a.dataUrl && cwSafeVaultKey('alb_' + a.id) === k);
+          }
+          if (entry.kind === 'voice_letter') {
+            const rawId = k.replace(/^vl_/, '');
+            if (delVl.has(rawId)) return true;
+            return (state.voiceLetters || []).some(v => v && v.audioUrl && cwSafeVaultKey('vl_' + v.id) === k);
+          }
+          if (entry.kind === 'avatar') {
+            if (k === 'av_suwan') return !!(state.profile && state.profile.suwanAvatar);
+            if (k === 'av_jingchan') return !!(state.profile && state.profile.jingchanAvatar);
+          }
+          return false;
+        }
+
+        async function restoreVaultEntryFromCloudState(room, entry) {
+          if (!room || !entry || !entry.key) return false;
+          if (isVaultEntryAlreadyLocal(entry)) return false;
+          try {
+            const headRoom = `${room}__vm__${entry.key}`;
+            const hRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(headRoom)}&select=payload`, { headers: sbHeaders() }, 16000);
+            if (!hRes.ok) return false;
+            const hArr = await hRes.json();
+            if (!Array.isArray(hArr) || !hArr[0] || !hArr[0].payload) return false;
+            const head = await e2eeUnwrapPayload(hArr[0].payload);
+            if (!head) return false;
+
+            let fullDataUrl = '';
+            if (head.v === 'cw_vm_v1' && head.dataUrl) {
+              fullDataUrl = head.dataUrl;
+            } else if (head.v === 'cw_vm_head_v1' && Number(head.chunks) > 0) {
+              const total = Number(head.chunks);
+              const parts = new Array(total);
+              for (let c = 0; c < total; c += 4) {
+                const keys = [];
+                for (let j = c; j < Math.min(total, c + 4); j++) keys.push(`${room}__vm__${entry.key}__c${j}`);
+                const cUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=in.(${keys.map(x => encodeURIComponent(x)).join(',')})&select=room_id,payload`;
+                const cRes = await fetchWithTimeout(cUrl, { headers: sbHeaders() }, 20000);
+                if (!cRes.ok) return false;
+                const cRows = await cRes.json();
+                if (!Array.isArray(cRows)) return false;
+                for (const cr of cRows) {
+                  const decC = await e2eeUnwrapPayload(cr && cr.payload);
+                  if (decC && typeof decC.idx === 'number' && typeof decC.data === 'string') {
+                    parts[decC.idx] = decC.data;
+                  }
+                }
+              }
+              if (parts.some(p => typeof p !== 'string')) return false;
+              fullDataUrl = parts.join('');
+            }
+            if (!fullDataUrl) return false;
+            markVaultKeyUploaded(entry.key);
+            return await handleIncomingMediaPacket({
+              v: 'pro2_media',
+              kind: head.kind || entry.kind,
+              mediaId: entry.key,
+              ts: head.ts || entry.ts || Date.now(),
+              myRole: head.myRole || (head.meta && (head.meta.sender || head.meta.authorRole)) || 'jingchan',
+              dataUrl: fullDataUrl,
+              meta: head.meta || {}
+            }, false, true);
+          } catch (_) {
+            return false;
+          }
         }
 
         async function flushSyncOutbox() {
@@ -20419,93 +20663,79 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // Send compressed media (photos, videos, voice messages, voice letters) over BOTH EMQX China Direct + Supabase Seoul!
         // Large files (>340KB, e.g. videos up to 10MB) are automatically split into 260KB chunks so China<->Korea sync NEVER times out!
+        async function sendEmqxMediaPaced(room, kind, mediaId, meta, rawStr, nowTs) {
+          if (!room || !rawStr) return false;
+          if (rawStr.length <= 165000) {
+            return publishEmqxBackup(room, JSON.stringify({
+              v: 'pro2_media',
+              kind,
+              mediaId,
+              ts: nowTs,
+              clientId: myDeviceClientId,
+              myRole: (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan',
+              dataUrl: rawStr,
+              meta: meta || {}
+            }));
+          }
+          const EMQX_CHUNK = 150000;
+          const totalChunks = Math.ceil(rawStr.length / EMQX_CHUNK);
+          let okCnt = 0;
+          for (let i = 0; i < totalChunks; i++) {
+            const cPkt = {
+              v: 'pro2_media_chunk',
+              transferId: mediaId,
+              mediaId,
+              kind,
+              chunkIndex: i,
+              totalChunks,
+              chunkData: rawStr.slice(i * EMQX_CHUNK, (i + 1) * EMQX_CHUNK),
+              ts: nowTs,
+              clientId: myDeviceClientId,
+              myRole: (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan',
+              meta: i === 0 ? (meta || {}) : {}
+            };
+            if (publishEmqxBackup(room, JSON.stringify(cPkt))) okCnt++;
+            if (i + 1 < totalChunks) await new Promise(r => setTimeout(r, 95));
+          }
+          return okCnt === totalChunks;
+        }
+
         async function pushMediaSyncPacket(kind, meta, dataUrl, filename) {
           const room = getSyncRoomCode();
           if (!room || !dataUrl || !String(dataUrl).startsWith('data:')) return;
-          const rawStr = String(dataUrl);
+          const rawStr = (kind === 'voice_letter' || kind === 'chat_voice' || kind === 'custom_voice')
+            ? normalizeAudioDataUrl(String(dataUrl))
+            : String(dataUrl);
           const isZh = state.lang === 'zh';
           const isVidKind = kind === 'chat_video' || kind === 'album_video';
           const mediaId = `${kind}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+          const vaultKey = deriveDeterministicVaultKey(kind, meta, mediaId);
           const nowTs = Date.now();
-          // Unlimited Parallel Chunked Transfer (>340KB) — 3x concurrent 380KB chunks with 3 retries over EMQX + Supabase!
-          if (rawStr.length > 340000) {
-            const CHUNK_SIZE = 380000;
-            const totalChunks = Math.ceil(rawStr.length / CHUNK_SIZE);
-            let sbOkCount = 0;
-            let emqxOkCount = 0;
-            let doneCount = 0;
-            const sendOneChunk = async (i) => {
-              const chunkPkt = {
-                v: 'pro2_media_chunk',
-                transferId: mediaId,
-                mediaId,
-                kind,
-                chunkIndex: i,
-                totalChunks,
-                chunkData: rawStr.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
-                ts: nowTs,
-                clientId: myDeviceClientId,
-                myRole: state.myRole || 'suwan',
-                meta: i === 0 ? (meta || {}) : {}
-              };
-              try {
-                if (publishEmqxBackup(room, JSON.stringify(chunkPkt))) emqxOkCount++;
-              } catch (_) {}
-              let sentSb = false;
-              for (let attempt = 0; attempt < 3 && !sentSb; attempt++) {
-                try {
-                  await insertSupabaseEvent(room, 'media', chunkPkt);
-                  sentSb = true;
-                  sbOkCount++;
-                } catch (_) {
-                  if (attempt < 2) await new Promise(r => setTimeout(r, 750 * (attempt + 1)));
-                }
-              }
-              doneCount++;
-            };
-            const CONCURRENCY = 3;
-            for (let start = 0; start < totalChunks; start += CONCURRENCY) {
-              const batch = [];
-              for (let j = start; j < Math.min(totalChunks, start + CONCURRENCY); j++) batch.push(sendOneChunk(j));
-              await Promise.allSettled(batch);
-              if (isVidKind && (start === 0 || doneCount % 6 === 0 || doneCount >= totalChunks)) {
-                try { showToast(isZh ? `🎬 视频高速发送中 (${doneCount}/${totalChunks})...` : `🎬 동영상 고속 전송 중 (${doneCount}/${totalChunks})...`); } catch (_) {}
-              }
-            }
-            if (sbOkCount === totalChunks || emqxOkCount === totalChunks) {
-              lastSyncOkTs = Date.now();
-              updateLiveSyncIndicators(true, room);
-              if (isVidKind) {
-                try { showToast(isZh ? '🎬 视频发送成功！对方马上就能看到 ✨' : '🎬 동영상 전송 완료! 상대방도 바로 볼 수 있어요 ✨'); } catch (_) {}
-              }
-            } else if (isVidKind) {
-              try { showToast(isZh ? '⚠️ 网络波动，部分视频分片未送达，请重试发送' : '⚠️ 네트워크가 불안정해 일부 영상 조각이 못 갔어요. 다시 보내주세요'); } catch (_) {}
-            }
-            return;
+
+          // Channel 1: Instant China-Direct EMQX P2P (150KB paced frames so Qingdao<->Korea never drops packets!)
+          const emqxPromise = sendEmqxMediaPaced(room, kind, mediaId, meta, rawStr, nowTs).catch(() => false);
+          // Channel 2: Permanent Cloud Vault inside proven couple_sync_state table!
+          const vaultPromise = saveVaultItemToCloudState(room, vaultKey, kind, meta, rawStr).catch(() => false);
+
+          // Channel 3: Legacy couple_sync_events (if available on Supabase)
+          let eventsOk = false;
+          if (!__sbEventsUnavailable && rawStr.length <= 340000) {
+            try {
+              eventsOk = await insertSupabaseEvent(room, 'media', {
+                v: 'pro2_media', kind, mediaId, ts: nowTs, clientId: myDeviceClientId, myRole: state.myRole || 'suwan', dataUrl: rawStr, meta: meta || {}
+              });
+            } catch (_) {}
           }
-          const pkt = {
-            v: 'pro2_media',
-            kind,
-            mediaId,
-            ts: nowTs,
-            clientId: myDeviceClientId,
-            myRole: state.myRole || 'suwan',
-            dataUrl: rawStr,
-            meta: meta || {}
-          };
-          // Dual-channel media delivery: EMQX China Direct (instant in China) + Supabase Seoul (persistent archive)
-          try {
-            const mStr = JSON.stringify(pkt);
-            if (mStr.length <= 490000) {
-              publishEmqxBackup(room, mStr);
-            }
-          } catch (_) {}
-          try {
-            await insertSupabaseEvent(room, 'media', pkt);
+
+          const [emqxOk, vaultOk] = await Promise.all([emqxPromise, vaultPromise]);
+          if (emqxOk || vaultOk || eventsOk) {
             lastSyncOkTs = Date.now();
             updateLiveSyncIndicators(true, room);
-          } catch (_) {
-            enqueueOutboxPacket('media', pkt, 'media');
+            if (isVidKind) {
+              try { showToast(isZh ? '🎬 视频发送成功！已同步至对方与永久云金库 ✨' : '🎬 동영상 전송 완료! 상대방과 클라우드 금고에 저장됐어요 ✨'); } catch (_) {}
+            }
+          } else if (isVidKind) {
+            try { showToast(isZh ? '⚠️ 网络波动，部分视频分片未送达，请重试发送' : '⚠️ 네트워크가 불안정해 일부 영상 조각이 못 갔어요. 다시 보내주세요'); } catch (_) {}
           }
         }
         window.__pushMediaSyncPacket = pushMediaSyncPacket;
@@ -20515,8 +20745,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const room = getSyncRoomCode();
           if (!room) return;
           const pkt = { v: 'pro2_signal', kind, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan', ...(payload || {}) };
-          // Ephemeral 'typing' signals go ONLY over real-time EMQX WebSocket (never stored in DB so old typing never replays on boot!)
-          const isEphemeral = (kind === 'typing' || kind === 'presence');
+          // Ephemeral signals go over real-time EMQX + Supabase Broadcast + ntfy (never stored in couple_sync_events)
+          const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync');
           if (!isEphemeral) {
             insertSupabaseEvent(room, 'signal', pkt).then(() => {
               lastSyncOkTs = Date.now();
@@ -20577,6 +20807,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (!sig || sig.v !== 'pro2_signal') return;
           if (sig.clientId && sig.clientId === myDeviceClientId) return;
           const pName = sig.myRole === 'suwan' ? '수완(完)' : '靖灿(灿)';
+          if (sig.kind === 'request_vault_sync') {
+            if (typeof window.__respondToPartnerVaultRequest === 'function') {
+              window.__respondToPartnerVaultRequest(sig);
+            }
+            return;
+          }
           if (sig.kind === 'presence' && sig.myRole && sig.myRole !== (state.myRole || 'suwan')) {
             if (!window.__cwPartnerPresence) window.__cwPartnerPresence = { suwan: { online: false, lastSeen: 0 }, jingchan: { online: false, lastSeen: 0 } };
             const prevInfo = window.__cwPartnerPresence[sig.myRole] || { online: false, lastSeen: 0 };
@@ -20708,8 +20944,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (processedMediaIds.has(mid) && !needsRecovery) return false;
           markMediaSeen(mid);
 
-          const localDataUrl = pkt.dataUrl || '';
           const isAudioKind = pkt.kind === 'chat_voice' || pkt.kind === 'voice_letter' || pkt.kind === 'custom_voice';
+          const localDataUrl = isAudioKind ? normalizeAudioDataUrl(pkt.dataUrl || '') : String(pkt.dataUrl || '');
           if (!localDataUrl || !localDataUrl.startsWith('data:')) return false;
           if (isAudioKind && !localDataUrl.startsWith('data:audio/')) return false;
 
@@ -20923,7 +21159,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         function buildSyncPayload(coreObj, fullSnapshot) {
           const lim = fullSnapshot
-            ? { msg: 60, qa: 30, diary: 40, memo: 40, bucket: 40, cap: 30, coup: 30, anniv: 30, sched: 40, phrase: 100, trans: 30, gif: 25 }
+            ? { msg: 220, qa: 40, diary: 60, memo: 60, bucket: 50, cap: 40, coup: 40, anniv: 40, sched: 50, phrase: 120, trans: 35, gif: 25 }
             : { msg: 20, qa: 10, diary: 12, memo: 15, bucket: 15, cap: 10, coup: 12, anniv: 12, sched: 15, phrase: 25, trans: 12, gif: 12 };
           return {
             v: 'pro2',
@@ -21141,7 +21377,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (isSelfRow && !allowMediaReplay) return false;
           const data = await e2eeUnwrapPayload(row.payload);
           if (!data || typeof data !== 'object') return false;
-          if (data.v === 'pro2' && (!isSelfRow || allowMediaReplay)) return mergeIncomingCoupleData(data, isSelfRow ? false : isLiveEvent);
+          if (data.v === 'pro2' && (!isSelfRow || allowMediaReplay)) return mergeIncomingCoupleData(data, isSelfRow ? false : isLiveEvent, !!allowMediaReplay);
           if (data.v === 'pro2_media') return await handleIncomingMediaPacket(data, isSelfRow ? false : isLiveEvent, !!allowMediaReplay);
           if (data.v === 'pro2_media_chunk') return await handleIncomingMediaChunk(data, isSelfRow ? false : isLiveEvent, !!allowMediaReplay);
           if (data.v === 'pro2_signal' && !isSelfRow) { handleIncomingChatSignal(data); return false; }
@@ -21289,6 +21525,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 // When catching up a backlog of missed events, only alert on the newest one (never flood 10+ banners!)
                 const isTrulyNewRow = isLivePull && (Date.now() - __cwBootEpoch) > 4000 && rid > lastId && (newRows.length <= 2 || rid === latestNewId);
                 if (await processSupabaseEventRow(r, isTrulyNewRow)) mergedAny = true;
+              }
+            }
+            if (shouldPullMedia) {
+              fetchCloudVaultManifest(room).then(async (mItems) => {
+                let anyV = false;
+                for (const it of mItems) {
+                  if (await restoreVaultEntryFromCloudState(room, it)) anyV = true;
+                }
+                if (anyV) {
+                  persistMediaVaultsNow(true);
+                  saveState(false);
+                  try { renderBucketAndAlbum(); renderVoiceLetters(); renderChat(); renderHome(); updateVaultIndicators(); } catch (_) {}
+                }
+              }).catch(() => {});
+              if ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0) {
+                if (typeof window.__requestPartnerVaultSync === 'function') window.__requestPartnerVaultSync('poll_missing');
               }
             }
             if (mediaPull.status === 'fulfilled' && Array.isArray(mediaPull.value)) {
@@ -21486,48 +21738,67 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (btn) { btn.disabled = true; btn.textContent = isZh ? '⏳ 正在恢复...' : '⏳ 복구 중...'; }
           if (reportEl) reportEl.classList.add('hidden');
           try {
-            // Phase 1: Snapshot from couple_sync_state
-            setProg(8, isZh ? '1/3 正在拉取云端快照记录...' : '1/3 서버 스냅샷 기록 불러오는 중...');
+            // Immediately request real-time P2P vault stream from partner's browser/phone (works in 0.1s over EMQX China-Direct!)
+            if (typeof window.__requestPartnerVaultSync === 'function') {
+              window.__requestPartnerVaultSync(silentBoot ? 'boot_restore' : 'manual_restore');
+            }
+
+            // Phase 1: Snapshot from couple_sync_state (with allowSelfReplay=true so ALL history restores!)
+            setProg(10, isZh ? '1/4 正在拉取云端快照记录...' : '1/4 서버 스냅샷 기록 불러오는 중...');
             try {
               const snapRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`, { headers: sbHeaders() }, 15000);
               if (snapRes.ok) {
                 const snapArr = await snapRes.json();
                 if (Array.isArray(snapArr) && snapArr[0] && snapArr[0].payload) {
                   const decSnap = await e2eeUnwrapPayload(snapArr[0].payload);
-                  if (decSnap) mergeIncomingCoupleData(decSnap, false);
+                  if (decSnap) mergeIncomingCoupleData(decSnap, false, true);
                 }
               }
             } catch (_) {}
 
-            // Phase 2: Universal Event & Media Index Scan (works EVEN IF 'kind' column does not exist in Supabase!)
-            setProg(18, isZh ? '2/3 正在扫描云端全部历史记录与照片/视频/语音...' : '2/3 서버의 모든 대화·사진·앨범·프로필·음성 기록 스캔 중...');
-            let evCursor = null;
-            const allEventIds = [];
-            for (let page = 0; page < 6; page++) {
-              const idxUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}${evCursor ? `&id=lt.${evCursor}` : ''}&select=id&order=id.desc&limit=500`;
-              try {
-                const iRes = await fetchWithTimeout(idxUrl, { headers: sbHeaders() }, 15000);
-                if (!iRes.ok) break;
-                const iRows = await iRes.json();
-                if (!Array.isArray(iRows) || !iRows.length) break;
-                for (const r of iRows) { if (r && r.id) allEventIds.push(Number(r.id)); }
-                evCursor = iRows[iRows.length - 1].id;
-                if (iRows.length < 500) break;
-              } catch (_) { break; }
+            // Phase 2: Permanent Cloud Media Vault inside couple_sync_state (__vault_manifest_v1)
+            setProg(24, isZh ? '2/4 正在读取云端永久相册与语音信金库...' : '2/4 서버 영구 금고(앨범 사진·음성편지·프로필) 복구 중...');
+            const manifestItems = await fetchCloudVaultManifest(room);
+            let vaultRestored = 0;
+            for (let mi = 0; mi < manifestItems.length; mi++) {
+              const okV = await restoreVaultEntryFromCloudState(room, manifestItems[mi]);
+              if (okV) vaultRestored++;
+              const vPct = 24 + ((mi + 1) / Math.max(1, manifestItems.length)) * 36;
+              setProg(vPct, isZh
+                ? `2/4 正在恢复永久金库照片与语音 (${mi + 1}/${manifestItems.length})...`
+                : `2/4 영구 금고 사진·음성편지 복구 중 (${mi + 1}/${manifestItems.length})...`);
             }
 
-            // Phase 3: Chronological 6-by-6 Batched Download & Full Replay (restores ALL text history + photos + avatars + videos + voices!)
+            // Phase 3: Universal Event Scan in couple_sync_events (if table exists)
+            setProg(64, isZh ? '3/4 正在扫描历史同步事件...' : '3/4 서버 이벤트 기록 정밀 스캔 중...');
+            let evCursor = null;
+            const allEventIds = [];
+            if (!__sbEventsUnavailable) {
+              for (let page = 0; page < 4; page++) {
+                const idxUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}${evCursor ? `&id=lt.${evCursor}` : ''}&select=id&order=id.desc&limit=500`;
+                try {
+                  const iRes = await fetchWithTimeout(idxUrl, { headers: sbHeaders() }, 10000);
+                  if (!iRes.ok) break;
+                  const iRows = await iRes.json();
+                  if (!Array.isArray(iRows) || !iRows.length) break;
+                  for (const r of iRows) { if (r && r.id) allEventIds.push(Number(r.id)); }
+                  evCursor = iRows[iRows.length - 1].id;
+                  if (iRows.length < 500) break;
+                } catch (_) { break; }
+              }
+            }
+
             const orderedIds = allEventIds.slice().reverse();
-            const totalMedia = orderedIds.length;
+            const totalMedia = manifestItems.length + orderedIds.length;
             let fetchedCount = 0;
             let failedBatches = 0;
-            for (let bi = 0; bi < totalMedia; bi += 6) {
+            for (let bi = 0; bi < orderedIds.length; bi += 6) {
               const chunkIds = orderedIds.slice(bi, bi + 6);
               let okBatch = false;
               for (let attempt = 0; attempt < 2 && !okBatch; attempt++) {
                 try {
                   const bUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&id=in.(${chunkIds.join(',')})&order=id.asc`;
-                  const bRes = await fetchWithTimeout(bUrl, { headers: sbHeaders() }, 25000);
+                  const bRes = await fetchWithTimeout(bUrl, { headers: sbHeaders() }, 22000);
                   if (bRes.ok) {
                     const bRows = await bRes.json();
                     if (Array.isArray(bRows)) {
@@ -21538,15 +21809,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                     okBatch = true;
                   }
                 } catch (_) {
-                  if (attempt === 0) await new Promise(r => setTimeout(r, 800));
+                  if (attempt === 0) await new Promise(r => setTimeout(r, 700));
                 }
               }
               if (!okBatch) failedBatches++;
-              fetchedCount = Math.min(totalMedia, bi + chunkIds.length);
-              const pct = totalMedia > 0 ? (20 + (fetchedCount / totalMedia) * 75) : 95;
+              fetchedCount = Math.min(orderedIds.length, bi + chunkIds.length);
+              const pct = orderedIds.length > 0 ? (65 + (fetchedCount / orderedIds.length) * 25) : 90;
               setProg(pct, isZh
-                ? `3/3 正在恢复历史记录与照片/语音 (${fetchedCount}/${totalMedia})...`
-                : `3/3 서버 전체 기록·사진·프로필·음성 복구 중 (${fetchedCount}/${totalMedia})...`);
+                ? `3/4 正在恢复事件媒体 (${fetchedCount}/${orderedIds.length})...`
+                : `3/4 추가 이벤트 기록 복구 중 (${fetchedCount}/${orderedIds.length})...`);
+            }
+
+            // Brief window for live EMQX P2P partner stream packets to land if partner's app is currently open!
+            if (!silentBoot && ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0)) {
+              setProg(93, isZh ? '4/4 正在呼叫对方在线设备同步相册与语音信...' : '4/4 상대방 접속 기기(징찬 폰·이전 브라우저)에서 직통 수신 대기 중...');
+              await new Promise(r => setTimeout(r, 2200));
             }
 
             // Phase 4: Sort messages strictly chronologically, lock into all 4 IndexedDB Vaults & Re-render
@@ -21576,10 +21853,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                    <div>• 情侣相册：<b>${after.albums}</b>${diffStr(after.albums, before.albums)} · 语音信：<b>${after.voices}</b>${diffStr(after.voices, before.voices)}</div>
                    <div>• 聊天记录：<b>${after.msgs}</b>${diffStr(after.msgs, before.msgs)} · 日记/备忘：<b>${after.diaries}/${after.memos}</b></div>
                    ${failedBatches > 0 ? `<div class="text-rose-500 mt-1">⚠️ 网络波动跳过 ${failedBatches} 批，可稍后再点一次补齐</div>` : ''}`
-                : `<div class="font-bold text-gold mb-1">☁️ 서버 기록·미디어 ${totalMedia}건 전체 스캔 · 안전 복구 완료</div>
+                : `<div class="font-bold text-gold mb-1">☁️ 서버·금고 미디어 ${totalMedia}건 스캔 · 안전 복구 완료</div>
                    <div>• 메신저 사진·영상·음성: <b>${after.chatMedia}건</b>${diffStr(after.chatMedia, before.chatMedia)}</div>
                    <div>• 커플앨범: <b>${after.albums}건</b>${diffStr(after.albums, before.albums)} · 음성편지: <b>${after.voices}건</b>${diffStr(after.voices, before.voices)}</div>
                    <div>• 대화: <b>${after.msgs}건</b>${diffStr(after.msgs, before.msgs)} · 일기·메모: <b>${after.diaries}/${after.memos}건</b></div>
+                   ${(after.albums === 0 && after.voices === 0) ? `<div class="mt-1.5 pt-1.5 border-t text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-royal);">💡 이전 앱 삭제 전 사진·음성편지는 <b>징찬이 폰 웹앱</b>(또는 수완님 폰 삼성인터넷/크롬)이 켜지는 즉시 <b>EMQX 직통 + 서버 영구금고</b>로 자동 전송되어 채워져요!</div>` : ''}
                    ${failedBatches > 0 ? `<div class="text-rose-500 mt-1">⚠️ 네트워크 불안정으로 ${failedBatches}개 구간을 건너뛰었어요. 한 번 더 누르면 이어서 채워져요.</div>` : ''}`;
               reportEl.classList.remove('hidden');
             }
@@ -22086,72 +22364,197 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           renderGrid();
         })();
 
-        // Auto-recover cloud history/photos if local vault was wiped by APK reinstall + backfill local media to cloud once!
+        // ==================== Prime 4 v58: Bidirectional P2P + Cloud Vault Auto-Recovery & Backfill ====================
+        let __lastVaultReqSentTs = 0;
+        let __isStreamingVaultToPartner = false;
+
+        function requestPartnerVaultSync(reason) {
+          const now = Date.now();
+          if ((now - __lastVaultReqSentTs) < 6000 && reason !== 'manual_restore') return;
+          __lastVaultReqSentTs = now;
+          const haveAlbums = (state.albums || []).filter(a => a && a.id && a.dataUrl).map(a => a.id).slice(0, 160);
+          const haveVoices = (state.voiceLetters || []).filter(v => v && v.id && v.audioUrl).map(v => v.id).slice(0, 100);
+          const haveChatMedia = (state.chat?.messages || []).filter(m => m && m.id && (m.photoUrl || m.videoUrl || m.audioUrl)).map(m => m.id).slice(-80);
+          const haveAvatars = [];
+          if (state.profile?.suwanAvatar) haveAvatars.push('suwan');
+          if (state.profile?.jingchanAvatar) haveAvatars.push('jingchan');
+          sendChatSignal('request_vault_sync', {
+            reason: reason || 'auto',
+            haveAlbums,
+            haveVoices,
+            haveChatMedia,
+            haveAvatars
+          });
+        }
+        window.__requestPartnerVaultSync = requestPartnerVaultSync;
+
+        async function respondToPartnerVaultRequest(sig) {
+          if (__isStreamingVaultToPartner) return;
+          const room = getSyncRoomCode();
+          if (!room) return;
+          const haveAlbSet = new Set(Array.isArray(sig?.haveAlbums) ? sig.haveAlbums : []);
+          const haveVlSet = new Set(Array.isArray(sig?.haveVoices) ? sig.haveVoices : []);
+          const haveCmSet = new Set(Array.isArray(sig?.haveChatMedia) ? sig.haveChatMedia : []);
+          const haveAvSet = new Set(Array.isArray(sig?.haveAvatars) ? sig.haveAvatars : []);
+
+          const missingAlbums = (state.albums || []).filter(a => a && a.id && a.dataUrl && !haveAlbSet.has(a.id)).slice(0, 60);
+          const missingVoices = (state.voiceLetters || []).filter(v => v && v.id && v.audioUrl && !haveVlSet.has(v.id)).slice(0, 40);
+          const missingChatM = (state.chat?.messages || []).filter(m => m && m.id && (m.photoUrl || m.audioUrl || m.videoUrl) && !haveCmSet.has(m.id)).slice(-35);
+          const missingAvs = ['suwan', 'jingchan'].filter(rk => state.profile?.[rk + 'Avatar'] && !haveAvSet.has(rk));
+          const customVoiceEntries = Object.entries(state.customVoices || {}).filter(([, u]) => u && String(u).startsWith('data:'));
+
+          if (!missingAlbums.length && !missingVoices.length && !missingChatM.length && !missingAvs.length && !customVoiceEntries.length) {
+            return;
+          }
+          __isStreamingVaultToPartner = true;
+          try {
+            await pushFullCloudSync();
+            for (const rk of missingAvs) {
+              const avUrl = state.profile[rk + 'Avatar'];
+              if (avUrl) {
+                await sendEmqxMediaPaced(room, 'avatar', `av_${rk}_${Date.now()}`, { target: rk }, avUrl, Date.now());
+                await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('avatar', { target: rk }, rk), 'avatar', { target: rk }, avUrl);
+              }
+            }
+            for (const alb of missingAlbums) {
+              const mKind = String(alb.mediaType || '').includes('video') ? 'album_video' : 'album_photo';
+              const meta = { albumId: alb.id, authorRole: alb.authorRole || state.myRole || 'jingchan', caption: alb.caption || '', translated: alb.translated || '', date: alb.date || '', category: alb.category || '' };
+              await sendEmqxMediaPaced(room, mKind, `p2p_alb_${alb.id}`, meta, alb.dataUrl, Date.now());
+              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey(mKind, meta, alb.id), mKind, meta, alb.dataUrl);
+              await new Promise(r => setTimeout(r, 140));
+            }
+            for (const vl of missingVoices) {
+              const normAud = normalizeAudioDataUrl(vl.audioUrl);
+              if (!normAud || !normAud.startsWith('data:audio/')) continue;
+              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'jingchan', tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
+              await sendEmqxMediaPaced(room, 'voice_letter', `p2p_vl_${vl.id}`, meta, normAud, Date.now());
+              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('voice_letter', meta, vl.id), 'voice_letter', meta, normAud);
+              await new Promise(r => setTimeout(r, 140));
+            }
+            for (const [phr, cvUrl] of customVoiceEntries) {
+              const normCv = normalizeAudioDataUrl(cvUrl);
+              if (!normCv || !normCv.startsWith('data:audio/')) continue;
+              const meta = { phrase: phr };
+              await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_${Date.now()}`, meta, normCv, Date.now());
+              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normCv);
+            }
+            for (const cm of missingChatM) {
+              if (cm.photoUrl && String(cm.photoUrl).startsWith('data:image/')) {
+                const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간' };
+                await sendEmqxMediaPaced(room, 'chat_photo', `p2p_cm_${cm.id}`, meta, cm.photoUrl, cm.ts || Date.now());
+                await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_photo', meta, cm.id), 'chat_photo', meta, cm.photoUrl);
+              } else if (cm.audioUrl) {
+                const normChatAud = normalizeAudioDataUrl(cm.audioUrl);
+                if (normChatAud && normChatAud.startsWith('data:audio/')) {
+                  const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang };
+                  await sendEmqxMediaPaced(room, 'chat_voice', `p2p_cvmsg_${cm.id}`, meta, normChatAud, cm.ts || Date.now());
+                  await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_voice', meta, cm.id), 'chat_voice', meta, normChatAud);
+                }
+              }
+              await new Promise(r => setTimeout(r, 120));
+            }
+          } catch (_) {} finally {
+            setTimeout(() => { __isStreamingVaultToPartner = false; }, 4000);
+          }
+        }
+        window.__respondToPartnerVaultRequest = respondToPartnerVaultRequest;
+
         async function autoSyncVaultAndHistoryOnBoot() {
           try {
             const room = getSyncRoomCode();
             if (!room) return;
             const localAlbums = Array.isArray(state.albums) ? state.albums.filter(a => a && a.dataUrl) : [];
             const localVoices = Array.isArray(state.voiceLetters) ? state.voiceLetters.filter(v => v && v.audioUrl) : [];
-            const hasAv = !!(state.profile?.suwanAvatar || state.profile?.jingchanAvatar);
-
             const localChatMedia = Array.isArray(state.chat?.messages)
               ? state.chat.messages.filter(m => m && (m.photoUrl || m.videoUrl || m.audioUrl))
               : [];
+            const hasAv = !!(state.profile?.suwanAvatar || state.profile?.jingchanAvatar);
 
-            // A) If local media vault is completely empty (e.g. fresh APK install), silently replay couple_sync_events once!
-            if (localAlbums.length === 0 && localVoices.length === 0 && localChatMedia.length === 0 && !hasAv && !sessionStorage.getItem('cw_auto_deep_restore_v53')) {
-              sessionStorage.setItem('cw_auto_deep_restore_v53', '1');
-              await runFullCloudDataRestore(true);
-              return;
+            // Step 1: Always pull any items present in couple_sync_state __vault_manifest_v1 that we don't have locally yet!
+            const manifestItems = await fetchCloudVaultManifest(room);
+            let pulledCount = 0;
+            for (const entry of manifestItems) {
+              if (await restoreVaultEntryFromCloudState(room, entry)) pulledCount++;
+            }
+            if (pulledCount > 0) {
+              persistMediaVaultsNow(true);
+              flushIdbStateNow();
+              saveState(false);
+              try { renderAll(); updateVaultIndicators(); } catch (_) {}
+              showToast(state.lang === 'zh'
+                ? `☁️ 已自动从云端金库找回 ${pulledCount} 项相册照片/语音信 ✨`
+                : `☁️ 클라우드 영구 금고에서 사진·음성편지 ${pulledCount}건을 자동 복구했어요 ✨`);
             }
 
-            // B) If this device HAS local media/avatars/albums/chat photos (e.g. Jingchan's browser that kept local IndexedDB!), ensure they are backed up to Supabase once!
-            const bfKey = 'cw_vault_cloud_backfill_v53';
-            if ((localAlbums.length > 0 || localVoices.length > 0 || localChatMedia.length > 0 || hasAv) && !localStorage.getItem(bfKey)) {
-              localStorage.setItem(bfKey, '1');
+            // Step 2: If our albums or voiceLetters are STILL empty, request real-time P2P sync from partner's phone/browser!
+            if ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0) {
+              requestPartnerVaultSync('boot_missing');
+              if (localAlbums.length === 0 && localVoices.length === 0 && localChatMedia.length === 0 && !hasAv && !sessionStorage.getItem('cw_auto_deep_restore_v58')) {
+                sessionStorage.setItem('cw_auto_deep_restore_v58', '1');
+                await runFullCloudDataRestore(true);
+              }
+            }
+
+            // Step 3: Per-item verified cloud upload for ANY local albums, voice letters, avatars, customVoices, or chat media not yet in couple_sync_state!
+            // (Marks each item uploaded ONLY AFTER Supabase returns 200 OK — never loses items if offline in Qingdao!)
+            const uploadedSet = getUploadedVaultSet();
+            const manifestKeySet = new Set(manifestItems.map(x => x && x.key).filter(Boolean));
+            const isAlreadyBackedUp = (vk) => uploadedSet.has(vk) && manifestKeySet.has(vk);
+
+            if (localAlbums.length > 0 || localVoices.length > 0 || localChatMedia.length > 0 || hasAv) {
               await pushFullCloudSync();
-              for (const roleK of ['suwan', 'jingchan']) {
-                const avData = state.profile && state.profile[roleK + 'Avatar'];
-                if (avData && String(avData).startsWith('data:image/')) {
-                  try { await pushMediaSyncPacket('avatar', { target: roleK }, avData, `${roleK}_avatar.jpg`); } catch (_) {}
-                }
+            }
+            for (const rk of ['suwan', 'jingchan']) {
+              const avData = state.profile && state.profile[rk + 'Avatar'];
+              const vk = deriveDeterministicVaultKey('avatar', { target: rk }, rk);
+              if (avData && String(avData).startsWith('data:image/') && !isAlreadyBackedUp(vk)) {
+                await saveVaultItemToCloudState(room, vk, 'avatar', { target: rk }, avData);
               }
-              for (const alb of localAlbums.slice(0, 40)) {
-                if (alb && alb.dataUrl && String(alb.dataUrl).startsWith('data:')) {
-                  const mKind = String(alb.mediaType || '').includes('video') ? 'album_video' : 'album_photo';
-                  try {
-                    await pushMediaSyncPacket(mKind, {
-                      albumId: alb.id,
-                      caption: alb.caption || '',
-                      translated: alb.translated || '',
-                      date: alb.date || '',
-                      category: alb.category || ''
-                    }, alb.dataUrl, 'vault_media');
-                  } catch (_) {}
-                }
+            }
+            for (const alb of localAlbums.slice(0, 80)) {
+              const mKind = String(alb.mediaType || '').includes('video') ? 'album_video' : 'album_photo';
+              const meta = { albumId: alb.id, authorRole: alb.authorRole || state.myRole || 'suwan', caption: alb.caption || '', translated: alb.translated || '', date: alb.date || '', category: alb.category || '' };
+              const vk = deriveDeterministicVaultKey(mKind, meta, alb.id);
+              if (!isAlreadyBackedUp(vk)) {
+                await saveVaultItemToCloudState(room, vk, mKind, meta, alb.dataUrl);
+                await sendEmqxMediaPaced(room, mKind, `boot_alb_${alb.id}`, meta, alb.dataUrl, Date.now());
               }
-              for (const vl of localVoices.slice(0, 20)) {
-                if (vl && vl.audioUrl && String(vl.audioUrl).startsWith('data:audio/')) {
-                  try {
-                    await pushMediaSyncPacket('voice_letter', {
-                      id: vl.id, sender: vl.sender, tag: vl.tag, note: vl.note, translated: vl.translated, date: vl.date, time: vl.time
-                    }, vl.audioUrl, 'voice.webm');
-                  } catch (_) {}
-                }
+            }
+            for (const vl of localVoices.slice(0, 50)) {
+              const normAud = normalizeAudioDataUrl(vl.audioUrl);
+              if (!normAud || !normAud.startsWith('data:audio/')) continue;
+              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'suwan', tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
+              const vk = deriveDeterministicVaultKey('voice_letter', meta, vl.id);
+              if (!isAlreadyBackedUp(vk)) {
+                await saveVaultItemToCloudState(room, vk, 'voice_letter', meta, normAud);
+                await sendEmqxMediaPaced(room, 'voice_letter', `boot_vl_${vl.id}`, meta, normAud, Date.now());
               }
-              for (const cm of localChatMedia.slice(-30)) {
-                try {
-                  if (cm.photoUrl && String(cm.photoUrl).startsWith('data:image/')) {
-                    await pushMediaSyncPacket('chat_photo', {
-                      msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간'
-                    }, cm.photoUrl, 'chat_photo.jpg');
-                  } else if (cm.audioUrl && String(cm.audioUrl).startsWith('data:audio/')) {
-                    await pushMediaSyncPacket('chat_voice', {
-                      msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang
-                    }, cm.audioUrl, 'chat_voice.webm');
+            }
+            for (const [phr, cvUrl] of Object.entries(state.customVoices || {})) {
+              const normCv = normalizeAudioDataUrl(cvUrl);
+              if (!normCv || !normCv.startsWith('data:audio/')) continue;
+              const meta = { phrase: phr };
+              const vk = deriveDeterministicVaultKey('custom_voice', meta, phr);
+              if (!isAlreadyBackedUp(vk)) {
+                await saveVaultItemToCloudState(room, vk, 'custom_voice', meta, normCv);
+              }
+            }
+            for (const cm of localChatMedia.slice(-40)) {
+              if (cm.photoUrl && String(cm.photoUrl).startsWith('data:image/')) {
+                const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간' };
+                const vk = deriveDeterministicVaultKey('chat_photo', meta, cm.id);
+                if (!isAlreadyBackedUp(vk)) {
+                  await saveVaultItemToCloudState(room, vk, 'chat_photo', meta, cm.photoUrl);
+                }
+              } else if (cm.audioUrl) {
+                const normChatAud = normalizeAudioDataUrl(cm.audioUrl);
+                if (normChatAud && normChatAud.startsWith('data:audio/')) {
+                  const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang };
+                  const vk = deriveDeterministicVaultKey('chat_voice', meta, cm.id);
+                  if (!isAlreadyBackedUp(vk)) {
+                    await saveVaultItemToCloudState(room, vk, 'chat_voice', meta, normChatAud);
                   }
-                } catch (_) {}
+                }
               }
             }
           } catch (_) {}
@@ -24955,8 +25358,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v57)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v57';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v58)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v58';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
