@@ -15,12 +15,9 @@
   <link rel="manifest" href="./manifest_clean.json?v=22" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
-  <link rel="preconnect" href="https://generativelanguage.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
   <link rel="dns-prefetch" href="https://broker.emqx.io" />
 <title>灿完时光 — 우리 둘만의 공간</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
   <!-- 100% Zero-CDN Offline-Ready Build for Mainland China & Baidu Browser (No VPN Required) -->
   <style>
 
@@ -2511,7 +2508,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v64: App-Wide Couture Boutique Elevation
+       Prime 4 · v71: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2702,7 +2699,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v64: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v71: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -2829,7 +2826,7 @@
       .sm\:w-auto { width: auto !important; }
     }
 </style>
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" onerror="(function(){var s=document.createElement('script');s.src='https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js';s.onload=function(){if(typeof window.__reconnectLiveSync==='function')window.__reconnectLiveSync();};document.head.appendChild(s);})()"></script>
 </head>
 <body style="padding-bottom: 0 !important;">
 
@@ -4945,8 +4942,9 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v64</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v71</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
+            <button id="directApkDownloadBtn" type="button" class="btn-gold px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 앱 바로 업데이트</button>
           </div>
         </div>
       </div>
@@ -5318,9 +5316,201 @@
     </div>
   </div>
 
+
+
+
+  <!-- Speech Recognition Pronunciation Check Modal (Plus 1.3) -->
+  <div id="speechPracticeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,10,28,0.58); backdrop-filter: blur(6px);">
+    <div class="royal-card rounded-3xl p-5 w-full max-w-md space-y-3.5 shadow-2xl">
+      <div class="flex items-center justify-between gap-2">
+        <div class="text-sm font-bold text-gold" id="speechModalTitle">🎤 따라 말하기 발음 체크 (+15 XP)</div>
+        <button id="closeSpeechModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs">✕</button>
+      </div>
+      <div class="royal-subcard rounded-2xl p-3.5 space-y-1.5 text-center">
+        <div id="speechTargetKo" class="text-lg font-bold leading-snug break-words"></div>
+        <div id="speechTargetZh" class="text-xs text-sec break-words"></div>
+        <div id="speechTargetPron" class="text-[11px] text-mut break-words"></div>
+        <div class="flex items-center justify-center gap-2 pt-1.5">
+          <button id="speechListenRefBtn" type="button" class="btn-ghost px-3 py-1 rounded-full text-xs font-semibold">🔊 원어민 듣기</button>
+          <button id="speechListenSlowBtn" type="button" class="btn-ghost px-3 py-1 rounded-full text-xs font-semibold">🐢 천천히</button>
+        </div>
+      </div>
+      <div id="speechMicSection" class="space-y-2.5 text-center">
+        <button id="speechStartMicBtn" type="button" class="btn-royal w-full py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2">🎤 눌러서 따라 말하기</button>
+        <div id="speechHeardBox" class="hidden rounded-2xl p-2.5 text-xs text-sec" style="background: var(--surface-2);"></div>
+      </div>
+      <!-- Graceful Typing Fallback for Huawei/WeChat browsers without Web Speech API -->
+      <div id="speechTypeFallback" class="hidden space-y-2 pt-1 border-t" style="border-color: var(--border-subtle);">
+        <div id="speechFallbackHint" class="text-[11px] text-sec text-center">음성인식 미지원 브라우저에서도 아래에 한국어를 따라 입력하면 +15 XP를 받을 수 있어요!</div>
+        <div class="flex gap-2">
+          <input id="speechFallbackInput" type="text" class="royal-input flex-1 rounded-xl px-3 py-2 text-xs" placeholder="위 한국어 문장을 따라 입력해 보세요..." />
+          <button id="speechFallbackSubmitBtn" type="button" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0">확인</button>
+        </div>
+      </div>
+      <div id="speechResultBanner" class="hidden rounded-2xl p-3 text-xs font-semibold text-center"></div>
+    </div>
+  </div>
+
+
+  <!-- Prime 3 v26: Smart Partner-Language Intent & Natural Polish (Understand Awkward Korean/Chinese Easily) -->
+  
+
+
+  <!-- Prime 3 v41: CW Talk Live Partner Status Pill (1-Tap Quick Status Bar Removed) -->
+  
+
+
+  <!-- Prime 3 v29: Global 2-Second Long-Press Auto-Copy Anywhere in App -->
+  
+
+
+  <!-- Prime 3 v41 Pro: Full-App Maker Mode Live Editor + Real-Time Auto-Sync -->
+  
+
+  <!-- Prime 3 v41: Keep Mobile Keyboard Open on Submit (Messenger & All Text Forms) -->
+  
+
+  <!-- v55 Chat Wallpaper Customizer Modal -->
+
+  <div id="cwMicPermModal" class="cw-mic-modal hidden fixed inset-0 z-[10050] flex items-center justify-center p-4" style="background: rgba(16, 11, 28, 0.58);">
+    <div class="royal-card w-full max-w-sm rounded-3xl p-5 space-y-3.5 border" style="background: var(--surface-1); border-color: var(--border-accent);">
+      <div class="flex items-center justify-between gap-2">
+        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>🎙️</span> <span id="cwMicModalTitle">마이크 권한 허용 · 음성 보내기</span></div>
+        <button id="cwMicModalCloseBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs">✕</button>
+      </div>
+      <div id="cwMicModalDesc" class="text-xs text-sec leading-relaxed">마이크 권한을 한 번만 허용하면 앱 안에서 바로 목소리를 녹음해 보낼 수 있어요. 아래 버튼을 눌러 허용 창을 띄우거나 휴대폰 녹음기로 바로 보낼 수 있어요 💜</div>
+      <input id="cwNativeVoiceCaptureInput" type="file" accept="audio/*" capture="microphone" class="hidden" />
+      <div class="space-y-2 pt-0.5">
+        <button id="cwMicRequestNowBtn" type="button" class="btn-royal w-full py-3 rounded-2xl text-xs font-bold">🎙️ 앱 안에서 마이크 허용 · 바로 녹음하기</button>
+        <label for="cwNativeVoiceCaptureInput" id="cwMicNativeRecBtn" class="hidden btn-gold w-full py-2.5 rounded-2xl text-xs font-bold block text-center cursor-pointer select-none">📱 用手机自带录音机直接发送</label>
+        <button id="cwMicOpenSettingsBtn" type="button" class="hidden btn-gold w-full py-2.5 rounded-2xl text-xs font-bold">⚙️ 앱 권한 설정 바로 열기 (마이크 켜기)</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="cwInAppUpdateModal" class="hidden fixed inset-0 z-[10060] flex items-center justify-center p-4" style="background: rgba(16, 11, 28, 0.62);">
+    <div class="royal-card w-full max-w-sm rounded-3xl p-5 space-y-3.5 border" style="background: var(--surface-1); border-color: var(--border-accent);">
+      <div class="flex items-center justify-between gap-2">
+        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>✨</span> <span id="cwInAppUpdTitle">새 버전 앱 업데이트 도착</span></div>
+        <button id="cwInAppUpdCloseBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs">✕</button>
+      </div>
+      <div id="cwInAppUpdDesc" class="text-xs text-sec leading-relaxed">대화·사진·학습 기록은 그대로 보존되며, 앱 내부 순정 음성 녹음과 중국 고속 연결이 향상되었어요 💜</div>
+      <div class="space-y-2 pt-0.5">
+        <button id="cwInAppUpdInstallBtn" type="button" class="btn-royal w-full py-3 rounded-2xl text-xs font-bold">📲 지금 앱 안에서 바로 업데이트</button>
+        <button id="cwInAppUpdLaterBtn" type="button" class="btn-ghost w-full py-2 rounded-2xl text-xs font-semibold">나중에 하기</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cwChatBgModal" class="hidden fixed inset-0 z-[9990] flex items-end sm:items-center justify-center p-3 sm:p-4" style="background: rgba(18, 13, 31, 0.52);">
+    <div class="royal-card w-full max-w-md rounded-3xl p-4 sm:p-5 space-y-4" style="background: var(--surface-1);">
+      <div class="flex items-center justify-between gap-2">
+        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>🖼️</span> <span id="cwChatBgModalTitle">채팅방 배경 꾸미기</span></div>
+        <button id="closeChatBgModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-sm">✕</button>
+      </div>
+      <div class="space-y-2">
+        <div id="cwChatBgPresetLabel" class="text-xs font-semibold text-sec">감성 배경 프리셋</div>
+        <div class="grid grid-cols-4 gap-2">
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="default" style="background: linear-gradient(135deg,#f6efff,#fff2f8); color:#583894; border-color:var(--border-accent);">기본</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="rose" style="background: linear-gradient(135deg,#ffe4ee,#fff5ec); color:#9d174d; border-color:rgba(244,114,182,0.4);">로즈</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="lavender" style="background: linear-gradient(135deg,#ede9fe,#e0e7ff); color:#4c1d95; border-color:rgba(139,92,246,0.4);">라벤더</button>
+          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="starlight" style="background: linear-gradient(135deg,#1e1436,#321d54); color:#f5d8a8; border-color:rgba(216,180,254,0.35);">별빛</button>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <input id="cwChatBgFileInput" type="file" accept="image/*" class="hidden" />
+        <button id="cwChatBgPickPhotoBtn" type="button" class="btn-royal w-full py-2.5 rounded-2xl text-xs font-bold">📷 갤러리에서 커플 사진 선택</button>
+      </div>
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs">
+          <span id="cwChatBgAlphaLabel" class="font-semibold text-sec">배경 은은함 (글자 가독성)</span>
+          <span id="cwChatBgAlphaVal" class="font-bold text-gold">55%</span>
+        </div>
+        <input id="cwChatBgAlpha" type="range" min="15" max="85" value="55" class="w-full accent-purple-600" />
+      </div>
+      <div class="space-y-1.5">
+        <div id="cwBubbleSizeLabel" class="text-xs font-semibold text-sec">💬 말풍선 크기</div>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="sm">작게</button>
+          <button type="button" class="cw-bubble-size-btn btn-royal rounded-xl py-1.5 text-xs font-bold" data-bsize="md">보통</button>
+          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="lg">크게</button>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button id="cwChatBgResetBtn" type="button" class="btn-ghost px-3.5 py-2 rounded-xl text-xs font-semibold">초기화</button>
+        <button id="cwChatBgDoneBtn" type="button" class="btn-royal px-4 py-2 rounded-xl text-xs font-bold">적용 완료</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  
+
+  
 <script>
-    (function () {
+(function(){
+  var MINI_ICONS = {
+    bell: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+    home: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1v-9.5z"/></svg>',
+    learn: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    space: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    settings: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0-4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
+  };
+  try {
+    var slots = document.querySelectorAll('.cw-ico-slot[data-ico]');
+    for (var i = 0; i < slots.length; i++) {
+      var k = slots[i].getAttribute('data-ico');
+      if (MINI_ICONS[k] && !slots[i].innerHTML) slots[i].innerHTML = MINI_ICONS[k];
+    }
+    var pad2 = function(n){ return (n < 10 ? '0' : '') + n; };
+    var now = new Date();
+    var utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    var kst = new Date(utcMs + 9 * 3600000);
+    var cst = new Date(utcMs + 8 * 3600000);
+    var kcEl = document.getElementById('suwanClock');
+    var ccEl = document.getElementById('jingchanClock');
+    if (kcEl) kcEl.textContent = pad2(kst.getHours()) + ':' + pad2(kst.getMinutes());
+    if (ccEl) ccEl.textContent = pad2(cst.getHours()) + ':' + pad2(cst.getMinutes());
+    var savedCore = null, expLang = '';
+    try {
+      savedCore = JSON.parse(localStorage.getItem('chanwan_shiguang_v6_core') || 'null');
+      expLang = localStorage.getItem('cw_user_explicit_lang') || '';
+    } catch(e) {}
+    var tzBoot = '';
+    try { tzBoot = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e) {}
+    var isChina = (/Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)/i.test(tzBoot) || (now.getTimezoneOffset() === -480) || /^zh/i.test(navigator.language || '')) && !/Asia\/Seoul/i.test(tzBoot);
+    var isZhBoot = expLang ? (expLang === 'zh') : ((savedCore && savedCore.lang === 'zh') || isChina);
+    if (isZhBoot) {
+      document.documentElement.lang = 'zh-CN';
+      var la = document.getElementById('langToggleActive');
+      var ln = document.getElementById('langToggleNext');
+      if (la) la.textContent = '中';
+      if (ln) ln.textContent = '한';
+      var ddLbl = document.querySelector('[data-i18n="togetherLabel"]');
+      if (ddLbl) ddLbl.textContent = '相伴时光';
+    }
+  } catch(e) {}
+})();
+</script>
+<script>
+(function () {
       'use strict';
+
+      function isMainlandChinaClient() {
+        try {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+          if (/Asia\/Seoul/i.test(tz)) return false;
+          if (/Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)/i.test(tz)) return true;
+          if (new Date().getTimezoneOffset() === -480) return true;
+          const ua = navigator.userAgent || '';
+          if (/HuaweiBrowser|HarmonyOS|MicroMessenger|baiduboxapp|Baidu|Quark|UCBrowser|MQQBrowser|HONOR/i.test(ua) && /^zh/i.test(navigator.language || '')) return true;
+        } catch (_) {}
+        return false;
+      }
+      window.__isMainlandChinaClient = isMainlandChinaClient;
 
       const CW_MEDIA_SVG = {
         play: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8.4 6.2c0-.95 1.05-1.52 1.86-1.01l8.8 5.55c.75.47.75 1.55 0 2.02l-8.8 5.55c-.81.51-1.86-.06-1.86-1.01V6.2z" fill="currentColor"/></svg>',
@@ -6315,12 +6505,15 @@
           if (!cleanMsg) cleanMsg = partnerRole === 'suwan' ? '새 메시지가 도착했어요' : '发来了一条新消息';
           // Translate boilerplate media/heartbeat captions into receiver's language cleanly
           if (partnerRole === 'jingchan') {
-            if (cleanMsg === '지금 보고 싶어요 💜') cleanMsg = '现在好想你';
-            else if (cleanMsg === '🎬 동영상을 보냈어요') cleanMsg = '发送了一段视频';
-            else if (cleanMsg === '📷 사진을 보냈어요') cleanMsg = '发送了一张照片';
-            else if (cleanMsg === '🎙️ 음성 메시지를 보냈어요') cleanMsg = '发送了一条语音';
+            if (cleanMsg === '지금 보고 싶어요 💜') cleanMsg = '现在好想你 💜';
+            else if (/동영상을 보냈어요/.test(cleanMsg)) cleanMsg = '🎬 发送了一段视频';
+            else if (/사진을 보냈어요/.test(cleanMsg)) cleanMsg = '📷 发送了一张照片';
+            else if (/음성 메시지/.test(cleanMsg)) cleanMsg = '🎙️ 发送了一条语音';
+            else if (/\[움짤\]/.test(cleanMsg)) cleanMsg = '🎞️ 发送了一张动图';
             else if (cleanMsg === '새 메시지가 도착했어요') cleanMsg = '发来了一条新消息';
           } else {
+            if (cleanMsg === '🎙️ 语音消息') cleanMsg = '음성 메시지를 보냈어요';
+            else if (cleanMsg === '🎞️ [动图]') cleanMsg = '움짤을 보냈어요';
             cleanMsg = cleanMsg.replace(/^[🎬📷🎙️💌💓💬]+\s*/u, '');
           }
           const appIconUrl = 'https://swans8562-sudo.github.io/chanwan/icon-192.png?v=21';
@@ -6536,10 +6729,10 @@
           .replace(/ㅎ{2,}/g, ' 하하 ')
           .replace(/ㅋ{2,}/g, ' 하하 ')
           .replace(/[ㅠㅜ]{2,}/g, ' ')
-          .replace(/(?<![가-힣])ㅇㅇ(?![가-힣])/g, '응응')
-          .replace(/(?<![가-힣])ㅇㅋ(?![가-힣])/g, '오케이')
-          .replace(/(?<![가-힣])ㄱㅅ(?![가-힣])/g, '감사')
-          .replace(/(?<![가-힣])ㄴㄴ(?![가-힣])/g, '아니')
+          .replace(/(^|[^가-힣])ㅇㅇ(?![가-힣])/g, '$1응응')
+          .replace(/(^|[^가-힣])ㅇㅋ(?![가-힣])/g, '$1오케이')
+          .replace(/(^|[^가-힣])ㄱㅅ(?![가-힣])/g, '$1감사')
+          .replace(/(^|[^가-힣])ㄴㄴ(?![가-힣])/g, '$1아니')
           .replace(/\s{2,}/g, ' ')
           .trim();
         const snippet = (ttsNormalized || clean).slice(0, 140);
@@ -7562,9 +7755,9 @@
             .replace(/ㅎ{2}/g, '嘿嘿')
             .replace(/ㅋ{3,}/g, '哈哈哈')
             .replace(/ㅋ{2}/g, '哈哈')
-            .replace(/(?<![가-힣])[ㅠㅜ]+(?![가-힣])/g, '呜呜')
+            .replace(/(^|[^가-힣])[ㅠㅜ]+(?![가-힣])/g, '$1呜呜')
             .replace(/[ㅠㅜ]{2,}/g, '呜呜')
-            .replace(/(?<![가-힣])[ㅎㅋ]+(?![가-힣])/g, '');
+            .replace(/(^|[^가-힣])[ㅎㅋ]+(?![가-힣])/g, '$1');
           if (/^(헤헤헤+|헤헿+)$/.test(__pOrig.trim())) __pOut = '嘿嘿嘿';
           else if (/^헤헤$/.test(__pOrig.trim())) __pOut = '嘿嘿';
           else if (/헤헿|헤헤/.test(__pOrig) && !/嘿嘿/.test(__pOut)) __pOut = __pOut.replace(/呵呵|哈哈|嗯哼/g, '嘿嘿');
@@ -7704,17 +7897,17 @@
           ? origRawText
               .replace(/ㅎ{2,}/g, ' 하하')
               .replace(/ㅋ{2,}/g, ' 하하하')
-              .replace(/(?<![가-힣])[ㅠㅜ]+(?![가-힣])/g, ' 흑흑')
+              .replace(/(^|[^가-힣])[ㅠㅜ]+(?![가-힣])/g, '$1 흑흑')
               .replace(/[ㅠㅜ]{2,}/g, ' 흑흑')
-              .replace(/(?<![가-힣])ㅇㅇ(?![가-힣])/g, '응응')
-              .replace(/(?<![가-힣])ㅇㅋ(?![가-힣])/g, '오케이')
-              .replace(/(?<![가-힣])ㄱㅅ(?![가-힣])/g, '고마워')
+              .replace(/(^|[^가-힣])ㅇㅇ(?![가-힣])/g, '$1응응')
+              .replace(/(^|[^가-힣])ㅇㅋ(?![가-힣])/g, '$1오케이')
+              .replace(/(^|[^가-힣])ㄱㅅ(?![가-힣])/g, '$1고마워')
               .replace(/\s{2,}/g, ' ')
               .trim()
           : origRawText;
         const toneMode = toneOverride || activeToneMode || 'lover';
 
-        const isChinaMode = !!(state.settings && state.settings.chinaMode);
+        const isChinaMode = !!(state.settings && state.settings.chinaMode) || isMainlandChinaClient();
 
         // 1) Flagship Gemini 2.5 Pro Live (with automatic Gemini 2.5 Pro fallback, skipped in China Direct Mode)
         const apiKey = (state.settings && state.settings.geminiApiKey || '').trim();
@@ -7808,6 +8001,33 @@
         if (/^(징찬아|징찬이|징찬님|징찬)$/.test(normalized)) {
           const zOut = normalized === '징찬아' ? '靖灿呀' : '靖灿';
           return { original: text, translated: zOut, srcLang: 'ko', tgtLang: 'zh', pronunciation: 'Jìngcàn', literal: '靖灿', tone: '💜 커플 이름 고정 번역', nuance: '징찬 이름은 앱 전체에서 항상 「靖灿」으로 고정 번역돼요.', alts: ['靖灿'], accuracy: 100, engine: '커플 이름 고정 사전 💜' };
+        }
+        const ZH_COUPLE_EXACT = [
+          { rx: /^(?:欧巴|哥哥)[,，\s]*(?:你在干嘛|在干嘛呀?|在干什么呢?|忙什么呢)$/, ko: '오빠, 지금 뭐 해?', alt: '오빠 뭐 하고 있어?' },
+          { rx: /^(?:欧巴|哥哥)[,，\s]*(?:吃饭了吗|吃了吗|吃过饭了吗)$/, ko: '오빠, 밥 먹었어?', alt: '오빠 식사했어?' },
+          { rx: /^(?:我刚下班|刚下班呀?|下班啦|下班了)$/, ko: '나 방금 퇴근했어!', alt: '이제 막 일 끝났어!' },
+          { rx: /^(?:还在店里|我还在店里呢?)$/, ko: '아직 가게에 있어!', alt: '나 아직 가게야' },
+          { rx: /^(?:到家啦|到家了|我到家啦|安全到家啦?)$/, ko: '집에 잘 도착했어!', alt: '나 집 도착했어!' },
+          { rx: /^(?:好累呀|好累啊|今天好累呀?)$/, ko: '오늘 너무 피곤해 ㅠㅠ', alt: '아구 힘들다 ㅠ' },
+          { rx: /^(?:抱抱|求抱抱|抱抱我)$/, ko: '꼬옥 안아줘 🤗', alt: '안아줘!' },
+          { rx: /^(?:亲亲|么么哒|啾咪)$/, ko: '쪽쪽 😘', alt: '뽀뽀 💕' },
+          { rx: /^(?:我也想你|我也好想你呀?)$/, ko: '나도 너무 보고 싶어 💜', alt: '나도 보고 싶어!' },
+          { rx: /^(?:我也爱你|我也好爱你呀?)$/, ko: '나도 사랑해 ❤️', alt: '나도 많이 사랑해!' },
+          { rx: /^(?:早安呀?|早上好呀?)[,，\s]*(?:欧巴|哥哥)?$/, ko: '오빠 좋은 아침! ☀️', alt: '잘 잤어? 좋은 아침!' },
+          { rx: /^(?:晚安呀?|晚安好梦)[,，\s]*(?:欧巴|哥哥)?$/, ko: '오빠 잘 자, 좋은 꿈 꿔 🌙', alt: '잘 자요 내 사랑 🌙' }
+        ];
+        if (srcLang === 'zh') {
+          for (const zc of ZH_COUPLE_EXACT) {
+            if (zc.rx.test(rawNorm)) {
+              return {
+                original: origRawText, translated: zc.ko, altTranslated: zc.alt, srcLang: 'zh', tgtLang: 'ko',
+                pronunciation: '', literal: zc.ko, tone: '💜 자연스러운 연인체', toneKo: '💜 자연스러운 연인체', toneZh: '💜 甜蜜自然口语',
+                nuance: '징찬이가 자주 쓰는 다정한 중국어 일상 표현이에요.', nuanceKo: '징찬이가 자주 쓰는 다정한 중국어 일상 표현이에요.',
+                nuanceZh: '自然亲切的情侣日常表达，已精准译为地道韩语半语。',
+                alts: [zc.alt], accuracy: 99, engine: '한중 커플 정밀 사전 💜'
+              };
+            }
+          }
         }
         if (/^(靖灿呀|靖灿)$/.test(normalized)) {
           const kOut = normalized === '靖灿呀' ? '징찬아' : '징찬';
@@ -7995,6 +8215,7 @@
       }
       window.__getActiveGeminiKey = __getActiveGeminiKey;
       async function __callGeminiCoupleTranslate(rawText, toneOverride) {
+        if ((state && state.settings && state.settings.chinaMode) || isMainlandChinaClient()) return null;
         const gKey = __getActiveGeminiKey();
         if (!gKey) return null;
         if (__cwEngineSkipUntil.gemini && Date.now() < __cwEngineSkipUntil.gemini) return null;
@@ -8164,11 +8385,16 @@
         const isValidRes = (r) => isPureTarget(r);
         // 3) Fast 1st-Arrival Free Race (never lets 5ms partial dictionary cut off real neural MT!)
         const nowTs = Date.now();
+        const skipGoogleInChina = !!(state && state.settings && state.settings.chinaMode) || isMainlandChinaClient();
         const jobs = [];
-        if (firstSkip !== 'google' && !(__cwEngineSkipUntil.google && nowTs < __cwEngineSkipUntil.google)) {
+        if (!skipGoogleInChina && firstSkip !== 'google' && !(__cwEngineSkipUntil.google && nowTs < __cwEngineSkipUntil.google)) {
           jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'mymemory', _isRetry: true }), 2600).then(r => { if (!isValidRes(r)) __cwEngineSkipUntil.google = Date.now() + 12000; return r; }));
         }
-        if (firstSkip !== 'mymemory') {
+        if (skipGoogleInChina) {
+          // Parallel race between SimplyTranslate & MyMemory so Mainland China gets <0.35s instant neural translation!
+          if (firstSkip !== 'simply') jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'mymemory', _isRetry: true }), 3200));
+          if (firstSkip !== 'mymemory') jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'simply', _isRetry: true }), 3500));
+        } else if (firstSkip !== 'mymemory') {
           jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride, { skipEngine: 'google', _isRetry: true }), 2800));
         }
         if (!jobs.length) jobs.push(raceWithCap(_coreTranslate(mtInput, toneOverride), 2800));
@@ -10019,7 +10245,8 @@
       const __cwBlobUrlMap = new Map();
       function __cwMediaUrl(raw, fallbackMime) {
         if (!raw || typeof raw !== 'string') return '';
-        if (!raw.startsWith('data:') || (raw.length < 45000 && !fallbackMime)) return raw;
+        if (raw.startsWith('data:image/')) return raw;
+        if (!raw.startsWith('data:') || (raw.length < 400000 && !fallbackMime)) return raw;
         const key = `${fallbackMime || ''}:${raw.length}:${raw.slice(0, 48)}:${raw.slice(-24)}`;
         const cached = __cwBlobUrlMap.get(key);
         if (cached) return cached;
@@ -10544,12 +10771,26 @@
         if (st) st.textContent = recording ? (isZh ? '正在录音... 读完点停止' : '녹음 중이에요! 다 읽으면 중지를 눌러주세요') : (isZh ? '点击下方按钮朗读，或导入手机录音文件' : '녹음 시작을 누르거나 휴대폰 녹음 파일을 불러오세요');
       }
 
+      let vrUsingNatBridge = false;
       function stopVrRecordingNow() {
         if (!vrIsRecording) return;
         const isZh = state.lang === 'zh';
         vrUpdateRecBtnUI(false);
         if (vrTimerInterval) { clearInterval(vrTimerInterval); vrTimerInterval = null; }
         if (activeRecordTimer) { clearTimeout(activeRecordTimer); activeRecordTimer = null; }
+        if (vrUsingNatBridge && window.ChanwanNative && typeof window.ChanwanNative.stopNativeAudioRecord === 'function') {
+          vrUsingNatBridge = false;
+          vrIsRecording = false;
+          let b64 = '';
+          try { b64 = String(window.ChanwanNative.stopNativeAudioRecord() || ''); } catch (_) {}
+          vrCleanupTracks();
+          if (b64.startsWith('data:audio/')) {
+            vrSetPreview(b64);
+            const st = document.getElementById('vrStatusText');
+            if (st) st.textContent = isZh ? '录音完成！先试听再点保存 💜' : '녹음 완료! 미리듣기 후 저장을 눌러주세요 💜';
+          }
+          return;
+        }
 
         if (activeVoiceRecorder && activeVoiceRecorder.state !== 'inactive') {
           try { activeVoiceRecorder.requestData && activeVoiceRecorder.requestData(); } catch (_) {}
@@ -10592,14 +10833,45 @@
 
         const isLocalFile = window.location && window.location.protocol === 'file:';
         const isEmbedded = (() => { try { return window.self !== window.top; } catch (_) { return true; } })();
+        if (window.ChanwanNative) {
+          const hasM = typeof window.ChanwanNative.hasMicPermission === 'function' ? !!window.ChanwanNative.hasMicPermission() : true;
+          if (!hasM && typeof window.ChanwanNative.requestMicPermission === 'function') {
+            window.ChanwanNative.requestMicPermission();
+            if (st) st.textContent = isZh ? '请在弹出的系统窗口点「允许」麦克风 💜' : '화면에 뜬 권한 창에서 마이크 「허용」을 눌러주세요 💜';
+            let p = 0;
+            const wt = setInterval(() => {
+              p++;
+              if (window.ChanwanNative.hasMicPermission && window.ChanwanNative.hasMicPermission()) {
+                clearInterval(wt);
+                startVrRecordingNow();
+              } else if (p >= 30) clearInterval(wt);
+            }, 250);
+            return;
+          }
+          if (typeof window.ChanwanNative.startNativeAudioRecord === 'function') {
+            try {
+              if (window.ChanwanNative.startNativeAudioRecord()) {
+                vrUsingNatBridge = true;
+                vrConnecting = false;
+                vrIsRecording = true;
+                vrStartTs = Date.now();
+                vrUpdateRecBtnUI(true);
+                const tEl = document.getElementById('vrTimerText');
+                if (tEl) tEl.textContent = '00:00';
+                vrTimerInterval = setInterval(() => {
+                  const sec = Math.floor((Date.now() - vrStartTs) / 1000);
+                  if (tEl) tEl.textContent = `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+                }, 250);
+                activeRecordTimer = setTimeout(() => { if (vrIsRecording) stopVrRecordingNow(); }, 30000);
+                return;
+              }
+            } catch (_) {}
+          }
+        }
         if (isLocalFile || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          // On local file:// HTML (where browsers block Web Mic API), open native phone mic/audio picker immediately in 1 tap!
-          const fi = document.getElementById('vrFileInput');
-          if (st) st.textContent = isZh ? '已打开手机录音/音频选择，录完后自动载入 💜' : '기기 녹음기/파일 선택창을 열었어요. 녹음하거나 파일을 고르면 바로 들어와요 💜';
-          if (fi) { fi.click(); return; }
           showMicFallbackNotice(
-            '로컬 HTML 파일에서는 브라우저 정책상 「🎙️ 기기 녹음·파일」 버튼으로 녹음해 주세요!',
-            '本地 HTML 文件请点击「🎙️ 手机录音·文件」直接录音哦！'
+            '현재 브라우저에서는 마이크 연결이 제한되어 있어요. 전용 앱에서 바로 녹음해 주세요 💜',
+            '当前浏览器不支持直接录音，请在灿完时光 App 内直接录音哦 💜'
           );
           return;
         }
@@ -10858,6 +11130,9 @@
 
       function applyLanguage(lang, silent) {
         state.lang = lang === 'zh' ? 'zh' : 'ko';
+        if (silent === false) {
+          try { localStorage.setItem('cw_user_explicit_lang', state.lang); } catch (_) {}
+        }
         document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'ko';
         const dict = I18N[state.lang];
         document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -12489,6 +12764,7 @@
             const isAutoVoiceCap = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/')) && /^(🎙️\s*)?(음성 메시지|语音消息)(\s*🎙️)?$/.test(String(m.original || '').trim());
             const isAutoMediaCaption = isAutoVoiceCap || (hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim()));
             const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
+            const isMissingPhotoBubble = !hasMedia && (/^(사진( \d+장)?을 보냈어요 📷|分享了(一张|\s*\d+\s*张)照片 📷)$/.test(String(m.original || '').trim()) || String(m.id || '').startsWith('msg_img_'));
             const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
             const isPureWcMsg = showText && !hasMedia && !m.sticker && typeof window.isPureWechatEmoticonMsg === 'function' && window.isPureWechatEmoticonMsg(String(m.original || '').trim());
             const isPurePunctMsg = showText && !hasMedia && !m.sticker && !isPureWcMsg && /^[?!.,~…·\-_:;'"()[\]{}+=/*\\|\s？！？。，、]+$/.test(String(m.original || '').trim());
@@ -12524,12 +12800,13 @@
                   <div class="cw-msg-bubble rounded-2xl ${hasMedia && !showText ? 'p-1.5' : 'px-3.5 py-2.5'} space-y-1.5 border" data-msg-id="${escapeHtml(m.id)}" style="background: ${mine ? 'var(--bubble-suwan)' : 'var(--bubble-jingchan)'}; border-color: ${mine ? 'rgba(255,255,255,0.22)' : 'var(--border-subtle)'}; color: ${mine ? '#ffffff' : 'var(--text-primary)'};">
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
                     ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof window.__pullCloudSync==='function'){if(window.__cwApi&&window.__cwApi.showToast)window.__cwApi.showToast((window.__cwApi.getState&&window.__cwApi.getState()?.lang==='zh')?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');window.__pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
+                    ${isMissingPhotoBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">📷 ${state.lang === 'zh' ? '正在同步照片 · 点此立即加载' : '사진 동기화 중 · 눌러서 바로 보기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">${CW_MEDIA_SVG.play}</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0 inline-flex items-center">${CW_MEDIA_SVG.waveMini}</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
-                      ? `<div class="${m.photoUrls.length === 2 ? 'cw-photo-grid-2' : 'cw-photo-grid-3'}">${m.photoUrls.map((u, uIdx) => `<button type="button" class="cw-photo-cell cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="${uIdx}"><img src="${__cwMediaUrl(u)}" alt="photo" loading="lazy" decoding="async" /></button>`).join('')}</div>`
+                      ? `<div class="${m.photoUrls.length === 2 ? 'cw-photo-grid-2' : 'cw-photo-grid-3'}">${m.photoUrls.map((u, uIdx) => `<button type="button" class="cw-photo-cell cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="${uIdx}"><img src="${__cwMediaUrl(u)}" alt="photo" decoding="async" /></button>`).join('')}</div>`
                       : (m.videoUrl ? `<div class="cw-photo-single relative"><video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><div class="absolute top-1.5 right-1.5 flex items-center gap-1"><a href="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" download="chanwan_video_${escapeHtml(m.id)}.mp4" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a><button type="button" class="cw-zoom-video px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" data-src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" title="전체화면">⛶</button></div></div>`
-                        : (m.photoUrl ? `<button type="button" class="${isGifMedia ? 'cw-gif-single' : 'cw-photo-single'} cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="0"><img src="${__cwMediaUrl(m.photoUrl)}" alt="photo" loading="lazy" decoding="async" /></button>` : ''))}
+                        : (m.photoUrl ? `<button type="button" class="${isGifMedia ? 'cw-gif-single' : 'cw-photo-single'} cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="0"><img src="${__cwMediaUrl(m.photoUrl)}" alt="photo" decoding="async" /></button>` : ''))}
                     ${showText ? renderChatLinkEmbed(m.original, mine) : ''}
                     ${showText ? `<div class="flex items-start justify-between gap-2"><div class="min-w-0 flex-1 cw-keep-native-emoji ${isEmojiMsg ? 'text-3xl leading-normal py-1 flex items-center justify-center flex-wrap gap-1 text-center' : (mine ? 'cw-orig-main text-[0.98rem] font-bold leading-snug break-words tracking-[-0.01em]' : 'cw-orig-sub text-[0.84rem] font-medium opacity-80 leading-snug break-words tracking-[-0.01em]')} ${m.sticker ? 'text-center font-bold text-xs' : ''}">${window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml(m.original), isPureWcMsg ? 42 : 22) : escapeHtml(m.original)}</div>${(!isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg && !isVoiceBubble) ? `<button type="button" class="speak-btn opacity-65 hover:opacity-100 shrink-0 pt-0.5 inline-flex items-center" data-text="${escapeHtml(m.original)}" data-lang="${origLang}" title="${state.lang === 'zh' ? 'AI 原文朗读' : '원문 듣기'}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>` : ''}</div>` : ''}
                     ${hasTrans ? `
@@ -13610,7 +13887,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return `
           <div class="royal-card rounded-2xl overflow-hidden flex flex-col">
             <div class="aspect-square overflow-hidden bg-purple-100/40 relative">
-              ${ph.mediaType === 'video' ? `<video src="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><a href="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" download="chanwan_album_${escapeHtml(ph.id)}.mp4" class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a>` : `<img src="${__cwMediaUrl(ph.dataUrl)}" alt="${escapeHtml(ph.caption)}" loading="lazy" decoding="async" class="cw-zoom-direct w-full h-full object-cover cursor-pointer" data-src="${__cwMediaUrl(ph.dataUrl)}" />`}
+              ${ph.mediaType === 'video' ? `<video src="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><a href="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" download="chanwan_album_${escapeHtml(ph.id)}.mp4" class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a>` : `<img src="${__cwMediaUrl(ph.dataUrl)}" alt="${escapeHtml(ph.caption)}" decoding="async" class="cw-zoom-direct w-full h-full object-cover cursor-pointer" data-src="${__cwMediaUrl(ph.dataUrl)}" />`}
               <span class="cw-keep-native-emoji absolute top-1.5 left-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: rgba(25, 16, 44, 0.72); color: #fffaf2;">${escapeHtml(catLabel)}</span>
             </div>
             <div class="p-2.5 space-y-1 flex-1 flex flex-col justify-between">
@@ -15921,6 +16198,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           showToast(state.lang === 'zh' ? '🎙️ 语音消息已发送！' : '🎙️ 음성 메시지를 보냈어요!');
           pushNotification('🎙️', `${senderName}의 음성 메시지`, `${senderName}发来语音消息`, '메신저에서 바로 들어보세요 💜', '快去聊天里听听吧 💜', 'translator', 'messenger', 'post', false, sender);
         };
+        window.__receiveNativeRecordedVoice = (dataUrl, sec) => {
+          document.getElementById('cwMicPermModal')?.classList.add('hidden');
+          const norm = normalizeAudioDataUrl(String(dataUrl || ''));
+          if (norm && norm.startsWith('data:audio/')) {
+            sendQuickVoiceBubble(norm);
+          }
+        };
         let pendingVoiceDataUrl = '', pendingVoiceAudio = null, pendingVoicePlaying = false;
         const setPrevPlayBtnState = (playing) => {
           const pBtn = document.getElementById('chatVoicePrevPlayBtn');
@@ -15981,10 +16265,24 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (urlToSend) sendQuickVoiceBubble(urlToSend);
         });
 
+        let cmUsingNativeBridgeRec = false;
         const stopCmRec = () => {
           if (!cmIsRec) return;
           if (cmTimer) { clearInterval(cmTimer); cmTimer = null; }
           if (cmMax) { clearTimeout(cmMax); cmMax = null; }
+          if (cmUsingNativeBridgeRec && window.ChanwanNative && typeof window.ChanwanNative.stopNativeAudioRecord === 'function') {
+            cmUsingNativeBridgeRec = false;
+            const recMs = Date.now() - cmStartTs;
+            let b64Url = '';
+            try { b64Url = String(window.ChanwanNative.stopNativeAudioRecord() || ''); } catch (_) {}
+            cmCleanup();
+            if (recMs >= 600 && b64Url.startsWith('data:audio/')) {
+              sendQuickVoiceBubble(b64Url);
+            } else {
+              showToast(state.lang === 'zh' ? '录音时间太短已取消（请录满1秒）' : '녹음이 너무 짧아 취소됐어요 (1초 이상 말씀해 주세요)');
+            }
+            return;
+          }
           if (cmRec && cmRec.state !== 'inactive') {
             try { cmRec.requestData && cmRec.requestData(); } catch (_) {}
             try { cmRec.stop(); } catch (_) { cmCleanup(); }
@@ -15994,53 +16292,122 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const sec = Math.max(1, Math.round((Date.now() - cmStartTs) / 1000));
             const sr = cmPcmCtx ? cmPcmCtx.sampleRate : 16000;
             const wav = encodePcmToWavDataUrl(cmPcmBufs, sr);
-            cmPcmBufs = []; cmCleanup(); openVoiceConfirmBar(wav, sec);
+            cmPcmBufs = []; cmCleanup(); sendQuickVoiceBubble(wav);
             return;
           }
           cmCleanup();
         };
-        const openCwMicPermModal = () => {
+        const openCwMicPermModal = (customReason) => {
           const modal = document.getElementById('cwMicPermModal');
           if (!modal) return;
           const isZh = state.lang === 'zh';
           const hasNat = typeof window.ChanwanNative !== 'undefined';
+          const webMicSupported = !!(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function');
           const ttl = document.getElementById('cwMicModalTitle');
           const dsc = document.getElementById('cwMicModalDesc');
           const reqBtn = document.getElementById('cwMicRequestNowBtn');
           const setBtn = document.getElementById('cwMicOpenSettingsBtn');
-          const natBtn = document.getElementById('cwMicNativeRecBtn');
-          if (ttl) ttl.textContent = isZh ? '开启麦克风 · 发送语音消息' : '마이크 권한 허용 · 음성 보내기';
-          if (dsc) dsc.textContent = isZh
-            ? (hasNat ? '点击下方「立即允许麦克风」即可弹出系统授权窗口；若已点过不再询问，可一键打开权限设置，或直接用手机录音发送 💜' : '点击下方按钮弹出麦克风权限窗口；如果浏览器已拦截，也可以直接用手机录音机录制发送 💜')
-            : (hasNat ? '아래 「지금 마이크 권한 허용하기」를 누르면 바로 권한 허용 창이 떠요! 만약 이전에 거절했다면 「앱 권한 설정 바로 열기」나 「휴대폰 녹음기로 바로 보내기」를 눌러 주세요 💜' : '아래 버튼을 눌러 마이크 허용 창을 띄우거나, 바로 휴대폰 녹음기로 녹음해 보낼 수 있어요 💜');
-          if (reqBtn) reqBtn.textContent = isZh ? '🎙️ 立即允许麦克风并开始录音' : '🎙️ 지금 마이크 권한 허용하고 녹음하기';
+
+          if (ttl) ttl.textContent = isZh ? '开启麦克风 · 应用内直接录音' : '앱 안에서 바로 음성 녹음하기';
+          if (dsc) {
+            if (customReason === 'denied_browser' && hasNat) {
+              dsc.textContent = isZh
+                ? '请在权限设置中将「麦克风」开启，返回后即可直接在应用内录音发送 💜'
+                : '아래 노란 「앱 권한 설정 바로 열기」를 눌러 「권한 → 마이크 → 허용」을 켜주시면 앱 안에서 바로 녹음돼요 💜';
+            } else if (customReason === 'denied_browser') {
+              dsc.textContent = isZh
+                ? '⚠️ 浏览器已拦截麦克风！请点击地址栏左侧「🔒 图标 → 网站设置 → 允许麦克风」后再试 💜'
+                : '⚠️ 브라우저에서 마이크가 차단되어 있어요! 주소창 왼쪽 「🔒 자물쇠 → 권한 → 마이크 허용」을 켜고 다시 눌러 주세요 💜';
+            } else {
+              dsc.textContent = isZh
+                ? '点击下方紫色按钮，在弹出的窗口点击「允许」即可直接在聊天窗内录音 💜'
+                : '아래 보라색 버튼을 누르고 권한 창에서 「허용」을 누르면, 다른 화면 이동 없이 채팅창 안에서 바로 녹음돼요 💜';
+            }
+          }
+          if (reqBtn) {
+            reqBtn.classList.toggle('hidden', !hasNat && !webMicSupported);
+            reqBtn.textContent = isZh ? '🎙️ 在应用内允许麦克风并开始录音' : '🎙️ 앱 안에서 마이크 허용 · 바로 녹음하기';
+          }
+          const natRecLabel = document.getElementById('cwMicNativeRecBtn');
+          const isSamsungUa = /Samsung|SM-|SAMSUNG/i.test(navigator.userAgent || '');
+          if (natRecLabel) {
+            const showWebRecorderLabel = !hasNat && !isSamsungUa;
+            natRecLabel.classList.toggle('hidden', !showWebRecorderLabel);
+            natRecLabel.textContent = isZh ? '📱 用手机自带录音机直接录制发送' : '📱 휴대폰 녹음기로 바로 보내기';
+          }
           if (setBtn) {
-            setBtn.textContent = isZh ? '⚙️ 打开灿完时光权限设置' : '⚙️ 灿完时光 권한 설정 바로 열기';
+            setBtn.textContent = isZh ? '⚙️ 打开应用权限设置（开启麦克风）' : '⚙️ 앱 권한 설정 바로 열기 (마이크 켜기)';
             setBtn.classList.toggle('hidden', !(hasNat && typeof window.ChanwanNative.openAppSettings === 'function'));
           }
-          if (natBtn) natBtn.textContent = isZh ? '📱 用手机自带录音机直接发送' : '📱 휴대폰 기본 녹음기로 바로 녹음·전송';
           modal.classList.remove('hidden');
         };
         window.__openCwMicPermModal = openCwMicPermModal;
+
+        const buildLiveRecBadgeHtml = (tLabel) => `<span class="inline-flex items-center gap-1.5">${CW_MEDIA_SVG.stopBadge}<svg viewBox="0 0 15 16" width="13" height="13" fill="none"><line class="cw-wave-bar" x1="2.5" y1="4" x2="2.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b2" x1="7.5" y1="2" x2="7.5" y2="14" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b3" x1="12.5" y1="4" x2="12.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></svg><span class="text-[10.5px] font-bold tabular-nums leading-none">${tLabel}</span></span>`;
 
         const startCmVoiceRecording = async (fromModalRetry) => {
           const isZh = state.lang === 'zh';
           if (cmIsRec) { stopCmRec(); return; }
           if (cmConnecting) return;
-          // Stop any active SpeechRecognition first so Android mic hardware isn't locked!
           try { if (typeof stopVoiceRecognition === 'function') stopVoiceRecognition(); } catch (_) {}
-          if (window.ChanwanNative && typeof window.ChanwanNative.requestMicPermission === 'function') {
-            try {
-              const hasMic = typeof window.ChanwanNative.hasMicPermission === 'function' ? window.ChanwanNative.hasMicPermission() : true;
-              if (!hasMic) {
-                window.ChanwanNative.requestMicPermission();
-                if (!fromModalRetry) { openCwMicPermModal(); return; }
-                await new Promise(r => setTimeout(r, 900));
+
+          // Engine 0 (100% Bulletproof Native APK MediaRecorder — bypasses WebView getUserMedia bugs completely!)
+          const hasNativeApkBridge = typeof window.ChanwanNative !== 'undefined';
+          if (hasNativeApkBridge) {
+            const hasMic = typeof window.ChanwanNative.hasMicPermission === 'function' ? !!window.ChanwanNative.hasMicPermission() : false;
+            if (!hasMic) {
+              if (typeof window.ChanwanNative.requestMicPermission === 'function') {
+                try { window.ChanwanNative.requestMicPermission(); } catch (_) {}
               }
-            } catch (_) {}
+              showToast(isZh ? '🎙️ 请在系统弹窗点「允许」即可立即开始录音！' : '🎙️ 권한 허용을 누르시면 바로 녹음이 시작돼요!');
+              let pCnt = 0;
+              const pWatch = setInterval(() => {
+                pCnt++;
+                let nowGranted = false;
+                try { nowGranted = !!(window.ChanwanNative && window.ChanwanNative.hasMicPermission && window.ChanwanNative.hasMicPermission()); } catch (_) {}
+                if (nowGranted) {
+                  clearInterval(pWatch);
+                  document.getElementById('cwMicPermModal')?.classList.add('hidden');
+                  startCmVoiceRecording(true);
+                } else if (pCnt === 7 && !fromModalRetry) {
+                  // OS dialog was suppressed by Android -> jump straight to App Permission Settings without annoying intermediate modal!
+                  if (window.ChanwanNative && typeof window.ChanwanNative.openAppSettings === 'function') {
+                    showToast(isZh ? '⚙️ 请在「权限 → 麦克风」开启允许，返回即可直接录音 💜' : '⚙️ 「권한 → 마이크 → 허용」만 한 번 켜주시면 앞으로 누르자마자 바로 녹음돼요 💜');
+                    try { window.ChanwanNative.openAppSettings(); } catch (_) {}
+                  }
+                } else if (pCnt >= 48) {
+                  clearInterval(pWatch);
+                }
+              }, 250);
+              return;
+            }
+            if (typeof window.ChanwanNative.startNativeAudioRecord === 'function') {
+              try {
+                const startedNat = !!window.ChanwanNative.startNativeAudioRecord();
+                if (startedNat) {
+                  document.getElementById('cwMicPermModal')?.classList.add('hidden');
+                  cmUsingNativeBridgeRec = true;
+                  cmConnecting = false;
+                  cmIsRec = true;
+                  cmStartTs = Date.now();
+                  if (chatVoiceBtn) {
+                    chatVoiceBtn.classList.remove('btn-ghost');
+                    chatVoiceBtn.classList.add('cw-vrec-active');
+                    chatVoiceBtn.innerHTML = buildLiveRecBadgeHtml('0:00');
+                  }
+                  cmTimer = setInterval(() => {
+                    const sec = Math.floor((Date.now() - cmStartTs) / 1000);
+                    if (chatVoiceBtn) chatVoiceBtn.innerHTML = buildLiveRecBadgeHtml(`${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`);
+                  }, 500);
+                  cmMax = setTimeout(() => { if (cmIsRec) stopCmRec(); }, 45000);
+                  return;
+                }
+              } catch (_) {}
+            }
           }
+
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            openCwMicPermModal();
+            openCwMicPermModal('unsupported');
             return;
           }
           cmConnecting = true;
@@ -16049,20 +16416,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const stream = await requestSafeAudioStream();
             document.getElementById('cwMicPermModal')?.classList.add('hidden');
             cmConnecting = false; cmStream = stream; cmIsRec = true; cmStartTs = Date.now();
-            const buildLiveRecHtml = (tLabel) => `<span class="inline-flex items-center gap-1.5">${CW_MEDIA_SVG.stopBadge}<svg viewBox="0 0 15 16" width="13" height="13" fill="none"><line class="cw-wave-bar" x1="2.5" y1="4" x2="2.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b2" x1="7.5" y1="2" x2="7.5" y2="14" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/><line class="cw-wave-bar b3" x1="12.5" y1="4" x2="12.5" y2="12" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/></svg><span class="text-[10.5px] font-bold tabular-nums leading-none">${tLabel}</span></span>`;
             if (chatVoiceBtn) {
               chatVoiceBtn.classList.remove('btn-ghost');
               chatVoiceBtn.classList.add('cw-vrec-active');
-              chatVoiceBtn.innerHTML = buildLiveRecHtml('0:00');
+              chatVoiceBtn.innerHTML = buildLiveRecBadgeHtml('0:00');
             }
             cmTimer = setInterval(() => {
               const sec = Math.floor((Date.now() - cmStartTs) / 1000);
-              if (chatVoiceBtn) chatVoiceBtn.innerHTML = buildLiveRecHtml(`${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`);
+              if (chatVoiceBtn) chatVoiceBtn.innerHTML = buildLiveRecBadgeHtml(`${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`);
             }, 500);
             let ok = false;
             if (typeof MediaRecorder !== 'undefined') {
               try {
-                // Prioritize WebM Opus first for Android WebView compatibility (audio/mp4 often produces 0-byte blobs on Android WebView!)
                 const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
                 const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
                 const chunks = [];
@@ -16079,13 +16444,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                       r.onloadend = () => {
                         let dUrl = String(r.result || '');
                         if (dUrl.startsWith('data:video/')) dUrl = 'data:audio/' + dUrl.slice(11);
-                        openVoiceConfirmBar(dUrl, sec);
+                        sendQuickVoiceBubble(dUrl);
                       };
                       r.readAsDataURL(blob);
                     } else if (cmPcmBufs.length) {
                       const sec = Math.max(1, Math.round(recMs / 1000));
                       const sr = cmPcmCtx ? cmPcmCtx.sampleRate : 16000;
-                      openVoiceConfirmBar(encodePcmToWavDataUrl(cmPcmBufs, sr), sec);
+                      sendQuickVoiceBubble(encodePcmToWavDataUrl(cmPcmBufs, sr));
                     } else {
                       showToast(state.lang === 'zh' ? '录音时间太短已自动取消（请录满1秒）' : '녹음이 너무 짧아 취소됐어요 (1초 이상 말씀해 주세요)');
                     }
@@ -16108,22 +16473,32 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             cmMax = setTimeout(() => { if (cmIsRec) stopCmRec(); }, 45000);
           } catch (recErr) {
             cmCleanup();
-            if (fromModalRetry) {
-              const isZhR = state.lang === 'zh';
-              const natInp = document.getElementById('cwNativeVoiceCaptureInput');
-              showToast(isZhR
-                ? '📱 正在打开手机录音机（安装最新 v43 APK 即可应用内一键直录）'
-                : '📱 기본 녹음기를 열어요! (권한이 꺼져 있다면 앱 권한에서 마이크를 켜거나 최신 v43 APK를 설치해 주세요)');
-              if (natInp) { try { natInp.click(); return; } catch (_) {} }
+            if (typeof window.ChanwanNative !== 'undefined' && typeof window.ChanwanNative.startNativeAudioRecord !== 'function') {
+              showToast(state.lang === 'zh'
+                ? '📲 当前旧版 App 缺少录音引擎，请安装最新 APK (v49) 后即可一键直录 💜'
+                : '📲 현재 휴대폰에 예전 버전 APK가 깔려 있어요! 최신 APK(v49)를 한 번만 덮어쓰기 설치하면 누르자마자 바로 녹음돼요 💜');
+              return;
             }
-            openCwMicPermModal();
+            const isSamsungWeb = /Samsung|SM-|SAMSUNG/i.test(navigator.userAgent || '');
+            if (typeof window.ChanwanNative === 'undefined' && !isSamsungWeb) {
+              openCwMicPermModal('denied_browser');
+            } else {
+              showToast(state.lang === 'zh'
+                ? '🎙️ 请允许麦克风权限后再试'
+                : '🎙️ 마이크 권한을 허용으로 켜주시면 누르자마자 바로 녹음돼요 💜');
+            }
           }
+        };
+
+        window.__onNativeMicGranted = () => {
+          document.getElementById('cwMicPermModal')?.classList.add('hidden');
+          startCmVoiceRecording(true);
         };
 
         if (chatVoiceBtn) {
           chatVoiceBtn.addEventListener('click', () => startCmVoiceRecording(false));
         }
-        // Delegated listeners so #cwMicPermModal buttons (✕, backdrop, 허용하고 녹음하기, 권한 설정 열기, 기본 녹음기) ALWAYS respond in 0ms regardless of DOM order!
+        // Delegated listeners for #cwMicPermModal (Note: #cwMicNativeRecBtn is now a native <label for="cwNativeVoiceCaptureInput"> so browser opens recorder natively!)
         document.addEventListener('click', (e) => {
           const t = e.target;
           if (!t || !t.closest) return;
@@ -16136,42 +16511,58 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (window.ChanwanNative && typeof window.ChanwanNative.openAppSettings === 'function') {
               try { window.ChanwanNative.openAppSettings(); } catch (_) {}
             } else {
-              showToast(state.lang === 'zh' ? '请在手机系统设置中开启浏览器麦克风权限' : '휴대폰 설정 → 애플리케이션 → 권한에서 마이크를 허용해 주세요');
+              showToast(state.lang === 'zh' ? '请点浏览器地址栏旁 🔒 图标允许麦克风' : '주소창 옆 🔒 아이콘 → 사이트 설정에서 마이크를 허용해 주세요');
             }
-            return;
-          }
-          if (t.closest('#cwMicNativeRecBtn')) {
-            const natInp = document.getElementById('cwNativeVoiceCaptureInput');
-            if (natInp) natInp.click();
             return;
           }
           if (t.closest('#cwMicRequestNowBtn')) {
             document.getElementById('cwMicPermModal')?.classList.add('hidden');
-            const hasNat = !!(window.ChanwanNative && typeof window.ChanwanNative.requestMicPermission === 'function');
-            const alreadyGranted = hasNat && typeof window.ChanwanNative.hasMicPermission === 'function'
-              ? !!window.ChanwanNative.hasMicPermission()
-              : true;
-            if (alreadyGranted) {
-              // Call synchronously inside user tap gesture so Chromium WebView never blocks getUserMedia!
-              startCmVoiceRecording(true);
-            } else {
-              try { window.ChanwanNative.requestMicPermission(); } catch (_) {}
-              showToast(state.lang === 'zh' ? '🎙️ 请在系统弹窗点「允许」，授权后自动开始录音！' : '🎙️ 시스템 팝업에서 「허용」을 누르면 바로 녹음이 시작돼요!');
-              let polls = 0;
-              const waitTimer = setInterval(() => {
-                polls++;
-                let grantedNow = false;
-                try { grantedNow = !!(window.ChanwanNative && window.ChanwanNative.hasMicPermission && window.ChanwanNative.hasMicPermission()); } catch (_) {}
-                if (grantedNow) {
-                  clearInterval(waitTimer);
-                  startCmVoiceRecording(true);
-                } else if (polls >= 32) {
-                  clearInterval(waitTimer);
-                }
-              }, 250);
+            startCmVoiceRecording(true);
+            return;
+          }
+          if (t.id === 'cwInAppUpdateModal' || t.closest('#cwInAppUpdCloseBtn') || t.closest('#cwInAppUpdLaterBtn')) {
+            document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
+            try { sessionStorage.setItem('cw_dismiss_apk_upd_v49', '1'); } catch (_) {}
+            return;
+          }
+          if (t.closest('#cwInAppUpdInstallBtn') || t.closest('#directApkDownloadBtn')) {
+            e.preventDefault();
+            document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
+            const apkUrl = 'https://swans8562-sudo.github.io/chanwan/chanwan-shiguang.apk?v=48';
+            if (window.ChanwanNative && typeof window.ChanwanNative.downloadAndInstallApk === 'function') {
+              try { window.ChanwanNative.downloadAndInstallApk(apkUrl); return; } catch (_) {}
             }
+            if (window.ChanwanNative && typeof window.ChanwanNative.openExternalUrl === 'function') {
+              try { window.ChanwanNative.openExternalUrl(apkUrl); return; } catch (_) {}
+            }
+            window.location.href = apkUrl;
           }
         });
+
+        // Automatic In-App APK Update Popup when running an older APK inside the app!
+        setTimeout(() => {
+          try {
+            if (typeof window.ChanwanNative === 'undefined') return;
+            const curApkVer = typeof window.ChanwanNative.getApkVersion === 'function' ? Number(window.ChanwanNative.getApkVersion() || 0) : 43;
+            if (curApkVer >= 49 || sessionStorage.getItem('cw_dismiss_apk_upd_v49') === '1') return;
+            fetch('./chanwan-shiguang.apk?_chk=' + Date.now(), { method: 'HEAD', cache: 'no-store' }).then((r) => {
+              if (!r || !r.ok) return;
+              const isZh = state.lang === 'zh';
+              const modal = document.getElementById('cwInAppUpdateModal');
+              const ttl = document.getElementById('cwInAppUpdTitle');
+              const dsc = document.getElementById('cwInAppUpdDesc');
+              const btn = document.getElementById('cwInAppUpdInstallBtn');
+              const lat = document.getElementById('cwInAppUpdLaterBtn');
+              if (ttl) ttl.textContent = isZh ? '✨ 发现灿完时光新版 App (v49)' : '✨ 새 버전 앱 업데이트 도착 (v49)';
+              if (dsc) dsc.textContent = isZh
+                ? '聊天、相册与学习记录全部保留！升级后支持应用内原生录音与更稳后台推送 💜'
+                : '대화·사진·학습 기록은 그대로 유지되며, 앱 내 순정 음성 녹음과 백그라운드 알림이 한층 강화되었어요 💜';
+              if (btn) btn.textContent = isZh ? '📲 立即在应用内一键更新' : '📲 지금 앱 안에서 바로 업데이트';
+              if (lat) lat.textContent = isZh ? '稍后再说' : '나중에 하기';
+              if (modal) modal.classList.remove('hidden');
+            }).catch(() => {});
+          } catch (_) {}
+        }, 2800);
         document.addEventListener('change', (e) => {
           const inp = e.target;
           if (!inp || inp.id !== 'cwNativeVoiceCaptureInput') return;
@@ -16181,7 +16572,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const r = new FileReader();
           r.onloadend = () => {
             const dUrl = normalizeAudioDataUrl(String(r.result || ''));
-            openVoiceConfirmBar(dUrl, Math.max(2, Math.round((f.size || 16000) / 8000)));
+            sendQuickVoiceBubble(dUrl);
           };
           r.readAsDataURL(f);
           inp.value = '';
@@ -16191,7 +16582,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v64',
+          ver: 'Prime 4 · v71',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16213,7 +16604,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v64 更新日志' : '📜 灿完时光 Prime 4 · v64 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v71 更新日志' : '📜 灿完时光 Prime 4 · v71 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -18241,6 +18632,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
         }
 
+        let vlUsingNatBridge = false;
         function vlStopRec() {
           if (!vlIsRec) return;
           const isZh = state.lang === 'zh';
@@ -18251,6 +18643,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (dot) dot.style.background = '#a855f7';
           if (vlTimer) { clearInterval(vlTimer); vlTimer = null; }
           if (vlMaxTimer) { clearTimeout(vlMaxTimer); vlMaxTimer = null; }
+          if (vlUsingNatBridge && window.ChanwanNative && typeof window.ChanwanNative.stopNativeAudioRecord === 'function') {
+            vlUsingNatBridge = false;
+            vlIsRec = false;
+            let b64 = '';
+            try { b64 = String(window.ChanwanNative.stopNativeAudioRecord() || ''); } catch (_) {}
+            vlCleanup();
+            if (b64.startsWith('data:audio/')) {
+              vlSetPreview(b64);
+              if (st) st.textContent = isZh ? '录音完成！试听后点发送 💌' : '녹음 완료! 미리듣기 후 보내기를 눌러주세요 💌';
+            }
+            return;
+          }
           if (vlRecorder && vlRecorder.state !== 'inactive') {
             try { vlRecorder.requestData && vlRecorder.requestData(); } catch (_) {}
             try { vlRecorder.stop(); } catch (_) { vlCleanup(); }
@@ -18286,9 +18690,44 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const dot = document.getElementById('vlStatusDot');
             const isLocal = window.location && window.location.protocol === 'file:';
             const isEmb = (() => { try { return window.self !== window.top; } catch (_) { return true; } })();
+            if (window.ChanwanNative) {
+              const hasM = typeof window.ChanwanNative.hasMicPermission === 'function' ? !!window.ChanwanNative.hasMicPermission() : true;
+              if (!hasM && typeof window.ChanwanNative.requestMicPermission === 'function') {
+                window.ChanwanNative.requestMicPermission();
+                if (st) st.textContent = isZh ? '请在系统弹窗点「允许」麦克风 💜' : '화면에 뜬 권한 창에서 마이크 「허용」을 눌러주세요 💜';
+                let p = 0;
+                const wt = setInterval(() => {
+                  p++;
+                  if (window.ChanwanNative.hasMicPermission && window.ChanwanNative.hasMicPermission()) {
+                    clearInterval(wt);
+                    vlRecBtn.click();
+                  } else if (p >= 30) clearInterval(wt);
+                }, 250);
+                return;
+              }
+              if (typeof window.ChanwanNative.startNativeAudioRecord === 'function') {
+                try {
+                  if (window.ChanwanNative.startNativeAudioRecord()) {
+                    vlUsingNatBridge = true;
+                    vlConnecting = false; vlIsRec = true; vlStartTs = Date.now();
+                    vlRecBtn.innerHTML = `<span class="inline-flex items-center gap-1.5">${CW_MEDIA_SVG.stopBadge}<span>${isZh ? '停止录音' : '녹음 중지'}</span></span>`;
+                    vlRecBtn.classList.add('badge-pulse');
+                    if (dot) dot.style.background = '#e11d48';
+                    if (st) st.textContent = isZh ? '正在录制语音信... 说完点停止' : '음성 편지 녹음 중! 다 말하면 중지를 눌러주세요';
+                    const tEl = document.getElementById('vlTimerText');
+                    if (tEl) tEl.textContent = '00:00';
+                    vlTimer = setInterval(() => {
+                      const sec = Math.floor((Date.now() - vlStartTs) / 1000);
+                      if (tEl) tEl.textContent = `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+                    }, 250);
+                    vlMaxTimer = setTimeout(() => { if (vlIsRec) vlStopRec(); }, 60000);
+                    return;
+                  }
+                } catch (_) {}
+              }
+            }
             if (isLocal || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-              const fi = document.getElementById('vlFileInput');
-              if (fi) { fi.click(); return; }
+              if (st) st.textContent = isZh ? '当前浏览器不支持直录，请在专属 App 内录音 💜' : '전용 앱 안에서 바로 녹음하실 수 있어요 💜';
               return;
             }
             vlConnecting = true;
@@ -18872,6 +19311,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               saveState(true);
               renderAll();
               refreshBothCityWeathers();
+
+        // Gentle 1-line "Add to Home Screen (添加到桌面)" tip for Jingchan's Huawei Browser so she can use full-screen without browser bars!
+        setTimeout(() => {
+          try {
+            if (typeof window.ChanwanNative !== 'undefined') return;
+            const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+            if (isStandalone || !isMainlandChinaClient()) return;
+            if (localStorage.getItem('cw_hide_china_pwa_tip_v1') === '1') return;
+            const homeTab = document.getElementById('tab-home');
+            if (!homeTab || document.getElementById('cwChinaPwaTipBar')) return;
+            const isWechat = /MicroMessenger/i.test(navigator.userAgent || '');
+            const bar = document.createElement('div');
+            bar.id = 'cwChinaPwaTipBar';
+            bar.className = 'royal-card rounded-2xl px-3.5 py-2.5 mb-2.5 flex items-center justify-between gap-2 text-xs';
+            bar.style.border = '1px solid var(--border-accent)';
+            bar.innerHTML = `<div class="leading-snug">${isWechat ? '💡 点右上角「<b>⋯ → 在浏览器打开</b>」并<b>添加到桌面</b>，即可像 App 一样全屏秒开收发消息 💜' : '💡 点浏览器右下角菜单「<b>添加到桌面 / 主屏幕</b>」，全屏无边框更流畅 💜'}</div><button type="button" id="cwCloseChinaTipBtn" class="btn-ghost w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[11px]">✕</button>`;
+            homeTab.insertBefore(bar, homeTab.firstChild);
+            document.getElementById('cwCloseChinaTipBtn')?.addEventListener('click', () => {
+              try { localStorage.setItem('cw_hide_china_pwa_tip_v1', '1'); } catch (_) {}
+              bar.remove();
+            });
+          } catch (_) {}
+        }, 1400);
+
               if (typeof window.__syncCloudLearnVaultNow === 'function') window.__syncCloudLearnVaultNow();
               if (typeof window.__pushFullCloudSync === 'function') window.__pushFullCloudSync();
               const isZhImp = state.lang === 'zh';
@@ -18977,22 +19440,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (chinaCb) chinaCb.checked = on;
           if (chinaLbl) chinaLbl.textContent = on ? (state.lang === 'zh' ? '直连开启' : '직통 ON') : (state.lang === 'zh' ? '智能自动' : '자동');
         }
+                // Run Mainland China auto-optimization IMMEDIATELY on boot (not inside click handler!)
+        try {
+          if (isMainlandChinaClient()) {
+            if (!state.settings) state.settings = {};
+            if (localStorage.getItem('cw_user_explicit_chinamode') !== '0') {
+              state.settings.chinaMode = true;
+            }
+            if (!localStorage.getItem('cw_my_role')) {
+              state.myRole = 'jingchan';
+            }
+            const expLang = localStorage.getItem('cw_user_explicit_lang') || '';
+            if (!expLang && state.lang !== 'zh') {
+              applyLanguage('zh', true);
+            }
+          }
+        } catch (_) {}
         if (chinaCb) {
           chinaCb.addEventListener('change', () => {
             if (!state.settings) state.settings = {};
             state.settings.chinaMode = chinaCb.checked;
-            saveState();
-            // Auto-detect Mainland China / Baidu / WeChat / QQ Browser -> automatically enable China Direct Mode (No VPN needed!)
-        try {
-          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-          const ua = navigator.userAgent || '';
-          const isChinaEnv = (/Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)/i.test(tz) || /baiduboxapp|Baidu|BIDUBrowser/i.test(ua)) && !/Asia\/Seoul/i.test(tz);
-          if (isChinaEnv && state.settings && typeof state.settings.chinaMode === 'undefined') {
-            state.settings.chinaMode = true;
-            saveState();
-          }
-        } catch (_) {}
-        syncChinaModeUi();
+            try { localStorage.setItem('cw_user_explicit_chinamode', chinaCb.checked ? '1' : '0'); } catch (_) {}
+            saveState(false);
+            syncChinaModeUi();
             showToast(chinaCb.checked
               ? (state.lang === 'zh' ? '🇨🇳 已开启中国大陆直连优化模式' : '🇨🇳 중국 직통 최적화 모드가 켜졌어요')
               : (state.lang === 'zh' ? '🌐 已切换为智能多线路模式' : '🌐 자동 다중 경로 모드로 전환됐어요'));
@@ -19159,7 +19629,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         function applyMyRole(role, silent) {
           state.myRole = role === 'jingchan' ? 'jingchan' : 'suwan';
-          try { localStorage.setItem('cw_my_role', state.myRole); } catch (_) {}
+          if (!silent) { try { localStorage.setItem('cw_my_role', state.myRole); } catch (_) {} }
           try {
             if (window.ChanwanNative && typeof window.ChanwanNative.setRole === 'function') {
               window.ChanwanNative.setRole(state.myRole);
@@ -19451,7 +19921,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (cwE2eePrivateRoom) return cwE2eePrivateRoom;
           if (!state.settings) state.settings = {};
           if (!state.settings.cloudSyncRoom) state.settings.cloudSyncRoom = DEFAULT_COUPLE_ROOM;
-          return String(state.settings.cloudSyncRoom).trim().replace(/[^a-zA-Z0-9_-]/g, '') || DEFAULT_COUPLE_ROOM;
+          const rCode = String(state.settings.cloudSyncRoom).trim().replace(/[^a-zA-Z0-9_-]/g, '') || DEFAULT_COUPLE_ROOM;
+          if (window.ChanwanNative && typeof window.ChanwanNative.setRoom === 'function' && window.__lastSyncedNatRoom !== rCode) {
+            window.__lastSyncedNatRoom = rCode;
+            try { window.ChanwanNative.setRoom(rCode); } catch (_) {}
+          }
+          return rCode;
         }
 
         function updateLiveSyncIndicators(connected, room) {
@@ -19638,6 +20113,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!ex) continue;
               const __cmIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(cm.translated || '').trim());
               const __exIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(ex.translated || '').trim());
+              if (cm.readByPartner && !ex.readByPartner) {
+                ex.readByPartner = true;
+                ex.deliveryStatus = 'sent';
+                changed = true;
+                chatChanged = true;
+              }
+              if (Array.isArray(cm.reactions) && cm.reactions.length > (Array.isArray(ex.reactions) ? ex.reactions.length : 0)) {
+                ex.reactions = cm.reactions.slice(0, 12);
+                changed = true;
+                chatChanged = true;
+              }
               if (cm.translated && !__cmIsPending && (!ex.translated || __exIsPending || Number(cm.accuracy || 0) >= Number(ex.accuracy || 0) || (cm.editedAt && cm.editedAt > (ex.editedAt || 0)))) {
                 ex.original = cm.original || ex.original;
                 ex.translated = cm.translated;
@@ -19855,7 +20341,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 if (typeof window.__renderPresenceBadges === 'function') window.__renderPresenceBadges();
                 changed = true;
               }
+              const rkRead = rk + 'ReadUpToTs';
+              const incRd = Number(inc.profile[rkRead] || 0);
+              const curRd = Number(state.profile[rkRead] || 0);
+              if (incRd > curRd) {
+                state.profile[rkRead] = incRd;
+                changed = true;
+              }
             });
+            const __myRoleNow = state.myRole || 'suwan';
+            const __partnerRoleNow = __myRoleNow === 'suwan' ? 'jingchan' : 'suwan';
+            const __partnerReadWatermark = Number(state.profile[__partnerRoleNow + 'ReadUpToTs'] || 0);
+            if (__partnerReadWatermark > 0 && Array.isArray(state.chat?.messages)) {
+              state.chat.messages.forEach(m => {
+                if (!m || m.readByPartner) return;
+                const _ns = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+                if (_ns === __myRoleNow && Number(m.ts || 0) > 0 && Number(m.ts || 0) <= __partnerReadWatermark) {
+                  m.readByPartner = true;
+                  m.deliveryStatus = 'sent';
+                  changed = true;
+                  chatChanged = true;
+                }
+              });
+            }
             if (inc.profile.jingchanSleep && Number(inc.profile.jingchanSleep.updatedAt || 0) > Number(state.profile.jingchanSleep?.updatedAt || 0)) {
               state.profile.jingchanSleep = { ...inc.profile.jingchanSleep };
               changed = true;
@@ -20491,6 +20999,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               jingchanActivity: coreObj.profile?.jingchanActivity || '',
               suwanActivityUpdatedAt: Number(coreObj.profile?.suwanActivityUpdatedAt || 0),
               jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
+              suwanLastSeen: Number(coreObj.profile?.suwanLastSeen || 0),
+              jingchanLastSeen: Number(coreObj.profile?.jingchanLastSeen || 0),
+              suwanReadUpToTs: Number(coreObj.profile?.suwanReadUpToTs || 0),
+              jingchanReadUpToTs: Number(coreObj.profile?.jingchanReadUpToTs || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
@@ -20507,7 +21019,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 translated: String(m.translated || '').slice(0, 220),
                 pronunciation: String(m.pronunciation || '').slice(0, 120),
                 tone: m.tone || '', engine: m.engine || '', tgtLang: m.tgtLang || '',
-                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, reactions: m.reactions || []
+                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || []
               })),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 2)
             },
@@ -20539,7 +21051,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 original: String(m.original || '').slice(0, 180),
                 translated: String(m.translated || '').slice(0, 180),
                 tone: m.tone || '', nuance: String(m.nuance || '').slice(0, 80),
-                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, reactions: m.reactions || []
+                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || []
               })) },
               deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-6)
             };
@@ -20571,6 +21083,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
               suwanLastSeen: Number(coreObj.profile?.suwanLastSeen || 0),
               jingchanLastSeen: Number(coreObj.profile?.jingchanLastSeen || 0),
+              suwanReadUpToTs: Number(coreObj.profile?.suwanReadUpToTs || 0),
+              jingchanReadUpToTs: Number(coreObj.profile?.jingchanReadUpToTs || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
@@ -20592,7 +21106,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 pronunciation: String(m.pronunciation || '').slice(0, 220),
                 tone: m.tone || '', toneZh: m.toneZh || '', nuance: String(m.nuance || '').slice(0, 180), nuanceZh: String(m.nuanceZh || '').slice(0, 180),
                 engine: m.engine || '', tgtLang: m.tgtLang || '',
-                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, reactions: m.reactions || [],
+                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
                 replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx
               })),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 3)
@@ -20768,7 +21282,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // ==================== Prime 4 v58: Schema-Proof Permanent Cloud Media Vault inside couple_sync_state ====================
         // Uses proven couple_sync_state (room_id PK + payload JSONB) so albums, voice letters, avatars & chat media NEVER vanish even if couple_sync_events fails!
-        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v58';
+        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v67';
         function getUploadedVaultSet() {
           try {
             const arr = JSON.parse(localStorage.getItem(CW_VM_UPLOADED_KEY) || '[]');
@@ -20957,8 +21471,171 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (k === 'av_suwan') return !!(state.profile && state.profile.suwanAvatar);
             if (k === 'av_jingchan') return !!(state.profile && state.profile.jingchanAvatar);
           }
+          if (entry.kind === 'chat_photo' || entry.kind === 'chat_video' || entry.kind === 'chat_voice') {
+            const rawMid = k.replace(/^cm_/, '').replace(/_\d+$/, '');
+            const delMsg = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
+            if (delMsg.has(rawMid)) return true;
+            return (state.chat?.messages || []).some(m => m && (m.id === rawMid || cwSafeVaultKey('cm_' + m.id) === k) && !!(m.photoUrl || m.videoUrl || m.audioUrl));
+          }
+          if (entry.kind === 'custom_voice') {
+            for (const [phr, u] of Object.entries(state.customVoices || {})) {
+              if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr }, phr) === k) return true;
+            }
+          }
           return false;
         }
+
+        async function restoreVaultBatchParallel(room, manifestList) {
+          if (!room || !Array.isArray(manifestList) || !manifestList.length) return 0;
+          // Prioritize avatars + newest items FIRST so recent chat/album photos appear in <0.8s!
+          const ordered = manifestList.slice().reverse().sort((a, b) => {
+            const aAv = (a && a.kind === 'avatar') ? 1 : 0;
+            const bAv = (b && b.kind === 'avatar') ? 1 : 0;
+            if (aAv !== bAv) return bAv - aAv;
+            return Number(b?.ts || 0) - Number(a?.ts || 0);
+          });
+          const missing = ordered.filter(it => it && it.key && !isVaultEntryAlreadyLocal(it));
+          let count = 0;
+          for (let i = 0; i < missing.length; i += 4) {
+            const batch = missing.slice(i, i + 4);
+            const res = await Promise.all(batch.map(it => restoreVaultEntryFromCloudState(room, it).catch(() => false)));
+            res.forEach(ok => { if (ok) count++; });
+            if (count > 0 && i === 0) {
+              try { renderHome(); renderChat(); renderBucketAndAlbum(); if (typeof renderVoiceLetters === 'function') renderVoiceLetters(); } catch (_) {}
+            }
+          }
+          return count;
+        }
+
+        // Fast 1-Request Recent Media Pack (${room}__recent_media_v1): delivers avatars + recent chat/album photos & voices in 1 HTTP call!
+        let __lastRecentPackPushSig = '';
+        async function pushRecentMediaPack(room) {
+          if (!room) return false;
+          try {
+            const delAlb = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
+            const delMsg = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
+            const avatars = {};
+            if (state.profile?.suwanAvatar && String(state.profile.suwanAvatar).length <= 240000) avatars.suwan = state.profile.suwanAvatar;
+            if (state.profile?.jingchanAvatar && String(state.profile.jingchanAvatar).length <= 240000) avatars.jingchan = state.profile.jingchanAvatar;
+
+            const recentAlbums = (state.albums || [])
+              .filter(a => a && a.id && !delAlb.has(a.id) && a.dataUrl && String(a.dataUrl).startsWith('data:image/') && String(a.dataUrl).length <= 210000)
+              .slice(0, 14)
+              .map(a => ({
+                id: a.id, authorRole: a.authorRole || state.myRole || 'suwan',
+                dataUrl: a.dataUrl, mediaType: 'image',
+                caption: a.caption || '', translated: a.translated || '',
+                date: a.date || '', category: a.category || '✨ 일상 순간', source: a.source || 'album'
+              }));
+
+            const recentChatMedia = (state.chat?.messages || [])
+              .filter(m => m && m.id && !delMsg.has(m.id) && ((m.photoUrl && String(m.photoUrl).length <= 210000) || (m.audioUrl && String(m.audioUrl).length <= 240000)))
+              .slice(-12)
+              .map(m => ({
+                id: m.id, ts: m.ts, sender: m.sender, time: m.time,
+                original: m.original || '', translated: m.translated || '', tgtLang: m.tgtLang || '',
+                photoCat: m.photoCat || '✨ 일상 순간',
+                photoUrl: (m.photoUrl && String(m.photoUrl).length <= 210000) ? m.photoUrl : '',
+                audioUrl: (m.audioUrl && String(m.audioUrl).length <= 240000) ? normalizeAudioDataUrl(m.audioUrl) : ''
+              }));
+
+            const recentVoices = (state.voiceLetters || [])
+              .filter(v => v && v.id && v.audioUrl && String(v.audioUrl).length <= 240000)
+              .slice(0, 8)
+              .map(v => ({
+                id: v.id, sender: v.sender || state.myRole || 'suwan', tag: v.tag || '🎙️',
+                note: v.note || '', translated: v.translated || '', date: v.date || '', time: v.time || '',
+                audioUrl: normalizeAudioDataUrl(v.audioUrl)
+              }));
+
+            if (!Object.keys(avatars).length && !recentAlbums.length && !recentChatMedia.length && !recentVoices.length) return false;
+            const sig = `${avatars.suwan ? avatars.suwan.length : 0}|${avatars.jingchan ? avatars.jingchan.length : 0}|${recentAlbums.map(x => x.id).join(',')}|${recentChatMedia.map(x => x.id).join(',')}|${recentVoices.map(x => x.id).join(',')}`;
+            if (sig === __lastRecentPackPushSig) return true;
+            __lastRecentPackPushSig = sig;
+            await upsertSupabaseStateSnapshot(`${room}__recent_media_v1`, {
+              v: 'cw_recent_media_v1',
+              updatedAt: Date.now(),
+              avatars,
+              albums: recentAlbums,
+              chatMedia: recentChatMedia,
+              voices: recentVoices
+            }, 18000);
+            return true;
+          } catch (_) { return false; }
+        }
+
+        async function pullRecentMediaPack(room, showFeedback) {
+          if (!room) room = getSyncRoomCode();
+          if (!room) return false;
+          try {
+            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room + '__recent_media_v1')}&select=payload`, { headers: sbHeaders() }, 12000);
+            if (!res.ok) return false;
+            const arr = await res.json();
+            if (!Array.isArray(arr) || !arr[0] || !arr[0].payload) return false;
+            const pack = await e2eeUnwrapPayload(arr[0].payload);
+            if (!pack || pack.v !== 'cw_recent_media_v1') return false;
+
+            let changed = false;
+            const delAlb = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
+            const delMsg = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
+            const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
+
+            if (pack.avatars && typeof pack.avatars === 'object') {
+              if (!state.profile) state.profile = {};
+              if (pack.avatars.suwan && !state.profile.suwanAvatar) { state.profile.suwanAvatar = pack.avatars.suwan; changed = true; }
+              if (pack.avatars.jingchan && !state.profile.jingchanAvatar) { state.profile.jingchanAvatar = pack.avatars.jingchan; changed = true; }
+            }
+            if (Array.isArray(pack.albums)) {
+              if (!Array.isArray(state.albums)) state.albums = [];
+              for (const pa of pack.albums) {
+                if (!pa || !pa.id || delAlb.has(pa.id) || !pa.dataUrl) continue;
+                const ex = state.albums.find(x => x && x.id === pa.id);
+                if (!ex) { state.albums.push({ ...pa, comments: [] }); changed = true; }
+                else if (!ex.dataUrl) { ex.dataUrl = pa.dataUrl; changed = true; }
+              }
+            }
+            if (Array.isArray(pack.chatMedia)) {
+              if (!Array.isArray(state.chat.messages)) state.chat.messages = [];
+              for (const pcm of pack.chatMedia) {
+                if (!pcm || !pcm.id || delMsg.has(pcm.id)) continue;
+                const exM = state.chat.messages.find(x => x && x.id === pcm.id);
+                if (exM) {
+                  if (pcm.photoUrl && !exM.photoUrl) { exM.photoUrl = pcm.photoUrl; changed = true; }
+                  if (pcm.audioUrl && !exM.audioUrl) { exM.audioUrl = normalizeAudioDataUrl(pcm.audioUrl); changed = true; }
+                } else if (pcm.photoUrl || pcm.audioUrl) {
+                  state.chat.messages.push({
+                    id: pcm.id, ts: pcm.ts || Date.now(), sender: pcm.sender || 'suwan', time: pcm.time || '',
+                    original: pcm.original || (pcm.photoUrl ? '사진을 보냈어요 📷' : '🎙️ 음성 메시지'),
+                    translated: pcm.translated || '', tgtLang: pcm.tgtLang || '',
+                    photoCat: pcm.photoCat || '✨ 일상 순간',
+                    photoUrl: pcm.photoUrl || '', audioUrl: pcm.audioUrl ? normalizeAudioDataUrl(pcm.audioUrl) : '',
+                    reactions: []
+                  });
+                  state.chat.messages = sortChatMessagesStable(state.chat.messages);
+                  changed = true;
+                }
+              }
+            }
+            if (Array.isArray(pack.voices)) {
+              if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
+              for (const pv of pack.voices) {
+                if (!pv || !pv.id || delVl.has(pv.id) || !pv.audioUrl) continue;
+                if (!state.voiceLetters.some(x => x && x.id === pv.id && x.audioUrl)) {
+                  state.voiceLetters.push({ ...pv, audioUrl: normalizeAudioDataUrl(pv.audioUrl) });
+                  changed = true;
+                }
+              }
+            }
+            if (changed) {
+              persistMediaVaultsNow(true);
+              saveState(false);
+              try { renderHome(); renderChat(); renderBucketAndAlbum(); if (typeof renderVoiceLetters === 'function') renderVoiceLetters(); updateVaultIndicators(); } catch (_) {}
+              if (showFeedback) showToast(state.lang === 'zh' ? '📷 已加载最新照片与语音 ✨' : '📷 최신 사진과 음성을 불러왔어요 ✨');
+            }
+            return changed;
+          } catch (_) { return false; }
+        }
+        window.__pullRecentMediaNow = (fb) => pullRecentMediaPack(getSyncRoomCode(), !!fb);
 
         async function restoreVaultEntryFromCloudState(room, entry) {
           if (!room || !entry || !entry.key) return false;
@@ -21262,6 +21939,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
 
           const [emqxOk, vaultOk] = await Promise.all([emqxPromise, vaultPromise]);
+          pushRecentMediaPack(room).catch(() => {});
           if (emqxOk || vaultOk || eventsOk) {
             lastSyncOkTs = Date.now();
             updateLiveSyncIndicators(true, room);
@@ -21329,7 +22007,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             });
             if (!latestPartnerTs) return;
             const now = Date.now();
-            if (!force && latestPartnerTs <= lastReadPartnerMsgTs && (now - lastReadSignalSentTs) < 8000) return;
+            if (!state.profile) state.profile = {};
+            const myReadKey = myR + 'ReadUpToTs';
+            const prevSavedReadTs = Number(state.profile[myReadKey] || 0);
+            const watermarkAdvanced = latestPartnerTs > prevSavedReadTs;
+            if (watermarkAdvanced) {
+              state.profile[myReadKey] = latestPartnerTs;
+              saveState(true);
+            }
+            if (!force && !watermarkAdvanced && latestPartnerTs <= lastReadPartnerMsgTs && (now - lastReadSignalSentTs) < 8000) return;
             lastReadPartnerMsgTs = latestPartnerTs;
             lastReadSignalSentTs = now;
             sendChatSignal('read', { readUpToTs: latestPartnerTs });
@@ -21716,6 +22402,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               jingchanActivityUpdatedAt: Number(coreObj.profile?.jingchanActivityUpdatedAt || 0),
               suwanLastSeen: Number(coreObj.profile?.suwanLastSeen || 0),
               jingchanLastSeen: Number(coreObj.profile?.jingchanLastSeen || 0),
+              suwanReadUpToTs: Number(coreObj.profile?.suwanReadUpToTs || 0),
+              jingchanReadUpToTs: Number(coreObj.profile?.jingchanReadUpToTs || 0),
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
@@ -22013,6 +22701,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
           pullCloudSync(false);
         }
+        window.__reconnectLiveSync = connectLiveSyncStream;
 
         async function pullCloudSync(manual) {
           if (isPullingCloud && !manual) return;
@@ -22104,12 +22793,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
             }
             if (shouldPullMedia) {
+              pullRecentMediaPack(room, false).catch(() => {});
               fetchCloudVaultManifest(room).then(async (mItems) => {
-                let anyV = false;
-                for (const it of mItems) {
-                  if (await restoreVaultEntryFromCloudState(room, it)) anyV = true;
-                }
-                if (anyV) {
+                const cnt = await restoreVaultBatchParallel(room, mItems);
+                if (cnt > 0) {
                   persistMediaVaultsNow(true);
                   saveState(false);
                   try { renderBucketAndAlbum(); renderVoiceLetters(); renderChat(); renderHome(); updateVaultIndicators(); } catch (_) {}
@@ -23065,12 +23752,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             // Step 0: Sync dedicated Cloud Study Vault (__learn_vault_v1) so Korean study progress never vanishes!
             await syncCloudLearnVault(room, false);
 
-            // Step 1: Always pull any items present in couple_sync_state __vault_manifest_v1 that we don't have locally yet!
-            const manifestItems = await fetchCloudVaultManifest(room);
-            let pulledCount = 0;
-            for (const entry of manifestItems) {
-              if (await restoreVaultEntryFromCloudState(room, entry)) pulledCount++;
+            // Step 0.5: Instant 1-Request Recent Media Pack pull & push!
+            await pullRecentMediaPack(room, false);
+            if (localAlbums.length > 0 || localVoices.length > 0 || localChatMedia.length > 0 || hasAv) {
+              pushRecentMediaPack(room).catch(() => {});
             }
+            // Step 1: Parallel Newest-First Vault Restore!
+            const manifestItems = await fetchCloudVaultManifest(room);
+            const pulledCount = await restoreVaultBatchParallel(room, manifestItems);
             if (pulledCount > 0) {
               persistMediaVaultsNow(true);
               flushIdbStateNow();
@@ -23157,12 +23846,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // Boot Supabase Realtime + Postgres REST immediately!
         connectLiveSyncStream();
+        setTimeout(() => { pullRecentMediaPack(getSyncRoomCode(), false).catch(() => {}); }, 350);
         setTimeout(() => {
           connectLiveSyncStream();
           flushSyncOutbox();
           recoverCustomVoicesFromCloud();
-          setTimeout(() => { autoSyncVaultAndHistoryOnBoot(); }, 1800);
-        }, 1200);
+          autoSyncVaultAndHistoryOnBoot();
+        }, 950);
 
         async function recoverCustomVoicesFromCloud() {
           try {
@@ -25954,8 +26644,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v64)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v64';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v71)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v71';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
@@ -26101,6 +26791,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         } catch (_) {}
 
         await loadState();
+        try {
+          if (isMainlandChinaClient()) {
+            if (!state.settings) state.settings = {};
+            if (localStorage.getItem('cw_user_explicit_chinamode') !== '0') state.settings.chinaMode = true;
+            if (!localStorage.getItem('cw_my_role')) state.myRole = 'jingchan';
+            if (!localStorage.getItem('cw_user_explicit_lang')) state.lang = 'zh';
+          }
+        } catch (_) {}
         // Auto-recover any messages left in 'sending' state if app closed mid-send
         try {
           let hasStaleSending = false;
@@ -27527,45 +28225,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       init();
     })();
-  </script>
-
-
-  <!-- Speech Recognition Pronunciation Check Modal (Plus 1.3) -->
-  <div id="speechPracticeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,10,28,0.58); backdrop-filter: blur(6px);">
-    <div class="royal-card rounded-3xl p-5 w-full max-w-md space-y-3.5 shadow-2xl">
-      <div class="flex items-center justify-between gap-2">
-        <div class="text-sm font-bold text-gold" id="speechModalTitle">🎤 따라 말하기 발음 체크 (+15 XP)</div>
-        <button id="closeSpeechModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs">✕</button>
-      </div>
-      <div class="royal-subcard rounded-2xl p-3.5 space-y-1.5 text-center">
-        <div id="speechTargetKo" class="text-lg font-bold leading-snug break-words"></div>
-        <div id="speechTargetZh" class="text-xs text-sec break-words"></div>
-        <div id="speechTargetPron" class="text-[11px] text-mut break-words"></div>
-        <div class="flex items-center justify-center gap-2 pt-1.5">
-          <button id="speechListenRefBtn" type="button" class="btn-ghost px-3 py-1 rounded-full text-xs font-semibold">🔊 원어민 듣기</button>
-          <button id="speechListenSlowBtn" type="button" class="btn-ghost px-3 py-1 rounded-full text-xs font-semibold">🐢 천천히</button>
-        </div>
-      </div>
-      <div id="speechMicSection" class="space-y-2.5 text-center">
-        <button id="speechStartMicBtn" type="button" class="btn-royal w-full py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2">🎤 눌러서 따라 말하기</button>
-        <div id="speechHeardBox" class="hidden rounded-2xl p-2.5 text-xs text-sec" style="background: var(--surface-2);"></div>
-      </div>
-      <!-- Graceful Typing Fallback for Huawei/WeChat browsers without Web Speech API -->
-      <div id="speechTypeFallback" class="hidden space-y-2 pt-1 border-t" style="border-color: var(--border-subtle);">
-        <div id="speechFallbackHint" class="text-[11px] text-sec text-center">음성인식 미지원 브라우저에서도 아래에 한국어를 따라 입력하면 +15 XP를 받을 수 있어요!</div>
-        <div class="flex gap-2">
-          <input id="speechFallbackInput" type="text" class="royal-input flex-1 rounded-xl px-3 py-2 text-xs" placeholder="위 한국어 문장을 따라 입력해 보세요..." />
-          <button id="speechFallbackSubmitBtn" type="button" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0">확인</button>
-        </div>
-      </div>
-      <div id="speechResultBanner" class="hidden rounded-2xl p-3 text-xs font-semibold text-center"></div>
-    </div>
-  </div>
-
-
-  <!-- Prime 3 v26: Smart Partner-Language Intent & Natural Polish (Understand Awkward Korean/Chinese Easily) -->
-  <script>
-  (function initPartnerIntentPolish() {
+;
+(function initPartnerIntentPolish() {
     if (window.__cwPartnerPolishReady) return;
     window.__cwPartnerPolishReady = true;
     const CACHE_KEY = 'cw_polish_cache_v2';
@@ -27758,12 +28419,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       }
     });
   })();
-  </script>
-
-
-  <!-- Prime 3 v41: CW Talk Live Partner Status Pill (1-Tap Quick Status Bar Removed) -->
-  <script>
-  (function initPartnerStatusPillOnly() {
+;
+(function initPartnerStatusPillOnly() {
     if (window.__cwQuickStatusReady) return;
     window.__cwQuickStatusReady = true;
 
@@ -27798,12 +28455,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       if (el) el.addEventListener('change', () => setTimeout(syncPartnerStatusPill, 60));
     });
   })();
-  </script>
-
-
-  <!-- Prime 3 v29: Global 2-Second Long-Press Auto-Copy Anywhere in App -->
-  <script>
-  (function initTwoSecondLongPressCopy() {
+;
+(function initTwoSecondLongPressCopy() {
     if (window.__cwLongPressCopyReady) return;
     window.__cwLongPressCopyReady = true;
 
@@ -27894,12 +28547,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     document.addEventListener('pointercancel', cancelLp, { passive: true });
     document.addEventListener('scroll', cancelLp, { passive: true, capture: true });
   })();
-  </script>
-
-
-  <!-- Prime 3 v41 Pro: Full-App Maker Mode Live Editor + Real-Time Auto-Sync -->
-  <script>
-  (function initMakerModeController() {
+;
+(function initMakerModeController() {
     if (window.__cwMakerModeReady) return;
     window.__cwMakerModeReady = true;
 
@@ -28424,11 +29073,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       applyMakerLayout(chosen, true);
     }, 350);
   })();
-  </script>
-
-  <!-- Prime 3 v41: Keep Mobile Keyboard Open on Submit (Messenger & All Text Forms) -->
-  <script>
-  (function initKeepKeyboardOnSend() {
+;
+(function initKeepKeyboardOnSend() {
     if (window.__cwKeepKbReady) return;
     window.__cwKeepKbReady = true;
 
@@ -28460,69 +29106,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       }, 20);
     }, true);
   })();
-  </script>
-
-  <!-- v55 Chat Wallpaper Customizer Modal -->
-
-  <div id="cwMicPermModal" class="cw-mic-modal hidden fixed inset-0 z-[10050] flex items-center justify-center p-4" style="background: rgba(16, 11, 28, 0.58);">
-    <div class="royal-card w-full max-w-sm rounded-3xl p-5 space-y-3.5 border" style="background: var(--surface-1); border-color: var(--border-accent);">
-      <div class="flex items-center justify-between gap-2">
-        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>🎙️</span> <span id="cwMicModalTitle">마이크 권한 허용 · 음성 보내기</span></div>
-        <button id="cwMicModalCloseBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs">✕</button>
-      </div>
-      <div id="cwMicModalDesc" class="text-xs text-sec leading-relaxed">마이크 권한을 한 번만 허용하면 앱 안에서 바로 목소리를 녹음해 보낼 수 있어요. 아래 버튼을 눌러 허용 창을 띄우거나 휴대폰 녹음기로 바로 보낼 수 있어요 💜</div>
-      <input id="cwNativeVoiceCaptureInput" type="file" accept="audio/*" capture="microphone" class="hidden" />
-      <div class="space-y-2 pt-0.5">
-        <button id="cwMicRequestNowBtn" type="button" class="btn-royal w-full py-2.5 rounded-2xl text-xs font-bold">🎙️ 지금 마이크 권한 허용하기</button>
-        <button id="cwMicOpenSettingsBtn" type="button" class="hidden btn-ghost w-full py-2.5 rounded-2xl text-xs font-bold">⚙️ 앱 권한 설정 바로 열기</button>
-        <button id="cwMicNativeRecBtn" type="button" class="btn-gold w-full py-2.5 rounded-2xl text-xs font-bold">📱 휴대폰 녹음기로 바로 녹음·파일 보내기</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="cwChatBgModal" class="hidden fixed inset-0 z-[9990] flex items-end sm:items-center justify-center p-3 sm:p-4" style="background: rgba(18, 13, 31, 0.52);">
-    <div class="royal-card w-full max-w-md rounded-3xl p-4 sm:p-5 space-y-4" style="background: var(--surface-1);">
-      <div class="flex items-center justify-between gap-2">
-        <div class="font-bold text-sm sm:text-base flex items-center gap-1.5"><span>🖼️</span> <span id="cwChatBgModalTitle">채팅방 배경 꾸미기</span></div>
-        <button id="closeChatBgModalBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-sm">✕</button>
-      </div>
-      <div class="space-y-2">
-        <div id="cwChatBgPresetLabel" class="text-xs font-semibold text-sec">감성 배경 프리셋</div>
-        <div class="grid grid-cols-4 gap-2">
-          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="default" style="background: linear-gradient(135deg,#f6efff,#fff2f8); color:#583894; border-color:var(--border-accent);">기본</button>
-          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="rose" style="background: linear-gradient(135deg,#ffe4ee,#fff5ec); color:#9d174d; border-color:rgba(244,114,182,0.4);">로즈</button>
-          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="lavender" style="background: linear-gradient(135deg,#ede9fe,#e0e7ff); color:#4c1d95; border-color:rgba(139,92,246,0.4);">라벤더</button>
-          <button type="button" class="cw-bg-preset-btn rounded-2xl p-2 text-[11px] font-bold border text-center" data-preset="starlight" style="background: linear-gradient(135deg,#1e1436,#321d54); color:#f5d8a8; border-color:rgba(216,180,254,0.35);">별빛</button>
-        </div>
-      </div>
-      <div class="space-y-2">
-        <input id="cwChatBgFileInput" type="file" accept="image/*" class="hidden" />
-        <button id="cwChatBgPickPhotoBtn" type="button" class="btn-royal w-full py-2.5 rounded-2xl text-xs font-bold">📷 갤러리에서 커플 사진 선택</button>
-      </div>
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between text-xs">
-          <span id="cwChatBgAlphaLabel" class="font-semibold text-sec">배경 은은함 (글자 가독성)</span>
-          <span id="cwChatBgAlphaVal" class="font-bold text-gold">55%</span>
-        </div>
-        <input id="cwChatBgAlpha" type="range" min="15" max="85" value="55" class="w-full accent-purple-600" />
-      </div>
-      <div class="space-y-1.5">
-        <div id="cwBubbleSizeLabel" class="text-xs font-semibold text-sec">💬 말풍선 크기</div>
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="sm">작게</button>
-          <button type="button" class="cw-bubble-size-btn btn-royal rounded-xl py-1.5 text-xs font-bold" data-bsize="md">보통</button>
-          <button type="button" class="cw-bubble-size-btn btn-ghost rounded-xl py-1.5 text-xs font-bold" data-bsize="lg">크게</button>
-        </div>
-      </div>
-      <div class="flex items-center justify-end gap-2 pt-1">
-        <button id="cwChatBgResetBtn" type="button" class="btn-ghost px-3.5 py-2 rounded-xl text-xs font-semibold">초기화</button>
-        <button id="cwChatBgDoneBtn" type="button" class="btn-royal px-4 py-2 rounded-xl text-xs font-bold">적용 완료</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function initV55Upgrades() {
+;
+(function initV55Upgrades() {
       const __api = () => window.__cwApi || {};
       const __st = () => (__api().getState ? __api().getState() : null);
       const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
@@ -28820,10 +29405,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       renderHomeCouplePhrase(false);
       setTimeout(() => { applyChatBg(); renderHomeCouplePhrase(false); }, 900);
     })();
-  </script>
-
-  <script>
-    (function initV56DelightPack() {
+;
+(function initV56DelightPack() {
       const __api = () => window.__cwApi || {};
       const __st = () => (__api().getState ? __api().getState() : null);
       const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
@@ -29041,10 +29624,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       renderQuickPhraseBar();
       setTimeout(() => { renderQuickPhraseBar(); }, 1000);
     })();
-  </script>
-
-  <script>
-    (function initV57Features() {
+;
+(function initV57Features() {
       const __api = () => window.__cwApi || {};
       const __st = () => (__api().getState ? __api().getState() : null);
       const __save = (sync) => { if (__api().saveState) __api().saveState(sync); };
@@ -29147,6 +29728,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       setTimeout(() => { drawRandomMemory(false); }, 1100);
       
     })();
-  </script>
+</script>
+<script>
+(function(){
+  var urls = [
+    'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js'
+  ];
+  var idx = 0;
+  function tryLoad() {
+    if (window.supabase || idx >= urls.length) return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = urls[idx++];
+    var done = false;
+    var t = setTimeout(function(){ if (!done) { done = true; tryLoad(); } }, 2500);
+    s.onload = function(){
+      done = true; clearTimeout(t);
+      if (typeof window.__reconnectLiveSync === 'function') window.__reconnectLiveSync();
+    };
+    s.onerror = function(){ if (!done) { done = true; clearTimeout(t); tryLoad(); } };
+    document.head.appendChild(s);
+  }
+  setTimeout(tryLoad, 120);
+})();
+</script>
 </body>
 </html>

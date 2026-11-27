@@ -1,10 +1,16 @@
-const SW_VER = 'chanwan-sw-prime4-v64';
-const PRECACHE_URLS = ['./', './index.html', './manifest_clean.json?v=22', './icon-192.png?v=21', './badge-96.png?v=23'];
+const SW_VER = 'chanwan-sw-prime4-v71';
+const PRECACHE_URLS = [
+  './',
+  './index.html',
+  './manifest_clean.json?v=22',
+  './icon-192.png?v=21',
+  './badge-96.png?v=23'
+];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(SW_VER)
-      .then((cache) => cache.addAll(PRECACHE_URLS).catch(() => {}))
+      .then((cache) => Promise.allSettled(PRECACHE_URLS.map((u) => cache.add(u))))
       .then(() => self.skipWaiting())
   );
 });
@@ -17,24 +23,25 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-function isHtmlResponse(res) {
+async function fetchCompleteHtmlWithTimeout(req, ms) {
+  const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = setTimeout(() => {
+    if (ctrl) { try { ctrl.abort(); } catch (_) {} }
+  }, ms);
   try {
-    const ct = (res && res.headers && res.headers.get('content-type')) || '';
-    return ct.toLowerCase().includes('text/html');
-  } catch (_) { return false; }
-}
-
-function fetchHtmlWithTimeout(req, ms) {
-  return new Promise((resolve, reject) => {
-    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    const t = setTimeout(() => {
-      if (ctrl) { try { ctrl.abort(); } catch (_) {} }
-      reject(new Error('nav_timeout'));
-    }, ms);
-    fetch(req, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
-      .then((res) => { clearTimeout(t); resolve(res); })
-      .catch((err) => { clearTimeout(t); reject(err); });
-  });
+    const res = await fetch(req, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined });
+    if (!res || !res.ok) throw new Error('bad_status');
+    const text = await res.text();
+    clearTimeout(timer);
+    if (!text || !text.includes('</html>')) throw new Error('incomplete_html');
+    return new Response(text, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
 }
 
 self.addEventListener('fetch', (e) => {
@@ -42,42 +49,45 @@ self.addEventListener('fetch', (e) => {
   let url;
   try { url = new URL(e.request.url); } catch (_) { return; }
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.endsWith('.apk')) return;
 
   const isNav = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('/index.html');
 
   if (isNav) {
-    e.respondWith(
-      fetchHtmlWithTimeout(e.request, 3200)
-        .then((res) => {
-          if (res && res.ok && isHtmlResponse(res)) {
-            const copy1 = res.clone();
-            const copy2 = res.clone();
-            caches.open(SW_VER).then((c) => {
-              c.put('./index.html', copy1).catch(() => {});
-              c.put('./', copy2).catch(() => {});
-            }).catch(() => {});
-            return res;
-          }
-          throw new Error('bad_html');
-        })
-        .catch(() =>
-          caches.open(SW_VER).then((c) =>
-            c.match('./index.html').then((r) => r || c.match('./') || caches.match(e.request))
-          )
-        )
-    );
+    e.respondWith((async () => {
+      const cache = await caches.open(SW_VER);
+      const cached = (await cache.match('./index.html')) || (await cache.match('./'));
+      const netPromise = fetchCompleteHtmlWithTimeout(e.request, cached ? 5000 : 12000)
+        .then((freshRes) => {
+          cache.put('./index.html', freshRes.clone()).catch(() => {});
+          cache.put('./', freshRes.clone()).catch(() => {});
+          return freshRes;
+        });
+
+      if (cached) {
+        e.waitUntil(netPromise.catch(() => {}));
+        return cached;
+      }
+      return netPromise;
+    })());
     return;
   }
 
   e.respondWith(
     caches.open(SW_VER).then((cache) =>
       cache.match(e.request).then((cached) => {
-        const net = fetch(e.request).then((res) => {
+        if (cached) {
+          e.waitUntil(
+            fetch(e.request).then((res) => {
+              if (res && res.ok) cache.put(e.request, res.clone()).catch(() => {});
+            }).catch(() => {})
+          );
+          return cached;
+        }
+        return fetch(e.request).then((res) => {
           if (res && res.ok) cache.put(e.request, res.clone()).catch(() => {});
           return res;
-        }).catch(() => cached);
-        if (cached) { e.waitUntil(net.catch(() => {})); return cached; }
-        return net;
+        });
       })
     )
   );
