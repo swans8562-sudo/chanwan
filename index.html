@@ -2508,7 +2508,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v71: App-Wide Couture Boutique Elevation
+       Prime 4 · v73: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2699,7 +2699,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v71: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v73: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4942,7 +4942,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v71</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v73</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 앱 바로 업데이트</button>
           </div>
@@ -13303,6 +13303,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               ev.preventDefault();
               const tr = document.getElementById('chatStickerTray');
               if (tr) {
+                tr.__cwPointerStartedInside = false;
+                window.__cwDrawerOpenedAt = Date.now();
                 tr.classList.remove('hidden');
                 if (typeof renderChatStickers === 'function') renderChatStickers('wechat');
               }
@@ -15722,6 +15724,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             return;
           }
           if (tab === 'wechat') {
+            try {
+              if (!localStorage.getItem('cw_fix_ghost_crack_v73')) {
+                localStorage.setItem('cw_fix_ghost_crack_v73', '1');
+                const prevRec = JSON.parse(localStorage.getItem('chanwan_recent_wechat_v2') || '[]');
+                if (Array.isArray(prevRec) && prevRec.includes('[裂开]')) {
+                  localStorage.setItem('chanwan_recent_wechat_v2', JSON.stringify(prevRec.filter(x => x !== '[裂开]')));
+                }
+              }
+            } catch (_) {}
             let recentIcons = [];
             try { recentIcons = JSON.parse(localStorage.getItem('chanwan_recent_wechat_v2') || '[]'); } catch (_) {}
             if (!Array.isArray(recentIcons) || !recentIcons.length) {
@@ -15757,6 +15768,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (!stickerGrid.__cwWcDelegated) {
               stickerGrid.__cwWcDelegated = true;
               stickerGrid.addEventListener('click', (ev) => {
+                if (window.__cwToggleTouchActive || (stickerTray && !stickerTray.__cwPointerStartedInside && ev.detail > 0) || (Date.now() - (window.__cwDrawerOpenedAt || 0) < 150)) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  return;
+                }
                 const btn = ev.target && ev.target.closest ? ev.target.closest('.insert-wc-emoji-btn') : null;
                 if (!btn) return;
                 ev.preventDefault();
@@ -15924,11 +15940,52 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
         };
         window.__syncChatPlusBtnIcon = syncChatPlusBtnIcon;
+        if (!window.__cwDrawerTouchReleaseBound) {
+          window.__cwDrawerTouchReleaseBound = true;
+          const clearToggleTouch = () => {
+            if (!window.__cwToggleTouchActive) return;
+            setTimeout(() => { window.__cwToggleTouchActive = false; }, 90);
+          };
+          window.addEventListener('touchend', clearToggleTouch, { passive: true, capture: true });
+          window.addEventListener('touchcancel', clearToggleTouch, { passive: true, capture: true });
+          window.addEventListener('pointerup', clearToggleTouch, { passive: true, capture: true });
+          window.addEventListener('pointercancel', clearToggleTouch, { passive: true, capture: true });
+        }
+        const attachDrawerGhostClickShield = (trayEl) => {
+          if (!trayEl || trayEl.__cwGhostShieldBound) return;
+          trayEl.__cwGhostShieldBound = true;
+          trayEl.__cwPointerStartedInside = false;
+          trayEl.addEventListener('pointerdown', () => { trayEl.__cwPointerStartedInside = true; }, true);
+          trayEl.addEventListener('touchstart', () => { trayEl.__cwPointerStartedInside = true; }, { passive: true, capture: true });
+          trayEl.addEventListener('mousedown', () => { trayEl.__cwPointerStartedInside = true; }, true);
+          trayEl.addEventListener('click', (ev) => {
+            if (window.__cwToggleTouchActive || (!trayEl.__cwPointerStartedInside && ev.detail > 0) || (Date.now() - (window.__cwDrawerOpenedAt || 0) < 150)) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              if (typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+            }
+          }, true);
+        };
+        attachDrawerGhostClickShield(stickerTray);
+        attachDrawerGhostClickShield(chatPlusDrawer);
         const bindInstantDrawerToggle = (btnEl, onToggle) => {
           if (!btnEl) return;
           let lastPtrTs = 0;
-          btnEl.addEventListener('pointerdown', (ev) => {
-            if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+          btnEl.addEventListener('touchstart', (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            lastPtrTs = Date.now();
+            window.__cwLastDrawerToggleTs = lastPtrTs;
+            window.__cwToggleTouchActive = true;
+            onToggle();
+          }, { passive: false });
+          btnEl.addEventListener('mousedown', (ev) => {
+            if (ev.button !== 0) return;
+            if (Date.now() - lastPtrTs < 550) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              return;
+            }
             ev.preventDefault();
             ev.stopPropagation();
             lastPtrTs = Date.now();
@@ -15937,11 +15994,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           });
           btnEl.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            if (Date.now() - lastPtrTs < 450) {
+            if (Date.now() - lastPtrTs < 550) {
               ev.preventDefault();
               return;
             }
-            window.__cwLastDrawerToggleTs = Date.now();
+            lastPtrTs = Date.now();
+            window.__cwLastDrawerToggleTs = lastPtrTs;
             onToggle();
           });
         };
@@ -15966,6 +16024,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (willOpen) {
               saveChatCursorAndDismissKb();
               if (stickerTray) stickerTray.classList.add('hidden');
+              chatPlusDrawer.__cwPointerStartedInside = false;
+              window.__cwDrawerOpenedAt = Date.now();
               chatPlusDrawer.classList.remove('hidden');
               if (typeof window.__scrollChatToBottom === 'function') window.__scrollChatToBottom(true);
             } else {
@@ -15990,6 +16050,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
               syncChatPlusBtnIcon(false);
               if ((window.__activeStickerTab || 'wechat') === 'wechat') renderChatStickers();
+              stickerTray.__cwPointerStartedInside = false;
+              window.__cwDrawerOpenedAt = Date.now();
               stickerTray.classList.remove('hidden');
               if (typeof window.__scrollChatToBottom === 'function') window.__scrollChatToBottom(true);
             } else {
@@ -16527,15 +16589,57 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           if (t.closest('#cwInAppUpdInstallBtn') || t.closest('#directApkDownloadBtn')) {
             e.preventDefault();
-            document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
-            const apkUrl = 'https://swans8562-sudo.github.io/chanwan/chanwan-shiguang.apk?v=48';
-            if (window.ChanwanNative && typeof window.ChanwanNative.downloadAndInstallApk === 'function') {
-              try { window.ChanwanNative.downloadAndInstallApk(apkUrl); return; } catch (_) {}
-            }
-            if (window.ChanwanNative && typeof window.ChanwanNative.openExternalUrl === 'function') {
-              try { window.ChanwanNative.openExternalUrl(apkUrl); return; } catch (_) {}
-            }
-            window.location.href = apkUrl;
+            const isZh = state.lang === 'zh';
+            const apkUrl = 'https://swans8562-sudo.github.io/chanwan/chanwan-shiguang.apk?t=' + Date.now();
+            showToast(isZh ? '⏳ 正在检查最新安装包...' : '⏳ 최신 앱 설치 파일을 확인하는 중...');
+            fetch('./chanwan-shiguang.apk?_chk=' + Date.now(), { method: 'HEAD', cache: 'no-store' })
+              .then((r) => {
+                if (r && r.ok) {
+                  document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
+                  if (window.ChanwanNative && typeof window.ChanwanNative.downloadAndInstallApk === 'function') {
+                    try { window.ChanwanNative.downloadAndInstallApk(apkUrl); return; } catch (_) {}
+                  }
+                  if (window.ChanwanNative && typeof window.ChanwanNative.openExternalUrl === 'function') {
+                    try { window.ChanwanNative.openExternalUrl(apkUrl); return; } catch (_) {}
+                  }
+                  const a = document.createElement('a');
+                  a.href = apkUrl;
+                  a.download = 'chanwan-shiguang.apk';
+                  a.target = '_blank';
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                } else {
+                  const modal = document.getElementById('cwInAppUpdateModal');
+                  const ttl = document.getElementById('cwInAppUpdTitle');
+                  const dsc = document.getElementById('cwInAppUpdDesc');
+                  const btn = document.getElementById('cwInAppUpdInstallBtn');
+                  const lat = document.getElementById('cwInAppUpdLaterBtn');
+                  if (ttl) ttl.textContent = isZh ? '📦 APK 安装包位置指引' : '📦 새 APK 파일 받는 곳 안내';
+                  if (dsc) dsc.textContent = isZh
+                    ? '仓库根目录尚未放入 chanwan-shiguang.apk。请在浏览器打开 GitHub Actions 页面，点击最上方绿色 ✅ 记录底部的 chanwan-shiguang-apk 下载安装 💜'
+                    : '아직 저장소 루트에 APK 파일이 복사되지 않아 GitHub Actions 보관함에 들어 있어요! 크롬에서 GitHub Actions 페이지를 열어 맨 위 초록 체크(✅) 항목 맨 아래 「chanwan-shiguang-apk」를 받아 설치해 주세요 💜 (아래 버튼을 누르면 주소가 복사돼요!)';
+                  if (btn) {
+                    btn.textContent = isZh ? '📋 复制 GitHub Actions 下载地址' : '📋 GitHub Actions 주소 복사하기';
+                    btn.onclick = (ev) => {
+                      ev.preventDefault();
+                      ev.stopPropagation();
+                      const actUrl = 'https://github.com/swans8562-sudo/chanwan/actions';
+                      if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(actUrl).catch(() => {});
+                      }
+                      showToast(isZh ? '✅ 已复制地址！请粘贴到浏览器打开' : '✅ 주소 복사 완료! 크롬 주소창에 붙여넣어 열어주세요');
+                      document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
+                    };
+                  }
+                  if (lat) lat.textContent = isZh ? '关闭' : '닫기';
+                  if (modal) modal.classList.remove('hidden');
+                }
+              })
+              .catch(() => {
+                showToast(isZh ? '网络暂时波动，请稍后再试' : '네트워크 확인 후 다시 눌러주세요');
+              });
+            return;
           }
         });
 
@@ -16582,7 +16686,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v71',
+          ver: 'Prime 4 · v73',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16604,7 +16708,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v71 更新日志' : '📜 灿完时光 Prime 4 · v71 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v73 更新日志' : '📜 灿完时光 Prime 4 · v73 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -23529,9 +23633,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           tray.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'INPUT') e.preventDefault(); });
           let lastUFabTs = 0;
+          tray.__cwPointerStartedInside = false;
+          tray.addEventListener('pointerdown', () => { tray.__cwPointerStartedInside = true; }, true);
+          tray.addEventListener('touchstart', () => { tray.__cwPointerStartedInside = true; }, { passive: true, capture: true });
+          tray.addEventListener('click', (e) => {
+            if ((!tray.__cwPointerStartedInside && e.detail > 0) || (Date.now() - lastUFabTs < 150)) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            }
+          }, true);
           const toggleUniversalTray = () => {
             if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
             const willOpen = tray.classList.contains('hidden');
+            if (willOpen) tray.__cwPointerStartedInside = false;
             tray.classList.toggle('hidden', !willOpen);
             if (willOpen) {
               if (activeTarget && activeTarget.isConnected) {
@@ -23542,8 +23657,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               wrap.style.bottom = 'calc(60px + env(safe-area-inset-bottom, 0px))';
             }
           };
-          fab.addEventListener('pointerdown', (e) => {
-            if (e.pointerType === 'mouse' && e.button !== 0) return;
+          fab.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            lastUFabTs = Date.now();
+            toggleUniversalTray();
+          }, { passive: false });
+          fab.addEventListener('mousedown', (e) => {
+            if (e.button !== 0 || Date.now() - lastUFabTs < 550) return;
             e.preventDefault();
             e.stopPropagation();
             lastUFabTs = Date.now();
@@ -23552,7 +23673,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           fab.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (Date.now() - lastUFabTs < 450) return;
+            if (Date.now() - lastUFabTs < 550) return;
+            lastUFabTs = Date.now();
             toggleUniversalTray();
           });
 
@@ -26644,8 +26766,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v71)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v71';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v73)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v73';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
