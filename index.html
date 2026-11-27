@@ -2455,9 +2455,31 @@
     .tab-panel, .royal-card, .royal-card-gold, .royal-subcard, .cw-msg-row {
       contain: layout style;
     }
-    header, .dock-pill, .cw-dock-pill, #bottomNavDock {
+    header, .dock-bar, nav.dock-bar, .dock-pill, .cw-dock-pill, #bottomNavDock, .cw-nuance-detail {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
+    }
+    /* Prime 4 v59: 120Hz Zero-Jank Typing & Layout Isolation Engine */
+    input, textarea {
+      text-rendering: optimizeSpeed !important;
+      font-kerning: none !important;
+      font-variant-ligatures: none !important;
+      transition: none !important;
+    }
+    #chatForm, .cw-input-bar-row {
+      contain: layout style;
+    }
+    @supports (field-sizing: content) {
+      #chatInput {
+        field-sizing: content;
+        min-height: 22px;
+        max-height: 66px !important;
+      }
+    }
+    html.cw-kb-open .cw-msg-bubble,
+    html.cw-kb-open .royal-card,
+    html.cw-kb-open .royal-subcard {
+      transition: none !important;
     }
     .modal-backdrop {
       backdrop-filter: blur(3px) !important;
@@ -2489,7 +2511,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v58: App-Wide Couture Boutique Elevation
+       Prime 4 · v60: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2680,7 +2702,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v58: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v60: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -3277,6 +3299,13 @@
             <span id="learnDailyGoalText">🎯 오늘 목표: 0 / 20문제</span>
             <span id="learnBookmarkSummary">⭐ 즐겨찾기 0개 · 🐢 느리게 듣기 지원</span>
           </div>
+          <div id="learnZeroRecoverBar" class="hidden pt-2 mt-1 border-t flex flex-wrap items-center justify-between gap-2" style="border-color: var(--border-subtle);">
+            <span id="learnZeroRecoverHint" class="text-[11px] text-sec">💡 앱 재설치로 학습 기록이 비었나요?</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button type="button" id="learnCloudRecoverBtn" class="btn-royal px-3 py-1 rounded-full text-[11px] font-bold">☁️ 서버·징찬 폰에서 복구</button>
+              <button type="button" id="learnBackupMergeBtn" class="btn-gold px-3 py-1 rounded-full text-[11px] font-bold">📥 백업 파일 합치기</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3770,7 +3799,7 @@
             <button id="chatVoiceMsgBtn" type="button" class="btn-ghost w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition" title="음성 메시지 녹음" aria-label="음성 메시지"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="voice"></span></button>
 
             <div class="royal-input flex-1 min-w-0 rounded-2xl px-3 py-1.5 flex items-center gap-1.5" style="min-height: 38px;">
-              <textarea id="chatInput" rows="1" data-i18n-placeholder="phChat" class="flex-1 min-w-0 w-full bg-transparent border-0 outline-none text-sm leading-snug resize-none py-0.5 max-h-24 overflow-y-auto" placeholder="" autocomplete="off"></textarea>
+              <textarea id="chatInput" rows="1" data-i18n-placeholder="phChat" class="flex-1 min-w-0 w-full bg-transparent border-0 outline-none text-sm leading-snug resize-none py-0.5 max-h-24 overflow-y-auto" placeholder="" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
               <button id="cwQuickPhraseToggleBtn" type="button" class="w-7 h-7 rounded-full flex items-center justify-center opacity-75 hover:opacity-100 shrink-0 transition" title="빠른 메시지 숨기기/켜기" aria-label="빠른 메시지"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M5 6.5h11.5a3.5 3.5 0 0 1 3.5 3.5v3a3.5 3.5 0 0 1-3.5 3.5H9.2L5.5 19v-2.5A3.5 3.5 0 0 1 3 13v-3a3.5 3.5 0 0 1 2-3.5z" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11.5h5.5M8 14h3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 4l.7 1.6L20.8 6.3l-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7.7-1.6z" fill="currentColor"/></svg></button>
               <button id="chatMicBtn" type="button" class="w-7 h-7 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 shrink-0 transition" title="음성인식 (말하면 글자로 입력)" aria-label="음성인식"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="mic"></span></button>
             </div>
@@ -4924,7 +4953,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v58</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v60</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
           </div>
         </div>
@@ -9676,7 +9705,39 @@
             }
           } catch (_) {}
         }
-        setInterval(() => { if (!document.hidden) autoResolvePendingTranslations(); }, 3000);
+        // Global 0.001ms Active-Typing Tracker: defers heavy background polling, JSON.stringify & DOM sweeps while fingers are typing!
+        window.__cwLastUserTypingTs = 0;
+        window.__cwIsImeComposing = false;
+        window.__isActivelyTyping = function() {
+          return !!window.__cwIsImeComposing || ((performance.now ? performance.now() : Date.now()) - (window.__cwLastUserTypingTs || 0)) < 950;
+        };
+        document.addEventListener('compositionstart', () => {
+          window.__cwIsImeComposing = true;
+          window.__cwLastUserTypingTs = performance.now ? performance.now() : Date.now();
+        }, { passive: true, capture: true });
+        document.addEventListener('compositionend', () => {
+          window.__cwIsImeComposing = false;
+          window.__cwLastUserTypingTs = performance.now ? performance.now() : Date.now();
+        }, { passive: true, capture: true });
+        document.addEventListener('keydown', (ev) => {
+          const t = ev.target;
+          if (t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT')) {
+            window.__cwLastUserTypingTs = performance.now ? performance.now() : Date.now();
+          }
+        }, { passive: true, capture: true });
+        document.addEventListener('input', (ev) => {
+          const t = ev.target;
+          if (t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT')) {
+            window.__cwLastUserTypingTs = performance.now ? performance.now() : Date.now();
+            if (t.spellcheck !== false) t.spellcheck = false;
+          }
+        }, { passive: true, capture: true });
+
+        setInterval(() => {
+          if (!document.hidden && !(window.__isActivelyTyping && window.__isActivelyTyping())) {
+            autoResolvePendingTranslations();
+          }
+        }, 3500);
 
       let activeAvatarTarget = 'suwan';
       let activeCityTarget = 'suwan';
@@ -9696,6 +9757,129 @@
         };
       }
 
+      // Prime 4 v60: Never-Shrink Monotonic Korean Study Merger (protects XP, streak, solvedHistory, studyLog, praiseStickers, wrongNotes & bookmarks!)
+      const CW_LEVEL_RANK = { starter: 1, beginner: 2, intermediate: 3, advanced: 4, master: 5 };
+      function mergeLearnMonotonic(curRaw, incRaw) {
+        const cur = (curRaw && typeof curRaw === 'object') ? curRaw : {};
+        const inc = (incRaw && typeof incRaw === 'object') ? incRaw : {};
+        const curReset = Number(cur.resetAt || 0);
+        const incReset = Number(inc.resetAt || 0);
+        if (incReset > 0 && incReset > curReset) {
+          return { ...DEFAULT_STATE.learn, ...inc, resetAt: incReset };
+        }
+        if (curReset > 0 && curReset > incReset) {
+          return { ...DEFAULT_STATE.learn, ...cur, resetAt: curReset };
+        }
+        const mergeObjList = (aList, bList, keyFn, cap) => {
+          const map = new Map();
+          const out = [];
+          for (const item of [...(Array.isArray(aList) ? aList : []), ...(Array.isArray(bList) ? bList : [])]) {
+            if (!item || typeof item !== 'object') continue;
+            const k = keyFn(item);
+            if (!k) continue;
+            if (!map.has(k)) {
+              const copy = { ...item };
+              map.set(k, copy);
+              out.push(copy);
+            } else {
+              const ex = map.get(k);
+              if (item.reviewedDone && !ex.reviewedDone) {
+                ex.correct = true;
+                ex.reviewedDone = true;
+                ex.reviewedAt = item.reviewedAt || Date.now();
+              }
+            }
+          }
+          return cap ? out.slice(0, cap) : out;
+        };
+
+        const mergedPraises = mergeObjList(inc.praiseStickers, cur.praiseStickers, x => x.id || `${x.date}_${x.time}_${x.type}`, 80);
+        const mergedHist = mergeObjList(inc.solvedHistory, cur.solvedHistory, x => x.id || `${x.date}_${x.time}_${x.q}`, 80);
+        const reviewedSet = new Set(mergedHist.filter(h => h && h.reviewedDone).map(h => h.q));
+        const mergedWrong = mergeObjList(cur.wrongNotes, inc.wrongNotes, x => x.id || x.q, 80).filter(w => !reviewedSet.has(w.q));
+        const mergedStarred = mergeObjList(cur.starredProblems, inc.starredProblems, x => `${x.q || ''}|${x.answer || ''}`, 80);
+        const mergedBookmarks = Array.from(new Set([...(Array.isArray(cur.bookmarks) ? cur.bookmarks : []), ...(Array.isArray(inc.bookmarks) ? inc.bookmarks : [])].filter(Boolean))).slice(0, 150);
+        const mergedSolvedQIds = Array.from(new Set([...(Array.isArray(cur.solvedQIds) ? cur.solvedQIds : []), ...(Array.isArray(inc.solvedQIds) ? inc.solvedQIds : [])].filter(Boolean)));
+        const mergedSpoken = Array.from(new Set([...(Array.isArray(cur.spokenPhrases) ? cur.spokenPhrases : []), ...(Array.isArray(inc.spokenPhrases) ? inc.spokenPhrases : [])].filter(Boolean))).slice(-200);
+
+        const mergedLog = { ...(cur.studyLog && typeof cur.studyLog === 'object' ? cur.studyLog : {}) };
+        if (inc.studyLog && typeof inc.studyLog === 'object') {
+          Object.keys(inc.studyLog).forEach(dk => {
+            mergedLog[dk] = Math.max(Number(mergedLog[dk] || 0), Number(inc.studyLog[dk] || 0));
+          });
+        }
+
+        const curXp = Number(cur.xp || 0);
+        const incXp = Number(inc.xp || 0);
+        const curSolved = Number(cur.solved || 0);
+        const incSolved = Number(inc.solved || 0);
+        const bestStreak = incSolved > curSolved ? Math.max(Number(inc.streak || 0), Number(cur.streak || 0)) : Math.max(Number(cur.streak || 0), Number(inc.streak || 0));
+
+        const curLv = CW_LEVEL_RANK[cur.currentLevel] ? cur.currentLevel : 'starter';
+        const incLv = CW_LEVEL_RANK[inc.currentLevel] ? inc.currentLevel : 'starter';
+        const bestLevel = CW_LEVEL_RANK[incLv] > CW_LEVEL_RANK[curLv] ? incLv : curLv;
+
+        const curXpDate = String(cur.todayXpDate || '');
+        const incXpDate = String(inc.todayXpDate || '');
+        const bestXpDate = incXpDate >= curXpDate ? (incXpDate || curXpDate) : curXpDate;
+        const bestTodayXp = (curXpDate && curXpDate === incXpDate)
+          ? Math.max(Number(cur.todayXp || 0), Number(inc.todayXp || 0))
+          : (incXpDate > curXpDate ? Number(inc.todayXp || 0) : Number(cur.todayXp || 0));
+        const bestTodayXpEarned = (curXpDate && curXpDate === incXpDate)
+          ? Math.max(Number(cur.todayXpEarned || 0), Number(inc.todayXpEarned || 0))
+          : (incXpDate > curXpDate ? Number(inc.todayXpEarned || 0) : Number(cur.todayXpEarned || 0));
+
+        const curSolvDate = String(cur.todaySolvedDate || '');
+        const incSolvDate = String(inc.todaySolvedDate || '');
+        const bestSolvDate = incSolvDate >= curSolvDate ? (incSolvDate || curSolvDate) : curSolvDate;
+        const bestTodaySolvedCnt = (curSolvDate && curSolvDate === incSolvDate)
+          ? Math.max(Number(cur.todaySolvedCount || 0), Number(inc.todaySolvedCount || 0))
+          : (incSolvDate > curSolvDate ? Number(inc.todaySolvedCount || 0) : Number(cur.todaySolvedCount || 0));
+
+        const curSpkDate = String(cur.spokenDoneDate || '');
+        const incSpkDate = String(inc.spokenDoneDate || '');
+        const bestSpkDate = incSpkDate >= curSpkDate ? (incSpkDate || curSpkDate) : curSpkDate;
+        const bestSpkList = (curSpkDate && curSpkDate === incSpkDate)
+          ? Array.from(new Set([...(Array.isArray(cur.spokenDoneList) ? cur.spokenDoneList : []), ...(Array.isArray(inc.spokenDoneList) ? inc.spokenDoneList : [])]))
+          : (incSpkDate > curSpkDate ? (Array.isArray(inc.spokenDoneList) ? inc.spokenDoneList : []) : (Array.isArray(cur.spokenDoneList) ? cur.spokenDoneList : []));
+
+        const lastStudyTime = String(inc.lastStudyTime || '') > String(cur.lastStudyTime || '')
+          ? String(inc.lastStudyTime || '')
+          : String(cur.lastStudyTime || inc.lastStudyTime || '');
+
+        return {
+          ...DEFAULT_STATE.learn,
+          ...cur,
+          ...inc,
+          xp: Math.max(curXp, incXp),
+          solved: Math.max(curSolved, incSolved),
+          streak: bestStreak,
+          currentLevel: bestLevel,
+          quizIdx: Math.max(Number(cur.quizIdx || 0), Number(inc.quizIdx || 0)),
+          quizInputMode: cur.quizInputMode || inc.quizInputMode || 'choice',
+          gameBest: Math.max(Number(cur.gameBest || 0), Number(inc.gameBest || 0)),
+          suwanGameBest: Math.max(Number(cur.suwanGameBest || 0), Number(inc.suwanGameBest || 0)),
+          todayXpDate: bestXpDate,
+          todayXp: bestTodayXp,
+          todayXpEarned: bestTodayXpEarned,
+          todaySolvedDate: bestSolvDate,
+          todaySolvedCount: bestTodaySolvedCnt,
+          spokenDoneDate: bestSpkDate,
+          spokenDoneList: bestSpkList,
+          lastStudyTime,
+          studyLog: mergedLog,
+          praiseStickers: mergedPraises,
+          solvedHistory: mergedHist,
+          wrongNotes: mergedWrong,
+          bookmarks: mergedBookmarks,
+          solvedQIds: mergedSolvedQIds,
+          spokenPhrases: mergedSpoken,
+          starredProblems: mergedStarred,
+          resetAt: Math.max(curReset, incReset)
+        };
+      }
+      window.__mergeLearnMonotonic = mergeLearnMonotonic;
+
       let __cwStateLoaded = false;
       let __cwIdbFlushTimer = null;
       let __cwPendingCoreObj = null;
@@ -9712,9 +9896,13 @@
             if (m && (m.photoUrl || m.videoUrl || m.audioUrl || (Array.isArray(m.photoUrls) && m.photoUrls.length))) __cmCnt++;
           }
           const __albCatTs = Array.isArray(state.albums) ? state.albums.reduce((acc, a) => acc + Number((a && a.categoryUpdatedAt) || 0), 0) : 0;
-          const __sig = `${__aLen}:${__vLen}:${__cmCnt}:${(state.deletedAlbumIds || []).length}:${(state.deletedVoiceIds || []).length}:${__albCatTs}`;
+          const __lSig = `${Number(state.learn?.xp || 0)}:${Number(state.learn?.solved || 0)}:${(state.learn?.praiseStickers || []).length}:${Number(state.learn?.resetAt || 0)}`;
+          const __sig = `${__aLen}:${__vLen}:${__cmCnt}:${(state.deletedAlbumIds || []).length}:${(state.deletedVoiceIds || []).length}:${__albCatTs}:${__lSig}`;
           if (!force && __sig === __cwLastMediaVaultSig) return;
           __cwLastMediaVaultSig = __sig;
+          if (state.learn && (Number(state.learn.xp || 0) > 0 || Number(state.learn.solved || 0) > 0 || (state.learn.praiseStickers || []).length > 0 || Number(state.learn.resetAt || 0) > 0)) {
+            idbPut('learn_vault_v1', state.learn);
+          }
           // Never wipe non-empty IDB vaults with accidental empty arrays unless explicit deletions exist
           if (Array.isArray(state.albums) && (state.albums.length > 0 || (Array.isArray(state.deletedAlbumIds) && state.deletedAlbumIds.length > 0))) {
             idbPut('albums_vault_v1', state.albums);
@@ -9801,9 +9989,14 @@
       }
       window.__cwMediaUrl = __cwMediaUrl;
 
-      function flushIdbStateNow() {
+      function flushIdbStateNow(forceImmediate) {
         if (!__cwStateLoaded) return;
-        flushLocalCoreNow();
+        if (!forceImmediate && !document.hidden && window.__isActivelyTyping && window.__isActivelyTyping()) {
+          if (__cwIdbFlushTimer) clearTimeout(__cwIdbFlushTimer);
+          __cwIdbFlushTimer = setTimeout(() => flushIdbStateNow(false), 1200);
+          return;
+        }
+        flushLocalCoreNow(forceImmediate);
         if (__cwIdbFlushTimer) { clearTimeout(__cwIdbFlushTimer); __cwIdbFlushTimer = null; }
         try {
           // Persist media vaults first (dirty-checked), then store lightweight state in full_state_v6 to avoid 2x RAM spike on mobile!
@@ -9823,15 +10016,19 @@
           navigator.storage.persist().catch(() => {});
         }
       } catch (_) {}
-      window.addEventListener('pagehide', flushIdbStateNow);
-      document.addEventListener('visibilitychange', () => { if (document.hidden) flushIdbStateNow(); });
+      window.addEventListener('pagehide', () => flushIdbStateNow(true));
+      document.addEventListener('visibilitychange', () => { if (document.hidden) flushIdbStateNow(true); });
 
       let __cwLastMediaVaultSig = '';
       let __cwLsWriteTimer = null;
       let __cwBroadcastTimer = null;
-      function flushLocalCoreNow() {
+      function flushLocalCoreNow(forceImmediate) {
         if (__cwLsWriteTimer) { clearTimeout(__cwLsWriteTimer); __cwLsWriteTimer = null; }
         if (!__cwStateLoaded) return;
+        if (!forceImmediate && !document.hidden && window.__isActivelyTyping && window.__isActivelyTyping()) {
+          __cwLsWriteTimer = setTimeout(() => flushLocalCoreNow(false), 700);
+          return;
+        }
         try {
           const coreObj = __cwPendingCoreObj || extractLightweightCore(state);
           __cwPendingCoreObj = coreObj;
@@ -10045,7 +10242,7 @@
             candidates.push(JSON.parse(window.name.slice('CHANWAN_V6:'.length)));
           }
         } catch (_) {}
-        const [idbV6, idbV6Core, idbV5, idbSuwanVoices, idbAlbumsVault, idbVoiceLettersVault, idbDelAlbumsVault, idbDelVoicesVault, idbChatMediaVault] = await Promise.all([
+        const [idbV6, idbV6Core, idbV5, idbSuwanVoices, idbAlbumsVault, idbVoiceLettersVault, idbDelAlbumsVault, idbDelVoicesVault, idbChatMediaVault, idbLearnVault] = await Promise.all([
           idbGet('full_state_v6'),
           idbGet('core_state_v6'),
           idbGet('full_state'),
@@ -10054,7 +10251,8 @@
           idbGet('voice_letters_vault_v1'),
           idbGet('deleted_albums_vault_v1'),
           idbGet('deleted_voices_vault_v1'),
-          idbGet('chat_media_vault_v1')
+          idbGet('chat_media_vault_v1'),
+          idbGet('learn_vault_v1')
         ]);
         if (idbV6) candidates.push(idbV6);
         if (idbV6Core) candidates.push(idbV6Core);
@@ -10066,6 +10264,12 @@
           const mediaSource = idbV6 || idbV5 || valid.find(v => (v.albums && v.albums.length) || v.profile?.suwanAvatar);
           state = mergeWithDefaults(valid[0], mediaSource);
         }
+        // Always union-merge Korean Study progress across all local candidates + dedicated learn_vault_v1!
+        [idbV5 && idbV5.learn, idbV6 && idbV6.learn, idbV6Core && idbV6Core.learn, idbLearnVault].forEach(candL => {
+          if (candL && typeof candL === 'object') {
+            state.learn = mergeLearnMonotonic(state.learn, candL);
+          }
+        });
         // Always merge all persisted Suwan Voices from dedicated IDB vault so recordings NEVER disappear!
         state.customVoices = {
           ...(idbV5 && idbV5.customVoices && typeof idbV5.customVoices === 'object' ? idbV5.customVoices : {}),
@@ -11258,6 +11462,36 @@
           : `🎯 오늘 목표: ${Math.min(DAILY_STUDY_GOAL, todayGoalCnt)}/${DAILY_STUDY_GOAL}문제 · ⚡ 오늘 XP: ${todayXpNow}/${DAILY_XP_CAP}`;
         const vcCount = state.customVoices ? Object.keys(state.customVoices).length : 0;
         if (bmEl) bmEl.textContent = state.lang === 'zh' ? `⭐ 收藏 ${bmCount} 条 · 🎧 秀完原声 ${vcCount} 条` : `⭐ 즐겨찾기 ${bmCount}개 · 🎧 수완 보이스 ${vcCount}개`;
+        const zeroBar = document.getElementById('learnZeroRecoverBar');
+        if (zeroBar) {
+          const isZeroLearn = (Number(state.learn?.xp || 0) === 0 && Number(state.learn?.solved || 0) === 0);
+          zeroBar.classList.toggle('hidden', !isZeroLearn);
+          if (isZeroLearn) {
+            const isZhL = state.lang === 'zh';
+            const hEl = document.getElementById('learnZeroRecoverHint');
+            const cBtn = document.getElementById('learnCloudRecoverBtn');
+            const bBtn = document.getElementById('learnBackupMergeBtn');
+            if (hEl) hEl.textContent = isZhL ? '💡 学习记录为空？可从云端/对方手机或备份合并恢复' : '💡 학습 기록이 비었나요? 징찬 폰·서버 또는 백업에서 바로 합쳐요';
+            if (cBtn) {
+              cBtn.textContent = isZhL ? '☁️ 云端·对方手机恢复' : '☁️ 서버·징찬 폰 복구';
+              if (!cBtn.dataset.bound) {
+                cBtn.dataset.bound = '1';
+                cBtn.addEventListener('click', () => {
+                  if (typeof window.__runFullCloudDataRestore === 'function') window.__runFullCloudDataRestore(false);
+                });
+              }
+            }
+            if (bBtn) {
+              bBtn.textContent = isZhL ? '📥 导入备份合并' : '📥 백업 파일 합치기';
+              if (!bBtn.dataset.bound) {
+                bBtn.dataset.bound = '1';
+                bBtn.addEventListener('click', () => {
+                  document.getElementById('importBackupInput')?.click();
+                });
+              }
+            }
+          }
+        }
 
         // Build 12 daily phrases every day from DAILY_CURRICULUM + CHEAT_SHEET_72
         const dailyMasterPool = DAILY_CURRICULUM.concat(
@@ -14036,20 +14270,31 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         document.getElementById('homeTransInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') runHomeTrans(); });
 
         let homeLiveTimer = null, homeLiveSeq = 0;
-        document.getElementById('homeTransInput').addEventListener('input', (e) => {
-          const val = e.target.value.trim();
+        const scheduleHomeLiveTrans = (e) => {
+          if (e && e.isComposing) return;
+          const inpEl = document.getElementById('homeTransInput');
+          const val = (inpEl ? inpEl.value : '').trim();
           const out = document.getElementById('homeTransResult');
           clearTimeout(homeLiveTimer);
-          if (!val) { homeLiveSeq++; out.classList.add('hidden'); return; }
+          if (!val) { homeLiveSeq++; out.dataset.cwLoading = '0'; out.classList.add('hidden'); return; }
           const seq = ++homeLiveSeq;
           out.classList.remove('hidden');
-          out.innerHTML = `<div class="text-xs text-gold py-1.5">⚡ ${state.lang === 'zh' ? '正在实时翻译...' : '입력하는 대로 실시간 번역 중...'}</div>`;
+          if (out.dataset.cwLoading !== '1') {
+            out.dataset.cwLoading = '1';
+            out.innerHTML = `<div class="text-xs text-gold py-1.5">⚡ ${state.lang === 'zh' ? '正在实时翻译...' : '입력하는 대로 실시간 번역 중...'}</div>`;
+          }
           homeLiveTimer = setTimeout(async () => {
             const res = await geminiTranslate(val, 'lover');
             if (seq !== homeLiveSeq) return;
-            if (res) out.innerHTML = renderNuanceCardHtml(res); if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(localStorage.getItem('chanwan_icon_style_v1') || 'pastel');
-          }, 420);
-        });
+            out.dataset.cwLoading = '0';
+            if (res) {
+              out.innerHTML = renderNuanceCardHtml(res);
+              if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(localStorage.getItem('chanwan_icon_style_v1') || 'pastel', out);
+            }
+          }, 520);
+        };
+        document.getElementById('homeTransInput').addEventListener('input', scheduleHomeLiveTrans);
+        document.getElementById('homeTransInput').addEventListener('compositionend', scheduleHomeLiveTrans);
 
         // Tab 4: 번역·메신저 (Tone Modes + Real-Time Live Studio + Messenger)
         document.querySelectorAll('.trans-subtab').forEach(btn => btn.addEventListener('click', () => switchTransSubtab(btn.getAttribute('data-subtab'))));
@@ -14059,14 +14304,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const val = document.getElementById('studioTransInput').value.trim();
           const out = document.getElementById('studioTransOutput');
           clearTimeout(studioLiveTimer);
-          if (!val) { studioLiveSeq++; out.classList.add('hidden'); return; }
+          if (!val) { studioLiveSeq++; out.dataset.cwLoading = '0'; out.classList.add('hidden'); return; }
           const seq = ++studioLiveSeq;
           out.classList.remove('hidden');
-          out.innerHTML = `<div class="text-xs text-gold py-2">⚡ ${state.lang === 'zh' ? '正在实时自动翻译...' : '작성하는 즉시 실시간 번역 중...'}</div>`;
+          if (out.dataset.cwLoading !== '1') {
+            out.dataset.cwLoading = '1';
+            out.innerHTML = `<div class="text-xs text-gold py-2">⚡ ${state.lang === 'zh' ? '正在实时自动翻译...' : '작성하는 즉시 실시간 번역 중...'}</div>`;
+          }
           studioLiveTimer = setTimeout(async () => {
             const res = await geminiTranslate(val, activeToneMode);
             if (seq !== studioLiveSeq) return;
-            out.innerHTML = renderNuanceCardHtml(res); if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(localStorage.getItem('chanwan_icon_style_v1') || 'pastel');
+            out.dataset.cwLoading = '0';
+            out.innerHTML = renderNuanceCardHtml(res); if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(localStorage.getItem('chanwan_icon_style_v1') || 'pastel', out);
             if (res && res.original && res.original.length >= 2) {
               const last = state.transHistory[0];
               if (!last || last.original !== res.original) {
@@ -14098,18 +14347,26 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           });
         });
 
-        document.getElementById('studioTransInput').addEventListener('input', (e) => {
-          const v = e.target.value.trim();
+        const onStudioInputChanged = (e) => {
+          if (e && e.isComposing) return;
+          const inpEl = document.getElementById('studioTransInput');
+          const v = (inpEl ? inpEl.value : '').trim();
           const el = document.getElementById('studioTransDetected');
           if (!v) {
             el.textContent = state.lang === 'zh' ? '等待自动识别语言（输入即实时翻译）' : '입력하면 버튼 없이 바로 실시간 번역돼요';
             clearTimeout(studioLiveTimer); studioLiveSeq++;
-            document.getElementById('studioTransOutput').classList.add('hidden');
+            const outEl = document.getElementById('studioTransOutput');
+            if (outEl) { outEl.dataset.cwLoading = '0'; outEl.classList.add('hidden'); }
             return;
           }
-          el.textContent = state.lang === 'zh' ? (detectLanguage(v) === 'ko' ? '🇰🇷 识别到韩语 → 🇨🇳 实时自动翻译中' : '🇨🇳 识别到中文 → 🇰🇷 实时自动翻译中') : (detectLanguage(v) === 'ko' ? '🇰🇷 한국어 감지 → 🇨🇳 실시간 자동 번역 중' : '🇨🇳 중국어 감지 → 🇰🇷 실시간 자동 번역 중');
+          const nextLbl = state.lang === 'zh'
+            ? (detectLanguage(v) === 'ko' ? '🇰🇷 识别到韩语 → 🇨🇳 实时自动翻译中' : '🇨🇳 识别到中文 → 🇰🇷 实时自动翻译中')
+            : (detectLanguage(v) === 'ko' ? '🇰🇷 한국어 감지 → 🇨🇳 실시간 자동 번역 중' : '🇨🇳 중국어 감지 → 🇰🇷 실시간 자동 번역 중');
+          if (el.textContent !== nextLbl) el.textContent = nextLbl;
           triggerStudioLiveTranslate(false);
-        });
+        };
+        document.getElementById('studioTransInput').addEventListener('input', onStudioInputChanged);
+        document.getElementById('studioTransInput').addEventListener('compositionend', onStudioInputChanged);
         // ==================== v8.7 REAL-TIME VOICE RECOGNITION (KO & ZH SPEECH-TO-TEXT) ====================
         const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
         let activeRecognition = null;
@@ -15194,23 +15451,55 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           renderChatPinnedBanner();
           showToast(state.lang === 'zh' ? '已取消置顶公告' : '상단 공지 고정을 해제했어요');
         });
+        const __supportsFieldSizing = (typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('field-sizing', 'content'));
+        const __cachedChatSendBtn = document.getElementById('chatSendBtn');
+        let __lastShowSendState = null;
+        let __chatTaIsMultiLine = false;
+        let __chatHeightRaf = 0;
+
         function syncWechatSendButton() {
-          const hasText = !!(chatInputTa && chatInputTa.value.trim().length > 0);
+          const rawVal = chatInputTa ? chatInputTa.value : '';
+          const hasText = rawVal.length > 0 && /\S/.test(rawVal);
           const hasMedia = !!(pendingChatPhotoUrl || (Array.isArray(pendingChatPhotos) && pendingChatPhotos.length > 0));
           const showSend = hasText || hasMedia;
-          const sBtn = document.getElementById('chatSendBtn');
-          if (sBtn) {
-            sBtn.classList.toggle('hidden', !showSend);
-            if (!showSend) {
-              sBtn.disabled = false;
-              sBtn.textContent = state.lang === 'zh' ? '发送' : '전송';
+          if (showSend !== __lastShowSendState) {
+            __lastShowSendState = showSend;
+            const sBtn = __cachedChatSendBtn || document.getElementById('chatSendBtn');
+            if (sBtn) {
+              sBtn.classList.toggle('hidden', !showSend);
+              if (!showSend) {
+                sBtn.disabled = false;
+                sBtn.textContent = state.lang === 'zh' ? '发送' : '전송';
+              }
             }
+            if (chatPlusBtn) chatPlusBtn.classList.toggle('hidden', showSend);
           }
-          if (chatPlusBtn) chatPlusBtn.classList.toggle('hidden', showSend);
-          if (chatInputTa) {
+          if (!chatInputTa || __supportsFieldSizing) return;
+          // Zero-reflow single-line fast path: never touch style.height or read scrollHeight for short single-line input!
+          if (!rawVal) {
+            if (__chatTaIsMultiLine || chatInputTa.style.height) {
+              chatInputTa.style.height = '';
+              __chatTaIsMultiLine = false;
+            }
+            return;
+          }
+          const mightWrap = rawVal.indexOf('\n') !== -1 || rawVal.length > 22 || __chatTaIsMultiLine;
+          if (!mightWrap) return;
+          if (__chatHeightRaf) return;
+          __chatHeightRaf = requestAnimationFrame(() => {
+            __chatHeightRaf = 0;
+            if (!chatInputTa) return;
+            const vNow = chatInputTa.value || '';
+            if (!vNow) {
+              chatInputTa.style.height = '';
+              __chatTaIsMultiLine = false;
+              return;
+            }
             chatInputTa.style.height = 'auto';
-            chatInputTa.style.height = Math.min(chatInputTa.scrollHeight, 66) + 'px';
-          }
+            const nextH = Math.min(chatInputTa.scrollHeight, 66);
+            chatInputTa.style.height = nextH + 'px';
+            __chatTaIsMultiLine = nextH > 34;
+          });
         }
         window.__syncWechatSendButton = syncWechatSendButton;
         const saveChatCursorAndDismissKb = () => {
@@ -15263,14 +15552,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         if (chatInputTa) {
           chatInputTa.addEventListener('input', () => {
-            if (typeof chatInputTa.selectionStart === 'number') window.__cwChatCursorPos = chatInputTa.selectionStart;
             syncWechatSendButton();
           });
-          ['keyup', 'click', 'select'].forEach(evName => {
-            chatInputTa.addEventListener(evName, () => {
-              if (typeof chatInputTa.selectionStart === 'number') window.__cwChatCursorPos = chatInputTa.selectionStart;
-            });
-          });
+          chatInputTa.addEventListener('click', () => {
+            if (typeof chatInputTa.selectionStart === 'number') window.__cwChatCursorPos = chatInputTa.selectionStart;
+          }, { passive: true });
         }
         if (chatPlusBtn && chatPlusDrawer) {
           bindInstantDrawerToggle(chatPlusBtn, () => {
@@ -15385,34 +15671,38 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
         }
         window.__syncChatKeyboardViewport = syncChatKeyboardViewport;
+        let __vvRafId = 0;
+        const scheduleViewportSync = () => {
+          if (__vvRafId) return;
+          __vvRafId = requestAnimationFrame(() => {
+            __vvRafId = 0;
+            syncChatKeyboardViewport();
+          });
+        };
         if (window.visualViewport) {
-          window.visualViewport.addEventListener('resize', () => syncChatKeyboardViewport());
-          window.visualViewport.addEventListener('scroll', () => syncChatKeyboardViewport());
+          window.visualViewport.addEventListener('resize', scheduleViewportSync, { passive: true });
         }
-        window.addEventListener('resize', () => syncChatKeyboardViewport());
+        window.addEventListener('resize', scheduleViewportSync, { passive: true });
 
-        // Typing signal (throttled every 2.2s), Auto-scroll on typing/focus & Read receipt signal
+        // Typing signal (off-thread, throttled 3.2s), zero compositionupdate overhead!
         let lastTypingSigTs = 0;
         if (chatInputTa) {
           chatInputTa.addEventListener('input', () => {
+            const rawV = chatInputTa.value;
+            const hasTxt = rawV.length > 0 && /\S/.test(rawV);
             const now = Date.now();
-            const hasTxt = chatInputTa.value.trim().length > 0;
-            if (hasTxt && now - lastTypingSigTs > 2000) {
+            if (hasTxt && (now - lastTypingSigTs) > 3200) {
               lastTypingSigTs = now;
               window.__cwWasTyping = true;
-              if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: true });
+              setTimeout(() => {
+                if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: true });
+              }, 0);
             } else if (!hasTxt && window.__cwWasTyping) {
               window.__cwWasTyping = false;
               lastTypingSigTs = 0;
-              if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: false });
-            }
-          });
-          chatInputTa.addEventListener('compositionupdate', () => {
-            const now = Date.now();
-            if (now - lastTypingSigTs > 2000) {
-              lastTypingSigTs = now;
-              window.__cwWasTyping = true;
-              if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: true });
+              setTimeout(() => {
+                if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: false });
+              }, 0);
             }
           });
           chatInputTa.addEventListener('focus', () => {
@@ -15427,6 +15717,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (typeof window.__emitChatReadIfVisible === 'function') window.__emitChatReadIfVisible(false);
           });
           chatInputTa.addEventListener('blur', () => {
+            if (typeof chatInputTa.selectionStart === 'number') window.__cwChatCursorPos = chatInputTa.selectionStart;
             if (window.__cwWasTyping) {
               window.__cwWasTyping = false;
               if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('typing', { active: false });
@@ -15742,7 +16033,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v58',
+          ver: 'Prime 4 · v60',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -15764,7 +16055,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v58 更新日志' : '📜 灿完时光 Prime 4 · v58 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v60 更新日志' : '📜 灿完时光 Prime 4 · v60 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -18303,25 +18594,132 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   return;
                 }
               }
-              const __prevAlbums = Array.isArray(state.albums) ? state.albums.slice() : [];
-              const __prevVoiceLetters = Array.isArray(state.voiceLetters) ? state.voiceLetters.slice() : [];
-              state = mergeWithDefaults(parsed, parsed);
-              // Preserve & union-merge existing local albums and voiceLetters so backup restore never drops media
+              // Prime 4 v60: 100% Non-Destructive Smart Union-Merge Backup Restore!
+              // Keeps ALL newer messages/diaries/anniversaries/media on the phone while restoring ALL older messages, Korean Study XP/history, customVoices, TMI, quizzes & albums!
+              const curSnap = state;
+              const impSnap = mergeWithDefaults(parsed, parsed);
+
+              const unionById = (curArr, impArr) => {
+                const map = new Map();
+                const out = [];
+                for (const item of [...(Array.isArray(curArr) ? curArr : []), ...(Array.isArray(impArr) ? impArr : [])]) {
+                  if (!item || !item.id || DUMMY_IDS.has(item.id)) continue;
+                  if (!map.has(item.id)) {
+                    const copy = { ...item };
+                    map.set(item.id, copy);
+                    out.push(copy);
+                  } else {
+                    const ex = map.get(item.id);
+                    if (!ex.photoUrl && item.photoUrl) ex.photoUrl = item.photoUrl;
+                    if (!ex.videoUrl && item.videoUrl) ex.videoUrl = item.videoUrl;
+                    if (!ex.audioUrl && item.audioUrl) ex.audioUrl = item.audioUrl;
+                    if ((!Array.isArray(ex.photoUrls) || !ex.photoUrls.length) && Array.isArray(item.photoUrls) && item.photoUrls.length) ex.photoUrls = item.photoUrls;
+                    if ((!ex.translated || /^(⏳|\[)/.test(String(ex.translated))) && item.translated) ex.translated = item.translated;
+                    if (Array.isArray(item.replies) && item.replies.length) {
+                      const rMap = new Map((ex.replies || []).map(r => [r && r.id, r]));
+                      item.replies.forEach(r => { if (r && r.id && !rMap.has(r.id)) { ex.replies = ex.replies || []; ex.replies.push(r); } });
+                    }
+                    if (Array.isArray(item.comments) && item.comments.length) {
+                      const cMap = new Map((ex.comments || []).map(c => [c && c.id, c]));
+                      item.comments.forEach(c => { if (c && c.id && !cMap.has(c.id)) { ex.comments = ex.comments || []; ex.comments.push(c); } });
+                    }
+                  }
+                }
+                return out;
+              };
+
+              const delMsgSet = new Set([...(curSnap.deletedMsgIds || []), ...(impSnap.deletedMsgIds || [])]);
+              const delAlbSet = new Set([...(curSnap.deletedAlbumIds || []), ...(impSnap.deletedAlbumIds || [])]);
+              const delVlSet = new Set([...(curSnap.deletedVoiceIds || []), ...(impSnap.deletedVoiceIds || [])]);
+
+              const mergedMsgs = unionById(curSnap.chat?.messages, impSnap.chat?.messages)
+                .filter(m => m && !delMsgSet.has(m.id))
+                .sort((a, b) => (Number(a.ts || 0) || 0) - (Number(b.ts || 0) || 0));
+
+              const mergedLearn = mergeLearnMonotonic(curSnap.learn, impSnap.learn);
+
               const __impAlbMap = new Map();
-              [...__prevAlbums, ...(Array.isArray(state.albums) ? state.albums : [])].forEach(a => {
-                if (!a || !a.id) return;
+              [...(curSnap.albums || []), ...(impSnap.albums || [])].forEach(a => {
+                if (!a || !a.id || delAlbSet.has(a.id)) return;
                 const ex = __impAlbMap.get(a.id);
                 if (!ex || (!ex.dataUrl && a.dataUrl)) __impAlbMap.set(a.id, ex ? { ...ex, ...a, dataUrl: a.dataUrl || ex.dataUrl } : a);
               });
-              state.albums = Array.from(__impAlbMap.values()).sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+              const mergedAlbums = Array.from(__impAlbMap.values()).sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+
               const __impVlMap = new Map();
-              [...__prevVoiceLetters, ...(Array.isArray(state.voiceLetters) ? state.voiceLetters : [])].forEach(v => {
-                if (!v || !v.id) return;
+              [...(curSnap.voiceLetters || []), ...(impSnap.voiceLetters || [])].forEach(v => {
+                if (!v || !v.id || delVlSet.has(v.id)) return;
                 const ex = __impVlMap.get(v.id);
                 if (!ex || (!ex.audioUrl && v.audioUrl)) __impVlMap.set(v.id, ex ? { ...ex, ...v, audioUrl: v.audioUrl || ex.audioUrl } : v);
               });
-              state.voiceLetters = Array.from(__impVlMap.values()).sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
-              saveState(true); flushIdbStateNow(); renderAll(); refreshBothCityWeathers(); showToast(state.lang === 'zh' ? '备份数据已恢复 ✨' : '백업 데이터가 복원되었습니다 ✨');
+              const mergedVoiceLetters = Array.from(__impVlMap.values()).sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+
+              const mergedCustomVoices = { ...(impSnap.customVoices || {}), ...(curSnap.customVoices || {}) };
+              const pickTmi = (rk) => {
+                const cT = curSnap.tmiBook?.[rk] || {};
+                const iT = impSnap.tmiBook?.[rk] || {};
+                return Number(iT.updatedAt || 0) > Number(cT.updatedAt || 0) ? { ...cT, ...iT } : { ...iT, ...cT };
+              };
+
+              state = {
+                ...impSnap,
+                ...curSnap,
+                myRole: curSnap.myRole || impSnap.myRole || 'suwan',
+                startDate: (curSnap.startDate && curSnap.startDate !== '2026-01-01') ? curSnap.startDate : (impSnap.startDate || '2026-01-01'),
+                startDateUpdatedAt: Math.max(Number(curSnap.startDateUpdatedAt || 0), Number(impSnap.startDateUpdatedAt || 0)),
+                heartCount: Math.max(Number(curSnap.heartCount || 0), Number(impSnap.heartCount || 0)),
+                learn: mergedLearn,
+                chat: {
+                  ...(impSnap.chat || {}),
+                  ...(curSnap.chat || {}),
+                  messages: mergedMsgs,
+                  qaAnswers: unionById(curSnap.chat?.qaAnswers, impSnap.chat?.qaAnswers)
+                },
+                diaries: unionById(curSnap.diaries, impSnap.diaries),
+                memos: unionById(curSnap.memos, impSnap.memos),
+                anniversaries: unionById(curSnap.anniversaries, impSnap.anniversaries),
+                buckets: unionById(curSnap.buckets, impSnap.buckets),
+                capsules: unionById(curSnap.capsules, impSnap.capsules),
+                coupons: unionById(curSnap.coupons, impSnap.coupons),
+                schedules: unionById(curSnap.schedules, impSnap.schedules),
+                complimentJar: unionById(curSnap.complimentJar, impSnap.complimentJar),
+                coupleQuizzes: unionById(curSnap.coupleQuizzes, impSnap.coupleQuizzes),
+                drawQuizzes: unionById(curSnap.drawQuizzes, impSnap.drawQuizzes),
+                customPhrases: unionById(curSnap.customPhrases, impSnap.customPhrases),
+                customGifs: unionById(curSnap.customGifs, impSnap.customGifs),
+                tmiBook: { suwan: pickTmi('suwan'), jingchan: pickTmi('jingchan') },
+                lavender: {
+                  ...(impSnap.lavender || {}),
+                  ...(curSnap.lavender || {}),
+                  xp: Math.max(Number(curSnap.lavender?.xp || 0), Number(impSnap.lavender?.xp || 0)),
+                  totalWaters: Math.max(Number(curSnap.lavender?.totalWaters || 0), Number(impSnap.lavender?.totalWaters || 0))
+                },
+                profile: {
+                  ...(impSnap.profile || {}),
+                  ...(curSnap.profile || {}),
+                  suwanAvatar: curSnap.profile?.suwanAvatar || impSnap.profile?.suwanAvatar || '',
+                  jingchanAvatar: curSnap.profile?.jingchanAvatar || impSnap.profile?.jingchanAvatar || ''
+                },
+                albums: mergedAlbums,
+                voiceLetters: mergedVoiceLetters,
+                customVoices: mergedCustomVoices,
+                deletedMsgIds: Array.from(delMsgSet),
+                deletedAlbumIds: Array.from(delAlbSet),
+                deletedVoiceIds: Array.from(delVlSet)
+              };
+
+              if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow();
+              persistMediaVaultsNow(true);
+              flushIdbStateNow(true);
+              saveState(true);
+              renderAll();
+              refreshBothCityWeathers();
+              if (typeof window.__syncCloudLearnVaultNow === 'function') window.__syncCloudLearnVaultNow();
+              if (typeof window.__pushFullCloudSync === 'function') window.__pushFullCloudSync();
+              const isZhImp = state.lang === 'zh';
+              showToast(isZhImp
+                ? `✅ 备份已无损合并！学习 ${state.learn.xp || 0} XP · 聊天 ${state.chat.messages.length} 条 ✨`
+                : `✅ 기존 기록 유지 + 백업 합치기 완료! (학습 ${state.learn.xp || 0} XP · 대화 ${state.chat.messages.length}건) ✨`);
             } catch (_) { showToast(state.lang === 'zh' ? '不是有效的备份文件' : '올바른 백업 JSON 파일이 아닙니다.'); }
           };
           reader.readAsText(file); e.target.value = '';
@@ -19205,90 +19603,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           }
           if (inc.learn && typeof inc.learn === 'object') {
-            const curResetAt = Number(state.learn?.resetAt || 0);
-            const incResetAt = Number(inc.learn.resetAt || 0);
-            if (incResetAt > curResetAt) {
-              state.learn = { ...DEFAULT_STATE.learn, ...inc.learn, resetAt: incResetAt };
+            const prevSolved = Number(state.learn?.solved || 0);
+            const prevPraiseIds = new Set((state.learn?.praiseStickers || []).map(p => p && p.id).filter(Boolean));
+            const incPraises = Array.isArray(inc.learn.praiseStickers) ? inc.learn.praiseStickers : [];
+            const foundNewPraise = incPraises.find(p => p && p.id && !prevPraiseIds.has(p.id)) || null;
+            const beforeSig = JSON.stringify(state.learn || {});
+            const nextLearn = mergeLearnMonotonic(state.learn, inc.learn);
+            if (JSON.stringify(nextLearn) !== beforeSig) {
+              state.learn = nextLearn;
+              if (foundNewPraise) newestPraise = foundNewPraise;
               changed = true;
-            } else if (incResetAt === curResetAt) {
-              const curPraises = Array.isArray(state.learn?.praiseStickers) ? state.learn.praiseStickers : [];
-              const incPraises = Array.isArray(inc.learn.praiseStickers) ? inc.learn.praiseStickers : [];
-              const seenPr = new Set(curPraises.map(p => p && p.id).filter(Boolean));
-              const mergedPraises = curPraises.slice();
-              for (const pr of incPraises) {
-                if (pr && pr.id && !seenPr.has(pr.id)) {
-                  seenPr.add(pr.id);
-                  mergedPraises.unshift(pr);
-                  newestPraise = pr;
-                  changed = true;
-                }
+              try { idbPut('learn_vault_v1', state.learn); } catch (_) {}
+              if (isLiveEvent && Number(state.learn.solved || 0) > prevSolved && (state.myRole || 'suwan') === 'suwan' && inc.myRole === 'jingchan') {
+                pushNotification('📚', '靖灿(灿)이 한국어 공부를 했어요!', '靖灿完成了韩语练习！', `오늘 ${state.learn.todaySolvedCount || 1}문제 완료 · 누적 ${state.learn.xp || 0} XP 💜`, `今日已完成 ${state.learn.todaySolvedCount || 1} 题 · 累计 ${state.learn.xp || 0} XP 💜`, 'home', '', 'post', false, 'jingchan');
               }
-              if (mergedPraises.length > 60) mergedPraises.length = 60;
-
-              const mergedSpoken = Array.from(new Set([
-                ...(Array.isArray(state.learn?.spokenPhrases) ? state.learn.spokenPhrases : []),
-                ...(Array.isArray(inc.learn.spokenPhrases) ? inc.learn.spokenPhrases : [])
-              ])).slice(-200);
-
-              const curHist = Array.isArray(state.learn?.solvedHistory) ? state.learn.solvedHistory : [];
-              const incHist = Array.isArray(inc.learn.solvedHistory) ? inc.learn.solvedHistory : [];
-              const seenH = new Set(curHist.map(h => h && h.id).filter(Boolean));
-              const mergedHist = curHist.slice();
-              const histMap = new Map(mergedHist.map(x => [x && x.id, x]));
-              for (const h of incHist) {
-                if (!h || !h.id) continue;
-                if (!seenH.has(h.id)) { seenH.add(h.id); mergedHist.unshift(h); histMap.set(h.id, h); changed = true; }
-                else {
-                  const exH = histMap.get(h.id);
-                  if (exH && h.reviewedDone && !exH.reviewedDone) {
-                    exH.correct = true; exH.reviewedDone = true; exH.reviewedAt = h.reviewedAt || Date.now(); changed = true;
-                  }
-                }
-              }
-              if (mergedHist.length > 60) mergedHist.length = 60;
-
-              const hasLearnUpgrade =
-                (inc.learn.xp || 0) > (state.learn.xp || 0) ||
-                (inc.learn.solved || 0) > (state.learn.solved || 0) ||
-                (inc.learn.todayXp || 0) > (state.learn.todayXp || 0) ||
-                mergedPraises.length !== curPraises.length ||
-                mergedSpoken.length !== (state.learn?.spokenPhrases || []).length ||
-                mergedHist.length !== curHist.length ||
-                (Array.isArray(inc.learn.starredProblems) && inc.learn.starredProblems.length !== (state.learn?.starredProblems || []).length) ||
-                (inc.learn.lastStudyTime && inc.learn.lastStudyTime !== state.learn.lastStudyTime);
-
-              if (hasLearnUpgrade) {
-                const mergedLog = { ...(state.learn.studyLog || {}) };
-                if (inc.learn.studyLog && typeof inc.learn.studyLog === 'object') {
-                  Object.keys(inc.learn.studyLog).forEach(dk => {
-                    mergedLog[dk] = Math.max(mergedLog[dk] || 0, inc.learn.studyLog[dk] || 0);
-                  });
-                }
-                const prevSolved = state.learn.solved || 0;
-                const sameTodayXpDate = inc.learn.todayXpDate && inc.learn.todayXpDate === state.learn.todayXpDate;
-                state.learn = {
-                  ...state.learn,
-                  ...inc.learn,
-                  xp: Math.max(state.learn.xp || 0, inc.learn.xp || 0),
-                  solved: Math.max(state.learn.solved || 0, inc.learn.solved || 0),
-                  todayXp: sameTodayXpDate
-                    ? Math.max(state.learn.todayXp || 0, inc.learn.todayXp || 0)
-                    : (inc.learn.todayXpDate > (state.learn.todayXpDate || '') ? (inc.learn.todayXp || 0) : (state.learn.todayXp || 0)),
-                  todayXpDate: (inc.learn.todayXpDate || '') >= (state.learn.todayXpDate || '') ? (inc.learn.todayXpDate || state.learn.todayXpDate || '') : state.learn.todayXpDate,
-                  praiseStickers: mergedPraises,
-                  spokenPhrases: mergedSpoken,
-                  solvedHistory: mergedHist,
-                  starredProblems: Array.isArray(inc.learn.starredProblems) && inc.learn.starredProblems.length >= (state.learn?.starredProblems || []).length ? inc.learn.starredProblems.slice(0, 80) : (state.learn?.starredProblems || []),
-                  studyLog: mergedLog,
-                  resetAt: curResetAt
-                };
-                changed = true;
-                if (isLiveEvent && (state.learn.solved || 0) > prevSolved && (state.myRole || 'suwan') === 'suwan' && inc.myRole === 'jingchan') {
-                  pushNotification('📚', '靖灿(灿)이 한국어 공부를 했어요!', '靖灿完成了韩语练习！', `오늘 ${state.learn.todaySolvedCount || 1}문제 완료 · 누적 ${state.learn.xp || 0} XP 💜`, `今日已完成 ${state.learn.todaySolvedCount || 1} 题 · 累计 ${state.learn.xp || 0} XP 💜`, 'home', '', 'post', false, 'jingchan');
-                }
-                if (isLiveEvent && newestPraise && (state.myRole || 'suwan') === 'jingchan' && inc.myRole === 'suwan') {
-                  pushNotification(newestPraise.icon || '⭐', '수완(完)의 칭찬 스티커 도착!', '收到完送来的表扬贴纸！', `${newestPraise.icon || '⭐'} ${newestPraise.ko || '최고야'} (+20 XP) 💜`, `${newestPraise.icon || '⭐'} ${newestPraise.zh || '最棒啦'} (+20 XP) 💜`, 'home', '', 'post', false, 'suwan');
-                }
+              if (isLiveEvent && newestPraise && (state.myRole || 'suwan') === 'jingchan' && inc.myRole === 'suwan') {
+                pushNotification(newestPraise.icon || '⭐', '수완(完)의 칭찬 스티커 도착!', '收到完送来的表扬贴纸！', `${newestPraise.icon || '⭐'} ${newestPraise.ko || '최고야'} (+20 XP) 💜`, `${newestPraise.icon || '⭐'} ${newestPraise.zh || '最棒啦'} (+20 XP) 💜`, 'home', '', 'post', false, 'suwan');
               }
             }
           }
@@ -20091,6 +20421,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
             lavender: coreObj.lavender || null,
+            learn: coreObj.learn || undefined,
             complimentJar: (coreObj.complimentJar || []).slice(0, 4),
             coupleQuizzes: (coreObj.coupleQuizzes || []).slice(0, 4),
             chat: {
@@ -20314,6 +20645,49 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           return cwSafeVaultKey(kind + '_' + fallbackId);
         }
+
+        // Dedicated Cloud Study Vault (${room}__learn_vault_v1): NEVER shrinks unless explicit resetAt > cloudResetAt!
+        let __cachedCloudLearn = null;
+        async function syncCloudLearnVault(room, forcePush) {
+          if (!room) return false;
+          const lRoom = `${room}__learn_vault_v1`;
+          let changedLocal = false;
+          try {
+            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(lRoom)}&select=payload`, { headers: sbHeaders() }, 10000);
+            if (res.ok) {
+              const arr = await res.json();
+              if (Array.isArray(arr) && arr[0] && arr[0].payload) {
+                const dec = await e2eeUnwrapPayload(arr[0].payload);
+                if (dec && dec.learn && typeof dec.learn === 'object') {
+                  __cachedCloudLearn = dec.learn;
+                  const beforeS = JSON.stringify(state.learn || {});
+                  const merged = mergeLearnMonotonic(state.learn, dec.learn);
+                  if (JSON.stringify(merged) !== beforeS) {
+                    state.learn = merged;
+                    changedLocal = true;
+                    try { idbPut('learn_vault_v1', state.learn); } catch (_) {}
+                    saveState(false);
+                    try { renderLearn(); renderHome(); } catch (_) {}
+                  }
+                }
+              }
+            }
+          } catch (_) {}
+
+          const curL = state.learn || {};
+          const hasProgress = Number(curL.xp || 0) > 0 || Number(curL.solved || 0) > 0 || (curL.praiseStickers || []).length > 0 || Number(curL.resetAt || 0) > 0;
+          if (hasProgress) {
+            const safeOut = __cachedCloudLearn ? mergeLearnMonotonic(__cachedCloudLearn, curL) : curL;
+            if (forcePush || !__cachedCloudLearn || JSON.stringify(safeOut) !== JSON.stringify(__cachedCloudLearn)) {
+              __cachedCloudLearn = safeOut;
+              try {
+                await upsertSupabaseStateSnapshot(lRoom, { v: 'cw_learn_vault_v1', updatedAt: Date.now(), learn: safeOut }, 12000);
+              } catch (_) {}
+            }
+          }
+          return changedLocal;
+        }
+        window.__syncCloudLearnVaultNow = () => syncCloudLearnVault(getSyncRoomCode(), true);
 
         let __cwManifestQueue = Promise.resolve();
         async function fetchCloudVaultManifest(room) {
@@ -21229,8 +21603,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const room = getSyncRoomCode();
           if (!room || !coreObj) return;
           lastCloudPushTs = Date.now();
+          if (__cachedCloudLearn && coreObj.learn) {
+            coreObj.learn = mergeLearnMonotonic(__cachedCloudLearn, coreObj.learn);
+          }
           const payload = buildSyncPayload(coreObj, !!fullSnapshot);
           const fullSnapPayload = buildSyncPayload(coreObj, true);
+          if (Number(state.learn?.xp || 0) > 0 || Number(state.learn?.solved || 0) > 0 || Number(state.learn?.resetAt || 0) > 0) {
+            syncCloudLearnVault(room, false).catch(() => {});
+          }
           const emqxBody = buildEmqxFastPacket(coreObj);
           const ntfyBody = buildCompactNtfyPacket(coreObj);
 
@@ -21756,6 +22136,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
             } catch (_) {}
 
+            // Phase 1.5: Restore Dedicated Cloud Study Vault (__learn_vault_v1)
+            await syncCloudLearnVault(room, false);
+
             // Phase 2: Permanent Cloud Media Vault inside couple_sync_state (__vault_manifest_v1)
             setProg(24, isZh ? '2/4 正在读取云端永久相册与语音信金库...' : '2/4 서버 영구 금고(앨범 사진·음성편지·프로필) 복구 중...');
             const manifestItems = await fetchCloudVaultManifest(room);
@@ -22113,12 +22496,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // ---- Global Native-App Long-Press Guard (Blocks Browser Copy / Touch-to-Search Outside Inputs) ----
         document.addEventListener('contextmenu', (ev) => {
           const t = ev.target;
-          if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+          if (!t || t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.isContentEditable) return;
           ev.preventDefault();
         });
         document.addEventListener('selectstart', (ev) => {
           const t = ev.target;
-          if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+          if (!t || t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.isContentEditable) return;
           ev.preventDefault();
         });
 
@@ -22352,14 +22735,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           });
 
+          let __uVvRaf = 0;
           if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
-              positionWrapAboveKeyboard();
-              const act = document.activeElement;
-              if (act && (act.tagName === 'INPUT' || act.tagName === 'TEXTAREA') && act.id !== 'chatInput') {
-                try { act.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }); } catch (_) {}
-              }
-            });
+              if (wrap.classList.contains('hidden')) return;
+              if (__uVvRaf) return;
+              __uVvRaf = requestAnimationFrame(() => {
+                __uVvRaf = 0;
+                positionWrapAboveKeyboard();
+              });
+            }, { passive: true });
           }
           renderGrid();
         })();
@@ -22380,6 +22765,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (state.profile?.jingchanAvatar) haveAvatars.push('jingchan');
           sendChatSignal('request_vault_sync', {
             reason: reason || 'auto',
+            haveLearnXp: Number(state.learn?.xp || 0),
+            haveLearnSolved: Number(state.learn?.solved || 0),
             haveAlbums,
             haveVoices,
             haveChatMedia,
@@ -22397,6 +22784,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const haveCmSet = new Set(Array.isArray(sig?.haveChatMedia) ? sig.haveChatMedia : []);
           const haveAvSet = new Set(Array.isArray(sig?.haveAvatars) ? sig.haveAvatars : []);
 
+          const hasPartnerStudyToShare = Number(state.learn?.xp || 0) > Number(sig?.haveLearnXp || 0) || Number(state.learn?.solved || 0) > Number(sig?.haveLearnSolved || 0);
+          if (hasPartnerStudyToShare) {
+            try {
+              const fastEmqx = buildEmqxFastPacket(extractLightweightCore(state));
+              if (fastEmqx) publishEmqxBackup(room, fastEmqx);
+              await syncCloudLearnVault(room, true);
+              await pushFullCloudSync();
+            } catch (_) {}
+          }
           const missingAlbums = (state.albums || []).filter(a => a && a.id && a.dataUrl && !haveAlbSet.has(a.id)).slice(0, 60);
           const missingVoices = (state.voiceLetters || []).filter(v => v && v.id && v.audioUrl && !haveVlSet.has(v.id)).slice(0, 40);
           const missingChatM = (state.chat?.messages || []).filter(m => m && m.id && (m.photoUrl || m.audioUrl || m.videoUrl) && !haveCmSet.has(m.id)).slice(-35);
@@ -22470,6 +22866,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               : [];
             const hasAv = !!(state.profile?.suwanAvatar || state.profile?.jingchanAvatar);
 
+            // Step 0: Sync dedicated Cloud Study Vault (__learn_vault_v1) so Korean study progress never vanishes!
+            await syncCloudLearnVault(room, false);
+
             // Step 1: Always pull any items present in couple_sync_state __vault_manifest_v1 that we don't have locally yet!
             const manifestItems = await fetchCloudVaultManifest(room);
             let pulledCount = 0;
@@ -22486,8 +22885,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 : `☁️ 클라우드 영구 금고에서 사진·음성편지 ${pulledCount}건을 자동 복구했어요 ✨`);
             }
 
-            // Step 2: If our albums or voiceLetters are STILL empty, request real-time P2P sync from partner's phone/browser!
-            if ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0) {
+            // Step 2: If our albums, voiceLetters, or Study XP are STILL empty, request real-time P2P sync from partner's phone/browser!
+            if ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0 || Number(state.learn?.xp || 0) === 0) {
               requestPartnerVaultSync('boot_missing');
               if (localAlbums.length === 0 && localVoices.length === 0 && localChatMedia.length === 0 && !hasAv && !sessionStorage.getItem('cw_auto_deep_restore_v58')) {
                 sessionStorage.setItem('cw_auto_deep_restore_v58', '1');
@@ -22603,6 +23002,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __bgPollTick = 0;
         livePollTimer = setInterval(() => {
           if (document.hidden) return;
+          if (window.__isActivelyTyping && window.__isActivelyTyping()) return;
           if (typeof navigator !== 'undefined' && navigator.onLine === false) {
             updateLiveSyncIndicators(false, getSyncRoomCode());
             return;
@@ -25358,8 +25758,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v58)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v58';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v60)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v60';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
@@ -25477,6 +25877,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const mo = new MutationObserver(schedSweep);
             mo.observe(document.documentElement, { childList: true });
             mo.observe(document.body, { childList: true });
+            setTimeout(() => { try { mo.disconnect(); } catch (_) {} }, 6500);
           } catch (_) {}
         })();
 
@@ -27161,6 +27562,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     window.__cwQuickStatusReady = true;
 
     function syncPartnerStatusPill() {
+      if (window.__isActivelyTyping && window.__isActivelyTyping()) return;
       const st = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
       if (!st || !st.profile) return;
       const isZh = st.lang === 'zh';
@@ -27170,6 +27572,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const pill = document.getElementById('chatPartnerStatusPill');
       if (pill) {
         const cleanPartner = partnerVal ? (isZh ? (partnerVal.split('·')[1] || partnerVal).trim() : partnerVal.split('·')[0].trim()) : '';
+        if (pill.dataset.cwLastMood === cleanPartner) return;
+        pill.dataset.cwLastMood = cleanPartner;
         if (cleanPartner) {
           pill.textContent = cleanPartner;
           pill.classList.remove('hidden');
@@ -27258,7 +27662,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     document.addEventListener('pointerdown', (e) => {
       if (e.button && e.button !== 0) return;
       cancelLp();
-      const txt = extractCopyableText(e.target);
+      const t = e.target;
+      if (!t || t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.tagName === 'BUTTON') return;
+      const txt = extractCopyableText(t);
       if (!txt) return;
       startX = e.clientX || 0;
       startY = e.clientY || 0;
