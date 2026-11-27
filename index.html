@@ -2508,7 +2508,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v73: App-Wide Couture Boutique Elevation
+       Prime 4 · v74: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2699,7 +2699,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v73: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v74: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -2826,7 +2826,6 @@
       .sm\:w-auto { width: auto !important; }
     }
 </style>
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" onerror="(function(){var s=document.createElement('script');s.src='https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js';s.onload=function(){if(typeof window.__reconnectLiveSync==='function')window.__reconnectLiveSync();};document.head.appendChild(s);})()"></script>
 </head>
 <body style="padding-bottom: 0 !important;">
 
@@ -4942,7 +4941,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v73</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v74</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 앱 바로 업데이트</button>
           </div>
@@ -12532,7 +12531,7 @@
               state.lang === 'zh' ? '删除纪念日' : '기념일 삭제',
               state.lang === 'zh' ? '确定要删除这个纪念日吗？' : '이 기념일을 삭제할까요?',
               () => {
-                state.anniversaries = state.anniversaries.filter(x => x.id !== aid);
+                recordDeletedSpaceItem(aid); state.anniversaries = state.anniversaries.filter(x => x.id !== aid);
                 saveState(true); renderAnniversary();
               }
             );
@@ -12598,6 +12597,58 @@
             <span class="shrink-0 opacity-80">↗</span>
           </a>`;
       }
+
+      function recordDeletedSpaceItem(itemId) {
+        if (!itemId) return;
+        if (!Array.isArray(state.deletedItemIds)) state.deletedItemIds = [];
+        if (!state.deletedItemIds.includes(itemId)) state.deletedItemIds.push(itemId);
+        if (state.deletedItemIds.length > 200) state.deletedItemIds = state.deletedItemIds.slice(-200);
+        if (typeof window.__sendChatSignal === 'function') {
+          window.__sendChatSignal('delete_item', { itemId });
+        }
+      }
+      window.__recordDeletedSpaceItem = recordDeletedSpaceItem;
+
+      function deleteChatMessageCleanly(mid) {
+        if (!mid) return;
+        if (typeof window.__stopChatVoiceIfPlaying === 'function') window.__stopChatVoiceIfPlaying(mid);
+        if (!Array.isArray(state.deletedMsgIds)) state.deletedMsgIds = [];
+        if (!state.deletedMsgIds.includes(mid)) state.deletedMsgIds.push(mid);
+        if (state.deletedMsgIds.length > 180) state.deletedMsgIds = state.deletedMsgIds.slice(-180);
+
+        const vlChatId = `vl_chat_${mid}`;
+        if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
+        if (!state.deletedVoiceIds.includes(vlChatId)) state.deletedVoiceIds.push(vlChatId);
+        if (state.deletedVoiceIds.length > 180) state.deletedVoiceIds = state.deletedVoiceIds.slice(-180);
+
+        state.chat.messages = (state.chat?.messages || []).filter(x => x && x.id !== mid);
+        if (Array.isArray(state.voiceLetters)) {
+          state.voiceLetters = state.voiceLetters.filter(v => v && v.id !== vlChatId);
+        }
+        if (state.chat && state.chat.pinnedMsg && state.chat.pinnedMsg.id === mid) {
+          state.chat.pinnedMsg = { id: '', text: '', translated: '', updatedAt: Date.now() };
+        }
+        try {
+          if (typeof __cwChatMediaCache === 'object' && __cwChatMediaCache && __cwChatMediaCache[mid]) {
+            delete __cwChatMediaCache[mid];
+            idbPut('chat_media_vault_v1', { ...__cwChatMediaCache });
+          }
+          idbPut('voice_letters_vault_v1', state.voiceLetters || []);
+          idbPut('deleted_voices_vault_v1', state.deletedVoiceIds);
+        } catch (_) {}
+
+        saveState(true);
+        renderChat();
+        renderHome();
+        if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+        if (typeof window.__sendChatSignal === 'function') {
+          window.__sendChatSignal('delete', { msgId: mid, vlId: vlChatId });
+        }
+        if (typeof window.__refreshRecentMediaPackAfterDelete === 'function') {
+          window.__refreshRecentMediaPackAfterDelete();
+        }
+      }
+      window.__deleteChatMessageCleanly = deleteChatMessageCleanly;
 
       function isMyAuthoredItem(item) {
         if (!item) return false;
@@ -12765,6 +12816,7 @@
             const isAutoMediaCaption = isAutoVoiceCap || (hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim()));
             const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
             const isMissingPhotoBubble = !hasMedia && (/^(사진( \d+장)?을 보냈어요 📷|分享了(一张|\s*\d+\s*张)照片 📷)$/.test(String(m.original || '').trim()) || String(m.id || '').startsWith('msg_img_'));
+            const isMissingVoiceBubble = !m.audioUrl && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || /^(🎙️\s*)?(음성 메시지|语音消息|음성 메시지를 보냈어요|发来一条语音消息)(\s*🎙️)?$/.test(String(m.original || '').trim()) || String(m.id || '').startsWith('msg_v_'));
             const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
             const isPureWcMsg = showText && !hasMedia && !m.sticker && typeof window.isPureWechatEmoticonMsg === 'function' && window.isPureWechatEmoticonMsg(String(m.original || '').trim());
             const isPurePunctMsg = showText && !hasMedia && !m.sticker && !isPureWcMsg && /^[?!.,~…·\-_:;'"()[\]{}+=/*\\|\s？！？。，、]+$/.test(String(m.original || '').trim());
@@ -12801,6 +12853,7 @@
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
                     ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof window.__pullCloudSync==='function'){if(window.__cwApi&&window.__cwApi.showToast)window.__cwApi.showToast((window.__cwApi.getState&&window.__cwApi.getState()?.lang==='zh')?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');window.__pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
                     ${isMissingPhotoBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">📷 ${state.lang === 'zh' ? '正在同步照片 · 点此立即加载' : '사진 동기화 중 · 눌러서 바로 보기'}</button>` : ''}
+                    ${isMissingVoiceBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="cw-voice-play-btn w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎙️ ${state.lang === 'zh' ? '正在同步语音 · 点此立即加载' : '음성 동기화 중 · 눌러서 바로 듣기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">${CW_MEDIA_SVG.play}</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0 inline-flex items-center">${CW_MEDIA_SVG.waveMini}</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
@@ -12944,6 +12997,11 @@
 
           listEl.querySelectorAll('.cw-voice-play-btn').forEach(btn => {
             btn.addEventListener('click', (ev) => {
+              if (window.__cwSuppressZoomUntil && Date.now() < window.__cwSuppressZoomUntil) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                return;
+              }
               ev.stopPropagation();
               const mid = btn.getAttribute('data-msg-id');
               const target = (state.chat.messages || []).find(x => x && x.id === mid);
@@ -13102,13 +13160,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const myR = state.myRole || 'suwan';
             const normS = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
             const mine = normS === myR;
-            const hasTxt = String(m.original || '').trim().length > 0;
-            const hasTrans = !!(m.translated && m.translated !== m.original && !/^\[(中文|한국어)\]\s*/.test(String(m.translated)));
+            const isVoice = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/')) || String(m.id || '').startsWith('msg_v_') || m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지';
+            const isAutoCap = isVoice || /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
+            const hasTxt = !isAutoCap && String(m.original || '').trim().length > 0;
+            const hasTrans = !isAutoCap && !!(m.translated && m.translated !== m.original && !/^\[(中文|한국어)\]\s*/.test(String(m.translated)));
             const isPureLink = /^https?:\/\/\S+$/i.test(String(m.original || '').trim());
-            const isVoice = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/'));
             const topReacts = ['❤️', '🥰', '😘', '😂', '🥺', '👍'];
             const moreReacts = ['💜', '🫶', '🤗', '😍', '🥹', '😭', '😡', '😤', '😮', '🤔', '👏', '🙏', '🔥', '🎉', '✨', '💯', '🌙', '🍽️'];
             const acts = [];
+            if (isVoice && m.audioUrl) acts.push({ act: 'play_voice', label: isZh ? '播放语音' : '음성 듣기', svg: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>' });
             if (hasTxt) acts.push({ act: 'copy_orig', label: isZh ? '复制原文' : '원문 복사', svg: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>' });
             if (hasTrans) acts.push({ act: 'copy_trans', label: isZh ? '复制译文' : '번역 복사', svg: '<path d="M4 5h7M7 3v2M5 9c1 2 3 4 5 5M10 9c-1 2-3 4-5 5"/><path d="M13 19l4-10 4 10M14.5 16h5"/>' });
             acts.push({ act: 'reply', label: isZh ? '回复' : '답장', svg: '<polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>' });
@@ -13197,16 +13257,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   state.chat.pinnedMsg = { id: m.id, text: (m.original || m.translated || '').slice(0, 120), translated: (m.translated || '').slice(0, 120), author: m.sender === 'suwan' ? '수완' : '靖灿', updatedAt: Date.now() };
                   saveState(true); renderChat();
                   showToast(isZh ? '📌 已置顶到聊天顶部公告！' : '📌 채팅방 상단 공지로 고정했어요!');
+                } else if (act === 'play_voice') {
+                  const vBtn = listEl.querySelector(`.cw-voice-play-btn[data-msg-id="${mid}"]`);
+                  if (m.audioUrl && typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(mid, m.audioUrl, vBtn);
                 } else if (act === 'edit') {
                   const box = document.getElementById(`editMsgBox_${mid}`);
                   const ta = document.getElementById(`editMsgTa_${mid}`);
                   if (box) { box.classList.remove('hidden'); if (ta) ta.focus(); }
                 } else if (act === 'del') {
-                  if (!Array.isArray(state.deletedMsgIds)) state.deletedMsgIds = [];
-                  if (!state.deletedMsgIds.includes(mid)) state.deletedMsgIds.push(mid);
-                  state.chat.messages = (state.chat.messages || []).filter(x => x && x.id !== mid);
-                  saveState(true); renderChat();
-                  showToast(isZh ? '🗑️ 已删除消息' : '🗑️ 메시지를 삭제했어요');
+                  if (typeof window.__deleteChatMessageCleanly === 'function') {
+                    window.__deleteChatMessageCleanly(mid);
+                  }
+                  showToast(isZh ? (isVoice ? '🗑️ 已删除语音消息' : '🗑️ 已删除消息') : (isVoice ? '🗑️ 음성 메시지를 삭제했어요' : '🗑️ 메시지를 삭제했어요'));
                 }
               });
             });
@@ -13215,7 +13277,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             let lpTimer = null, startX = 0, startY = 0;
             const clearLp = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } bub.classList.remove('cw-pressing'); };
             bub.addEventListener('touchstart', (ev) => {
-              if (ev.target.closest('button:not(.cw-zoom-photo), a, video, input, textarea')) return;
+              if (ev.target.closest('button:not(.cw-zoom-photo):not(.cw-voice-play-btn), a, input, textarea')) return;
               const t0 = ev.touches && ev.touches[0];
               if (!t0) return;
               startX = t0.clientX; startY = t0.clientY;
@@ -13223,7 +13285,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               lpTimer = setTimeout(() => {
                 lpTimer = null;
                 bub.classList.remove('cw-pressing');
-                window.__cwSuppressZoomUntil = Date.now() + 600;
+                window.__cwSuppressZoomUntil = Date.now() + 650;
                 openMsgContextMenu(bub.getAttribute('data-msg-id'), bub);
               }, 420);
             }, { passive: true });
@@ -13235,8 +13297,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             bub.addEventListener('touchend', clearLp, { passive: true });
             bub.addEventListener('touchcancel', clearLp, { passive: true });
             bub.addEventListener('contextmenu', (ev) => {
-              if (ev.target.closest('button:not(.cw-zoom-photo), a, video, input, textarea')) return;
+              if (ev.target.closest('button:not(.cw-zoom-photo):not(.cw-voice-play-btn), a, input, textarea')) return;
               ev.preventDefault();
+              window.__cwSuppressZoomUntil = Date.now() + 650;
               openMsgContextMenu(bub.getAttribute('data-msg-id'), bub);
             });
           });
@@ -13369,13 +13432,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.lang === 'zh' ? '删除消息' : '메시지 삭제 확인',
                 state.lang === 'zh' ? '确定要删除这条消息吗？删除后无法恢复。' : '이 메시지를 정말 삭제할까요? 삭제하면 되돌릴 수 없어요.',
                 () => {
-                  if (delId) {
-                    if (!Array.isArray(state.deletedMsgIds)) state.deletedMsgIds = [];
-                    if (!state.deletedMsgIds.includes(delId)) state.deletedMsgIds.push(delId);
-                    if (state.deletedMsgIds.length > 120) state.deletedMsgIds = state.deletedMsgIds.slice(-120);
+                  if (delId && typeof window.__deleteChatMessageCleanly === 'function') {
+                    window.__deleteChatMessageCleanly(delId);
                   }
-                  state.chat.messages = state.chat.messages.filter(x => x.id !== delId);
-                  saveState(true); renderChat(); renderHome();
                   showToast(state.lang === 'zh' ? '消息已删除' : '메시지가 삭제되었습니다.');
                 }
               );
@@ -13511,7 +13570,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.lang === 'zh' ? '删除日记' : '일기 삭제 확인',
               state.lang === 'zh' ? '确定要删除这篇日记吗？删除后无法恢复。' : '이 일기를 정말 삭제할까요? 삭제하면 되돌릴 수 없어요.',
               () => {
-                state.diaries = state.diaries.filter(x => x.id !== delId);
+                recordDeletedSpaceItem(delId); state.diaries = state.diaries.filter(x => x.id !== delId);
                 saveState(true); renderDiaryQaMemos(); renderHome();
               }
             );
@@ -13597,7 +13656,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.lang === 'zh' ? '删除问答记录' : '커플 문답 삭제 확인',
               state.lang === 'zh' ? '确定要删除这条回答吗？' : '이 답변을 정말 삭제할까요?',
               () => {
-                state.chat.qaAnswers = state.chat.qaAnswers.filter(x => x.id !== delId);
+                recordDeletedSpaceItem(delId); state.chat.qaAnswers = state.chat.qaAnswers.filter(x => x.id !== delId);
                 saveState(true); renderDiaryQaMemos();
               }
             );
@@ -13648,7 +13707,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.lang === 'zh' ? '删除时光胶囊' : '타임캡슐 삭제 확인',
               state.lang === 'zh' ? '确定要删除这封时光胶囊信件吗？' : '이 타임캡슐 편지를 정말 삭제할까요?',
               () => {
-                state.capsules = state.capsules.filter(x => x.id !== delId);
+                recordDeletedSpaceItem(delId); state.capsules = state.capsules.filter(x => x.id !== delId);
                 saveState(true); renderDiaryQaMemos(); renderHome();
               }
             );
@@ -13712,7 +13771,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.lang === 'zh' ? '删除备忘录' : '메모 삭제 확인',
               state.lang === 'zh' ? '确定要删除这条备忘录吗？' : '이 메모를 정말 삭제할까요?',
               () => {
-                state.memos = state.memos.filter(x => x.id !== delId);
+                recordDeletedSpaceItem(delId); state.memos = state.memos.filter(x => x.id !== delId);
                 saveState(true); renderDiaryQaMemos();
               }
             );
@@ -13787,7 +13846,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.lang === 'zh' ? '删除心愿清单' : '위시리스트 삭제 확인',
               state.lang === 'zh' ? '确定要删除这条心愿吗？' : '이 위시리스트 항목을 정말 삭제할까요?',
               () => {
-                state.buckets = state.buckets.filter(x => x.id !== delId);
+                recordDeletedSpaceItem(delId); state.buckets = state.buckets.filter(x => x.id !== delId);
                 saveState(true); renderBucketAndAlbum(); renderHome();
               }
             );
@@ -15715,7 +15774,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   state.lang === 'zh' ? '删除收藏动图' : '저장된 움짤 삭제',
                   state.lang === 'zh' ? '确定要删除这个动图吗？' : '이 움짤을 삭제할까요?',
                   () => {
-                    state.customGifs = (state.customGifs || []).filter(x => x.id !== gid);
+                    recordDeletedSpaceItem(gid); state.customGifs = (state.customGifs || []).filter(x => x.id !== gid);
                     saveState(true); renderChatStickers();
                   }
                 );
@@ -16686,7 +16745,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v73',
+          ver: 'Prime 4 · v74',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16708,7 +16767,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v73 更新日志' : '📜 灿完时光 Prime 4 · v73 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v74 更新日志' : '📜 灿完时光 Prime 4 · v74 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17072,7 +17131,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.lang === 'zh' ? '删除日程' : '일정 삭제',
                 state.lang === 'zh' ? '确定要删除这条日程吗？' : '이 일정을 삭제할까요?',
                 () => {
-                  state.schedules = (state.schedules || []).filter(x => x.id !== sid);
+                  recordDeletedSpaceItem(sid); state.schedules = (state.schedules || []).filter(x => x.id !== sid);
                   saveState(true); renderCoupleCalendar();
                 }
               );
@@ -18701,7 +18760,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.lang === 'zh' ? '确定要删除这条语音信件吗？' : '이 음성편지를 삭제할까요?',
                 () => {
                   if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
-                if (!state.deletedVoiceIds.includes(vid)) state.deletedVoiceIds.push(vid);
+                if (!state.deletedVoiceIds.includes(vid)) state.deletedVoiceIds.push(vid); if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('delete_voice', { vlId: vid });
                 state.voiceLetters = (state.voiceLetters || []).filter(x => x.id !== vid);
                 try { idbPut('voice_letters_vault_v1', state.voiceLetters); idbPut('deleted_voices_vault_v1', state.deletedVoiceIds); } catch (_) {}
                   saveState(true); renderVoiceLetters();
@@ -19328,10 +19387,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 }
                 return out;
               };
+              const unionClean = (a, b) => unionById(a, b).filter(x => x && (!x.id || !delItemSet.has(x.id)));
 
               const delMsgSet = new Set([...(curSnap.deletedMsgIds || []), ...(impSnap.deletedMsgIds || [])]);
               const delAlbSet = new Set([...(curSnap.deletedAlbumIds || []), ...(impSnap.deletedAlbumIds || [])]);
               const delVlSet = new Set([...(curSnap.deletedVoiceIds || []), ...(impSnap.deletedVoiceIds || [])]);
+              const delItemSet = new Set([...(curSnap.deletedItemIds || []), ...(impSnap.deletedItemIds || [])]);
 
               const mergedMsgs = unionById(curSnap.chat?.messages, impSnap.chat?.messages)
                 .filter(m => m && !delMsgSet.has(m.id))
@@ -19374,20 +19435,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   ...(impSnap.chat || {}),
                   ...(curSnap.chat || {}),
                   messages: mergedMsgs,
-                  qaAnswers: unionById(curSnap.chat?.qaAnswers, impSnap.chat?.qaAnswers)
+                  qaAnswers: unionClean(curSnap.chat?.qaAnswers, impSnap.chat?.qaAnswers)
                 },
-                diaries: unionById(curSnap.diaries, impSnap.diaries),
-                memos: unionById(curSnap.memos, impSnap.memos),
-                anniversaries: unionById(curSnap.anniversaries, impSnap.anniversaries),
-                buckets: unionById(curSnap.buckets, impSnap.buckets),
-                capsules: unionById(curSnap.capsules, impSnap.capsules),
-                coupons: unionById(curSnap.coupons, impSnap.coupons),
-                schedules: unionById(curSnap.schedules, impSnap.schedules),
+                diaries: unionClean(curSnap.diaries, impSnap.diaries),
+                memos: unionClean(curSnap.memos, impSnap.memos),
+                anniversaries: unionClean(curSnap.anniversaries, impSnap.anniversaries),
+                buckets: unionClean(curSnap.buckets, impSnap.buckets),
+                capsules: unionClean(curSnap.capsules, impSnap.capsules),
+                coupons: unionClean(curSnap.coupons, impSnap.coupons),
+                schedules: unionClean(curSnap.schedules, impSnap.schedules),
                 complimentJar: unionById(curSnap.complimentJar, impSnap.complimentJar),
                 coupleQuizzes: unionById(curSnap.coupleQuizzes, impSnap.coupleQuizzes),
                 drawQuizzes: unionById(curSnap.drawQuizzes, impSnap.drawQuizzes),
                 customPhrases: unionById(curSnap.customPhrases, impSnap.customPhrases),
-                customGifs: unionById(curSnap.customGifs, impSnap.customGifs),
+                customGifs: unionClean(curSnap.customGifs, impSnap.customGifs),
                 tmiBook: { suwan: pickTmi('suwan'), jingchan: pickTmi('jingchan') },
                 lavender: {
                   ...(impSnap.lavender || {}),
@@ -19406,7 +19467,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 customVoices: mergedCustomVoices,
                 deletedMsgIds: Array.from(delMsgSet),
                 deletedAlbumIds: Array.from(delAlbSet),
-                deletedVoiceIds: Array.from(delVlSet)
+                deletedVoiceIds: Array.from(delVlSet),
+                deletedItemIds: Array.from(delItemSet)
               };
 
               if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow();
@@ -19689,7 +19751,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.lang === 'zh' ? '删除甜蜜券' : '애정 쿠폰 삭제',
                 state.lang === 'zh' ? '确定要删除这张甜蜜券吗？' : '이 애정 쿠폰을 삭제할까요?',
                 () => {
-                  state.coupons = state.coupons.filter(x => x.id !== cpid);
+                  recordDeletedSpaceItem(cpid); state.coupons = state.coupons.filter(x => x.id !== cpid);
                   saveState(true); renderCoupons();
                 }
               );
@@ -20198,6 +20260,35 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             });
             if (state.deletedAlbumIds.length > 150) state.deletedAlbumIds = state.deletedAlbumIds.slice(-150);
           }
+          if (Array.isArray(inc.deletedVoiceIds) && inc.deletedVoiceIds.length) {
+            if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
+            inc.deletedVoiceIds.forEach(vid => {
+              if (vid && !state.deletedVoiceIds.includes(vid)) {
+                state.deletedVoiceIds.push(vid);
+                changed = true;
+              }
+            });
+            if (state.deletedVoiceIds.length > 180) state.deletedVoiceIds = state.deletedVoiceIds.slice(-180);
+          }
+          if (Array.isArray(inc.deletedItemIds) && inc.deletedItemIds.length) {
+            if (!Array.isArray(state.deletedItemIds)) state.deletedItemIds = [];
+            inc.deletedItemIds.forEach(iid => {
+              if (iid && !state.deletedItemIds.includes(iid)) {
+                state.deletedItemIds.push(iid);
+                changed = true;
+              }
+            });
+            if (state.deletedItemIds.length > 200) state.deletedItemIds = state.deletedItemIds.slice(-200);
+          }
+          const delVlSetNow = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
+          if (delVlSetNow.size && Array.isArray(state.voiceLetters)) {
+            const prevVlLen = state.voiceLetters.length;
+            state.voiceLetters = state.voiceLetters.filter(v => v && !delVlSetNow.has(v.id));
+            if (state.voiceLetters.length !== prevVlLen) {
+              changed = true;
+              try { idbPut('voice_letters_vault_v1', state.voiceLetters); idbPut('deleted_voices_vault_v1', state.deletedVoiceIds); } catch (_) {}
+            }
+          }
           const delAlbSet = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
           if (delAlbSet.size && Array.isArray(state.albums)) {
             const prevAlbLen = state.albums.length;
@@ -20205,10 +20296,28 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (state.albums.length !== prevAlbLen) changed = true;
           }
           const delSet = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
+          if (delSet.size && Array.isArray(state.chat?.messages)) {
+            const prevMsgLen = state.chat.messages.length;
+            state.chat.messages = state.chat.messages.filter(m => m && !delSet.has(m.id));
+            if (state.chat.messages.length !== prevMsgLen) { changed = true; chatChanged = true; }
+          }
           if (inc.chat && Array.isArray(inc.chat.messages)) {
-            const cleanIncomingMsgs = inc.chat.messages.filter(m => {
+            const cleanIncomingMsgs = inc.chat.messages.map(m => {
+              if (!m || !m.id) return m;
+              const cmCached = (typeof __cwChatMediaCache === 'object' && __cwChatMediaCache) ? __cwChatMediaCache[m.id] : null;
+              if (cmCached) {
+                return {
+                  ...m,
+                  photoUrl: m.photoUrl || cmCached.photoUrl || '',
+                  videoUrl: m.videoUrl || cmCached.videoUrl || '',
+                  audioUrl: m.audioUrl || cmCached.audioUrl || ''
+                };
+              }
+              return m;
+            }).filter(m => {
               if (!m || !m.id || delSet.has(m.id)) return false;
-              const isGhostVoice = (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || m.original === '🎙️ 음성 메시지' || m.original === '🎙️ 语音消息') && (!m.audioUrl || !String(m.audioUrl).startsWith('data:audio/'));
+              const isRecentVoice = m.ts && (Date.now() - Number(m.ts)) < 240000;
+              const isGhostVoice = !isRecentVoice && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || m.original === '🎙️ 음성 메시지' || m.original === '🎙️ 语音消息') && (!m.audioUrl || !String(m.audioUrl).startsWith('data:audio/'));
               return !isGhostVoice;
             });
             const existingMap = new Map((state.chat.messages || []).map(x => [x && x.id, x]));
@@ -20261,10 +20370,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             changed = true;
             if (typeof window.__renderChatPinnedBanner === 'function') window.__renderChatPinnedBanner();
           }
+          const delItemSet = new Set(Array.isArray(state.deletedItemIds) ? state.deletedItemIds : []);
           if (inc.chat && Array.isArray(inc.chat.qaAnswers)) {
+            const cleanQaInc = inc.chat.qaAnswers.filter(x => x && x.id && !delItemSet.has(x.id));
             const prevQaIds = new Set((state.chat.qaAnswers || []).map(x => x && x.id));
-            const newPartnerQa = isLiveEvent && __isFromPartner ? inc.chat.qaAnswers.find(x => x && x.id && !prevQaIds.has(x.id)) : null;
-            state.chat.qaAnswers = mergeById(state.chat.qaAnswers, inc.chat.qaAnswers, true, false);
+            const newPartnerQa = isLiveEvent && __isFromPartner ? cleanQaInc.find(x => x && x.id && !prevQaIds.has(x.id)) : null;
+            state.chat.qaAnswers = mergeById((state.chat.qaAnswers || []).filter(x => x && !delItemSet.has(x.id)), cleanQaInc, true, false);
             if (newPartnerQa) {
               const bKo = String(newPartnerQa.answer || newPartnerQa.translated || '오늘의 문답을 확인해 보세요 💜').slice(0, 60);
               const bZh = String(newPartnerQa.translated || newPartnerQa.answer || '快来查看今日问答吧 💜').slice(0, 60);
@@ -20273,10 +20384,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           ['diaries', 'memos', 'buckets', 'capsules', 'coupons', 'anniversaries', 'schedules', 'customPhrases', 'transHistory', 'customGifs'].forEach(k => {
             if (Array.isArray(inc[k])) {
+              const cleanIncK = inc[k].filter(x => x && (!x.id || !delItemSet.has(x.id)));
               const __notifyKeys = ['diaries', 'memos', 'buckets', 'capsules', 'coupons', 'anniversaries', 'schedules'];
               const prevIdsK = (isLiveEvent && __isFromPartner && __notifyKeys.includes(k)) ? new Set((state[k] || []).map(x => x && x.id)) : null;
-              const newSpaceItem = prevIdsK ? inc[k].find(x => x && x.id && !prevIdsK.has(x.id)) : null;
-              state[k] = mergeById(state[k], inc[k], true, false);
+              const newSpaceItem = prevIdsK ? cleanIncK.find(x => x && x.id && !prevIdsK.has(x.id)) : null;
+              state[k] = mergeById((state[k] || []).filter(x => x && (!x.id || !delItemSet.has(x.id))), cleanIncK, true, false);
               if (newSpaceItem) {
                 if (k === 'diaries') {
                   const bKo = String(newSpaceItem.title || newSpaceItem.content || '새 일기가 올라왔어요 🪶').slice(0, 60);
@@ -21131,6 +21243,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             memos: (coreObj.memos || []).slice(0, 1),
             deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-10),
             deletedAlbumIds: (coreObj.deletedAlbumIds || []).slice(-15),
+            deletedVoiceIds: (coreObj.deletedVoiceIds || []).slice(-12),
+            deletedItemIds: (coreObj.deletedItemIds || []).slice(-15),
             rpsGame: coreObj.rpsGame || null,
             truthDare: coreObj.truthDare ? { activeCard: coreObj.truthDare.activeCard, updatedAt: coreObj.truthDare.updatedAt, history: (coreObj.truthDare.history || []).slice(0, 3) } : null
           };
@@ -21217,8 +21331,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             },
             diaries: (coreObj.diaries || []).slice(0, 2),
             memos: (coreObj.memos || []).slice(0, 2),
-            deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-15),
+            deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-20),
             deletedAlbumIds: (coreObj.deletedAlbumIds || []).slice(-20),
+            deletedVoiceIds: (coreObj.deletedVoiceIds || []).slice(-20),
+            deletedItemIds: (coreObj.deletedItemIds || []).slice(-25),
             rpsGame: coreObj.rpsGame || null,
             truthDare: coreObj.truthDare ? { activeCard: coreObj.truthDare.activeCard, updatedAt: coreObj.truthDare.updatedAt, history: (coreObj.truthDare.history || []).slice(0, 6) } : null,
             drawQuizzes: (coreObj.drawQuizzes || []).slice(0, 4),
@@ -21643,8 +21759,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 audioUrl: (m.audioUrl && String(m.audioUrl).length <= 240000) ? normalizeAudioDataUrl(m.audioUrl) : ''
               }));
 
+            const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
             const recentVoices = (state.voiceLetters || [])
-              .filter(v => v && v.id && v.audioUrl && String(v.audioUrl).length <= 240000)
+              .filter(v => v && v.id && !delVl.has(v.id) && v.audioUrl && String(v.audioUrl).length <= 240000)
               .slice(0, 8)
               .map(v => ({
                 id: v.id, sender: v.sender || state.myRole || 'suwan', tag: v.tag || '🎙️',
@@ -21668,6 +21785,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) { return false; }
         }
 
+        window.__refreshRecentMediaPackAfterDelete = () => {
+          __lastRecentPackPushSig = '';
+          const rm = getSyncRoomCode();
+          if (rm) setTimeout(() => { pushRecentMediaPack(rm).catch(() => {}); }, 250);
+        };
         async function pullRecentMediaPack(room, showFeedback) {
           if (!room) room = getSyncRoomCode();
           if (!room) return false;
@@ -22200,6 +22322,43 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               target.reactions = sig.reactions.slice(0, 12);
               saveState(false); renderChat();
             }
+          } else if (sig.kind === 'delete' && sig.msgId) {
+            if (typeof window.__stopChatVoiceIfPlaying === 'function') window.__stopChatVoiceIfPlaying(sig.msgId);
+            if (!Array.isArray(state.deletedMsgIds)) state.deletedMsgIds = [];
+            if (!state.deletedMsgIds.includes(sig.msgId)) state.deletedMsgIds.push(sig.msgId);
+            const vlId = sig.vlId || `vl_chat_${sig.msgId}`;
+            if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
+            if (!state.deletedVoiceIds.includes(vlId)) state.deletedVoiceIds.push(vlId);
+            state.chat.messages = (state.chat?.messages || []).filter(m => m && m.id !== sig.msgId);
+            if (Array.isArray(state.voiceLetters)) state.voiceLetters = state.voiceLetters.filter(v => v && v.id !== vlId);
+            if (state.chat && state.chat.pinnedMsg && state.chat.pinnedMsg.id === sig.msgId) {
+              state.chat.pinnedMsg = { id: '', text: '', translated: '', updatedAt: Date.now() };
+            }
+            try {
+              if (typeof __cwChatMediaCache === 'object' && __cwChatMediaCache && __cwChatMediaCache[sig.msgId]) {
+                delete __cwChatMediaCache[sig.msgId];
+                idbPut('chat_media_vault_v1', { ...__cwChatMediaCache });
+              }
+              idbPut('voice_letters_vault_v1', state.voiceLetters || []);
+              idbPut('deleted_voices_vault_v1', state.deletedVoiceIds);
+            } catch (_) {}
+            saveState(false); renderChat(); renderHome();
+            if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+          } else if (sig.kind === 'delete_voice' && sig.vlId) {
+            if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
+            if (!state.deletedVoiceIds.includes(sig.vlId)) state.deletedVoiceIds.push(sig.vlId);
+            if (Array.isArray(state.voiceLetters)) state.voiceLetters = state.voiceLetters.filter(v => v && v.id !== sig.vlId);
+            try { idbPut('voice_letters_vault_v1', state.voiceLetters || []); idbPut('deleted_voices_vault_v1', state.deletedVoiceIds); } catch (_) {}
+            saveState(false); if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+          } else if (sig.kind === 'delete_item' && sig.itemId) {
+            if (!Array.isArray(state.deletedItemIds)) state.deletedItemIds = [];
+            if (!state.deletedItemIds.includes(sig.itemId)) state.deletedItemIds.push(sig.itemId);
+            if (state.chat && Array.isArray(state.chat.qaAnswers)) state.chat.qaAnswers = state.chat.qaAnswers.filter(x => x && x.id !== sig.itemId);
+            ['diaries', 'memos', 'buckets', 'capsules', 'coupons', 'anniversaries', 'schedules', 'customGifs', 'drawQuizzes'].forEach(k => {
+              if (Array.isArray(state[k])) state[k] = state[k].filter(x => x && x.id !== sig.itemId);
+            });
+            saveState(false);
+            try { renderDiaryQaMemos(); renderBucketAndAlbum(); renderAnniversary(); renderCoupleCalendar(); renderHome(); } catch (_) {}
           } else if (sig.kind === 'edit' && sig.msgId && sig.original) {
             const target = (state.chat?.messages || []).find(m => m && m.id === sig.msgId);
             if (target) {
@@ -22253,7 +22412,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const m = pkt.meta || {};
           const delSet = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
           const delAlbSet = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
+          const delVlSet = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
           if (m.msgId && delSet.has(m.msgId)) return false;
+          if (pkt.kind === 'voice_letter' && m.id && delVlSet.has(m.id)) return false;
           if ((pkt.kind === 'album_photo' || pkt.kind === 'album_video') && m.albumId && delAlbSet.has(m.albumId)) return false;
           const mid = pkt.mediaId || pkt.mediaUrl || `m_${pkt.ts}`;
           const needsRecovery = (
@@ -22541,8 +22702,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             customPhrases: (coreObj.customPhrases || []).slice(0, lim.phrase),
             transHistory: (coreObj.transHistory || []).slice(0, lim.trans),
             customGifs: (coreObj.customGifs || []).slice(0, lim.gif),
-            deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-80),
-            deletedAlbumIds: (coreObj.deletedAlbumIds || []).slice(-100),
+            deletedMsgIds: (coreObj.deletedMsgIds || []).slice(-120),
+            deletedAlbumIds: (coreObj.deletedAlbumIds || []).slice(-120),
+            deletedVoiceIds: (coreObj.deletedVoiceIds || []).slice(-120),
+            deletedItemIds: (coreObj.deletedItemIds || []).slice(-150),
             drawQuizzes: (coreObj.drawQuizzes || []).slice(0, 12),
             rpsGame: coreObj.rpsGame || null,
             truthDare: coreObj.truthDare || null,
@@ -25455,6 +25618,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         };
         document.addEventListener('pointerdown', unlockOnce, { once: true, passive: true });
 
+        window.__stopChatVoiceIfPlaying = function(targetMsgId) {
+          try {
+            if (!activeAudio) return;
+            if (!targetMsgId || activeMsgId === targetMsgId) {
+              activeAudio.pause();
+              if (activeBtn) resetBtnUi(activeBtn);
+              activeMsgId = '';
+              activeBtn = null;
+            }
+          } catch (_) {}
+        };
         window.__playChatVoiceMsg = function(msgId, audioUrl, btnEl, isAutoPlay) {
           if (!audioUrl) return;
           if (!activeAudio) {
@@ -26766,8 +26940,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v73)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v73';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v74)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v74';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {

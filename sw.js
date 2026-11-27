@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v73';
+const SW_VER = 'chanwan-sw-prime4-v74';
 const PRECACHE_URLS = [
   './',
   './index.html',
