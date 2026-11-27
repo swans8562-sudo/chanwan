@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.chanwan.shiguang.app-debug-4:/drawable_ic_stat_heart.xml.flat",
+        "source": "com.chanwan.shiguang.app-main-6:/drawable/ic_stat_heart.xml"
+    },
+    {
+        "merged": "com.chanwan.shiguang.app-debug-4:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.chanwan.shiguang.app-main-6:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.chanwan.shiguang.app-debug-4:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.chanwan.shiguang.app-main-6:/mipmap-xxxhdpi/ic_launcher.png"
+    }
+]

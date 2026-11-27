@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">灿完时光</string>
+    <style name="AppTheme" parent="android:Theme.DeviceDefault.NoActionBar">
+        <item name="android:statusBarColor">#120d1f</item>
+        <item name="android:navigationBarColor">#120d1f</item>
+    </style>
+</resources>

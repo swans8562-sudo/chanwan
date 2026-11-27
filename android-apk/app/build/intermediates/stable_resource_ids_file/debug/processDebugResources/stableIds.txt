@@ -1,0 +1,4 @@
+com.chanwan.shiguang:style/AppTheme = 0x7f040000
+com.chanwan.shiguang:string/app_name = 0x7f030000
+com.chanwan.shiguang:mipmap/ic_launcher = 0x7f020000
+com.chanwan.shiguang:drawable/ic_stat_heart = 0x7f010000

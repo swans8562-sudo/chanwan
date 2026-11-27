@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.chanwan.shiguang'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.chanwan.shiguang"
+        minSdk 24
+        targetSdk 34
+        versionCode 49
+        versionName "4.49"
+    }
+
+    signingConfigs {
+        chanwan {
+            storeFile file("chanwan-signing.jks")
+            storePassword "chanwan2026"
+            keyAlias "chanwan"
+            keyPassword "chanwan2026"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.chanwan
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.chanwan
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+}
