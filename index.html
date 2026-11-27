@@ -2511,7 +2511,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v60: App-Wide Couture Boutique Elevation
+       Prime 4 · v62: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2702,7 +2702,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v60: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v62: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -2832,15 +2832,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 </head>
 <body style="padding-bottom: 0 !important;">
-  <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
-    <defs>
-      <radialGradient id="cwWcSharedYellowGrad" cx="35%" cy="28%" r="68%">
-        <stop offset="0%" stop-color="#FFF38A"/>
-        <stop offset="55%" stop-color="#FFD43B"/>
-        <stop offset="100%" stop-color="#F5A614"/>
-      </radialGradient>
-    </defs>
-  </svg>
+
   <!-- Clean Top Header -->
   <header class="sticky top-0 z-40 header-lux" style="font-family: 'PingFang SC', 'Microsoft YaHei', 'Apple SD Gothic Neo', sans-serif;">
     <div class="w-full px-3 sm:px-6 lg:px-8 h-[64px] relative flex items-center justify-between">
@@ -4953,7 +4945,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v60</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v62</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
           </div>
         </div>
@@ -7563,7 +7555,9 @@
             .replace(/ㅋ{2}/g, '哈哈')
             .replace(/[ㅠㅜ]{2,}/g, '呜呜')
             .replace(/(?<![가-힣])[ㅎㅋㅠㅜ]+(?![가-힣])/g, '');
-          if (/헤헿|헤헤/.test(__pOrig) && !/嘿嘿/.test(__pOut)) __pOut = __pOut.replace(/呵呵|哈哈/g, '嘿嘿');
+          if (/^(헤헤헤+|헤헿+)$/.test(__pOrig.trim())) __pOut = '嘿嘿嘿';
+          else if (/^헤헤$/.test(__pOrig.trim())) __pOut = '嘿嘿';
+          else if (/헤헿|헤헤/.test(__pOrig) && !/嘿嘿/.test(__pOut)) __pOut = __pOut.replace(/呵呵|哈哈|嗯哼/g, '嘿嘿');
           if (/히힇|히히/.test(__pOrig) && !/嘻嘻/.test(__pOut)) __pOut = __pOut.replace(/呵呵/g, '嘻嘻');
           outText = __pOut;
         } else if (tgtLang === 'ko') {
@@ -14957,139 +14951,201 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function getWechatEmoticonSvg(tagOrKey, size = 28) {
           const entry = WECHAT_TAG_MAP.get(tagOrKey) || WECHAT_OFFICIAL_EMOTICONS.find(x => x.k === tagOrKey);
           const k = entry ? entry.k : 'smile';
-          const gid = `wcg_${k}_${size}`;
+          const vAlign = size >= 36 ? 'middle' : '-0.2em';
+          const wrapSvg = (inner) => `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:${vAlign};flex-shrink:0;">${inner}</svg>`;
+
+          // Standalone non-yellow icons (100% pure hex fills — zero url(#...) paint server dependencies!)
           if (k === 'doge') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><path d="M14 24L18 9l12 9M50 24L46 9l-12 9" fill="#E69A3A" stroke="#7A4414" stroke-width="2.4" stroke-linejoin="round"/><circle cx="32" cy="36" r="21" fill="#F4B350" stroke="#7A4414" stroke-width="2.4"/><ellipse cx="32" cy="42" rx="15" ry="12" fill="#FFF7E6"/><ellipse cx="24" cy="28" rx="3.2" ry="1.8" fill="#FFF7E6"/><ellipse cx="40" cy="28" rx="3.2" ry="1.8" fill="#FFF7E6"/><ellipse cx="24" cy="33" rx="4.2" ry="2.7" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="26" cy="33" r="1.9" fill="#3B200B"/><ellipse cx="40" cy="33" rx="4.2" ry="2.7" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="42" cy="33" r="1.9" fill="#3B200B"/><ellipse cx="32" cy="39" rx="3.2" ry="2.2" fill="#3B200B"/><path d="M26 44c3 2.5 9 2 13-1.5" fill="none" stroke="#5C3310" stroke-width="2.3" stroke-linecap="round"/></svg>`;
+            return wrapSvg(`<path d="M13 25L17 9l13 9M51 25L47 9l-13 9" fill="#E59838" stroke="#6E3B10" stroke-width="2.3" stroke-linejoin="round"/><circle cx="32" cy="36" r="21.5" fill="#F4B350" stroke="#6E3B10" stroke-width="2.3"/><ellipse cx="32" cy="42.5" rx="15.5" ry="12" fill="#FFF8EB"/><ellipse cx="23.5" cy="27.5" rx="3.4" ry="1.9" fill="#FFF8EB"/><ellipse cx="40.5" cy="27.5" rx="3.4" ry="1.9" fill="#FFF8EB"/><ellipse cx="23.5" cy="33" rx="4.6" ry="2.9" fill="#FFFFFF" stroke="#542C0C" stroke-width="1.8"/><circle cx="25.8" cy="33" r="2" fill="#2E1605"/><ellipse cx="40.5" cy="33" rx="4.6" ry="2.9" fill="#FFFFFF" stroke="#542C0C" stroke-width="1.8"/><circle cx="42.8" cy="33" r="2" fill="#2E1605"/><ellipse cx="32" cy="39" rx="3.3" ry="2.3" fill="#3B200B"/><path d="M25.5 44.2c3.5 2.6 9.8 2 13.5-1.6" fill="none" stroke="#542C0C" stroke-width="2.3" stroke-linecap="round"/>`);
           }
           if (k === 'rose') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><path d="M32 34v22" stroke="#15803D" stroke-width="3.6" stroke-linecap="round"/><path d="M32 47c-9 0-13-5-13-10 7 0 11 4 13 10zm0 0c9 0 13-5 13-10-7 0-11 4-13 10z" fill="#22C55E" stroke="#14532D" stroke-width="1.8"/><path d="M19 22c0-9 6-13 13-8 7-5 13-1 13 8 0 9-6 14-13 14s-13-5-13-14z" fill="#EF4444" stroke="#991B1B" stroke-width="2.2"/><path d="M24 19c4 4 12 4 16 0" fill="none" stroke="#FCA5A5" stroke-width="2" stroke-linecap="round"/></svg>`;
+            return wrapSvg(`<path d="M32 34v22" stroke="#15803D" stroke-width="3.8" stroke-linecap="round"/><path d="M32 47c-9 0-13-5-13-10 7 0 11 4 13 10zm0 0c9 0 13-5 13-10-7 0-11 4-13 10z" fill="#22C55E" stroke="#14532D" stroke-width="1.8"/><path d="M19 22c0-9 6-13 13-8 7-5 13-1 13 8 0 9-6 14-13 14s-13-5-13-14z" fill="#EF4444" stroke="#991B1B" stroke-width="2.2"/><path d="M24 19c4 4 12 4 16 0" fill="none" stroke="#FCA5A5" stroke-width="2.2" stroke-linecap="round"/>`);
           }
           if (k === 'heart' || k === 'broken') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><path d="M32 54S10 40 10 23c0-7.5 5.8-13 12.8-13 4.2 0 7.5 2.2 9.2 5.5C33.7 12.2 37 10 41.2 10 48.2 10 54 15.5 54 23c0 17-22 31-22 31z" fill="#EF4444" stroke="#991B1B" stroke-width="2.2"/>${k === 'broken' ? '<path d="M32 16l-4 10 7 6-5 10 2 10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' : '<ellipse cx="21" cy="20" rx="4" ry="2.5" transform="rotate(-25 21 20)" fill="rgba(255,255,255,0.45)"/>'}</svg>`;
+            return wrapSvg(`<path d="M32 54S9 40 9 23c0-7.8 6-13.2 13-13.2 4.3 0 7.7 2.2 10 5.7 2.3-3.5 5.7-5.7 10-5.7 7 0 13 5.4 13 13.2 0 17-23 31-23 31z" fill="#EF4444" stroke="#991B1B" stroke-width="2.2"/>${k === 'broken' ? '<path d="M32 15l-4.5 10.5 7.5 6-5.5 10.5 2.5 10" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>' : '<ellipse cx="20.5" cy="19.5" rx="4.5" ry="2.6" transform="rotate(-25 20.5 19.5)" fill="#FFFFFF" opacity="0.52"/>'}`);
           }
           if (k === 'lips') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><path d="M10 33c6-9 14-11 22-5 8-6 16-4 22 5-7 11-15 15-22 15S17 44 10 33z" fill="#F43F5E" stroke="#9F1239" stroke-width="2.3"/><path d="M12 33c12 3 28 3 40 0" fill="none" stroke="#881337" stroke-width="2.2"/></svg>`;
+            return wrapSvg(`<path d="M9 33c6.5-9.5 14.5-11.5 23-5 8.5-6.5 16.5-4.5 23 5-7.5 11.5-15.5 15.5-23 15.5S16.5 44.5 9 33z" fill="#F43F5E" stroke="#9F1239" stroke-width="2.3"/><path d="M11 33c13 3.2 29 3.2 42 0" fill="none" stroke="#881337" stroke-width="2.2"/><ellipse cx="23" cy="28" rx="4" ry="1.6" fill="#FFFFFF" opacity="0.45"/>`);
           }
           if (k === 'pig') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><ellipse cx="15" cy="18" rx="7" ry="9" fill="#FDA4AF" stroke="#9F1239" stroke-width="2.2"/><ellipse cx="49" cy="18" rx="7" ry="9" fill="#FDA4AF" stroke="#9F1239" stroke-width="2.2"/><circle cx="32" cy="35" r="21" fill="#FBCFE8" stroke="#9F1239" stroke-width="2.3"/><circle cx="23" cy="29" r="2.6" fill="#4C0519"/><circle cx="41" cy="29" r="2.6" fill="#4C0519"/><ellipse cx="32" cy="39" rx="9.5" ry="6.8" fill="#F472B6" stroke="#9F1239" stroke-width="2"/><circle cx="29" cy="39" r="2" fill="#881337"/><circle cx="35" cy="39" r="2" fill="#881337"/></svg>`;
+            return wrapSvg(`<ellipse cx="15" cy="18" rx="7.5" ry="9.5" fill="#FDA4AF" stroke="#9F1239" stroke-width="2.2"/><ellipse cx="49" cy="18" rx="7.5" ry="9.5" fill="#FDA4AF" stroke="#9F1239" stroke-width="2.2"/><circle cx="32" cy="35" r="21.5" fill="#FBCFE8" stroke="#9F1239" stroke-width="2.3"/><circle cx="23" cy="28.5" r="2.8" fill="#4C0519"/><circle cx="41" cy="28.5" r="2.8" fill="#4C0519"/><ellipse cx="32" cy="39" rx="10" ry="7" fill="#F472B6" stroke="#9F1239" stroke-width="2"/><circle cx="28.8" cy="39" r="2.1" fill="#881337"/><circle cx="35.2" cy="39" r="2.1" fill="#881337"/>`);
+          }
+          if (k === 'thumb') {
+            return wrapSvg(`<path d="M12 31h9v22h-9a3 3 0 0 1-3-3V34a3 3 0 0 1 3-3z" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2.2"/><path d="M21 31l7-16c1.5-3.5 6.5-3 6.5 1.5V26h13.5c3.5 0 5.5 3 4.5 6.2l-3.8 16.5c-.8 3-3.2 4.3-6.2 4.3H21V31z" fill="#FFDA3D" stroke="#B4690E" stroke-width="2.3" stroke-linejoin="round"/><ellipse cx="31" cy="16" rx="2" ry="4" fill="#FFF3A1" opacity="0.7"/>`);
+          }
+          if (k === 'pray') {
+            return wrapSvg(`<path d="M31 11c-2.5 0-4 2.2-4 5.5V35l-9 9 8 9 6-6V11zm2 0v36l6 6 8-9-9-9V16.5c0-3.3-1.5-5.5-4-5.5z" fill="#FFDA3D" stroke="#B4690E" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 45l10 10-5 4-10-10zm34 0L39 55l5 4 10-10z" fill="#EF4444" stroke="#991B1B" stroke-width="2"/><path d="M32 6v3M23 9l2 2.5M41 9l-2 2.5" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round"/>`);
           }
           if (k === 'hongbao') {
-            return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-0.22em;flex-shrink:0;"><rect x="14" y="8" width="36" height="48" rx="6" fill="#EF4444" stroke="#991B1B" stroke-width="2.3"/><path d="M14 20q18 12 36 0" fill="none" stroke="#FDE047" stroke-width="2.5"/><circle cx="32" cy="26" r="6.5" fill="#FACC15" stroke="#991B1B" stroke-width="1.8"/><text x="32" y="29" text-anchor="middle" font-size="9" font-weight="bold" fill="#991B1B">¥</text></svg>`;
+            return wrapSvg(`<rect x="14" y="8" width="36" height="48" rx="6" fill="#EF4444" stroke="#991B1B" stroke-width="2.3"/><path d="M14 21q18 12 36 0" fill="none" stroke="#FDE047" stroke-width="2.6"/><circle cx="32" cy="27" r="7" fill="#FACC15" stroke="#991B1B" stroke-width="1.8"/><path d="M29 24l3 3 3-3M28.5 27.5h7M28.5 30h7M32 27v5" stroke="#991B1B" stroke-width="1.6" stroke-linecap="round" fill="none"/>`);
           }
+
+          // Special [裂开] (crack): True split 2-half WeChat yellow sphere with real rift gap down the middle!
+          if (k === 'crack') {
+            return wrapSvg(`
+              <g transform="translate(-2.2, 0) rotate(-3 32 32)">
+                <path d="M33 7 A25 25 0 0 0 33 57 L29 44 L34 32 L28 20 Z" fill="#FFDA3D" stroke="#B86B08" stroke-width="2" stroke-linejoin="round"/>
+                <ellipse cx="20" cy="18" rx="5.5" ry="2.4" transform="rotate(-24 20 18)" fill="#FFFFFF" opacity="0.62"/>
+                <circle cx="21.5" cy="28" r="3.1" fill="#4A2708"/><circle cx="20.5" cy="27" r="1" fill="#FFFFFF"/>
+                <path d="M22 42h8" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>
+              </g>
+              <g transform="translate(2.2, 0.8) rotate(3.5 32 32)">
+                <path d="M33 7 L28 20 L34 32 L29 44 L33 57 A25 25 0 0 0 33 7 Z" fill="#F7C927" stroke="#B86B08" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="42.5" cy="28" r="3.1" fill="#4A2708"/><circle cx="41.5" cy="27" r="1" fill="#FFFFFF"/>
+                <path d="M34 42h8" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>
+              </g>`);
+          }
+
+          // 3D Glossy WeChat Yellow Sphere (100% pure hex layers — NEVER turns transparent!)
+          const sphere = `<circle cx="32" cy="32.8" r="25" fill="#EA9F10"/><circle cx="32" cy="32" r="24.8" fill="#FFDA3D" stroke="#B86B08" stroke-width="2"/><ellipse cx="27.5" cy="21.5" rx="15.5" ry="11" transform="rotate(-14 27.5 21.5)" fill="#FFED78" opacity="0.72"/><ellipse cx="22" cy="15.5" rx="6" ry="2.5" transform="rotate(-24 22 15.5)" fill="#FFFFFF" opacity="0.68"/>`;
+          const cheeks = `<ellipse cx="16.8" cy="36.5" rx="4.8" ry="2.8" fill="#FF6B6B" opacity="0.52"/><ellipse cx="47.2" cy="36.5" rx="4.8" ry="2.8" fill="#FF6B6B" opacity="0.52"/>`;
+          const archEyes = `<path d="M18.5 27.5c2.2-3.8 7.2-3.8 9.4 0M36.1 27.5c2.2-3.8 7.2-3.8 9.4 0" fill="none" stroke="#4A2708" stroke-width="2.8" stroke-linecap="round"/>`;
+          const dotEyes = `<circle cx="23.5" cy="27" r="3.2" fill="#4A2708"/><circle cx="22.4" cy="25.8" r="1" fill="#FFFFFF"/><circle cx="40.5" cy="27" r="3.2" fill="#4A2708"/><circle cx="39.4" cy="25.8" r="1" fill="#FFFFFF"/>`;
 
           let face = '';
-          const cheeks = `<ellipse cx="17.5" cy="37" rx="4.5" ry="2.6" fill="#FF7A7A" opacity="0.55"/><ellipse cx="46.5" cy="37" rx="4.5" ry="2.6" fill="#FF7A7A" opacity="0.55"/>`;
-          const archEyes = `<path d="M19 27c2-3.5 7-3.5 9 0M36 27c2-3.5 7-3.5 9 0" fill="none" stroke="#5C3310" stroke-width="2.8" stroke-linecap="round"/>`;
-          const dotEyes = `<circle cx="23.5" cy="27" r="3" fill="#5C3310"/><circle cx="40.5" cy="27" r="3" fill="#5C3310"/>`;
-
           switch (k) {
             case 'facepalm':
-              face = `<path d="M37 25c2.5-3 6.5-2.5 8.5 0.5" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>
-                      <path d="M45 28c3 3 4 7 1.5 8.5-2.5 1.5-5.5-2-1.5-8.5z" fill="#38BDF8"/>
-                      <path d="M25 43c4 3.5 12 3 16-1" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>
-                      <path d="M13 38c1-9 9-19 19-21 3-0.5 5 1.5 3.5 4L29 29l9-9c2-2 5 0 3.5 2.8L34 32l8.5-6.5c2-1.5 4.5 0.8 2.8 3L37 36l6.5-3.5c2-1 3.8 1.5 1.8 3.2-6 5.5-15 9.5-24 8.5-5-0.5-8.8-2.8-8.3-6.2z" fill="#FFE066" stroke="#B4690E" stroke-width="2.1" stroke-linejoin="round"/>`;
+              // Classic WeChat [捂脸]: curved laughing-crying right eye + tear drop + wide helpless toothy grin + sculpted 4-finger hand covering left face!
+              face = `<path d="M36.5 21.5c3 1 5.8 2.8 7.5 5" fill="none" stroke="#4A2708" stroke-width="2.3" stroke-linecap="round"/>
+                      <path d="M36 27.5c2.8-3.2 7.5-2.8 9.5 0.5" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>
+                      <path d="M46.5 28.5c3.8 3.2 4.6 8 1.6 9.6-2.8 1.5-5.8-2.2-1.6-9.6z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
+                      <path d="M23 39h20c-1.2 7.5-5.5 10.8-10.5 10.8S24 46 23 39z" fill="#991B1B" stroke="#4A2708" stroke-width="2"/>
+                      <path d="M24 39h18v3.2H24z" fill="#FFFFFF"/>
+                      <path d="M12 37c0-7 4.5-13.5 11-18.5 2-1.5 4.2-.2 3.2 2l-3.2 6.5 8.2-9.2c1.8-2 4.4-.4 3 2l-5.8 8.8 8.2-7.2c1.9-1.6 4.2.2 2.6 2.3l-6.2 7.5 6-4.2c1.8-1.2 3.6.8 1.9 2.6-5.2 5.8-12 9.8-19.2 10.2-5.8.4-9.7-1.2-9.7-2.8z" fill="#FFE46B" stroke="#A65E08" stroke-width="2" stroke-linejoin="round"/>`;
               break;
             case 'joy':
-              face = `${archEyes}<path d="M20 35h24c-1 9-6 13-12 13s-11-4-12-13z" fill="#991B1B" stroke="#5C3310" stroke-width="2.2"/><path d="M21 35h22v3.5H21z" fill="#fff"/>
-                      <path d="M15 30c-4 4-4 9-1 10.5 3 1.5 5.5-3 1-10.5zM49 30c4 4 4 9 1 10.5-3 1.5-5.5-3-1-10.5z" fill="#38BDF8"/>`;
+              face = `<path d="M18 21l7 2.5M46 21l-7 2.5" stroke="#4A2708" stroke-width="2.3" stroke-linecap="round"/>${archEyes}
+                      <path d="M19 35h26c-1.2 9.5-6.2 13.5-13 13.5S20.2 44.5 19 35z" fill="#991B1B" stroke="#4A2708" stroke-width="2.2"/><path d="M20.2 35h23.6v3.6H20.2z" fill="#FFFFFF"/>
+                      <path d="M15 29c-4.8 4-5.2 9.5-1.8 11.2 3.2 1.6 6-3.2 1.8-11.2zM49 29c4.8 4 5.2 9.5 1.8 11.2-3.2 1.6-6-3.2-1.8-11.2z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>`;
               break;
             case 'grin':
-              face = `${archEyes}${cheeks}<path d="M18 34h28c-1 10-6.5 14-14 14s-13-4-14-14z" fill="#fff" stroke="#5C3310" stroke-width="2.4"/><path d="M19 40h26M26 34v13M32 34v14M38 34v13" stroke="#5C3310" stroke-width="1.6"/>`;
+              face = `${archEyes}${cheeks}<path d="M17.5 34h29c-1.2 10.2-6.8 14.2-14.5 14.2S18.7 44.2 17.5 34z" fill="#FFFFFF" stroke="#4A2708" stroke-width="2.3"/><path d="M18.8 40.5h26.4M25.5 34v13M32 34v14M38.5 34v13" stroke="#4A2708" stroke-width="1.6"/>`;
               break;
             case 'snicker':
-              face = `${archEyes}${cheeks}<path d="M24 49c0-8 4-13 9-13s8 5 8 13" fill="#FFE066" stroke="#B4690E" stroke-width="2.2"/><path d="M28 39v6M32 38v7M36 39v6" stroke="#B4690E" stroke-width="1.6" stroke-linecap="round"/>`;
+              face = `${archEyes}${cheeks}<path d="M23 51c0-8.5 4.2-14 9.5-14s9 5.5 9 14z" fill="#FFE46B" stroke="#A65E08" stroke-width="2.1" stroke-linejoin="round"/><path d="M28 40v6.5M32.5 39v7.5M37 40v6.5" stroke="#A65E08" stroke-width="1.6" stroke-linecap="round"/>`;
               break;
             case 'kiss':
-              face = `${archEyes}${cheeks}<path d="M30 36c3-1.8 5 0.5 2.5 2.5 2.5 2 0.5 4.5-2.5 2.5" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/><path d="M48 24c-2-3-6.5-1.5-6.5 2 0 3.2 6.5 6.5 6.5 6.5s6.5-3.3 6.5-6.5c0-3.5-4.5-5-6.5-2z" fill="#EF4444"/>`;
+              face = `<path d="M19 27c2-3.2 6.5-3.2 8.5 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/><circle cx="40.5" cy="27" r="3" fill="#4A2708"/>${cheeks}<path d="M30 35.5c3.5-1.8 5.2.8 2.4 2.8 2.8 2 1 4.8-2.4 2.8" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/><path d="M49 23c-2.2-3.2-6.8-1.6-6.8 2.2 0 3.5 6.8 7 6.8 7s6.8-3.5 6.8-7c0-3.8-4.6-5.4-6.8-2.2z" fill="#EF4444" stroke="#991B1B" stroke-width="1.3"/>`;
               break;
             case 'shy':
-              face = `<path d="M19 28c2 2.5 6 2.5 8 0M37 28c2 2.5 6 2.5 8 0" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>${cheeks}<path d="M27 40c3 3 7 3 10 0" fill="none" stroke="#5C3310" stroke-width="2.5" stroke-linecap="round"/>`;
+              face = `<path d="M18.5 27.5c2.2 2.8 6.5 2.8 8.8 0M36.7 27.5c2.2 2.8 6.5 2.8 8.8 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>${cheeks}<path d="M26.5 40c3.2 3.2 7.8 3.2 11 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/>`;
               break;
             case 'happy':
-              face = `${archEyes}${cheeks}<path d="M22 36c3 7 17 7 20 0" fill="none" stroke="#5C3310" stroke-width="2.8" stroke-linecap="round"/>`;
+              face = `${archEyes}${cheeks}<path d="M21 36c3.5 7.5 18.5 7.5 22 0" fill="none" stroke="#4A2708" stroke-width="2.8" stroke-linecap="round"/>`;
+              break;
+            case 'chuckle':
+              face = `<path d="M18 20.5c3-2 7.5-1.5 9.5 1M46 20.5c-3-2-7.5-1.5-9.5 1" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>${dotEyes}${cheeks}<path d="M19 35.5h26c-1.5 8.5-6.5 12-13 12s-11.5-3.5-13-12z" fill="#991B1B" stroke="#4A2708" stroke-width="2.2"/><path d="M20.5 35.5h23v3.5h-23z" fill="#FFFFFF"/>`;
+              break;
+            case 'sly':
+              face = `<path d="M18 23l9-2.5M37 20.5c3-1.8 7-.8 9 1.8" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/>${archEyes}<path d="M22 39c6 4.5 16 2.5 21-3.5" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>`;
+              break;
+            case 'heiha':
+              face = `${archEyes}${cheeks}<path d="M22 36h20c-1 7-5 10-10 10s-9-3-10-10z" fill="#991B1B" stroke="#4A2708" stroke-width="2"/><path d="M9 28c-2-7 3-11 6-6l3 7M55 28c2-7-3-11-6-6l-3 7" fill="#FFE46B" stroke="#A65E08" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
               break;
             case 'smirk':
-              face = `<path d="M18 22l9-2M46 22l-9-2" stroke="#5C3310" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="24" cy="27" rx="5" ry="2.6" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="26" cy="27" r="1.8" fill="#3B200B"/><ellipse cx="40" cy="27" rx="5" ry="2.6" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="42" cy="27" r="1.8" fill="#3B200B"/><path d="M18 36c6 9 22 9 28-1-5 2-23 2-28 1z" fill="#fff" stroke="#5C3310" stroke-width="2.2"/>`;
+              face = `<path d="M18 21.5l9-2M46 21.5l-9-2" stroke="#4A2708" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="23.5" cy="27" rx="5.2" ry="2.8" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="25.8" cy="27" r="1.9" fill="#2E1605"/><ellipse cx="40.5" cy="27" rx="5.2" ry="2.8" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="42.8" cy="27" r="1.9" fill="#2E1605"/><path d="M18 36.5c6 8.5 22 8.5 28-1.5-5 2.2-23 2.2-28 1.5z" fill="#FFFFFF" stroke="#4A2708" stroke-width="2.2"/>`;
               break;
             case 'smart':
-              face = `<ellipse cx="24" cy="27" rx="4.8" ry="3.2" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="26" cy="27" r="2" fill="#3B200B"/><ellipse cx="40" cy="27" rx="4.8" ry="3.2" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="42" cy="27" r="2" fill="#3B200B"/><path d="M26 39c4 2 9 1.5 12-1" fill="none" stroke="#5C3310" stroke-width="2.4" stroke-linecap="round"/><path d="M22 49h16c2 0 3-3 0-4h-12" fill="#FFE066" stroke="#B4690E" stroke-width="2" stroke-linecap="round"/><path d="M49 15l1.5 3.5L54 20l-3.5 1.5L49 25l-1.5-3.5L44 20l3.5-1.5z" fill="#FFF"/>`;
+              face = `<ellipse cx="23.5" cy="27" rx="4.8" ry="3.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="25.8" cy="27" r="2" fill="#2E1605"/><ellipse cx="40.5" cy="27" rx="4.8" ry="3.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="42.8" cy="27" r="2" fill="#2E1605"/><path d="M25.5 38.5c4 2.2 9.2 1.5 12.5-1" fill="none" stroke="#4A2708" stroke-width="2.4" stroke-linecap="round"/><path d="M21 50h17c2.5 0 3.2-3.5 0-4.2H26" fill="#FFE46B" stroke="#A65E08" stroke-width="2" stroke-linecap="round"/><path d="M49 14l1.6 3.6L54.2 19l-3.6 1.6L49 24.2l-1.6-3.6L43.8 19l3.6-1.4z" fill="#FFFFFF" stroke="#D97706" stroke-width="1"/>`;
               break;
             case 'melon':
-              face = `<ellipse cx="24" cy="26" rx="4.2" ry="3" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="26" cy="26" r="1.9" fill="#3B200B"/><ellipse cx="40" cy="26" rx="4.2" ry="3" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="42" cy="26" r="1.9" fill="#3B200B"/><path d="M16 37h32c-2 11-9 16-16 16s-14-5-16-16z" fill="#EF4444" stroke="#15803D" stroke-width="3.2"/>`;
+              face = `<ellipse cx="23.5" cy="25.5" rx="4.4" ry="3" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="25.5" cy="25.5" r="1.9" fill="#2E1605"/><ellipse cx="40.5" cy="25.5" rx="4.4" ry="3" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="42.5" cy="25.5" r="1.9" fill="#2E1605"/><path d="M15.5 36.5h33c-2 11.5-9.2 16.5-16.5 16.5s-14.5-5-16.5-16.5z" fill="#EF4444" stroke="#15803D" stroke-width="3.2"/><circle cx="27" cy="42" r="1.1" fill="#1F2937"/><circle cx="32" cy="44" r="1.1" fill="#1F2937"/><circle cx="37" cy="42" r="1.1" fill="#1F2937"/>`;
               break;
             case 'peek':
-              face = `<circle cx="38" cy="28" r="4.2" fill="#fff" stroke="#5C3310" stroke-width="2"/><circle cx="38" cy="28" r="2" fill="#3B200B"/><path d="M12 24h18v22H12zM44 24h8v22h-8z" fill="#FFE066" stroke="#B4690E" stroke-width="2"/><path d="M18 24v20M24 24v20" stroke="#B4690E" stroke-width="1.8"/>`;
-              break;
-            case 'crack':
-              face = `${dotEyes}<path d="M25 41h14" stroke="#5C3310" stroke-width="2.5" stroke-linecap="round"/><path d="M33 10l-4 12 6 8-5 11 4 13" fill="none" stroke="#451A03" stroke-width="2.8" stroke-linejoin="round"/>`;
+              face = `<circle cx="38.5" cy="28" r="4.5" fill="#FFFFFF" stroke="#4A2708" stroke-width="2"/><circle cx="38.5" cy="28" r="2.1" fill="#2E1605"/><rect x="12" y="22" width="18" height="24" rx="4" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/><rect x="44.5" y="23" width="8.5" height="22" rx="3.5" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/><path d="M18 23v22M24 23v22" stroke="#A65E08" stroke-width="1.8"/>`;
               break;
             case 'pout':
-              face = `<circle cx="23" cy="29" r="3.6" fill="#5C3310"/><circle cx="22" cy="27.8" r="1.3" fill="#fff"/><circle cx="41" cy="29" r="3.6" fill="#5C3310"/><circle cx="40" cy="27.8" r="1.3" fill="#fff"/>${cheeks}<path d="M25 43c4-3.5 10-3.5 14 0" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>`;
+              face = `<path d="M18 22l7-2M46 22l-7-2" stroke="#4A2708" stroke-width="2.2" stroke-linecap="round"/><circle cx="23" cy="29" r="3.8" fill="#4A2708"/><circle cx="21.8" cy="27.6" r="1.4" fill="#FFFFFF"/><circle cx="41" cy="29" r="3.8" fill="#4A2708"/><circle cx="39.8" cy="27.6" r="1.4" fill="#FFFFFF"/>${cheeks}<path d="M25 43.5c4-3.8 10-3.8 14 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>`;
               break;
             case 'puppy':
-              face = `<circle cx="23" cy="29" r="5.5" fill="#5C3310"/><circle cx="21.5" cy="27" r="2.2" fill="#fff"/><circle cx="25" cy="31" r="1.1" fill="#fff"/><circle cx="41" cy="29" r="5.5" fill="#5C3310"/><circle cx="39.5" cy="27" r="2.2" fill="#fff"/><circle cx="43" cy="31" r="1.1" fill="#fff"/><path d="M28 42c2.5-2 5.5-2 8 0" fill="none" stroke="#5C3310" stroke-width="2.3" stroke-linecap="round"/>`;
+              face = `<circle cx="23" cy="29" r="5.6" fill="#4A2708"/><circle cx="21.2" cy="27" r="2.3" fill="#FFFFFF"/><circle cx="25" cy="31.2" r="1.1" fill="#FFFFFF"/><circle cx="41" cy="29" r="5.6" fill="#4A2708"/><circle cx="39.2" cy="27" r="2.3" fill="#FFFFFF"/><circle cx="43" cy="31.2" r="1.1" fill="#FFFFFF"/>${cheeks}<path d="M27.5 42.5c2.5-2.2 6.5-2.2 9 0" fill="none" stroke="#4A2708" stroke-width="2.4" stroke-linecap="round"/>`;
               break;
             case 'hug':
-              face = `${archEyes}${cheeks}<path d="M25 37c3.5 3.5 10.5 3.5 14 0" fill="none" stroke="#5C3310" stroke-width="2.5" stroke-linecap="round"/><path d="M12 42c6-4 12 2 10 8-5 1-11-3-10-8zm40 0c-6-4-12 2-10 8 5 1 11-3 10-8z" fill="#FFE066" stroke="#B4690E" stroke-width="2.2"/>`;
+              face = `${archEyes}${cheeks}<path d="M25 36.5c3.5 3.5 10.5 3.5 14 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M11 41c6.5-4 12.5 2 10.5 8.5-5.5 1-11.5-3-10.5-8.5zm42 0c-6.5-4-12.5 2-10.5 8.5 5.5 1 11.5-3 10.5-8.5z" fill="#FFE46B" stroke="#A65E08" stroke-width="2.1"/>`;
               break;
             case 'hearteyes':
-              face = `<path d="M23 31s-6-4-6-8.5c0-2.5 2-4.2 4.2-4.2 1.4 0 2.6 0.8 1.8 2 1.2-1.2 2.4-2 3.8-2 2.2 0 4.2 1.7 4.2 4.2 0 4.5-8 8.5-8 8.5zm18 0s-6-4-6-8.5c0-2.5 2-4.2 4.2-4.2 1.4 0 2.6 0.8 1.8 2 1.2-1.2 2.4-2 3.8-2 2.2 0 4.2 1.7 4.2 4.2 0 4.5-8 8.5-8 8.5z" fill="#EF4444"/><path d="M22 39c4 6 16 6 20 0" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>`;
+              face = `<path d="M22.5 31.5s-6.2-4-6.2-8.6c0-2.6 2-4.3 4.3-4.3 1.5 0 2.7.8 1.9 2.1 1.2-1.3 2.4-2.1 3.9-2.1 2.3 0 4.3 1.7 4.3 4.3 0 4.6-8.2 8.6-8.2 8.6zm19 0s-6.2-4-6.2-8.6c0-2.6 2-4.3 4.3-4.3 1.5 0 2.7.8 1.9 2.1 1.2-1.3 2.4-2.1 3.9-2.1 2.3 0 4.3 1.7 4.3 4.3 0 4.6-8.2 8.6-8.2 8.6z" fill="#EF4444" stroke="#991B1B" stroke-width="1.2"/><path d="M21.5 39c4.2 6.5 16.8 6.5 21 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>`;
               break;
             case 'tongue':
-              face = `<circle cx="23" cy="27" r="3" fill="#5C3310"/><path d="M36 27h9" stroke="#5C3310" stroke-width="2.8" stroke-linecap="round"/><path d="M23 37c4 4 14 4 18 0" fill="none" stroke="#5C3310" stroke-width="2.4" stroke-linecap="round"/><path d="M29 39v6a3.5 3.5 0 0 0 7 0v-6z" fill="#FB7185" stroke="#5C3310" stroke-width="1.8"/>`;
+              face = `<circle cx="23" cy="27" r="3.1" fill="#4A2708"/><path d="M36 27h9.5" stroke="#4A2708" stroke-width="2.8" stroke-linecap="round"/>${cheeks}<path d="M22.5 37c4 4 15 4 19 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M28.5 39v6.5a3.8 3.8 0 0 0 7.6 0V39z" fill="#FB7185" stroke="#9F1239" stroke-width="1.8"/>`;
               break;
             case 'tears':
-              face = `${dotEyes}<path d="M26 42c3.5-3 8.5-3 12 0" fill="none" stroke="#5C3310" stroke-width="2.4" stroke-linecap="round"/><path d="M22 33v14M42 33v14" stroke="#38BDF8" stroke-width="4" stroke-linecap="round"/>`;
+              face = `${dotEyes}<path d="M26 42.5c3.5-3 8.5-3 12 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M22.5 32.5v14M41.5 32.5v14" stroke="#38BDF8" stroke-width="4.4" stroke-linecap="round"/>`;
               break;
             case 'sob':
-              face = `<path d="M19 26l8 3-8 3M45 26l-8 3 8 3" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 31v18M44 31v18" stroke="#38BDF8" stroke-width="5" stroke-linecap="round"/><ellipse cx="32" cy="42" rx="7" ry="5.5" fill="#991B1B" stroke="#5C3310" stroke-width="2"/>`;
+              face = `<path d="M18.5 25.5l8 3.2-8 3.2M45.5 25.5l-8 3.2 8 3.2" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.5 31v18.5M43.5 31v18.5" stroke="#38BDF8" stroke-width="5.2" stroke-linecap="round"/><ellipse cx="32" cy="42" rx="7.2" ry="5.6" fill="#991B1B" stroke="#4A2708" stroke-width="2.1"/>`;
               break;
             case 'angry':
-              face = `<path d="M18 22l9 4M46 22l-9 4" stroke="#5C3310" stroke-width="3" stroke-linecap="round"/>${dotEyes}<path d="M24 43c4-4 12-4 16 0" fill="none" stroke="#5C3310" stroke-width="2.8" stroke-linecap="round"/>`;
+              face = `<path d="M17.5 21.5l9.5 4.5M46.5 21.5L37 26" stroke="#4A2708" stroke-width="3.1" stroke-linecap="round"/>${dotEyes}<path d="M23.5 43.5c4.2-4.5 12.8-4.5 17 0" fill="none" stroke="#4A2708" stroke-width="2.8" stroke-linecap="round"/>`;
               break;
             case 'wow':
-              face = `<path d="M23 20l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2zm18 0l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z" fill="#FFF" stroke="#D97706" stroke-width="1.2"/>${cheeks}<ellipse cx="32" cy="41" rx="6" ry="7" fill="#991B1B" stroke="#5C3310" stroke-width="2"/>`;
+              face = `<path d="M23 19.5l2.2 4.8 4.8 2.2-4.8 2.2-2.2 4.8-2.2-4.8-4.8-2.2 4.8-2.2zm18 0l2.2 4.8 4.8 2.2-4.8 2.2-2.2 4.8-2.2-4.8-4.8-2.2 4.8-2.2z" fill="#FFFFFF" stroke="#D97706" stroke-width="1.3"/>${cheeks}<ellipse cx="32" cy="41.5" rx="6.2" ry="7.2" fill="#991B1B" stroke="#4A2708" stroke-width="2.1"/>`;
               break;
             case '666':
-            case 'cheer':
-            case 'ok':
-            case 'peace':
-            case 'thumb':
-            case 'pray':
-            case 'clap':
-            case 'bye': {
-              const badgeTxt = k === '666' ? '666' : (k === 'cheer' ? '💪' : (k === 'ok' ? '👌' : (k === 'peace' ? '✌️' : (k === 'thumb' ? '👍' : (k === 'pray' ? '🙏' : (k === 'clap' ? '👏' : '👋'))))));
-              face = `${archEyes}${cheeks}<path d="M24 38c3.5 4 12.5 4 16 0" fill="none" stroke="#5C3310" stroke-width="2.5" stroke-linecap="round"/><text x="48" y="52" text-anchor="middle" font-size="${k === '666' ? '13' : '18'}" font-weight="900" fill="#B91C1C">${badgeTxt}</text>`;
+              face = `<rect x="15" y="23" width="15" height="8" rx="2.5" fill="#1F2937"/><rect x="34" y="23" width="15" height="8" rx="2.5" fill="#1F2937"/><path d="M30 26h4" stroke="#1F2937" stroke-width="2.4"/><path d="M24 39c3.5 4 12.5 4 16 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/><rect x="36" y="42" width="22" height="14" rx="5" fill="#EF4444" stroke="#991B1B" stroke-width="1.6"/><text x="47" y="52.5" text-anchor="middle" font-size="10.5" font-weight="900" fill="#FFFFFF">666</text>`;
               break;
-            }
+            case 'cheer':
+              face = `<path d="M11 20h42v5H11z" fill="#EF4444"/><path d="M18 29c2-3 6-3 8 0M36 29c2-3 6-3 8 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/><path d="M24 39c3.5 4 12.5 4 16 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/><path d="M46 46c3-9 10-8 10-1 0 6-6 9-12 7z" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/>`;
+              break;
+            case 'ok':
+              face = `<circle cx="23" cy="27" r="3.1" fill="#4A2708"/><path d="M36 27.5c2.2-3.2 6.8-3.2 9 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>${cheeks}<path d="M23 38c4 4.5 13 4.5 17 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><circle cx="48" cy="46" r="5" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/><circle cx="48" cy="46" r="2" fill="#FFFFFF"/><path d="M51 42l3-6M53 45l4-4" stroke="#A65E08" stroke-width="2.2" stroke-linecap="round"/>`;
+              break;
+            case 'peace':
+              face = `${archEyes}${cheeks}<path d="M23 38c4 5 14 5 18 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/><path d="M46 43l-2-10M50 43l3-10" stroke="#A65E08" stroke-width="3.6" stroke-linecap="round"/><path d="M46 43l-2-10M50 43l3-10" stroke="#FFE46B" stroke-width="1.8" stroke-linecap="round"/><circle cx="48" cy="47" r="5.5" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/>`;
+              break;
+            case 'clap':
+              face = `${archEyes}${cheeks}<path d="M23 37c4 4.5 14 4.5 18 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M22 52l6-9 5 4-5 8zm20 0l-6-9-5 4 5 8z" fill="#FFE46B" stroke="#A65E08" stroke-width="2" stroke-linejoin="round"/><path d="M32 39v-3M26 41l-2-2M38 41l2-2" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>`;
+              break;
+            case 'bye':
+              face = `<ellipse cx="23.5" cy="26" rx="4.5" ry="3.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="23.5" cy="24.5" r="2" fill="#2E1605"/><ellipse cx="40.5" cy="26" rx="4.5" ry="3.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.8"/><circle cx="40.5" cy="24.5" r="2" fill="#2E1605"/><path d="M24 39c4 3.5 12 3.5 16 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M47 48c-2-5 1-12 6-11 4 1 5 8 1 13-3 3-6 1-7-2z" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/>`;
+              break;
             case 'sleepy':
             case 'zzz':
-              face = `<path d="M19 29c2 2 6 2 8 0M37 29c2 2 6 2 8 0" fill="none" stroke="#5C3310" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="41" r="3.2" fill="#5C3310"/><text x="48" y="20" font-size="13" font-weight="bold" fill="#2563EB">Zzz</text>`;
+              face = `<path d="M18.5 29c2.2 2.2 6.5 2.2 8.8 0M36.7 29c2.2 2.2 6.5 2.2 8.8 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/><circle cx="32" cy="41.5" r="3.4" fill="#4A2708"/>${k === 'sleepy' ? '<ellipse cx="38" cy="43" rx="4.5" ry="3.2" fill="#BAE6FD" stroke="#0284C7" stroke-width="1.4"/>' : '<text x="47" y="19" font-size="12" font-weight="900" fill="#2563EB">Zzz</text>'}`;
+              break;
+            case 'shh':
+              face = `${dotEyes}<circle cx="32" cy="38" r="3.5" fill="#4A2708"/><rect x="29.2" y="34" width="5.6" height="20" rx="2.8" fill="#FFE46B" stroke="#A65E08" stroke-width="2"/>`;
+              break;
+            case 'dizzy':
+              face = `<path d="M23 27m-4 0a4 4 0 1 0 8 0a3 3 0 1 0 -6 0M41 27m-4 0a4 4 0 1 0 8 0a3 3 0 1 0 -6 0" fill="none" stroke="#4A2708" stroke-width="2.1" stroke-linecap="round"/><ellipse cx="32" cy="42" rx="4.5" ry="5.2" fill="#991B1B" stroke="#4A2708" stroke-width="2"/>`;
+              break;
+            case 'slap':
+              face = `<path d="M18 26l8 3-8 2M37 28c2.2 2 6.5 2 8.5 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M25 42c4-2.5 10-2.5 14 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="44" cy="36" rx="6.5" ry="5" fill="#EF4444" opacity="0.62"/>`;
+              break;
+            case 'sigh':
+              face = `<path d="M18 24l8-2M46 24l-8-2" stroke="#4A2708" stroke-width="2.2" stroke-linecap="round"/><path d="M19 29c2.2 2 6.5 2 8.5 0M36.5 29c2.2 2 6.5 2 8.5 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><path d="M26 41h12" stroke="#4A2708" stroke-width="2.4" stroke-linecap="round"/><path d="M38 43c6 0 10 3 10 6s-5 4-9 2c-3 1-6-2-4-5z" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.4"/>`;
+              break;
+            case 'bitter':
+              face = `<path d="M18 22c3-1 6-2.5 8-4.5M46 22c-3-1-6-2.5-8-4.5" fill="none" stroke="#4A2708" stroke-width="2.2" stroke-linecap="round"/>${dotEyes}<path d="M19.5 30.5h8M36.5 30.5h8" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round"/><path d="M24 41c4 3.5 12 3.5 16 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/>`;
+              break;
+            case 'frown':
+              face = `<path d="M19 21l8 3.5M45 21l-8 3.5" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>${dotEyes}<path d="M25 43c4-3.2 10-3.2 14 0" fill="none" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>`;
+              break;
+            case 'daze':
+              face = `<circle cx="23.5" cy="27" r="5" fill="#FFFFFF" stroke="#4A2708" stroke-width="2"/><circle cx="23.5" cy="27" r="2" fill="#2E1605"/><circle cx="40.5" cy="27" r="5" fill="#FFFFFF" stroke="#4A2708" stroke-width="2"/><circle cx="40.5" cy="27" r="2" fill="#2E1605"/><circle cx="32" cy="42" r="3" fill="#4A2708"/>`;
+              break;
+            case 'eyeroll':
+              face = `<circle cx="24" cy="26.5" r="5.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.9"/><circle cx="24" cy="23.2" r="2.3" fill="#2E1605"/><circle cx="40" cy="26.5" r="5.2" fill="#FFFFFF" stroke="#4A2708" stroke-width="1.9"/><circle cx="40" cy="23.2" r="2.3" fill="#2E1605"/><path d="M25 42h14" stroke="#4A2708" stroke-width="2.6" stroke-linecap="round"/>`;
               break;
             case 'sweat':
-            case 'slap':
-            case 'omg':
-            case 'daze':
+              face = `${dotEyes}<path d="M49.5 16c4.2 5.5 4.2 10.5 0 12-4.2-1.5-4.2-6.5 0-12z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/><path d="M25 42h14" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/>`;
+              break;
             case 'question':
-            case 'shh':
-            case 'dizzy':
-            case 'eyeroll':
+              face = `<path d="M18 22l7-2M38 20l8 2" stroke="#4A2708" stroke-width="2.3" stroke-linecap="round"/>${dotEyes}<path d="M26 42c3-2 9-2 12 0" fill="none" stroke="#4A2708" stroke-width="2.5" stroke-linecap="round"/><text x="49" y="21" font-size="16" font-weight="900" fill="#DC2626">?</text>`;
+              break;
             case 'emm':
-            case 'sigh':
-            case 'bitter':
-            case 'frown':
+              face = `${dotEyes}<path d="M22 41c4-2.5 14 2.5 20 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>`;
+              break;
+            case 'omg':
             case 'shock':
             case 'yawn':
-              face = `${k === 'eyeroll' ? '<circle cx="24" cy="26" r="5" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="24" cy="23.5" r="2.2" fill="#3B200B"/><circle cx="40" cy="26" r="5" fill="#fff" stroke="#5C3310" stroke-width="1.8"/><circle cx="40" cy="23.5" r="2.2" fill="#3B200B"/>' : dotEyes}
-                      ${k === 'sweat' ? '<path d="M49 18c4 5 4 10 0 11.5-4 1.5-4-6.5 0-11.5z" fill="#38BDF8"/>' : ''}
-                      ${k === 'question' ? '<text x="49" y="22" font-size="16" font-weight="900" fill="#DC2626">?</text>' : ''}
-                      <path d="${k === 'emm' ? 'M23 41c4-2 14 2 18 0' : (k === 'shock' || k === 'omg' || k === 'yawn' ? 'M28 41a4 5 0 1 0 8 0 4 5 0 1 0-8 0' : 'M25 42c4-2.5 10-2.5 14 0')}" fill="none" stroke="#5C3310" stroke-width="2.6" stroke-linecap="round"/>`;
+              face = `${k === 'yawn' ? archEyes : dotEyes}<ellipse cx="32" cy="41.5" rx="${k === 'yawn' ? '7' : '4.8'}" ry="${k === 'yawn' ? '8' : '6'}" fill="#991B1B" stroke="#4A2708" stroke-width="2.1"/>${k === 'omg' ? '<path d="M13 42l5-8M51 42l-5-8" stroke="#A65E08" stroke-width="3.6" stroke-linecap="round"/>' : ''}`;
               break;
             default:
-              face = `${k === 'smile' ? dotEyes : archEyes}${cheeks}<path d="M22 36c4 6 16 6 20 0" fill="none" stroke="#5C3310" stroke-width="2.7" stroke-linecap="round"/>`;
+              face = `${k === 'smile' ? dotEyes : archEyes}${cheeks}<path d="M22 36.5c4 6 16 6 20 0" fill="none" stroke="#4A2708" stroke-width="2.7" stroke-linecap="round"/>`;
           }
 
-          return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" style="display:inline-block;vertical-align:${size >= 36 ? 'middle' : '-0.2em'};flex-shrink:0;"><circle cx="32" cy="32" r="24" fill="url(#cwWcSharedYellowGrad)" stroke="#C97A0A" stroke-width="2"/><ellipse cx="23" cy="16" rx="8" ry="3.6" transform="rotate(-18 23 16)" fill="rgba(255,255,255,0.48)"/>${face}</svg>`;
+          return wrapSvg(`${sphere}${face}`);
         }
         window.getWechatEmoticonSvg = getWechatEmoticonSvg;
 
@@ -16033,7 +16089,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v60',
+          ver: 'Prime 4 · v62',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16055,7 +16111,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v60 更新日志' : '📜 灿完时光 Prime 4 · v60 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v62 更新日志' : '📜 灿完时光 Prime 4 · v62 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -19342,8 +19398,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const sbPill = document.getElementById('sbServerPill');
           const ntfyPill = document.getElementById('ntfyServerPill');
           const nowTs = Date.now();
-          const sbAlive = !isOffline && (syncTransportMode === 'realtime' || (sbLastOkTs > 0 && (nowTs - sbLastOkTs) < 25000));
-          const ntfyAlive = !isOffline && (ntfyLastOkTs > 0 && (nowTs - ntfyLastOkTs) < 35000);
+          const sbAlive = !isOffline && (syncTransportMode === 'realtime' || syncTransportMode === 'rest' || (sbLastOkTs > 0 && (nowTs - sbLastOkTs) < 90000));
+          const ntfyAlive = !isOffline && (ntfyLastOkTs > 0 && (nowTs - ntfyLastOkTs) < 90000);
           if (sbPill) {
             if (isOffline) { sbPill.textContent = isZh ? '🔴 离线' : '🔴 오프라인'; sbPill.style.color = '#e11d48'; }
             else if (syncTransportMode === 'realtime') { sbPill.textContent = isZh ? '🟢 实时' : '🟢 실시간'; sbPill.style.color = '#059669'; }
@@ -20655,6 +20711,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(lRoom)}&select=payload`, { headers: sbHeaders() }, 10000);
             if (res.ok) {
+              sbLastOkTs = Date.now();
               const arr = await res.json();
               if (Array.isArray(arr) && arr[0] && arr[0].payload) {
                 const dec = await e2eeUnwrapPayload(arr[0].payload);
@@ -20695,6 +20752,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(mRoom)}&select=payload,updated_at`, { headers: sbHeaders() }, 10000);
             if (!res.ok) return [];
+            sbLastOkTs = Date.now();
             const arr = await res.json();
             if (Array.isArray(arr) && arr[0] && arr[0].payload) {
               const dec = await e2eeUnwrapPayload(arr[0].payload);
@@ -21632,14 +21690,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           );
           const __canUpsertSnap = !!window.__cwInitialPullDone && __hasRealLocalData;
 
-          // Priority #2 & #3: Fire Supabase Seoul + ntfy simultaneously (5.5s tight timeout)
+          // Broadcast delta instantaneously over Seoul Supabase Realtime WebSocket (0.08s!) if subscribed
+          let sbRealtimeSent = false;
+          try {
+            if (sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function' && emqxBody) {
+              sbChannel.send({ type: 'broadcast', event: 'cw_delta', payload: JSON.parse(emqxBody) }).catch(() => {});
+              sbRealtimeSent = true;
+            }
+          } catch (_) {}
+
+          // Priority #2 & #3: Fire Supabase Seoul REST + ntfy simultaneously (5.5s tight timeout)
           const [sbEvRes, sbSnapRes, ntfyRes] = await Promise.allSettled([
             insertSupabaseEvent(room, 'delta', payload),
             __canUpsertSnap ? upsertSupabaseStateSnapshot(room, fullSnapPayload) : Promise.resolve(false),
             ntfyBody ? pushNtfyBackup(room, ntfyBody) : Promise.resolve(false)
           ]);
 
-          const sbOk = sbEvRes.status === 'fulfilled' || sbSnapRes.status === 'fulfilled';
+          const sbOk = sbRealtimeSent || (sbEvRes.status === 'fulfilled' && !!sbEvRes.value) || (sbSnapRes.status === 'fulfilled' && !!sbSnapRes.value);
           const ntfyOk = ntfyRes.status === 'fulfilled' && !!ntfyRes.value;
           if (sbOk) sbLastOkTs = Date.now();
           else enqueueOutboxPacket('delta', payload, 'delta');
@@ -21782,26 +21849,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 try { sbClient.removeChannel(sbChannel); } catch (_) {}
                 sbChannel = null;
               }
+              if (window.__sbPgChannel) {
+                try { sbClient.removeChannel(window.__sbPgChannel); } catch (_) {}
+                window.__sbPgChannel = null;
+              }
+              // Pure WebSocket Broadcast Channel: NEVER fails with CHANNEL_ERROR even if DB Realtime publication is off!
               sbChannel = sbClient
-                .channel(`chanwan-room-${room}`, { config: { broadcast: { self: false } } })
+                .channel(`chanwan-bcast-${room}`, { config: { broadcast: { self: false } } })
                 .on('broadcast', { event: 'cw_sig' }, (msg) => {
                   try {
+                    sbLastOkTs = Date.now();
+                    lastSyncOkTs = Date.now();
                     if (msg && msg.payload) handleIncomingChatSignal(msg.payload);
                   } catch (_) {}
                 })
-                .on(
-                  'postgres_changes',
-                  { event: 'INSERT', schema: 'public', table: 'couple_sync_events', filter: `room_id=eq.${room}` },
-                  (payload) => {
-                    if (payload && payload.new) {
+                .on('broadcast', { event: 'cw_delta' }, (msg) => {
+                  try {
+                    if (msg && msg.payload && msg.payload.clientId !== myDeviceClientId) {
+                      sbLastOkTs = Date.now();
                       lastSyncOkTs = Date.now();
-                      syncTransportMode = 'realtime';
-                      liveSyncSource = { readyState: 1 };
-                      processSupabaseEventRow(payload.new, true).catch(() => {});
+                      mergeIncomingCoupleData(msg.payload, true);
                       updateLiveSyncIndicators(true, room);
                     }
-                  }
-                )
+                  } catch (_) {}
+                })
                 .subscribe((status) => {
                   if (status === 'SUBSCRIBED') {
                     syncTransportMode = 'realtime';
@@ -21813,9 +21884,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
                     liveSyncSource = null;
                     if (syncTransportMode === 'realtime') syncTransportMode = 'rest';
-                    updateLiveSyncIndicators(true, room);
+                    updateLiveSyncIndicators(sbLastOkTs > 0, room);
                   }
                 });
+
+              // Optional secondary DB change listener on couple_sync_state (isolated so it never breaks sbChannel!)
+              window.__sbPgChannel = sbClient
+                .channel(`chanwan-pgstate-${room}`)
+                .on(
+                  'postgres_changes',
+                  { event: '*', schema: 'public', table: 'couple_sync_state', filter: `room_id=eq.${room}` },
+                  async (payload) => {
+                    try {
+                      if (payload && payload.new && payload.new.payload) {
+                        sbLastOkTs = Date.now();
+                        lastSyncOkTs = Date.now();
+                        const dec = await e2eeUnwrapPayload(payload.new.payload);
+                        if (dec) mergeIncomingCoupleData(dec, true);
+                        updateLiveSyncIndicators(true, room);
+                      }
+                    } catch (_) {}
+                  }
+                )
+                .subscribe();
             }
           } catch (_) {}
           pullCloudSync(false);
@@ -21855,6 +21946,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               (!bothRealtimeHealthy || manual || (window.__sbPollTick % 4 === 1)) ? pollNtfyBackup(room, isLivePull) : Promise.resolve(false),
               shouldPullSnap ? fetchWithTimeout(snapUrl, { headers: sbHeaders() }, SYNC_FETCH_TIMEOUT_MS).then(async r => {
                 if (!r.ok) return null;
+                sbLastOkTs = Date.now();
                 const d = await r.json();
                 try {
                   if (Array.isArray(d) && d[0] && d[0].payload) {
@@ -21864,7 +21956,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 } catch (_) {}
                 return d;
               }) : Promise.resolve(null),
-              fetchSbEventsCompat(evUrl, SYNC_FETCH_TIMEOUT_MS).then(async r => {
+              (!__sbEventsUnavailable ? fetchSbEventsCompat(evUrl, SYNC_FETCH_TIMEOUT_MS).then(async r => {
                 if (!r.ok) return null;
                 const d = await r.json();
                 try {
@@ -21882,17 +21974,19 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   }
                 } catch (_) {}
                 return d;
-              }),
-              shouldPullMedia ? fetchSbEventsCompat(mediaIdxUrl, 9000).then(r => r.ok ? r.json() : null) : Promise.resolve(null)
+              }) : Promise.resolve(null)),
+              (shouldPullMedia && !__sbEventsUnavailable) ? fetchSbEventsCompat(mediaIdxUrl, 9000).then(r => r.ok ? r.json() : null) : Promise.resolve(null)
             ]);
 
             let anyServerOk = !!emqxConnected;
             if (ntfyPull.status === 'fulfilled' && ntfyPull.value) { mergedAny = true; anyServerOk = true; }
-            if (snapPull.status === 'fulfilled' && Array.isArray(snapPull.value) && snapPull.value[0] && snapPull.value[0].payload) {
+            if (snapPull.status === 'fulfilled' && Array.isArray(snapPull.value)) {
               sbLastOkTs = Date.now(); anyServerOk = true;
-              const decSnap = await e2eeUnwrapPayload(snapPull.value[0].payload);
-              const snapFresh = !!(decSnap && decSnap.ts && (Date.now() - Number(decSnap.ts)) <= 60000);
-              if (decSnap && mergeIncomingCoupleData(decSnap, isLivePull && snapFresh)) mergedAny = true;
+              if (snapPull.value[0] && snapPull.value[0].payload) {
+                const decSnap = await e2eeUnwrapPayload(snapPull.value[0].payload);
+                const snapFresh = !!(decSnap && decSnap.ts && (Date.now() - Number(decSnap.ts)) <= 60000);
+                if (decSnap && mergeIncomingCoupleData(decSnap, isLivePull && snapFresh)) mergedAny = true;
+              }
             }
             if (evPull.status === 'fulfilled' && Array.isArray(evPull.value)) {
               sbLastOkTs = Date.now(); anyServerOk = true;
@@ -25758,8 +25852,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v60)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v60';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v62)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v62';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
