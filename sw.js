@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v41';
+const SW_VER = 'chanwan-sw-prime4-v52';
 const PRECACHE_URLS = ['./', './index.html', './manifest_clean.json?v=22', './icon-192.png?v=21', './badge-96.png?v=23'];
 
 self.addEventListener('install', (e) => {
@@ -95,20 +95,31 @@ self.addEventListener('fetch', (e) => {
 });
 
 self.addEventListener('notificationclick', (e) => {
+  const clickedTitle = (e.notification && e.notification.title) || '';
+  const clickedBody = (e.notification && e.notification.body) || '';
   e.notification.close();
   const data = (e.notification && e.notification.data) || {};
-  const targetUrl = data.url || './';
-  e.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if ('focus' in client) {
-          client.postMessage({ type: 'NOTIF_CLICK', tab: data.tab || 'translator', sub: data.sub || '' });
-          return client.focus();
-        }
+  const tab = data.tab || 'translator';
+  const base = data.url || './';
+  const targetUrl = base.includes('?') ? base : `${base}?tab=${encodeURIComponent(tab)}`;
+  e.waitUntil((async () => {
+    try {
+      if (self.registration && self.registration.getNotifications) {
+        const all = await self.registration.getNotifications();
+        if (Array.isArray(all)) all.forEach((n) => { try { n.close(); } catch (_) {} });
       }
-      if (self.clients.openWindow) return self.clients.openWindow(targetUrl);
-    })
-  );
+      if (self.registration && typeof self.registration.setAppBadge === 'function') await self.registration.setAppBadge(0);
+      if (self.registration && typeof self.registration.clearAppBadge === 'function') await self.registration.clearAppBadge();
+    } catch (_) {}
+    const clientList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of clientList) {
+      if ('focus' in client) {
+        client.postMessage({ type: 'NOTIF_CLICK', tab, sub: data.sub || '', title: clickedTitle, body: clickedBody });
+        return client.focus();
+      }
+    }
+    if (self.clients.openWindow) return self.clients.openWindow(targetUrl);
+  })());
 });
 
 self.addEventListener('message', (e) => {
