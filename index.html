@@ -2508,7 +2508,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v74: App-Wide Couture Boutique Elevation
+       Prime 4 · v76: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2699,7 +2699,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v74: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v76: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4941,7 +4941,7 @@
           <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
           <div class="inline-flex items-center gap-1.5 flex-wrap">
             <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v74</span>
+            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v76</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 앱 바로 업데이트</button>
           </div>
@@ -16745,7 +16745,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v74',
+          ver: 'Prime 4 · v76',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16767,7 +16767,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v74 更新日志' : '📜 灿完时光 Prime 4 · v74 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v76 更新日志' : '📜 灿完时光 Prime 4 · v76 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -26940,8 +26940,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v74)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v74';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v76)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v76';
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
@@ -28147,49 +28147,83 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.albums = state.albums.filter(a => a && !delSetH.has(a.id));
                 ghostAlbRemoved = Math.max(0, beforeH - state.albums.length);
               }
-              // Run heavy IDB + cloud I/O asynchronously right after paint so the UI responds in 0ms!
-              setTimeout(() => {
+              // Run heavy IDB + cloud I/O asynchronously right after paint and update Row 5 to ✅ 완료 when finished!
+              setTimeout(async () => {
                 try { if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow(); } catch (_) {}
                 try { if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow(); } catch (_) {}
                 try { if (typeof flushIdbStateNow === 'function') flushIdbStateNow(); } catch (_) {}
                 try { saveState(true); } catch (_) {}
                 try { if (typeof window.__connectEmqxNow === 'function') window.__connectEmqxNow(); } catch (_) {}
-                try { if (typeof window.__flushSyncOutbox === 'function') window.__flushSyncOutbox(); } catch (_) {}
-                try { if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false); } catch (_) {}
-                try { if (typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
+                try { if (typeof window.__reconnectLiveSync === 'function') window.__reconnectLiveSync(); } catch (_) {}
+                await Promise.allSettled([
+                  (typeof window.__flushSyncOutbox === 'function') ? Promise.resolve(window.__flushSyncOutbox()) : Promise.resolve(),
+                  (typeof window.__pullCloudSync === 'function') ? Promise.resolve(window.__pullCloudSync(false)) : Promise.resolve(),
+                  (typeof window.__broadcastPresenceNow === 'function') ? Promise.resolve(window.__broadcastPresenceNow(true, true)) : Promise.resolve()
+                ]);
+                const r5 = document.getElementById('cwHealRow5');
+                if (r5) {
+                  r5.textContent = isZh
+                    ? '5. ✅ 完成 · EMQX直连·待发重传·云端与在线状态同步完成'
+                    : '5. ✅ 완료 · EMQX·미전송 재전송·클라우드·접속 상태 동기화 완료';
+                }
               }, 35);
               rows.push(ghostAlbRemoved > 0
-                ? (isZh ? `4. 🔧 修复 · 永久金库已保存并清理残留已删照片 ${ghostAlbRemoved} 张` : `4. 🔧 복구 · 영구 금고 재저장 및 삭제된 사진 잔재 ${ghostAlbRemoved}건 정리`)
+                ? (isZh ? `4. ✅ 完成 · 永久金库已保存并清理残留已删照片 ${ghostAlbRemoved} 张` : `4. ✅ 완료 · 영구 금고 재저장 및 삭제된 사진 잔재 ${ghostAlbRemoved}건 정리 완료`)
                 : (isZh ? '4. ✅ 正常 · 照片/语音永久金库与全部数据已重新保存' : '4. ✅ 정상 · 사진·음성 영구 금고 및 전체 상태 재저장 완료'));
 
-              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence (queued non-blocking above)
-              rows.push(isZh ? '5. 🔧 同步 · EMQX直连重连·云端拉取·在线状态已刷新' : '5. 🔧 복구 · EMQX·미전송 재전송·클라우드·접속 상태 재동기화');
+              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence (updates #cwHealRow5 to ✅ 완료)
+              rows.push(isZh ? '5. ⏳ 同步中 · 正在重连 EMQX·重传队列·同步在线状态...' : '5. ⏳ 동기화 중 · EMQX·미전송 재전송·클라우드·접속 상태 연결 중...');
 
               // 6. Samsung/Android App Badge & Stray OS Notification Cleanup
+              const myRNow = state.myRole || 'suwan';
+              if (Array.isArray(state.notifications)) {
+                let cleanedStaleNotif = false;
+                state.notifications.forEach(n => {
+                  if (n && n.unread && (n.fromRole === myRNow || (n.createdAt && (Date.now() - Number(n.createdAt)) >= 86400000))) {
+                    n.unread = false;
+                    cleanedStaleNotif = true;
+                  }
+                });
+                if (cleanedStaleNotif) {
+                  saveState(false);
+                  if (typeof renderNotifications === 'function') renderNotifications();
+                }
+              }
               const unreadCnt = (state.notifications || []).filter(n => n && n.unread).length;
-              let badgeCleared = false;
               if (unreadCnt === 0) {
                 if (typeof clearAllAppBadgesAndOsNotifs === 'function') {
                   clearAllAppBadgesAndOsNotifs();
-                  badgeCleared = true;
                 } else if (navigator.clearAppBadge) {
-                  try { await navigator.clearAppBadge(); badgeCleared = true; } catch (_) {}
+                  try { await navigator.clearAppBadge(); } catch (_) {}
                 }
               }
-              rows.push(badgeCleared
-                ? (isZh ? '6. 🔧 修复 · 已强制清除桌面角标与残留系统通知' : '6. 🔧 복구 · 홈 화면 아이콘 배지 및 잔여 시스템 알림 초기화 완료')
+              rows.push(unreadCnt === 0
+                ? (isZh ? '6. ✅ 完成 · 桌面图标角标与残留系统通知已清理完毕' : '6. ✅ 완료 · 홈 화면 아이콘 배지 및 잔여 시스템 알림 초기화 완료')
                 : (isZh ? `6. ✅ 正常 · 应用通知角标正常 (未读 ${unreadCnt})` : `6. ✅ 정상 · 앱 알림 배지 정상 (안 읽음 ${unreadCnt}건)`));
 
-              // 7. Theme + Maker Mode + Forced Full-Screen Icon Style Re-apply
+              // 7. Theme + Font + Maker Mode + Forced Full-Screen Icon Style & Pending Translation Re-apply
               applyTheme(state.theme, true);
+              if (typeof applyFont === 'function') applyFont(state.font, true);
+              if (typeof applyDockFont === 'function') applyDockFont(state.dockFont, true);
               if (typeof window.__applyMakerLayout === 'function' && state.makerLayout) {
                 window.__applyMakerLayout(state.makerLayout, true);
               }
               const savedIconMode = localStorage.getItem('chanwan_icon_style_v1') || (state.settings && state.settings.iconStyle) || 'pastel';
               if (typeof window.__refreshIconSlots === 'function') window.__refreshIconSlots(document);
-              if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
+              if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(savedIconMode, document.body);
               try { renderChat(); renderHome(); renderNotifications(); } catch (_) {}
-              rows.push(isZh ? `7. 🔧 刷新 · 主题·排版·待译消息与图标风格(${savedIconMode})已刷新` : `7. 🔧 복구 · 테마·배치·미번역 문구·아이콘(${savedIconMode}) 즉시 새로고침`);
+              const hasPendingTr = (state.chat?.messages || []).some(m => m && /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim()));
+              if (hasPendingTr && typeof autoResolvePendingTranslations === 'function') {
+                rows.push(isZh ? `7. ⏳ 刷新中 · 正在补译待译消息并刷新图标(${savedIconMode})...` : `7. ⏳ 복구 중 · 미번역 문구 재번역 및 아이콘(${savedIconMode}) 새로고침 중...`);
+                setTimeout(async () => {
+                  try { await autoResolvePendingTranslations(); } catch (_) {}
+                  const r7 = document.getElementById('cwHealRow7');
+                  if (r7) r7.textContent = isZh ? `7. ✅ 完成 · 主题·字体·待译消息与图标(${savedIconMode})刷新完成` : `7. ✅ 완료 · 테마·글꼴·미번역 문구·아이콘(${savedIconMode}) 새로고침 완료`;
+                }, 50);
+              } else {
+                if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
+                rows.push(isZh ? `7. ✅ 完成 · 主题·字体·排版与图标(${savedIconMode})刷新完成` : `7. ✅ 완료 · 테마·글꼴·배치·아이콘(${savedIconMode}) 새로고침 완료`);
+              }
 
               // 8. Layout & spacing auto-fit
               const fitCnt = autoFixLayoutSpacing();
@@ -28225,7 +28259,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (reportEl) {
               reportEl.classList.remove('hidden');
               reportEl.innerHTML = `<div class="font-bold mb-1.5" style="color:#059669;">${isZh ? '✅ 应用内 10 项自检修复报告：' : '✅ 앱 자가 복구 10개 항목 점검 리포트:'}</div>` +
-                rows.map((x, idx) => `<div ${idx === 8 ? 'id="cwHealRow9" ' : ''}class="py-0.5">${escapeHtml(x)}</div>`).join('');
+                rows.map((x, idx) => `<div ${idx === 4 ? 'id="cwHealRow5" ' : (idx === 6 ? 'id="cwHealRow7" ' : (idx === 8 ? 'id="cwHealRow9" ' : ''))}class="py-0.5">${escapeHtml(x)}</div>`).join('');
             }
             runBtn.dataset.busy = '0';
             runBtn.textContent = origBtnTxt;
@@ -28238,7 +28272,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 v45 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v76 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
@@ -28552,8 +28586,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const cache = loadCache();
       if (cache[ck] && cache[ck].natural) return cache[ck];
 
-      // 1. Gemini 2.5 Flash (uses saved API key from Settings for best nuance & intent understanding!)
-      const gKey = (typeof window.__getActiveGeminiKey === 'function' ? window.__getActiveGeminiKey() : (localStorage.getItem('cw_gemini_api_key_v1') || '')).trim();
+      const stCheckCn = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
+      const inChinaNow = !!(stCheckCn && stCheckCn.settings && stCheckCn.settings.chinaMode) || (function(){
+        try {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+          return /^(Asia\/(Shanghai|Chongqing|Harbin|Urumqi)|PRC)$/i.test(tz);
+        } catch (_) { return false; }
+      })();
+
+      // 1. Gemini Flash (uses saved API key in Korea/global; skipped in 0ms in Mainland China where Google is GFW-blocked!)
+      const gKey = !inChinaNow ? (typeof window.__getActiveGeminiKey === 'function' ? window.__getActiveGeminiKey() : (localStorage.getItem('cw_gemini_api_key_v1') || '')).trim() : '';
       if (gKey) {
         try {
           const stNow = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
@@ -28608,7 +28650,33 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         } catch (_) {}
       }
 
-      // 2. Free Fallback: Direct natural translation (cross-lang) or Round-trip reconstruction (same-lang)
+      // 2. Mainland China Direct Fallback (0ms Google skip -> instant MyMemory + message cached translation!)
+      if (inChinaNow) {
+        try {
+          const stFbCn = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
+          const readerIsZhCn = !!(stFbCn && (stFbCn.lang === 'zh' || stFbCn.myRole === 'jingchan'));
+          const pair = readerIsZhCn ? (lang === 'ko' ? 'ko|zh-CN' : 'zh-CN|ko') : (lang === 'zh' ? 'zh-CN|ko' : 'ko|zh-CN');
+          const rMm = await fetchT(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=${pair}`, {}, 3200);
+          if (rMm && rMm.ok) {
+            const dMm = await rMm.json();
+            let trCn = String(dMm?.responseData?.translatedText || '').trim();
+            if (trCn && trCn !== clean) {
+              if (readerIsZhCn && /오빠/.test(clean)) trCn = trCn.replace(/我?弟弟|兄弟|老兄/g, '哥哥');
+              if (!readerIsZhCn && /哥哥|欧巴/.test(clean)) trCn = trCn.replace(/형님|형아/g, '오빠');
+              const outCn = {
+                natural: trCn,
+                intent: readerIsZhCn ? '已通过大陆直连引擎解析韩语原文的自然含义与温柔语气。' : '중국 직통 엔진으로 원문의 자연스러운 의미를 풀이했어요.',
+                tip: ''
+              };
+              cache[ck] = outCn; saveCache(cache);
+              return outCn;
+            }
+          }
+        } catch (_) {}
+        return null;
+      }
+
+      // 3. Global Free Fallback: Direct natural translation (cross-lang) or Round-trip reconstruction (same-lang)
       try {
         const stFb = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
         const readerIsZhFb = !!(stFb && (stFb.lang === 'zh' || stFb.myRole === 'jingchan'));
@@ -30027,9 +30095,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 </script>
 <script>
 (function(){
-  var urls = [
+  var isCnTz = false;
+  try { isCnTz = /^(Asia\/(Shanghai|Chongqing|Harbin|Urumqi)|PRC)$/i.test(Intl.DateTimeFormat().resolvedOptions().timeZone || ''); } catch (_) {}
+  var urls = isCnTz ? [
+    'https://registry.npmmirror.com/@supabase/supabase-js/2.49.4/files/dist/umd/supabase.min.js',
     'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js'
+  ] : [
+    'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
+    'https://registry.npmmirror.com/@supabase/supabase-js/2.49.4/files/dist/umd/supabase.min.js'
   ];
   var idx = 0;
   function tryLoad() {
