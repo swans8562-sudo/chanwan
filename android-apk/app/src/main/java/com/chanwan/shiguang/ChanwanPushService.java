@@ -249,6 +249,10 @@ public class ChanwanPushService extends Service {
     }
 
     private void dispatchIncomingPush(SharedPreferences prefs, String role, String title, String body, long whenMs) {
+        dispatchIncomingPush(prefs, role, title, body, whenMs, null);
+    }
+
+    private void dispatchIncomingPush(SharedPreferences prefs, String role, String title, String body, long whenMs, String rawPro2Json) {
         if (body == null || body.isEmpty()) return;
         if (body.startsWith("⏳ 번역 중") || body.startsWith("⏳ 正在翻译")) return;
 
@@ -258,13 +262,14 @@ public class ChanwanPushService extends Service {
                 .putLong("last_push_when", whenMs)
                 .apply();
 
-        if (MainActivity.isAppInForeground) {
-            MainActivity.nudgeForegroundWebViewSync();
+        if (MainActivity.isActivelyVisibleOnScreen()) {
+            MainActivity.deliverIncomingFromService(title, body, rawPro2Json);
             return;
         }
 
         long nowMs = System.currentTimeMillis();
         int notifId;
+        boolean silentInPlaceUpdate = false;
         synchronized (dedupLock) {
             String fp = title + "|" + body;
             if (fp.equals(lastFp) && (nowMs - lastFpMs) < 45000L) {
@@ -273,9 +278,10 @@ public class ChanwanPushService extends Service {
             if (!lastBody.isEmpty() && lastBody.equals(body) && (nowMs - lastFpMs) < 45000L) {
                 return;
             }
-            if ("suwan".equals(role) && lastNotifId > FG_NOTIF_ID && (nowMs - lastFpMs) < 10000L
+            if ("suwan".equals(role) && lastNotifId > FG_NOTIF_ID && (nowMs - lastFpMs) < 12000L
                     && hasCjkNoHangul(lastBody) && hasHangul(body)) {
                 notifId = lastNotifId;
+                silentInPlaceUpdate = true;
             } else {
                 notifId = (int) ((nowMs & 0x3fffffffL) + 1000L);
                 if (notifId == lastNotifId) notifId++;
@@ -286,12 +292,98 @@ public class ChanwanPushService extends Service {
             lastNotifId = notifId;
         }
 
-        showMessageNotif(title, body, whenMs, notifId);
+        showMessageNotif(title, body, whenMs, notifId, silentInPlaceUpdate);
+    }
+
+    private void handlePro2SyncStreamPayload(SharedPreferences prefs, String role, String rawMsg, long fallbackWhenMs, LinkedHashSet<String> seenPro2Ids) {
+        if (rawMsg == null || rawMsg.isEmpty() || !rawMsg.startsWith("{")) return;
+        try {
+            JSONObject pObj = new JSONObject(rawMsg);
+            if (pObj.optInt("__e2ee", 0) == 1) {
+                if (MainActivity.isActivelyVisibleOnScreen()) {
+                    MainActivity.deliverIncomingFromService("", "", rawMsg);
+                }
+                return;
+            }
+            String ver = pObj.optString("v", "");
+            if ("pro2_signal".equals(ver)) {
+                if (MainActivity.isActivelyVisibleOnScreen()) {
+                    MainActivity.deliverIncomingFromService("", "", rawMsg);
+                }
+                return;
+            }
+            if (!"pro2".equals(ver)) return;
+
+            if (MainActivity.isActivelyVisibleOnScreen()) {
+                MainActivity.deliverIncomingFromService("", "", rawMsg);
+                return;
+            }
+
+            JSONObject chat = pObj.optJSONObject("chat");
+            JSONArray msgs = (chat != null) ? chat.optJSONArray("messages") : null;
+            if (msgs == null || msgs.length() == 0) return;
+
+            long nowMs = System.currentTimeMillis();
+            boolean pro2Seeded = prefs.getBoolean("pro2_stream_seeded_v71", false);
+            if (!pro2Seeded) {
+                for (int i = 0; i < msgs.length(); i++) {
+                    JSONObject m = msgs.optJSONObject(i);
+                    if (m == null) continue;
+                    String mid = m.optString("id", "");
+                    long mts = m.optLong("ts", 0L);
+                    if (!mid.isEmpty() && (mts <= 0L || (nowMs - mts) > 90000L)) {
+                        seenPro2Ids.add(mid);
+                    }
+                }
+                prefs.edit().putBoolean("pro2_stream_seeded_v71", true).apply();
+                saveSeenIds(prefs, "seen_pro2_msg_ids", seenPro2Ids, null, 0L);
+            }
+
+            for (int i = 0; i < msgs.length(); i++) {
+                JSONObject m = msgs.optJSONObject(i);
+                if (m == null) continue;
+                String mid = m.optString("id", "");
+                if (mid.isEmpty()) continue;
+
+                String sender = m.optString("sender", "");
+                String normSender = (sender.equals("jingchan") || sender.contains("靖灿")) ? "jingchan" : "suwan";
+                if (normSender.equals(role)) {
+                    seenPro2Ids.add(mid);
+                    continue;
+                }
+
+                long mts = m.optLong("ts", 0L);
+                if (mts > 0L && (nowMs - mts) > 1800000L) {
+                    seenPro2Ids.add(mid);
+                    continue;
+                }
+
+                String orig = m.optString("original", "").trim();
+                String tr = m.optString("translated", "").trim();
+                boolean hasReadyTrans = !tr.isEmpty() && !tr.startsWith("⏳");
+                String stateKey = hasReadyTrans ? (mid + ":tr") : mid;
+                if (seenPro2Ids.contains(stateKey) || (seenPro2Ids.contains(mid + ":tr"))) continue;
+
+                seenPro2Ids.add(mid);
+                if (hasReadyTrans) seenPro2Ids.add(mid + ":tr");
+                saveSeenIds(prefs, "seen_pro2_msg_ids", seenPro2Ids, null, 0L);
+
+                String dispBody = hasReadyTrans ? tr : orig;
+                if (dispBody.isEmpty()) {
+                    if (m.optBoolean("hasVoice", false)) dispBody = "suwan".equals(role) ? "음성 메시지를 보냈어요 🎙️" : "发送了一条语音 🎙️";
+                    else if (m.optBoolean("hasVideo", false)) dispBody = "suwan".equals(role) ? "동영상을 보냈어요 🎬" : "发送了一段视频 🎬";
+                    else dispBody = "suwan".equals(role) ? "새 메시지가 도착했어요" : "发来了一条新消息";
+                }
+                String dispTitle = "suwan".equals(role) ? "💜 징찬" : "💜 秀完";
+                dispatchIncomingPush(prefs, role, dispTitle, dispBody, mts > 0L ? mts : fallbackWhenMs, rawMsg);
+            }
+        } catch (Exception ignored) {}
     }
 
     private void streamLoop() {
         SharedPreferences initPrefs = getSharedPreferences("cw_prefs", MODE_PRIVATE);
         LinkedHashSet<String> seenIds = loadSeenIds(initPrefs, "seen_ids");
+        LinkedHashSet<String> seenPro2Ids = loadSeenIds(initPrefs, "seen_pro2_msg_ids");
 
         while (running) {
             HttpURLConnection conn = null;
@@ -311,14 +403,18 @@ public class ChanwanPushService extends Service {
                 String sinceParam;
                 if (!lastId.isEmpty() && lastStreamSec > 0L && (nowConnSec - lastStreamSec) <= 1800L) {
                     sinceParam = "?since=" + URLEncoder.encode(lastId, "UTF-8");
-                } else if (lastStreamSec > 0L) {
-                    sinceParam = "?since=25m";
                 } else {
-                    sinceParam = "";
+                    sinceParam = "?since=25m";
                 }
 
-                String topic = room + "-" + role;
-                URL url = new URL("https://ntfy.sh/" + topic + "/json" + sinceParam);
+                String cleanRoom = room.replaceAll("[^a-zA-Z0-9_-]", "");
+                if (cleanRoom.length() > 48) cleanRoom = cleanRoom.substring(0, 48);
+                if (cleanRoom.isEmpty()) cleanRoom = DEFAULT_ROOM;
+
+                String pushTopic = room + "-" + role;
+                String syncTopic = "chanwan_pro2_" + cleanRoom;
+                String combinedTopics = pushTopic + "," + syncTopic;
+                URL url = new URL("https://ntfy.sh/" + combinedTopics + "/json" + sinceParam);
                 conn = (HttpURLConnection) url.openConnection();
                 activeConn = conn;
                 conn.setReadTimeout(75000);
@@ -362,14 +458,21 @@ public class ChanwanPushService extends Service {
                         continue;
                     }
 
-                    String title = obj.optString("title", "💜 灿完时光").trim();
-                    String body = obj.optString("message", "새 메시지가 도착했어요").trim();
+                    String msgTopic = obj.optString("topic", "");
+                    String rawMessage = obj.optString("message", "").trim();
                     long whenMs = (msgSec > 0L) ? (msgSec * 1000L) : System.currentTimeMillis();
 
-                    dispatchIncomingPush(prefs, role, title, body, whenMs);
+                    if (syncTopic.equals(msgTopic)) {
+                        handlePro2SyncStreamPayload(prefs, role, rawMessage, whenMs, seenPro2Ids);
+                        continue;
+                    }
+
+                    String title = obj.optString("title", "💜 灿完时光").trim();
+                    String body = rawMessage.isEmpty() ? "새 메시지가 도착했어요" : rawMessage;
+                    dispatchIncomingPush(prefs, role, title, body, whenMs, null);
                 }
             } catch (Exception ignored) {
-                try { Thread.sleep(3500); } catch (InterruptedException ie) { break; }
+                try { Thread.sleep(3000); } catch (InterruptedException ie) { break; }
             } finally {
                 activeConn = null;
                 if (conn != null) {
@@ -504,7 +607,7 @@ public class ChanwanPushService extends Service {
         }
     }
 
-    private void showMessageNotif(String title, String body, long whenMs, int notifId) {
+    private void showMessageNotif(String title, String body, long whenMs, int notifId, boolean onlyAlertOnce) {
         Intent open = new Intent(this, MainActivity.class);
         open.putExtra("from_notif", true);
         open.putExtra("notif_title", title);
@@ -525,10 +628,11 @@ public class ChanwanPushService extends Service {
                 .setWhen(whenMs)
                 .setShowWhen(true)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(onlyAlertOnce)
                 .setCategory(Notification.CATEGORY_MESSAGE)
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(onlyAlertOnce ? 0 : Notification.DEFAULT_ALL)
                 .setContentIntent(pi);
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

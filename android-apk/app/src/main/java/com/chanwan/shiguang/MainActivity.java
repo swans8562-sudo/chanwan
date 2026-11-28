@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.Gravity;
@@ -49,7 +50,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 70;
+    private static final int APK_BUILD_VER = 71;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;
@@ -677,16 +678,36 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static void nudgeForegroundWebViewSync() {
+    public static boolean isActivelyVisibleOnScreen() {
+        final MainActivity act = activeInstance;
+        if (!isAppInForeground || act == null) return false;
+        try {
+            PowerManager pm = (PowerManager) act.getSystemService(POWER_SERVICE);
+            if (pm != null && !pm.isInteractive()) return false;
+        } catch (Exception ignored) {}
+        return true;
+    }
+
+    public static void deliverIncomingFromService(final String title, final String body, final String rawPro2Json) {
         final MainActivity act = activeInstance;
         if (act == null) return;
+        final String safeTitle = JSONObject.quote(title != null ? title : "");
+        final String safeBody = JSONObject.quote(body != null ? body : "");
+        final String safeJson = JSONObject.quote(rawPro2Json != null ? rawPro2Json : "");
         act.runOnUiThread(() -> {
             try {
                 if (act.webView != null) {
-                    act.webView.evaluateJavascript("(function(){try{if(typeof window.__pullFastChatDeltaNow==='function')window.__pullFastChatDeltaNow(true);else if(typeof window.__pullCloudSync==='function')window.__pullCloudSync('live_push');}catch(e){}})();", null);
+                    act.webView.evaluateJavascript(
+                        "(function(){try{if(typeof window.__onNativeServiceIncoming==='function'){window.__onNativeServiceIncoming(" + safeTitle + "," + safeBody + "," + safeJson + ");}else if(typeof window.__pullFastChatDeltaNow==='function'){window.__pullFastChatDeltaNow(true);}}catch(e){}})();",
+                        null
+                    );
                 }
             } catch (Exception ignored) {}
         });
+    }
+
+    public static void nudgeForegroundWebViewSync() {
+        deliverIncomingFromService("", "", "");
     }
 
     private void requestRuntimePermissions() {

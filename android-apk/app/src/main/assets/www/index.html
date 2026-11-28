@@ -2544,7 +2544,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v97: App-Wide Couture Boutique Elevation
+       Prime 4 · v98: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2788,7 +2788,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v97: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v98: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5166,7 +5166,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v97</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v98</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -6768,7 +6768,6 @@
             else if (cleanMsg === '🎞️ [动图]') cleanMsg = '움짤을 보냈어요';
             cleanMsg = cleanMsg.replace(/^[🎬📷🎙️💌💓💬]+\s*/u, '');
           }
-          const appIconUrl = 'https://swans8562-sudo.github.io/chanwan/icon-192.png?v=21';
           const openBtnLabel = partnerRole === 'suwan' ? (isGame ? '⚖️ 게임 열기' : '💬 대화 열기') : (isGame ? '⚖️ 打开游戏' : '💬 打开聊天');
           const sendJson = (topic, attempt = 0) => {
             fetch('https://ntfy.sh', {
@@ -6779,15 +6778,14 @@
                 title: cleanTitle,
                 message: cleanMsg,
                 priority: 5,
-                icon: appIconUrl,
                 click: clickUrl,
                 actions: [{ action: 'view', label: openBtnLabel, url: clickUrl, clear: true }]
               }),
-              keepalive: attempt === 0
+              keepalive: true
             }).then((r) => {
               if (!r || !r.ok) throw new Error('ntfy_http_' + (r ? r.status : 0));
             }).catch(() => {
-              if (attempt < 2) setTimeout(() => sendJson(topic, attempt + 1), attempt === 0 ? 1200 : 3500);
+              if (attempt < 2) setTimeout(() => sendJson(topic, attempt + 1), attempt === 0 ? 900 : 2600);
             });
           };
           sendJson(targetCh);
@@ -15972,7 +15970,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } else if (__cachedQuick && __cachedQuick.translated) {
             __fireTranslatedPushOnce(__cachedQuick.translated, false);
           } else {
-            setTimeout(() => __fireTranslatedPushOnce(__pushFallbackBody, true), 5200);
+            // Fire IMMEDIATELY at 0ms so closing Huawei Browser right after Send NEVER drops OS notification!
+            // Once translation finishes (~1s later), __fireTranslatedPushOnce sends silent in-place Korean update!
+            __fireTranslatedPushOnce(__pushFallbackBody, true);
           }
           window.__pendingChatReply = null;
           document.getElementById('chatReplyBar')?.classList.add('hidden');
@@ -17587,9 +17587,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v97',
+          ver: 'Prime 4 · v98',
           date: '2026-11-26',
-          koTitle: 'Prime 4 · v97 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
+          koTitle: 'Prime 4 · v98 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
             '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
@@ -17609,7 +17609,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v97 更新日志' : '📜 灿完时光 Prime 4 · v97 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v98 更新日志' : '📜 灿完时光 Prime 4 · v98 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -21367,8 +21367,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (inc.clientId && inc.clientId === myDeviceClientId && !allowSelfReplay) return false;
           if (isLiveEvent && ((Date.now() - __cwBootEpoch) < 3500 || (inc.ts && (Date.now() - Number(inc.ts)) > 90000))) { isLiveEvent = false; }
           let changed = false;
+          const __hadPriorLocalHistory = ((state.chat?.messages || []).length > 0 || (state.diaries || []).length > 0 || Number(state.profile?.suwanLastSeen || 0) > 0);
           let chatChanged = false;
           let newestPartnerMsg = null;
+          let newlyAddedPartnerCount = 0;
           let newestPraise = null;
 
           const mergeById = (curArr, incArr, prepend, trackMsg) => {
@@ -21383,7 +21385,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 byId.set(item.id, item);
                 if (prepend) base.unshift(item); else base.push(item);
                 changed = true;
-                if (trackMsg) { chatChanged = true; const _ns = (item.sender === 'jingchan' || String(item.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan'; if (_ns !== (state.myRole || 'suwan')) newestPartnerMsg = item; }
+                if (trackMsg) { chatChanged = true; const _ns = (item.sender === 'jingchan' || String(item.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan'; if (_ns !== (state.myRole || 'suwan')) { newestPartnerMsg = item; newlyAddedPartnerCount++; } }
               } else {
                 // Merge nested replies (Truth/Dare, Compliment Jar, etc.) & updated translations on existing items!
                 if (Array.isArray(item.replies) && item.replies.length) {
@@ -22281,9 +22283,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 if (m && _ns === myR && !m.readByPartner && Number(m.ts || 0) > 0 && Number(m.ts || 0) <= pTs) { m.readByPartner = true; m.deliveryStatus = 'sent'; }
               });
             }
-            const __pMsgAgeMs = (newestPartnerMsg && newestPartnerMsg.ts) ? (Date.now() - Number(newestPartnerMsg.ts)) : 0;
-            const __isFreshPartnerMsg = !!(newestPartnerMsg && !newestPartnerMsg.read && (!newestPartnerMsg.ts || (__pMsgAgeMs >= -60000 && __pMsgAgeMs < 120000)));
-            if (isLiveEvent && __isFreshPartnerMsg) {
+            const __myReadTsNow = Number((state.profile && state.profile[(state.myRole || 'suwan') + 'ReadUpToTs']) || 0);
+            const __pMsgTs = Number((newestPartnerMsg && newestPartnerMsg.ts) || 0);
+            const __pMsgAgeMs = __pMsgTs ? (Date.now() - __pMsgTs) : 0;
+            const __isFreshLiveMsg = !!(newestPartnerMsg && !newestPartnerMsg.read && (!__pMsgTs || (__pMsgAgeMs >= -60000 && __pMsgAgeMs < 180000)));
+            const __isUnreadCatchupMsg = !!(newestPartnerMsg && __hadPriorLocalHistory && !newestPartnerMsg.read && __pMsgTs > __myReadTsNow && __pMsgAgeMs >= 0 && __pMsgAgeMs < 43200000);
+            if ((isLiveEvent && __isFreshLiveMsg) || __isUnreadCatchupMsg) {
               try { if (typeof window.__setInChatTypingState === 'function') window.__setInChatTypingState('', false); } catch (_) {}
               const pName = newestPartnerMsg.sender === 'suwan' ? '수완(完)' : '靖灿(灿)';
               const origTxtN = String(newestPartnerMsg.original || '');
@@ -22744,7 +22749,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               else if (data.v === 'pro2_signal') {
                 if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
                   publishEmqxRetained(room, 'sync', '');
-                  if (data.minVer === 'Prime 4 · v97') return;
+                  if (data.minVer === 'Prime 4 · v98') return;
                 }
                 handleIncomingChatSignal(data);
               }
@@ -23338,10 +23343,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
 
         let __lastEmergencyNtfyPollTs = 0;
-        async function pollNtfyBackup(room, isLive) {
+        async function pollNtfyBackup(room, isLive, forceNow) {
           if (!room) return false;
-          if (__ntfySseConnected && __ntfyLiveSse && __ntfyLiveSse.readyState === 1 && isLive) return false;
-          const minGap = __ntfyInitial12hDone ? 45000 : 0;
+          if (!forceNow && __ntfySseConnected && __ntfyLiveSse && __ntfyLiveSse.readyState === 1 && isLive) return false;
+          const minGap = forceNow ? 1500 : (__ntfyInitial12hDone ? 45000 : 0);
           if ((Date.now() - __lastEmergencyNtfyPollTs) < minGap) return false;
           __lastEmergencyNtfyPollTs = Date.now();
           try {
@@ -23464,7 +23469,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // ==================== Prime 4 v58: Schema-Proof Permanent Cloud Media Vault inside couple_sync_state ====================
         // Uses proven couple_sync_state (room_id PK + payload JSONB) so albums, voice letters, avatars & chat media NEVER vanish even if couple_sync_events fails!
-        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v70';
+        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v71';
         function getUploadedVaultSet() {
           try {
             const arr = JSON.parse(localStorage.getItem(CW_VM_UPLOADED_KEY) || '[]');
@@ -25156,7 +25161,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v97', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v98', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               publishEmqxRetained(rm, 'sync', pkt);
             } catch (_) {}
           },
@@ -25164,7 +25169,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v97', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v98', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               const wire = await e2eeWrapString(pkt);
               await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
                 method: 'POST',
@@ -25374,23 +25379,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         window.__pullCloudSync = pullCloudSync;
 
-        // Ultra-fast (~100ms) chat-only delta pull for notification open & foreground nudge (never waits on media scan!)
+        // Ultra-fast (~100ms) 4-channel delta pull for notification open, foreground nudge & visibility resume!
         async function pullFastChatDeltaNow(isLiveNudge) {
           try {
             const room = getSyncRoomCode();
             if (!room) return false;
+            connectSeoulDirectPhoenixWs();
             if (!emqxConnected) connectEmqxChinaDirect();
+            connectNtfyLiveSse();
+            try { sendChatSignal('request_peer_catchup', { latestTs: Date.now() }); } catch (_) {}
             const lastId = loadLastEventId();
             const safeFrom = Math.max(0, lastId - 10);
             const fastUrl = lastId > 0
               ? `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.delta&id=gt.${safeFrom}&order=id.asc&limit=30`
               : `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.delta&order=id.desc&limit=25`;
             const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`;
-            const [evRes, snapRes] = await Promise.allSettled([
-              fetchSbEventsCompat(fastUrl, 3500).then(r => r.ok ? r.json() : null),
-              fetchWithTimeout(snapUrl, { headers: sbHeaders() }, isMainlandChinaClient() ? 11000 : 5500).then(r => r.ok ? r.json() : null)
+            const [ntfyRes, evRes, snapRes] = await Promise.allSettled([
+              pollNtfyBackup(room, !!isLiveNudge, true),
+              !__sbEventsUnavailable ? fetchSbEventsCompat(fastUrl, 3500).then(r => r.ok ? r.json() : null) : Promise.resolve(null),
+              !__sbStateUnavailable ? fetchWithTimeout(snapUrl, { headers: sbHeaders() }, isMainlandChinaClient() ? 9000 : 4500).then(r => r.ok ? r.json() : null) : Promise.resolve(null)
             ]);
-            let changed = false;
+            let changed = (ntfyRes.status === 'fulfilled' && !!ntfyRes.value);
             if (evRes.status === 'fulfilled' && Array.isArray(evRes.value)) {
               const rows = lastId > 0 ? evRes.value : evRes.value.slice().reverse();
               const newRows = rows.filter(x => Number(x && x.id || 0) > lastId);
@@ -25403,7 +25412,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
             if (snapRes.status === 'fulfilled' && Array.isArray(snapRes.value) && snapRes.value[0]?.payload) {
               const dec = await e2eeUnwrapPayload(snapRes.value[0].payload);
-              if (dec && mergeIncomingCoupleData(dec, false)) changed = true;
+              if (dec && mergeIncomingCoupleData(dec, !!isLiveNudge)) changed = true;
             }
             if (changed) {
               if (Array.isArray(state.chat?.messages)) {
@@ -25417,6 +25426,41 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) { return false; }
         }
         window.__pullFastChatDeltaNow = pullFastChatDeltaNow;
+
+        // Direct 0.0s Native Push Service -> WebView Injection Bridge (when app screen is open!)
+        window.__onNativeServiceIncoming = async function(pushTitle, pushBody, rawPro2Json) {
+          try {
+            let mergedFromRaw = false;
+            if (rawPro2Json && String(rawPro2Json).trim()) {
+              const data = await e2eeUnwrapString(String(rawPro2Json));
+              if (data && data.clientId !== myDeviceClientId) {
+                if (data.v === 'pro2') {
+                  mergedFromRaw = !!mergeIncomingCoupleData(data, true);
+                } else if (data.v === 'pro2_signal') {
+                  handleIncomingChatSignal(data);
+                  return;
+                }
+              }
+            }
+            if (!mergedFromRaw) {
+              mergedFromRaw = await pullFastChatDeltaNow(true);
+            }
+            // If a direct push arrived while user is on Home/Study/Setting and message hasn't arrived on sync channel yet, show banner immediately!
+            const cleanB = String(pushBody || '').trim();
+            if (!mergedFromRaw && cleanB && !/^⏳/.test(cleanB)) {
+              const alreadyInChat = (state.chat?.messages || []).slice(-10).some(m =>
+                m && (String(m.original || '').trim() === cleanB || String(m.translated || '').trim() === cleanB)
+              );
+              if (!alreadyInChat) {
+                const myR = state.myRole || 'suwan';
+                const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
+                const pKo = pR === 'jingchan' ? '징찬' : '수완';
+                const pZh = pR === 'jingchan' ? '靖灿' : '秀完';
+                pushNotification('💬', `${pKo}의 새 메시지`, `${pZh}发来新消息`, cleanB, cleanB, 'translator', 'messenger', 'post', false, pR);
+              }
+            }
+          } catch (_) {}
+        };
 
         // 0.0s Notification Tap Handler: wipes ALL OS notifications, switches to CW Talk, shows message immediately & syncs!
         window.__openChatFromNotification = async function(pushTitle, pushBody, pushWhenMs) {
@@ -29708,8 +29752,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v97)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v97';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v98)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v98';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -30836,7 +30880,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v97';
+        const APP_VER_NOW = 'Prime 4 · v98';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -31187,7 +31231,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
 
           if (br) {
-            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v97' }); } catch (_) {}
+            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v98' }); } catch (_) {}
             try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pR, cmdTs); } catch (_) {}
             try { br.sendEmergencyNtfyHeal(pR, cmdTs); } catch (_) {}
             try { br.requestVaultNow(); } catch (_) {}
@@ -31959,7 +32003,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v97 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v98 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
