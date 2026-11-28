@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.Gravity;
@@ -52,13 +53,14 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 78;
+    private static final int APK_BUILD_VER = 79;
     private static volatile byte[] sCachedBestHtmlBytes = null;
     private static volatile int sCachedBestHtmlVer = 0;
     private static volatile long sLastOtaCheckMs = 0L;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;
+    private static final int CAM_PERM_FOR_CAPTURE_REQ = 1004;
 
     public static volatile boolean isAppInForeground = false;
     private static volatile MainActivity activeInstance = null;
@@ -70,6 +72,12 @@ public class MainActivity extends Activity {
     private WebChromeClient.CustomViewCallback customVideoFsCallback = null;
     private volatile boolean nativeFullscreenEnabled = false;
     private ValueCallback<Uri[]> filePathCallback;
+    private Uri pendingCapturePhotoUri = null;
+    private Uri pendingCaptureVideoUri = null;
+    private volatile int pendingDirectCaptureMode = 0;
+    private volatile long pendingDirectCaptureTs = 0L;
+    private boolean waitingCapturePermGrant = false;
+    private boolean pendingCaptureIsVideo = false;
     private PermissionRequest pendingWebPermReq;
     private boolean waitingSettingsMicReturn = false;
     private boolean openDialogAfterPermGrant = false;
@@ -455,6 +463,24 @@ public class MainActivity extends Activity {
 
                 if (filePathCallback != null) filePathCallback.onReceiveValue(null);
                 filePathCallback = callback;
+                pendingCapturePhotoUri = null;
+                pendingCaptureVideoUri = null;
+
+                int forcedMode = ((System.currentTimeMillis() - pendingDirectCaptureTs) < 4000L) ? pendingDirectCaptureMode : 0;
+                pendingDirectCaptureMode = 0;
+                boolean isDirectCapture = (forcedMode > 0) || (params != null && params.isCaptureEnabled());
+                boolean wantVideo = (forcedMode == 2) || (forcedMode == 0 && joined.contains("video") && !joined.contains("image"));
+
+                if (isDirectCapture) {
+                    if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        pendingCaptureIsVideo = wantVideo;
+                        waitingCapturePermGrant = true;
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAM_PERM_FOR_CAPTURE_REQ);
+                        return true;
+                    }
+                    return launchDirectCameraCapture(wantVideo);
+                }
+
                 try {
                     boolean allowMulti = params != null && params.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE;
                     Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -474,9 +500,28 @@ public class MainActivity extends Activity {
                     if (allowMulti) {
                         getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     }
-                    startActivityForResult(Intent.createChooser(getIntent, "사진 · 동영상 선택"), FILE_CHOOSER_REQ);
+
+                    Intent chooser = Intent.createChooser(getIntent, "사진 · 동영상 선택");
+                    if (Build.VERSION.SDK_INT < 23 || checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        List<Intent> camExtras = new ArrayList<>();
+                        if (joined.contains("image") || joined.isEmpty()) {
+                            Intent pCam = buildCameraCaptureIntent(false);
+                            if (pCam != null) camExtras.add(pCam);
+                        }
+                        if (joined.contains("video")) {
+                            Intent vCam = buildCameraCaptureIntent(true);
+                            if (vCam != null) camExtras.add(vCam);
+                        }
+                        if (!camExtras.isEmpty()) {
+                            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, camExtras.toArray(new Intent[0]));
+                        }
+                    }
+                    startActivityForResult(chooser, FILE_CHOOSER_REQ);
                 } catch (Exception e) {
-                    filePathCallback = null;
+                    if (filePathCallback != null) {
+                        filePathCallback.onReceiveValue(null);
+                        filePathCallback = null;
+                    }
                     return false;
                 }
                 return true;
@@ -925,6 +970,69 @@ public class MainActivity extends Activity {
             } else if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
                 runOnUiThread(this::openSystemAppSettingsForMic);
             }
+        } else if (requestCode == CAM_PERM_FOR_CAPTURE_REQ) {
+            boolean camGranted = grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            if (waitingCapturePermGrant) {
+                waitingCapturePermGrant = false;
+                if (camGranted) {
+                    launchDirectCameraCapture(pendingCaptureIsVideo);
+                } else {
+                    if (filePathCallback != null) {
+                        filePathCallback.onReceiveValue(null);
+                        filePathCallback = null;
+                    }
+                    String role = getSharedPreferences("cw_prefs", MODE_PRIVATE).getString("role", "suwan");
+                    Toast.makeText(this, "jingchan".equals(role) ? "请允许相机权限后再拍摄 📸" : "카메라 권한을 허용하면 바로 사진·동영상을 촬영할 수 있어요 📸", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    private Intent buildCameraCaptureIntent(boolean isVideo) {
+        try {
+            if (isVideo) {
+                File vf = new File(getCacheDir(), "cw_cam_video.mp4");
+                if (vf.exists()) vf.delete();
+                vf.createNewFile();
+                pendingCaptureVideoUri = Uri.parse("content://com.chanwan.shiguang.apkprovider/capture_video.mp4?t=" + System.currentTimeMillis());
+                Intent vIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                vIntent.putExtra(MediaStore.EXTRA_OUTPUT, pendingCaptureVideoUri);
+                vIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                vIntent.setClipData(ClipData.newRawUri("", pendingCaptureVideoUri));
+                vIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                return vIntent;
+            } else {
+                File pf = new File(getCacheDir(), "cw_cam_photo.jpg");
+                if (pf.exists()) pf.delete();
+                pf.createNewFile();
+                pendingCapturePhotoUri = Uri.parse("content://com.chanwan.shiguang.apkprovider/capture_photo.jpg?t=" + System.currentTimeMillis());
+                Intent pIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                pIntent.putExtra(MediaStore.EXTRA_OUTPUT, pendingCapturePhotoUri);
+                pIntent.setClipData(ClipData.newRawUri("", pendingCapturePhotoUri));
+                pIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                return pIntent;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private boolean launchDirectCameraCapture(boolean isVideo) {
+        try {
+            Intent camIntent = buildCameraCaptureIntent(isVideo);
+            if (camIntent == null) throw new RuntimeException("cam_intent_null");
+            startActivityForResult(camIntent, FILE_CHOOSER_REQ);
+            return true;
+        } catch (Exception e) {
+            pendingCapturePhotoUri = null;
+            pendingCaptureVideoUri = null;
+            if (filePathCallback != null) {
+                filePathCallback.onReceiveValue(null);
+                filePathCallback = null;
+            }
+            String role = getSharedPreferences("cw_prefs", MODE_PRIVATE).getString("role", "suwan");
+            Toast.makeText(this, "jingchan".equals(role) ? "无法打开相机，请重试" : "카메라 앱을 열지 못했어요. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
 
@@ -945,9 +1053,20 @@ public class MainActivity extends Activity {
                     results = new Uri[]{data.getData()};
                 }
             }
+            if (resultCode == RESULT_OK && results == null) {
+                File pf = new File(getCacheDir(), "cw_cam_photo.jpg");
+                File vf = new File(getCacheDir(), "cw_cam_video.mp4");
+                if (pendingCapturePhotoUri != null && pf.exists() && pf.length() > 0) {
+                    results = new Uri[]{pendingCapturePhotoUri};
+                } else if (pendingCaptureVideoUri != null && vf.exists() && vf.length() > 0) {
+                    results = new Uri[]{pendingCaptureVideoUri};
+                }
+            }
             if (results == null) {
                 results = WebChromeClient.FileChooserParams.parseResult(resultCode, data);
             }
+            pendingCapturePhotoUri = null;
+            pendingCaptureVideoUri = null;
             filePathCallback.onReceiveValue(results);
             filePathCallback = null;
         } else {
@@ -1183,6 +1302,32 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public boolean isNativeFullscreen() {
             return nativeFullscreenEnabled;
+        }
+
+        @JavascriptInterface
+        public void prepareDirectCapture(boolean isVideo) {
+            pendingDirectCaptureMode = isVideo ? 2 : 1;
+            pendingDirectCaptureTs = System.currentTimeMillis();
+        }
+
+        @JavascriptInterface
+        public boolean boostWebViewPerformance(final boolean clearDisk) {
+            runOnUiThread(() -> {
+                try {
+                    if (webView != null) {
+                        webView.clearCache(clearDisk);
+                        webView.clearHistory();
+                        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            webView.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
+                        }
+                    }
+                } catch (Throwable ignored) {}
+            });
+            new Thread(() -> {
+                try { System.gc(); } catch (Throwable ignored) {}
+            }, "ChanwanTurboGc").start();
+            return true;
         }
 
         @JavascriptInterface
