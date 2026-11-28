@@ -2540,7 +2540,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v91: App-Wide Couture Boutique Elevation
+       Prime 4 · v92: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2784,7 +2784,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v91: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v92: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4950,7 +4950,7 @@
             <div class="grid grid-cols-3 gap-1.5">
               <button id="pingPartnerHealthBtn" type="button" class="btn-royal h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">📡 실시간 핑 점검</button>
               <button id="testChinaEnvSimBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">🌏 중국망 진단</button>
-              <button id="remoteRefreshPartnerBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">🔄 상대앱 갱신</button>
+              <button id="remoteRefreshPartnerBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">🛠️ 원격 연결복구</button>
             </div>
             <div id="chinaSimResultBox" class="hidden rounded-xl px-2.5 py-2 text-[10.5px] leading-relaxed" style="background: var(--surface-1); border: 1px solid var(--border-accent);"></div>
           </div>
@@ -5103,7 +5103,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v91</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v92</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -17236,7 +17236,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v91',
+          ver: 'Prime 4 · v92',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17258,7 +17258,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v91 更新日志' : '📜 灿完时光 Prime 4 · v91 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v92 更新日志' : '📜 灿完时光 Prime 4 · v92 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -21376,6 +21376,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               state.profile.jingchanHealth = { ...inc.profile.jingchanHealth };
               if (typeof window.__renderPartnerHealthUi === 'function') setTimeout(window.__renderPartnerHealthUi, 0);
             }
+            const __myRoleHeal = state.myRole || 'suwan';
+            const __incHealTs = Number(inc.profile[__myRoleHeal + 'HealCmdTs'] || 0);
+            if (__incHealTs > 0) {
+              state.profile[__myRoleHeal + 'HealCmdTs'] = Math.max(Number(state.profile[__myRoleHeal + 'HealCmdTs'] || 0), __incHealTs);
+              const __lastAppliedHeal = Number(localStorage.getItem('cw_applied_heal_ts_v1') || 0);
+              if (__incHealTs > __lastAppliedHeal && (Date.now() - __incHealTs) < 43200000 && typeof window.__executeRemoteConnectionHeal === 'function') {
+                setTimeout(() => window.__executeRemoteConnectionHeal(__incHealTs), 150);
+              }
+            }
             if (inc.profile.suwanSleep && Number(inc.profile.suwanSleep.updatedAt || 0) > Number(state.profile.suwanSleep?.updatedAt || 0)) {
               state.profile.suwanSleep = { ...inc.profile.suwanSleep };
               changed = true;
@@ -22135,7 +22144,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanEnergy: coreObj.profile?.suwanEnergy,
               jingchanEnergy: coreObj.profile?.jingchanEnergy,
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
-              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
+              suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
             },
             hugs: coreObj.hugs || null,
             lavender: coreObj.lavender || null,
@@ -22221,7 +22232,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanEnergy: coreObj.profile?.suwanEnergy,
               jingchanEnergy: coreObj.profile?.jingchanEnergy,
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
-              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
+              suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -23298,12 +23311,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           } else if (sig.kind === 'remote_force_update') {
             const myR = state.myRole || 'suwan';
-            if (sig.targetRole === myR && !document.hidden) {
-              const lastR = Number(sessionStorage.getItem('cw_remote_upd_ts') || 0);
-              if (Date.now() - lastR > 30000 && typeof window.__forcePurgeCacheAndUpdate === 'function') {
-                sessionStorage.setItem('cw_remote_upd_ts', String(Date.now()));
-                showToast(state.lang === 'zh' ? '🔄 收到对方发送的最新版本刷新信号，正在更新...' : '🔄 상대방이 보낸 최신버전 갱신 신호로 자동 업데이트해요...');
-                setTimeout(() => window.__forcePurgeCacheAndUpdate(false), 700);
+            if (!sig.targetRole || sig.targetRole === myR) {
+              const cTs = Number(sig.cmdTs || sig.ts || Date.now());
+              if (typeof window.__executeRemoteConnectionHeal === 'function') {
+                window.__executeRemoteConnectionHeal(cTs);
+              } else if (!document.hidden && typeof window.__forcePurgeCacheAndUpdate === 'function') {
+                window.__forcePurgeCacheAndUpdate(false);
               }
             }
           } else if (sig.kind === 'vl_meta' && sig.vlId) {
@@ -23685,7 +23698,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanEnergy: coreObj.profile?.suwanEnergy,
               jingchanEnergy: coreObj.profile?.jingchanEnergy,
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
-              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
+              suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -24016,6 +24031,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           sendSignal: (kind, payload) => sendChatSignal(kind, payload),
           pullNow: (manual) => pullCloudSync(manual),
           pushFull: () => pushFullCloudSync(),
+          requestVaultNow: () => { try { requestPartnerVaultSync('manual_restore'); } catch (_) {} },
+          respondVaultNow: () => { try { respondToPartnerVaultRequest({}); } catch (_) {} },
+          forceReconnectMyNet: async () => {
+            try { if (emqxWs) emqxWs.close(); } catch (_) {}
+            emqxWs = null;
+            emqxConnected = false;
+            emqxSubscribedRoom = '';
+            connectLiveSyncStream();
+            try { await flushSyncOutbox(); } catch (_) {}
+            try { await pullCloudSync(false); } catch (_) {}
+          },
+          sendEmergencyNtfyHeal: async (targetRole, cmdTs) => {
+            try {
+              const rm = getSyncRoomCode();
+              if (!rm) return;
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const wire = await e2eeWrapString(pkt);
+              await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                body: wire
+              }, 6000);
+            } catch (_) {}
+          },
           getNetStats: () => ({
             emqxOk: !!emqxConnected,
             sbOk: !!(sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime',
@@ -28184,8 +28223,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v91)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v91';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v92)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v92';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29309,7 +29348,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v91';
+        const APP_VER_NOW = 'Prime 4 · v92';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -29402,6 +29441,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
           const pName = pR === 'jingchan' ? (isZh ? '靖灿(灿)' : '징찬(灿)') : (isZh ? '秀完(完)' : '수완(完)');
           if (title) title.textContent = isZh ? `📡 ${pName} 手机运行状态远程监控` : `📡 ${pName} 폰 작동 상태 원격 모니터`;
+          const rBtnEl = document.getElementById('remoteRefreshPartnerBtn');
+          if (rBtnEl && !rBtnEl.disabled) rBtnEl.textContent = isZh ? '🛠️ 远程修复连接' : '🛠️ 원격 연결복구';
 
           const h = state && state.profile ? state.profile[pR + 'Health'] : null;
           if (!h || !h.ts) {
@@ -29477,6 +29518,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let pingWaitTimer = null;
         window.__onPartnerHealthPong = function(rep, rttMs) {
           if (pingWaitTimer) { clearTimeout(pingWaitTimer); pingWaitTimer = null; }
+          if (healWaitTimer) {
+            clearTimeout(healWaitTimer);
+            healWaitTimer = null;
+            const rBtn = document.getElementById('remoteRefreshPartnerBtn');
+            if (rBtn) {
+              rBtn.disabled = false;
+              rBtn.textContent = (state && state.lang === 'zh') ? '🛠️ 远程修复连接' : '🛠️ 원격 연결복구';
+            }
+          }
           const btn = document.getElementById('pingPartnerHealthBtn');
           const isZh = state && state.lang === 'zh';
           if (btn) {
@@ -29529,18 +29579,113 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }, 2800);
         });
 
+        let healWaitTimer = null;
+        window.__executeRemoteConnectionHeal = async function(cmdTs) {
+          const tsNum = Number(cmdTs || Date.now());
+          const prevTs = Number(localStorage.getItem('cw_applied_heal_ts_v1') || 0);
+          if (tsNum <= prevTs) return;
+          try { localStorage.setItem('cw_applied_heal_ts_v1', String(tsNum)); } catch (_) {}
+
+          const isZh = state && state.lang === 'zh';
+          const br = getBridge();
+          try {
+            if (isMainlandChinaClient()) {
+              if (!state.settings) state.settings = {};
+              state.settings.chinaMode = true;
+            }
+          } catch (_) {}
+
+          if (!document.hidden) {
+            showToast(isZh ? '🛠️ 正在执行远程连接修复与同步优化...' : '🛠️ 상대방이 보낸 원격 연결 복구를 실행하고 있어요...');
+          }
+
+          // 1) Check if a newer app version is deployed on server — if so, purge cache & upgrade!
+          if (location.protocol.startsWith('http') && typeof window.__forcePurgeCacheAndUpdate === 'function') {
+            try {
+              const r = await fetch('./sw.js?_cb=' + Date.now(), { cache: 'no-store' });
+              if (r && r.ok) {
+                const txt = await r.text();
+                const m = txt.match(/SW_VER\s*=\s*['"]([^'"]+)['"]/);
+                if (m && m[1] && typeof RUNNING_SW_VER === 'string' && m[1] !== RUNNING_SW_VER) {
+                  if (!document.hidden) {
+                    setTimeout(() => window.__forcePurgeCacheAndUpdate(false), 350);
+                    return;
+                  } else {
+                    window.__cwPendingVisibilityUpgrade = true;
+                  }
+                }
+              }
+            } catch (_) {}
+          }
+
+          // 2) Force-reset & reconnect EMQX China Direct + Supabase + flush outbox + stream any pending videos/voices!
+          if (br) {
+            try { await br.forceReconnectMyNet(); } catch (_) {}
+            try { br.respondVaultNow(); } catch (_) {}
+          }
+
+          // 3) Wait 1.3s for fresh socket handshake, then stamp green health & send live pong back to Suwan!
+          setTimeout(() => {
+            try {
+              const myR = (state && state.myRole) || 'suwan';
+              const rep = collectMyDeviceHealth();
+              if (!state.profile) state.profile = {};
+              state.profile[myR + 'Health'] = rep;
+              if (br) {
+                br.sendSignal('pong_partner_health', { pingId: 'heal_' + tsNum, reqTs: tsNum, healed: true, health: rep });
+                br.pushFull().catch(() => {});
+              }
+              renderPartnerHealthUi();
+            } catch (_) {}
+          }, 1300);
+        };
+
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && window.__cwPendingVisibilityUpgrade && typeof window.__forcePurgeCacheAndUpdate === 'function') {
+            window.__cwPendingVisibilityUpgrade = false;
+            window.__forcePurgeCacheAndUpdate(false);
+          }
+        });
+
         document.getElementById('remoteRefreshPartnerBtn')?.addEventListener('click', () => {
+          const btn = document.getElementById('remoteRefreshPartnerBtn');
           const isZh = state && state.lang === 'zh';
           const myR = (state && state.myRole) || 'suwan';
           const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
           const br = getBridge();
+          const cmdTs = Date.now();
+
+          if (!state.profile) state.profile = {};
+          state.profile[pR + 'HealCmdTs'] = cmdTs;
+          saveState(false);
+
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = isZh ? '🛠️ 修复呼叫中...' : '🛠️ 복구 신호 전송...';
+          }
+
           if (br) {
-            try { br.sendSignal('remote_force_update', { targetRole: pR }); } catch (_) {}
+            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs }); } catch (_) {}
+            try { br.sendEmergencyNtfyHeal(pR, cmdTs); } catch (_) {}
+            try { br.requestVaultNow(); } catch (_) {}
             try { br.pushFull(); } catch (_) {}
           }
-          showToast(isZh
-            ? '🔄 已向对方手机发送最新版本刷新与全量同步信号 ✨'
-            : '🔄 징찬이 폰으로 최신 버전 새로고침 + 전체 대화 동기화 신호를 보냈어요 ✨');
+
+          if (healWaitTimer) clearTimeout(healWaitTimer);
+          healWaitTimer = setTimeout(() => {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = isZh ? '🛠️ 远程修复连接' : '🛠️ 원격 연결복구';
+            }
+            renderPartnerHealthUi();
+            const h = state && state.profile ? state.profile[pR + 'Health'] : null;
+            const gotFreshPong = !!(h && h.livePongAt && (Date.now() - Number(h.livePongAt)) < 4500);
+            if (!gotFreshPong) {
+              showToast(isZh
+                ? '📌 已在云端登记远程修复！对方当前未打开页面，打开瞬间将自动重连并升级 💜'
+                : '📌 3중 서버에 원격 복구를 걸어뒀어요! 징찬이가 지금 화면을 켜두었으면 곧 응답하고, 닫혀 있으면 여는 즉시 자동 복구·최신화돼요 💜');
+            }
+          }, 3400);
         });
 
         document.getElementById('testChinaEnvSimBtn')?.addEventListener('click', async () => {
@@ -30264,7 +30409,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v91 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v92 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
