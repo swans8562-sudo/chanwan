@@ -1,0 +1,110 @@
+name: Build Chanwan Shiguang APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'android-apk/**'
+      - 'chanwan_apk_github_kit*.zip'
+      - 'index.html'
+      - 'sw.js'
+      - 'manifest_clean.json'
+      - '.github/workflows/build-apk.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "chanwan-build-and-pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Unpack highest-version APK kit zip if present
+        run: |
+          shopt -s nullglob
+          zips=(chanwan_apk_github_kit*.zip)
+          if [ ${#zips[@]} -gt 0 ]; then
+            latest_zip=$(printf '%s\n' "${zips[@]}" | sort -V | tail -n 1)
+            echo "Unpacking highest version zip: $latest_zip"
+            unzip -o "$latest_zip"
+            rm -f chanwan_apk_github_kit*.zip
+          fi
+          mkdir -p android-apk/app/src/main/assets/www
+          for f in index.html sw.js manifest_clean.json _headers robots.txt icon-192.png icon-512.png badge-96.png; do
+            if [ -f "$f" ]; then cp -f "$f" android-apk/app/src/main/assets/www/; fi
+          done
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build Signed APK
+        run: gradle -p android-apk assembleDebug --no-daemon
+
+      - name: Commit Unpacked Web Files & Signed APK to main
+        run: |
+          cp -f android-apk/app/build/outputs/apk/debug/app-debug.apk android-apk/chanwan-shiguang.apk
+          cp -f android-apk/app/build/outputs/apk/debug/app-debug.apk ./chanwan-shiguang.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Deploy unpacked Chanwan Shiguang web and signed APK"
+          git pull --rebase origin main || true
+          git push origin HEAD:main || true
+
+      - name: Stage Site for Direct GitHub Pages Deployment
+        run: |
+          mkdir -p _site
+          touch _site/.nojekyll
+          for f in index.html sw.js manifest_clean.json _headers robots.txt icon-192.png icon-512.png badge-96.png chanwan-shiguang.apk; do
+            if [ -f "$f" ]; then cp -f "$f" _site/; fi
+          done
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        continue-on-error: true
+        with:
+          path: '_site'
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chanwan-shiguang-apk
+          path: android-apk/chanwan-shiguang.apk
+          retention-days: 30
+
+  deploy:
+    if: github.actor != 'github-actions[bot]'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Directly to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
