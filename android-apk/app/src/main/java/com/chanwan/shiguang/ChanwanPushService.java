@@ -401,7 +401,7 @@ public class ChanwanPushService extends Service {
                 if (room == null || room.trim().isEmpty()) room = DEFAULT_ROOM;
 
                 String qUrl = SUPABASE_URL + "/rest/v1/couple_sync_state?room_id=eq."
-                        + URLEncoder.encode(room, "UTF-8") + "&select=payload,updated_at";
+                        + URLEncoder.encode(room, "UTF-8") + "&select=payload";
                 conn = (HttpURLConnection) new URL(qUrl).openConnection();
                 conn.setConnectTimeout(8000);
                 conn.setReadTimeout(10000);
@@ -417,10 +417,9 @@ public class ChanwanPushService extends Service {
                 JSONArray arr = new JSONArray(sb.toString());
                 if (arr.length() == 0) continue;
                 JSONObject row = arr.getJSONObject(0);
-                long updatedAt = row.optLong("updated_at", 0L);
-                if (updatedAt > 0L && updatedAt == lastCheckedUpdatedAt && baselineSeeded) continue;
-
                 JSONObject payload = row.optJSONObject("payload");
+                long updatedAt = (payload != null) ? payload.optLong("ts", 0L) : 0L;
+                if (updatedAt > 0L && updatedAt == lastCheckedUpdatedAt && baselineSeeded) continue;
                 if (payload == null || payload.optBoolean("__cw_e2ee", false) || payload.optInt("__e2ee", 0) == 1) {
                     lastCheckedUpdatedAt = updatedAt;
                     continue;

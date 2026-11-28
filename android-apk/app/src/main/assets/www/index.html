@@ -2540,7 +2540,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v90: App-Wide Couture Boutique Elevation
+       Prime 4 · v91: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2784,7 +2784,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v90: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v91: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5103,7 +5103,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v90</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v91</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -10253,14 +10253,23 @@
       let activeMoodTarget = 'suwan';
 
       function extractLightweightCore(fullState) {
+        const stripHeavyField = (v) => (typeof v === 'string' && v.startsWith('data:') && v.length > 2000) ? '' : v;
         return {
           ...fullState,
           albums: [],
           customVoices: {},
           voiceLetters: [],
+          customGifs: Array.isArray(fullState.customGifs) ? fullState.customGifs.filter(g => g && (!g.url || String(g.url).length <= 35000)).slice(0, 12) : [],
+          drawQuizzes: Array.isArray(fullState.drawQuizzes) ? fullState.drawQuizzes.map(d => d ? ({ ...d, imageData: stripHeavyField(d.imageData), dataUrl: stripHeavyField(d.dataUrl) }) : d).slice(0, 10) : [],
+          diaries: Array.isArray(fullState.diaries) ? fullState.diaries.map(d => d ? ({ ...d, photoUrl: stripHeavyField(d.photoUrl), audioUrl: stripHeavyField(d.audioUrl) }) : d) : [],
           chat: {
             ...(fullState.chat || {}),
-            messages: Array.isArray(fullState.chat?.messages) ? fullState.chat.messages.map(m => ({ ...m, photoUrl: '', photoUrls: undefined, videoUrl: '', audioUrl: '' })) : []
+            messages: Array.isArray(fullState.chat?.messages) ? fullState.chat.messages.map(m => ({
+              ...m,
+              hasVoice: !!(m && (m.hasVoice || m.audioUrl || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))),
+              hasVideo: !!(m && (m.hasVideo || m.videoUrl || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()))),
+              photoUrl: '', photoUrls: undefined, videoUrl: '', audioUrl: ''
+            })) : []
           },
           profile: { ...fullState.profile, suwanAvatar: '', jingchanAvatar: '' }
         };
@@ -13188,7 +13197,7 @@
             const isVoiceTextCap = /^(?:🎙️\s*)?(?:음성 메시지|语音消息|음성 메시지를 보냈어요|发来一条语音消息|发送了一条语音)(?:\s*🎙️)?$/.test(_origTrim);
             const isPhotoTextCap = /^(?:📷\s*)?(?:사진(?:\s*\d+장)?을 보냈어요|分享了(?:一张|\s*\d+\s*张)照片|发送了一张照片)(?:\s*📷)?$/.test(_origTrim);
             const isVideoTextCap = /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(_origTrim);
-            const isMissingVideoBubble = !m.videoUrl && isVideoTextCap;
+            const isMissingVideoBubble = !m.videoUrl && (!!m.hasVideo || isVideoTextCap);
             const isMissingPhotoBubble = !hasMedia && (isPhotoTextCap || String(m.id || '').startsWith('msg_img_'));
             const isMissingVoiceBubble = !m.audioUrl && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || isVoiceTextCap || String(m.id || '').startsWith('msg_v_'));
             const isAutoMediaCaption = isVoiceTextCap || isMissingVoiceBubble || isMissingPhotoBubble || isMissingVideoBubble || (hasMedia && (/^🎞️ \[(움짤|动图)\]$/.test(_origTrim) || isPhotoTextCap || isVideoTextCap));
@@ -13226,7 +13235,7 @@
                   <!-- KakaoTalk Minimal Unified Message Bubble (Original + Translation in One Clean Card) -->
                   <div class="cw-msg-bubble rounded-2xl ${hasMedia && !showText ? 'p-1.5' : 'px-3.5 py-2.5'} space-y-1.5 border" data-msg-id="${escapeHtml(m.id)}" style="background: ${mine ? 'var(--bubble-suwan)' : 'var(--bubble-jingchan)'}; border-color: ${mine ? 'rgba(255,255,255,0.22)' : 'var(--border-subtle)'}; color: ${mine ? '#ffffff' : 'var(--text-primary)'};">
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
-                    ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof window.__pullCloudSync==='function'){if(window.__cwApi&&window.__cwApi.showToast)window.__cwApi.showToast((window.__cwApi.getState&&window.__cwApi.getState()?.lang==='zh')?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');window.__pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
+                    ${isMissingVideoBubble ? `<button type="button" data-msg-id="${escapeHtml(m.id)}" onclick="if(typeof window.__recoverMissingVideoNow==='function')window.__recoverMissingVideoNow('${escapeHtml(m.id)}',false);" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
                     ${isMissingPhotoBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">📷 ${state.lang === 'zh' ? '正在同步照片 · 点此立即加载' : '사진 동기화 중 · 눌러서 바로 보기'}</button>` : ''}
                     ${isMissingVoiceBubble ? `<button type="button" data-msg-id="${escapeHtml(m.id)}" onclick="if(typeof window.__recoverMissingVoiceNow==='function')window.__recoverMissingVoiceNow('${escapeHtml(m.id)}');" class="cw-voice-play-btn w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎙️ ${state.lang === 'zh' ? '正在同步语音 · 点此立即加载' : '음성 동기화 중 · 눌러서 바로 듣기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
@@ -17227,7 +17236,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v90',
+          ver: 'Prime 4 · v91',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17249,7 +17258,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v90 更新日志' : '📜 灿完时光 Prime 4 · v90 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v91 更新日志' : '📜 灿完时光 Prime 4 · v91 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -21171,6 +21180,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 });
               }, 350);
             }
+            const missingVidMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.videoUrl && (m.hasVideo || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()))).slice(-3);
+            if (missingVidMsgs.length) {
+              setTimeout(() => {
+                missingVidMsgs.forEach(mv => {
+                  if (mv && mv.id && !mv.videoUrl && typeof window.__recoverMissingVideoNow === 'function') {
+                    window.__recoverMissingVideoNow(mv.id, true);
+                  }
+                });
+              }, 600);
+            }
             setTimeout(() => { if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
               try { if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.update().catch(() => {}))); } catch (_) {} }, 600);
           }
@@ -22028,6 +22047,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                     }, 12000);
                     updateLiveSyncIndicators(true, room);
                     try { if (!document.hidden && typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
+                    try { if (typeof window.__stampMyHealthQuietly === 'function') setTimeout(() => window.__stampMyHealthQuietly(true), 600); } catch (_) {}
                     if (emqxPendingQueue.length) {
                       const qCopy = emqxPendingQueue.slice();
                       emqxPendingQueue = [];
@@ -22223,7 +22243,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   engine: m.engine || '', tgtLang: m.tgtLang || '',
                   accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
                   replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx,
-                  hasVoice: !!(m.hasVoice || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))
+                  hasVoice: !!(m.hasVoice || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || ''))),
+                  hasVideo: !!(m.hasVideo || m.videoUrl || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()))
                 }));
               })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 3)
@@ -22414,8 +22435,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
             body: JSON.stringify({
               room_id: room,
-              payload: wirePayload,
-              updated_at: Date.now()
+              payload: wirePayload
             })
           }, customTimeoutMs || Math.max(SYNC_FETCH_TIMEOUT_MS, 10000));
           if (!res.ok) throw new Error('sb_upsert_' + res.status);
@@ -22510,7 +22530,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         async function fetchCloudVaultManifest(room) {
           const mRoom = `${room}__vault_manifest_v1`;
           try {
-            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(mRoom)}&select=payload,updated_at`, { headers: sbHeaders() }, 10000);
+            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(mRoom)}&select=payload`, { headers: sbHeaders() }, 10000);
             if (!res.ok) return [];
             sbLastOkTs = Date.now();
             const arr = await res.json();
@@ -22548,7 +22568,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const dataStr = (kind === 'voice_letter' || kind === 'chat_voice' || kind === 'custom_voice')
             ? normalizeAudioDataUrl(String(rawDataUrl))
             : String(rawDataUrl);
-          const CHUNK_LEN = 220000;
+          const CHUNK_LEN = 110000;
+          const batchStep = isMainlandChinaClient() ? 2 : 3;
           const totalChunks = Math.max(1, Math.ceil(dataStr.length / CHUNK_LEN));
           const nowTs = Date.now();
           const roleNow = (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan';
@@ -22564,9 +22585,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 ts: nowTs
               }, 18000);
             } else {
-              for (let c = 0; c < totalChunks; c += 3) {
+              for (let c = 0; c < totalChunks; c += batchStep) {
                 const jobs = [];
-                for (let j = c; j < Math.min(totalChunks, c + 3); j++) {
+                for (let j = c; j < Math.min(totalChunks, c + batchStep); j++) {
                   jobs.push(upsertSupabaseStateSnapshot(`${room}__vm__${safeKey}__c${j}`, {
                     v: 'cw_vm_chunk_v1',
                     itemKey: safeKey,
@@ -23684,7 +23705,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   if (!m) return m;
                   const lm = liveMap.get(m.id) || (__cwChatMediaCache && __cwChatMediaCache[m.id]);
                   const hasV = !!(lm && lm.audioUrl) || !!(m.hasVoice || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')));
-                  return hasV ? { ...m, hasVoice: true } : m;
+                  const hasVid = !!(lm && lm.videoUrl) || !!(m.hasVideo || m.videoUrl || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()));
+                  if (hasV || hasVid) return { ...m, ...(hasV ? { hasVoice: true } : {}), ...(hasVid ? { hasVideo: true } : {}) };
+                  return m;
                 });
               })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, lim.qa)
@@ -24024,7 +24047,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               : (lastId > 0
                   ? `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&id=gt.${safeFromId}&order=id.asc&limit=60`
                   : `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&order=id.desc&limit=30`);
-            const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`;
+            const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`;
             const bothRealtimeHealthy = !!(emqxConnected && syncTransportMode === 'realtime' && (Date.now() - lastSyncOkTs) < 25000);
             const shouldPullSnap = !isLivePull || manual || !bothRealtimeHealthy || (window.__sbPollTick % 5 === 1);
             const shouldPullMedia = !isLivePull || manual || (window.__sbPollTick % 6 === 1);
@@ -24136,15 +24159,25 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             lastSyncOkTs = Date.now();
             if (syncTransportMode !== 'realtime') syncTransportMode = 'rest';
             await flushSyncOutbox();
-            const needSlimSnap = !localStorage.getItem('cw_slim_cloud_snap_v88');
+            const needSlimSnap = !localStorage.getItem('cw_slim_cloud_snap_v91');
             if (needSlimSnap) {
-              try { localStorage.setItem('cw_slim_cloud_snap_v88', '1'); } catch (_) {}
+              try { localStorage.setItem('cw_slim_cloud_snap_v88', '1'); localStorage.setItem('cw_slim_cloud_snap_v91', '1'); } catch (_) {}
               try {
-                ((state && state.chat && state.chat.messages) || []).slice(-10).forEach(vm => {
-                  const aud = (vm && vm.audioUrl) || (__cwChatMediaCache && vm && __cwChatMediaCache[vm.id] && __cwChatMediaCache[vm.id].audioUrl);
-                  if (vm && vm.id && aud && String(aud).startsWith('data:')) {
-                    const vk = deriveDeterministicVaultKey('chat_voice', vm, vm.id);
-                    saveVaultItemToCloudState(room, vk, 'chat_voice', vm, normalizeAudioDataUrl(String(aud))).catch(() => {});
+                ((state && state.chat && state.chat.messages) || []).slice(-12).forEach(vm => {
+                  if (!vm || !vm.id) return;
+                  const cached = (__cwChatMediaCache && __cwChatMediaCache[vm.id]) || {};
+                  const aud = vm.audioUrl || cached.audioUrl;
+                  const vid = vm.videoUrl || cached.videoUrl;
+                  const pho = vm.photoUrl || cached.photoUrl;
+                  if (aud && String(aud).startsWith('data:')) {
+                    const meta = { msgId: vm.id, sender: vm.sender, time: vm.time, original: vm.original, translated: vm.translated, tgtLang: vm.tgtLang };
+                    saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_voice', meta, vm.id), 'chat_voice', meta, normalizeAudioDataUrl(String(aud))).catch(() => {});
+                  } else if (vid && String(vid).startsWith('data:video/')) {
+                    const meta = { msgId: vm.id, sender: vm.sender, time: vm.time, original: vm.original || '동영상을 보냈어요 🎬', translated: vm.translated || '', tgtLang: vm.tgtLang || '', category: vm.photoCat || '✨ 일상 순간' };
+                    saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_video', meta, vm.id), 'chat_video', meta, String(vid)).catch(() => {});
+                  } else if (pho && String(pho).startsWith('data:image/')) {
+                    const meta = { msgId: vm.id, sender: vm.sender, time: vm.time, original: vm.original, translated: vm.translated, tgtLang: vm.tgtLang, category: vm.photoCat || '✨ 일상 순간' };
+                    saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_photo', meta, vm.id), 'chat_photo', meta, String(pho)).catch(() => {});
                   }
                 });
               } catch (_) {}
@@ -24191,7 +24224,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const fastUrl = lastId > 0
               ? `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.delta&id=gt.${safeFrom}&order=id.asc&limit=30`
               : `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.delta&order=id.desc&limit=25`;
-            const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`;
+            const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`;
             const [evRes, snapRes] = await Promise.allSettled([
               fetchSbEventsCompat(fastUrl, 3500).then(r => r.ok ? r.json() : null),
               fetchWithTimeout(snapUrl, { headers: sbHeaders() }, isMainlandChinaClient() ? 11000 : 5500).then(r => r.ok ? r.json() : null)
@@ -24319,7 +24352,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             // Phase 1: Snapshot from couple_sync_state (with allowSelfReplay=true so ALL history restores!)
             setProg(10, isZh ? '1/4 正在拉取云端快照记录...' : '1/4 서버 스냅샷 기록 불러오는 중...');
             try {
-              const snapRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`, { headers: sbHeaders() }, 15000);
+              const snapRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`, { headers: sbHeaders() }, 15000);
               if (snapRes.ok) {
                 const snapArr = await snapRes.json();
                 if (Array.isArray(snapArr) && snapArr[0] && snapArr[0].payload) {
@@ -25038,6 +25071,49 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return false;
         };
 
+        window.__recoverMissingVideoNow = async function(msgId, silent) {
+          const isZh = state.lang === 'zh';
+          if (!silent) showToast(isZh ? '🎬 正在高速拉取对方视频...' : '🎬 상대방 폰과 클라우드 금고에서 동영상을 불러오는 중...');
+          const room = getSyncRoomCode();
+          const findTarget = () => (state.chat?.messages || []).find(x => x && x.id === msgId);
+          let target = findTarget();
+          if (target && !target.videoUrl) {
+            const cachedCm = (__cwChatMediaCache && __cwChatMediaCache[msgId]) || null;
+            if (cachedCm && cachedCm.videoUrl) {
+              target.videoUrl = cachedCm.videoUrl;
+            } else {
+              const albMatch = (state.albums || []).find(a => a && a.dataUrl && String(a.mediaType || '').includes('video') && (a.id === 'alb_sync_' + msgId || a.id === 'alb_chat_' + msgId));
+              if (albMatch) target.videoUrl = albMatch.dataUrl;
+            }
+          }
+          if (!target || !target.videoUrl) {
+            try { requestPartnerVaultSync('manual_restore', msgId); } catch (_) {}
+            const directKey = cwSafeVaultKey('cm_' + msgId);
+            await Promise.allSettled([
+              restoreVaultEntryFromCloudState(room, { key: directKey, kind: 'chat_video', ts: Date.now() }),
+              fetchCloudVaultManifest(room).then(items => restoreVaultBatchParallel(room, items))
+            ]);
+          }
+          target = findTarget();
+          if (target && target.videoUrl) {
+            persistMediaVaultsNow(true);
+            saveState(false);
+            renderChat();
+            if (!silent) showToast(isZh ? '🎬 视频加载完成 ✨' : '🎬 동영상 불러오기 완료 ✨');
+            return true;
+          }
+          await new Promise(r => setTimeout(r, 2200));
+          target = findTarget();
+          if (target && target.videoUrl) {
+            persistMediaVaultsNow(true);
+            saveState(false);
+            renderChat();
+            return true;
+          }
+          if (!silent) showToast(isZh ? '🎬 已向对方手机请求重传视频，对方打开页面时将自动送达 💜' : '🎬 징찬이 폰에 동영상 재전송 신호를 보냈어요! 징찬이가 앱을 켜면 자동 도착해요 💜');
+          return false;
+        };
+
         async function respondToPartnerVaultRequest(sig) {
           if (__isStreamingVaultToPartner) return;
           const room = getSyncRoomCode();
@@ -25086,6 +25162,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간' };
                 await sendEmqxMediaPaced(room, 'chat_photo', `p2p_cm_${cm.id}`, meta, cm.photoUrl, cm.ts || Date.now());
                 await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_photo', meta, cm.id), 'chat_photo', meta, cm.photoUrl);
+              } else if (cm.videoUrl && String(cm.videoUrl).startsWith('data:video/')) {
+                const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original || '동영상을 보냈어요 🎬', translated: cm.translated || '', tgtLang: cm.tgtLang || '', category: cm.photoCat || '✨ 일상 순간' };
+                await sendEmqxMediaPaced(room, 'chat_video', `p2p_cvid_${cm.id}`, meta, cm.videoUrl, cm.ts || Date.now());
+                await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_video', meta, cm.id), 'chat_video', meta, cm.videoUrl);
               }
               await new Promise(r => setTimeout(r, 90));
             }
@@ -28104,8 +28184,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v90)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v90';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v91)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v91';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29229,7 +29309,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v90';
+        const APP_VER_NOW = 'Prime 4 · v91';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -29266,8 +29346,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             sbOk: !!net.sbOk,
             audioOk: !!(AC && canRec),
             outboxCnt: Number(net.outboxCnt || 0),
-            errCnt: Array.isArray(errLogs) ? errLogs.length : 0,
-            lastErr: (Array.isArray(errLogs) && errLogs[0] && errLogs[0].msg) ? String(errLogs[0].msg).slice(0, 70) : '',
+            errCnt: Array.isArray(errLogs) ? errLogs.filter(e => e && e.ts && (Date.now() - Number(e.ts)) < 1200000).length : 0,
+            lastErr: (() => { const rec = Array.isArray(errLogs) ? errLogs.find(e => e && e.ts && (Date.now() - Number(e.ts)) < 1200000) : null; return (rec && rec.msg) ? String(rec.msg).slice(0, 70) : ''; })(),
             activeTab: tabId,
             appMode: !!(window.ChanwanNative || document.fullscreenElement || document.webkitFullscreenElement || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true),
             visible: !document.hidden,
@@ -29275,6 +29355,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           };
         }
         window.__collectMyDeviceHealth = collectMyDeviceHealth;
+        window.__stampMyHealthQuietly = stampMyHealthQuietly;
 
         function stampMyHealthQuietly(pushSync) {
           try {
@@ -29492,12 +29573,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const net = br ? br.getNetStats() : { emqxOk: false };
 
             const tSb = Date.now();
-            const sbP = fetchSafe(`${sbUrl}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`, { headers: hdrs }, 6500)
+            const sbP = fetchSafe(`${sbUrl}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`, { headers: hdrs }, 9500)
               .then(async r => {
-                if (!r || !r.ok) return { ok: false };
+                if (!r || !r.ok) return { ok: false, status: r ? r.status : 0 };
                 const txt = await r.text();
                 return { ok: true, ms: Date.now() - tSb, kb: Math.max(1, Math.round(txt.length / 1024)) };
-              }).catch(() => ({ ok: false }));
+              }).catch(() => ({ ok: false, status: 0 }));
 
             const tMm = Date.now();
             const mmP = fetchSafe('https://api.mymemory.translated.net/get?q=' + encodeURIComponent('보고 싶어') + '&langpair=ko|zh-CN', {}, 5500)
@@ -29533,10 +29614,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
         });
 
-        setTimeout(() => {
-          stampMyHealthQuietly(true);
-          renderPartnerHealthUi();
-        }, 2200);
+        setTimeout(() => { stampMyHealthQuietly(true); renderPartnerHealthUi(); }, 2500);
+        setTimeout(() => { stampMyHealthQuietly(true); renderPartnerHealthUi(); }, 6500);
         setInterval(() => {
           if (!document.hidden) {
             stampMyHealthQuietly(false);
@@ -30185,7 +30264,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v90 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v91 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
