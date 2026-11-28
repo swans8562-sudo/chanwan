@@ -22,6 +22,7 @@
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
   <link rel="dns-prefetch" href="https://broker.emqx.io" />
+  <link rel="dns-prefetch" href="https://mqtt.eclipseprojects.io" />
 <title>灿完时光 — 우리 둘만의 공간</title>
   <!-- 100% Zero-CDN Offline-Ready Build for Mainland China & Baidu Browser (No VPN Required) -->
   <style>
@@ -1357,6 +1358,9 @@
       border-radius: 12px;
     }
     .cw-suwan-voice-pill {
+    .cw-suwan-voice-pill, .cw-jingchan-voice-pill { cursor: pointer; transition: transform 0.14s ease, opacity 0.14s ease; user-select: none; }
+    .cw-suwan-voice-pill:active, .cw-jingchan-voice-pill:active { transform: scale(0.94); }
+    .cw-jingchan-voice-pill { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 9999px; background: rgba(139, 92, 246, 0.15); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.32); white-space: nowrap; }
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -2540,7 +2544,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v94: App-Wide Couture Boutique Elevation
+       Prime 4 · v97: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2784,7 +2788,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v94: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v97: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -3419,6 +3423,7 @@
           <button type="button" class="learn-subtab btn-ghost py-2 px-2 rounded-xl text-xs font-semibold whitespace-nowrap truncate" data-subtab="chatbook" data-i18n="subChatbook">💬 우리 대화</button>
           <button type="button" class="learn-subtab btn-ghost py-2 px-2 rounded-xl text-xs font-semibold whitespace-nowrap truncate" data-subtab="review" data-i18n="subReview">📌 오답 노트</button>
           <button type="button" class="learn-subtab btn-ghost py-2 px-2 rounded-xl text-xs font-semibold whitespace-nowrap truncate" data-subtab="games" data-i18n="subGames">🎮 미니게임</button>
+          <button type="button" id="studyVoicesSubtabBtn" class="learn-subtab btn-gold col-span-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap truncate" data-subtab="voices">🎙️ 우리 녹음 문제·보이스 모음 (❤️ 수완 0 · 💜 징찬 0)</button>
         </div>
       </div>
 
@@ -3650,6 +3655,7 @@
             <select id="cheatCategorySelect" class="royal-input rounded-xl px-3 py-2.5 text-xs">
               <option value="all">전체 500개 보기 (全部500条)</option>
               <option value="bookmarks">⭐ 내 즐겨찾기만 보기 (仅看收藏)</option>
+              <option value="recorded">🎙️ 우리 녹음 표현만 보기 (仅看双人录音)</option>
               <option value="연애·애정">💜 연애·애정 (12)</option>
               <option value="일상·인사">☀️ 일상·인사 (12)</option>
               <option value="맛집·카페">☕ 맛집·카페 (12)</option>
@@ -3698,6 +3704,49 @@
 
         <div id="cbBookList" class="space-y-2.5"></div>
         <div id="cbQuizWrap" class="hidden space-y-3"></div>
+      </div>
+
+      <!-- Prime 4 v97: Dual-Partner Recorded Study Questions & Voices Hub (Suwan + Jingchan) -->
+      <div id="learn-sub-voices" class="hidden space-y-3.5">
+        <div class="royal-card-gold rounded-3xl p-4 sm:p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div id="svHubSubTag" class="text-[11px] text-champagne font-semibold">🎙️ 수완 &amp; 징찬 듀얼 보이스 스튜디오</div>
+              <h3 id="svHubTitle" class="text-sm sm:text-base font-bold mt-0.5 leading-snug">🎧 우리가 녹음한 문제 · 표현 모아보기</h3>
+            </div>
+            <div class="inline-flex items-center gap-1 p-1 rounded-full shrink-0" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+              <button type="button" class="sv-mode-btn btn-royal px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap" data-sv-mode="list" id="svModeListBtn">🎧 녹음 모음</button>
+              <button type="button" class="sv-mode-btn btn-ghost px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap" data-sv-mode="quiz" id="svModeQuizBtn">🎯 목소리 퀴즈</button>
+            </div>
+          </div>
+
+          <!-- Quick Add & Record Any Custom Problem/Sentence -->
+          <form id="svQuickAddForm" class="royal-subcard rounded-2xl p-3 space-y-2" style="border: 1px solid var(--border-subtle);">
+            <div id="svQuickAddLabel" class="text-[11px] font-bold text-gold">✨ 새 문장·문제 직접 입력하고 목소리 녹음하기</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input id="svQuickKoInput" type="text" class="royal-input rounded-xl px-3 py-2 text-xs" placeholder="한국어 문제 또는 표현 입력 (예: 오늘 뭐 먹었어?)" autocomplete="off" />
+              <div class="flex items-center gap-1.5">
+                <input id="svQuickZhInput" type="text" class="royal-input flex-1 min-w-0 rounded-xl px-3 py-2 text-xs" placeholder="중국어 뜻 (비워두면 자동 번역)" autocomplete="off" />
+                <button id="svQuickRecBtn" type="submit" class="btn-royal px-3 py-2 rounded-xl text-xs font-bold shrink-0 whitespace-nowrap">🎙️ 녹음</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="svFilterControls" class="space-y-2 pt-0.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-1">
+                <button type="button" class="sv-filter-btn btn-royal px-2.5 py-1 rounded-full text-[10.5px] font-semibold whitespace-nowrap" data-sv-filter="all" id="svFltAll">✨ 전체 0</button>
+                <button type="button" class="sv-filter-btn btn-ghost px-2.5 py-1 rounded-full text-[10.5px] font-semibold whitespace-nowrap" data-sv-filter="both" id="svFltBoth">💑 둘 다 녹음 0</button>
+                <button type="button" class="sv-filter-btn btn-ghost px-2.5 py-1 rounded-full text-[10.5px] font-semibold whitespace-nowrap" data-sv-filter="suwan" id="svFltSuwan">❤️ 수완 0</button>
+                <button type="button" class="sv-filter-btn btn-ghost px-2.5 py-1 rounded-full text-[10.5px] font-semibold whitespace-nowrap" data-sv-filter="jingchan" id="svFltJingchan">💜 징찬 0</button>
+              </div>
+              <input id="svSearchInput" type="text" class="royal-input rounded-xl px-3 py-1.5 text-xs w-full sm:w-44" placeholder="녹음한 문제 검색..." autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <div id="svRecordedList" class="space-y-2.5"></div>
+        <div id="svVoiceQuizWrap" class="hidden space-y-3"></div>
       </div>
     </section>
 
@@ -4625,7 +4674,7 @@
 
         <div class="grid grid-cols-2 gap-2.5">
           <button type="button" id="roleSuwanBtn" class="role-choice-btn royal-subcard rounded-2xl p-3.5 text-left border-2 transition" data-role="suwan">
-            <div class="text-sm font-bold text-gold">❤️ 수완(完)</div>
+            <div id="roleSuwanNameLabel" class="text-sm font-bold text-gold">❤️ 수완(完)</div>
             <div class="text-[11px] text-mut mt-0.5" data-i18n="roleSuwanSub">수완으로 작성 · 징찬 알림만 수신</div>
           </button>
           <button type="button" id="roleJingchanBtn" class="role-choice-btn royal-subcard rounded-2xl p-3.5 text-left border-2 transition" data-role="jingchan">
@@ -4858,6 +4907,20 @@
           </div>
         </div>
 
+        <!-- Mainland China (Qingdao) No-VPN Direct Optimization Mode Toggle -->
+        <div id="chinaModeSettingRow" class="royal-subcard rounded-2xl p-3.5 flex items-center justify-between gap-2.5" style="border: 1px solid var(--border-accent);">
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-bold flex items-center gap-1.5">
+              <span id="chinaModeTitleLabel">🇨🇳 중국(칭다오) 무VPN 직통 최적화 모드</span>
+            </div>
+            <div id="chinaModeDescLabel" class="text-[10.5px] text-mut mt-0.5 leading-snug">중국 현지 브라우저에서 해외 차단 서버를 건너뛰고 443 직통망·중국어 번역·알리바바 가속을 최우선 연결해요.</div>
+          </div>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer shrink-0">
+            <input id="toggleChinaMode" type="checkbox" class="w-4 h-4 accent-purple-600" />
+            <span id="chinaModeStateLabel" class="text-xs font-bold text-gold whitespace-nowrap">자동</span>
+          </label>
+        </div>
+
         <!-- Notification Sound & Closed-App Banner Settings -->
         <div class="royal-subcard rounded-2xl p-3.5 space-y-2.5">
           <div class="flex items-center justify-between text-[11px]">
@@ -4925,15 +4988,15 @@
           <div id="cloudSyncStatusText" class="text-[11px] text-sec leading-snug">🟡 한·중 실시간 동기화 채널을 연결하고 있어요...</div>
           <div id="dualServerStatusRow" class="grid grid-cols-3 gap-1.5 pt-0.5">
             <div class="rounded-xl px-2 py-1.5 flex flex-col justify-between gap-0.5 text-[10px]" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
-              <span class="font-semibold text-sec truncate">🌏 중국 직통</span>
+              <span id="srvLblEmqx" class="font-semibold text-sec truncate">🌏 중국 직통</span>
               <span id="emqxServerPill" class="font-bold whitespace-nowrap" style="color: var(--accent-royal);">🟡 대기</span>
             </div>
             <div class="rounded-xl px-2 py-1.5 flex flex-col justify-between gap-0.5 text-[10px]" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
-              <span class="font-semibold text-sec truncate">⚡ 서울 메인</span>
+              <span id="srvLblSeoul" class="font-semibold text-sec truncate">⚡ 서울 메인</span>
               <span id="sbServerPill" class="font-bold whitespace-nowrap" style="color: var(--accent-royal);">🟡 대기</span>
             </div>
             <div class="rounded-xl px-2 py-1.5 flex flex-col justify-between gap-0.5 text-[10px]" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
-              <span class="font-semibold text-sec truncate">🛡️ ntfy 백업</span>
+              <span id="srvLblNtfy" class="font-semibold text-sec truncate">🛡️ ntfy 백업</span>
               <span id="ntfyServerPill" class="font-bold whitespace-nowrap" style="color: var(--accent-royal);">🟡 대기</span>
             </div>
           </div>
@@ -5092,8 +5155,8 @@
         <!-- Suwan-Only Korean Learning Reset Control -->
         <div id="suwanOnlyLearnResetWrap" class="rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2.5" style="background: rgba(244,63,94,0.06); border: 1px solid rgba(244,63,94,0.2);">
           <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold text-rose-600">👑 수완 전용 · 한국어 학습 진행도 관리</div>
-            <div class="text-[11px] text-sec mt-0.5">징찬이의 누적 XP, 레벨, 연속 정답, 오답 노트를 초기화할 수 있어요. (수완 모드에서만 표시됨)</div>
+            <div id="suwanLearnResetTitle" class="text-xs font-bold text-rose-600">👑 수완 전용 · 한국어 학습 진행도 관리</div>
+            <div id="suwanLearnResetDesc" class="text-[11px] text-sec mt-0.5">징찬이의 누적 XP, 레벨, 연속 정답, 오답 노트를 초기화할 수 있어요. (수완 모드에서만 표시됨)</div>
           </div>
           <button id="resetLearnProgressBtn" type="button" class="btn-ghost px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 shrink-0 whitespace-nowrap" style="border-color: rgba(244,63,94,0.35);">🔄 한국어 학습 리셋</button>
         </div>
@@ -5103,7 +5166,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v94</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v97</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5455,12 +5518,18 @@
   <div id="voiceRecorderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(20, 12, 34, 0.56); backdrop-filter: blur(8px);">
     <div class="royal-card-gold rounded-3xl p-5 w-full max-w-sm space-y-4 shadow-2xl">
       <div class="flex items-start justify-between gap-2">
-        <div class="min-w-0">
-          <div class="text-xs font-bold text-champagne" id="vrModalTitle">🎙️ 내 목소리 녹음 스튜디오</div>
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-bold text-champagne" id="vrModalTitle">🎙️ 수완 · 징찬 보이스 녹음 스튜디오</div>
           <div id="vrPhraseKo" class="text-base font-bold text-gold mt-1 leading-snug break-words"></div>
           <div id="vrPhraseZh" class="text-xs text-sec mt-0.5 break-words"></div>
         </div>
         <button id="vrCloseBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0">✕</button>
+      </div>
+
+      <!-- Dual-Partner Speaker Selector (Suwan Voice vs Jingchan Voice) -->
+      <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+        <button type="button" id="vrSpeakerSuwanBtn" data-vr-sp="suwan" class="vr-speaker-btn btn-royal py-2 px-2.5 rounded-xl text-xs font-bold whitespace-nowrap truncate">❤️ 수완 보이스</button>
+        <button type="button" id="vrSpeakerJingchanBtn" data-vr-sp="jingchan" class="vr-speaker-btn btn-ghost py-2 px-2.5 rounded-xl text-xs font-bold whitespace-nowrap truncate">💜 징찬 보이스</button>
       </div>
 
       <div class="royal-subcard rounded-2xl p-4 text-center space-y-3">
@@ -6058,6 +6127,7 @@
         },
         zh: {
           headerSub: '完 ♥ 灿',
+          togetherLabel: '相爱天数',
           sysNotifTitle: '🔔 后台横幅提醒',
           allowBtn: '开启允许',
           filterAll: '全部',
@@ -6862,43 +6932,81 @@
           window.speechSynthesis.onvoiceschanged = loadTtsVoices;
         }
       } catch (_) {}
-      function speakText(text, lang, slow) {
-        const clean = String(text || '').trim();
-        if (!clean) return;
-        if (__ttsWatchdog) { clearTimeout(__ttsWatchdog); __ttsWatchdog = null; }
-        const ensureAudioEl = () => {
+      function lookupRecordedVoiceUrl(phrase, speaker) {
+        if (!phrase || !state) return '';
+        const map = speaker === 'jingchan' ? state.jingchanVoices : state.customVoices;
+        if (!map || typeof map !== 'object') return '';
+        if (map[phrase]) return map[phrase];
+        const normK = (s) => String(s || '').replace(/[\s?!.,~'"()「」『』]/g, '').trim();
+        const targetNorm = normK(phrase);
+        if (!targetNorm) return '';
+        for (const [k, v] of Object.entries(map)) {
+          if (v && normK(k) === targetNorm) return v;
+        }
+        return '';
+      }
+
+      function playRawRecordedDataUrl(rawUrl, slow, onEndedCb) {
+        if (!rawUrl) return false;
+        try {
           if (!sharedVoiceAudio) {
             sharedVoiceAudio = new Audio();
             sharedVoiceAudio.preload = 'auto';
             sharedVoiceAudio.setAttribute('playsinline', '');
             sharedVoiceAudio.setAttribute('webkit-playsinline', '');
           }
-          sharedVoiceAudio.muted = false;
-          sharedVoiceAudio.volume = 1.0;
-          return sharedVoiceAudio;
-        };
-
-        // Priority 0: Play Suwan's real recorded voice if saved for this Korean phrase!
-        try {
-          let customUrl = state && state.customVoices && state.customVoices[clean];
-          if (!customUrl && state && state.customVoices && typeof state.customVoices === 'object') {
-            const normK = (s) => String(s || '').replace(/[\s?!.,~'"()「」『』]/g, '').trim();
-            const targetNorm = normK(clean);
-            if (targetNorm) {
-              for (const [k, v] of Object.entries(state.customVoices)) {
-                if (v && normK(k) === targetNorm) { customUrl = v; break; }
-              }
-            }
-          }
-          if (customUrl) {
-            const el = ensureAudioEl();
-            el.pause();
+          const el = sharedVoiceAudio;
+          el.pause();
+          el.muted = false;
+          el.volume = 1.0;
+          const asset = (typeof preparePlayableAudioAsset === 'function') ? preparePlayableAudioAsset(rawUrl) : { playUrl: rawUrl, normUrl: rawUrl };
+          el.onended = typeof onEndedCb === 'function' ? () => { el.onended = null; onEndedCb(); } : null;
+          el.onerror = () => {
             el.onerror = null;
-            el.onplaying = null;
-            el.src = customUrl;
-            el.playbackRate = slow ? 0.76 : 1.0;
-            const p = el.play();
-            if (p && typeof p.catch === 'function') p.catch(() => {});
+            if (typeof playViaWebAudioFallback === 'function') {
+              playViaWebAudioFallback(asset.normUrl || rawUrl, null, onEndedCb || (() => {})).catch(() => {});
+            }
+          };
+          el.src = asset.playUrl || rawUrl;
+          el.playbackRate = slow ? 0.76 : 1.0;
+          const p = el.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(() => {
+              if (typeof playViaWebAudioFallback === 'function') {
+                playViaWebAudioFallback(asset.normUrl || rawUrl, null, onEndedCb || (() => {})).catch(() => {});
+              }
+            });
+          }
+          return true;
+        } catch (_) { return false; }
+      }
+
+      function speakText(text, lang, slow, forceSpeaker) {
+        const clean = String(text || '').trim();
+        if (!clean) return;
+        if (__ttsWatchdog) { clearTimeout(__ttsWatchdog); __ttsWatchdog = null; }
+
+        // Priority 0: Play Suwan's or Jingchan's real recorded voice!
+        try {
+          let customUrl = '';
+          if (forceSpeaker === 'suwan' || forceSpeaker === 'jingchan') {
+            customUrl = lookupRecordedVoiceUrl(clean, forceSpeaker);
+            if (!customUrl) {
+              // Request missing audio from partner/vault if metadata says partner recorded it!
+              if (typeof window.__requestPartnerVaultSync === 'function') window.__requestPartnerVaultSync('missing_study_voice');
+              showToast(state.lang === 'zh' ? '☁️ 正在从对方手机/云端同步原声录音，请稍候再点一次 💜' : '☁️ 상대방 목소리 녹음을 불러오는 중이에요! 잠시 후 다시 눌러보세요 💜');
+              return;
+            }
+          } else {
+            const preferPartner = (state && state.myRole === 'suwan') ? 'jingchan' : 'suwan';
+            const fallbackSelf = preferPartner === 'jingchan' ? 'suwan' : 'jingchan';
+            // For Korean learning phrases, prefer Suwan's native Korean voice first if available, else Jingchan's!
+            const isKoPhrase = /[가-힣]/.test(clean);
+            customUrl = isKoPhrase
+              ? (lookupRecordedVoiceUrl(clean, 'suwan') || lookupRecordedVoiceUrl(clean, 'jingchan'))
+              : (lookupRecordedVoiceUrl(clean, 'jingchan') || lookupRecordedVoiceUrl(clean, 'suwan'));
+          }
+          if (customUrl && playRawRecordedDataUrl(customUrl, slow)) {
             return;
           }
         } catch (_) {}
@@ -10119,6 +10227,8 @@
         buckets: [],
         albums: [],
         customVoices: {},
+        jingchanVoices: {},
+        studyVoiceMeta: {},
         voiceLetters: [],
         customPhrases: [],
         settings: { geminiApiKey: '', autoNuance: true, notifSound: true },
@@ -10260,6 +10370,7 @@
           ...fullState,
           albums: [],
           customVoices: {},
+          jingchanVoices: {},
           voiceLetters: [],
           customGifs: Array.isArray(fullState.customGifs) ? fullState.customGifs.filter(g => g && (!g.url || String(g.url).length <= 35000)).slice(0, 12) : [],
           drawQuizzes: Array.isArray(fullState.drawQuizzes) ? fullState.drawQuizzes.map(d => d ? ({ ...d, imageData: stripHeavyField(d.imageData), dataUrl: stripHeavyField(d.dataUrl) }) : d).slice(0, 10) : [],
@@ -10671,7 +10782,10 @@
         const badge = document.getElementById('storageStatusBadge');
         if (badge) badge.textContent = isZh ? `🛡️ 日记 ${dCnt} · 备忘 ${mCnt} · 照片 ${pCnt}` : `🛡️ 일기 ${dCnt} · 메모 ${mCnt} · 사진 ${pCnt}`;
         const info = document.getElementById('lastSavedInfo');
-        if (info) info.textContent = `${isZh ? '最后安全同步' : '마지막 안전 동기화'}: ${state.lastSaved || (isZh ? '刚刚' : '방금 전')}`;
+        const rawLs = (!state.lastSaved || state.lastSaved === '방금 전' || state.lastSaved === '刚刚')
+          ? (isZh ? '刚刚' : '방금 전')
+          : String(state.lastSaved).replace('오전', isZh ? '上午' : '오전').replace('오후', isZh ? '下午' : '오후');
+        if (info) info.textContent = `${isZh ? '最后安全同步' : '마지막 안전 동기화'}: ${rawLs}`;
         const grid = document.getElementById('vaultSummaryGrid');
         if (grid) {
           grid.innerHTML = `
@@ -10738,6 +10852,12 @@
           if (state && state.customVoices && typeof state.customVoices === 'object') {
             idbPut('suwan_voices_v1', { ...state.customVoices });
           }
+          if (state && state.jingchanVoices && typeof state.jingchanVoices === 'object') {
+            idbPut('jingchan_voices_v1', { ...state.jingchanVoices });
+          }
+          if (state && state.studyVoiceMeta && typeof state.studyVoiceMeta === 'object') {
+            idbPut('study_voice_meta_v1', { ...state.studyVoiceMeta });
+          }
           flushIdbStateNow();
         } catch (_) {}
       }
@@ -10752,6 +10872,14 @@
         const customVoices = {
           ...(mediaSource && mediaSource.customVoices && typeof mediaSource.customVoices === 'object' ? mediaSource.customVoices : {}),
           ...(candidate.customVoices && typeof candidate.customVoices === 'object' ? candidate.customVoices : {})
+        };
+        const jingchanVoices = {
+          ...(mediaSource && mediaSource.jingchanVoices && typeof mediaSource.jingchanVoices === 'object' ? mediaSource.jingchanVoices : {}),
+          ...(candidate.jingchanVoices && typeof candidate.jingchanVoices === 'object' ? candidate.jingchanVoices : {})
+        };
+        const studyVoiceMeta = {
+          ...(mediaSource && mediaSource.studyVoiceMeta && typeof mediaSource.studyVoiceMeta === 'object' ? mediaSource.studyVoiceMeta : {}),
+          ...(candidate.studyVoiceMeta && typeof candidate.studyVoiceMeta === 'object' ? candidate.studyVoiceMeta : {})
         };
         const voiceLetters = (Array.isArray(candidate.voiceLetters) && candidate.voiceLetters.length)
           ? candidate.voiceLetters
@@ -10782,6 +10910,8 @@
           },
           albums,
           customVoices,
+          jingchanVoices,
+          studyVoiceMeta,
           voiceLetters,
           customPhrases: Array.isArray(candidate.customPhrases) ? candidate.customPhrases : [],
           notifications: Array.isArray(candidate.notifications) ? candidate.notifications : [],
@@ -10839,11 +10969,13 @@
             candidates.push(JSON.parse(window.name.slice('CHANWAN_V6:'.length)));
           }
         } catch (_) {}
-        const [idbV6, idbV6Core, idbV5, idbSuwanVoices, idbAlbumsVault, idbVoiceLettersVault, idbDelAlbumsVault, idbDelVoicesVault, idbChatMediaVault, idbLearnVault] = await Promise.all([
+        const [idbV6, idbV6Core, idbV5, idbSuwanVoices, idbJingchanVoices, idbStudyVoiceMeta, idbAlbumsVault, idbVoiceLettersVault, idbDelAlbumsVault, idbDelVoicesVault, idbChatMediaVault, idbLearnVault] = await Promise.all([
           idbGet('full_state_v6'),
           idbGet('core_state_v6'),
           idbGet('full_state'),
           idbGet('suwan_voices_v1'),
+          idbGet('jingchan_voices_v1'),
+          idbGet('study_voice_meta_v1'),
           idbGet('albums_vault_v1'),
           idbGet('voice_letters_vault_v1'),
           idbGet('deleted_albums_vault_v1'),
@@ -10873,6 +11005,18 @@
           ...(idbV6 && idbV6.customVoices && typeof idbV6.customVoices === 'object' ? idbV6.customVoices : {}),
           ...(idbSuwanVoices && typeof idbSuwanVoices === 'object' ? idbSuwanVoices : {}),
           ...(state.customVoices && typeof state.customVoices === 'object' ? state.customVoices : {})
+        };
+        state.jingchanVoices = {
+          ...(idbV5 && idbV5.jingchanVoices && typeof idbV5.jingchanVoices === 'object' ? idbV5.jingchanVoices : {}),
+          ...(idbV6 && idbV6.jingchanVoices && typeof idbV6.jingchanVoices === 'object' ? idbV6.jingchanVoices : {}),
+          ...(idbJingchanVoices && typeof idbJingchanVoices === 'object' ? idbJingchanVoices : {}),
+          ...(state.jingchanVoices && typeof state.jingchanVoices === 'object' ? state.jingchanVoices : {})
+        };
+        state.studyVoiceMeta = {
+          ...(idbV5 && idbV5.studyVoiceMeta && typeof idbV5.studyVoiceMeta === 'object' ? idbV5.studyVoiceMeta : {}),
+          ...(idbV6 && idbV6.studyVoiceMeta && typeof idbV6.studyVoiceMeta === 'object' ? idbV6.studyVoiceMeta : {}),
+          ...(idbStudyVoiceMeta && typeof idbStudyVoiceMeta === 'object' ? idbStudyVoiceMeta : {}),
+          ...(state.studyVoiceMeta && typeof state.studyVoiceMeta === 'object' ? state.studyVoiceMeta : {})
         };
         // Union-merge dedicated IDB Albums & Voice Letters vaults so photos/voice letters NEVER disappear!
         const __delAlbSet = new Set([
@@ -11292,20 +11436,66 @@
         if (modal) modal.classList.add('hidden');
       }
 
-      function toggleRecordCustomVoice(phraseText, btnEl) {
-        const phrase = String(phraseText || '').trim();
-        if (!phrase) return;
-        vrCurrentPhrase = phrase;
-        const isZh = state.lang === 'zh';
-        const matchItem = CHEAT_SHEET_72.find(x => x.ko === phrase);
-        document.getElementById('vrModalTitle').textContent = isZh ? '🎙️ 秀完原声录音' : '🎙️ 수완 보이스 녹음';
-        document.getElementById('vrPhraseKo').textContent = phrase;
-        document.getElementById('vrPhraseZh').textContent = matchItem ? matchItem.zh : '';
-        document.getElementById('vrTimerText').textContent = '00:00';
-        vrUpdateRecBtnUI(false);
+      let vrCurrentSpeaker = 'suwan';
+      let vrCurrentMeta = { zh: '', question: '', source: '' };
 
-        const existingUrl = state.customVoices && state.customVoices[phrase];
+      function resolvePhraseMetaInfo(phrase, extraMeta) {
+        const clean = String(phrase || '').trim();
+        const savedM = (state.studyVoiceMeta && state.studyVoiceMeta[clean]) || {};
+        let zh = (extraMeta && extraMeta.zh) || savedM.zh || '';
+        let question = (extraMeta && extraMeta.question) || savedM.question || '';
+        let source = (extraMeta && extraMeta.source) || savedM.source || '';
+        if (!zh) {
+          const allC = typeof getAllCheatPhrases === 'function' ? getAllCheatPhrases() : (typeof CHEAT_SHEET_72 !== 'undefined' ? CHEAT_SHEET_72 : []);
+          const m1 = allC.find(x => x && x.ko === clean);
+          if (m1) { zh = m1.zh || ''; if (!source) source = m1.cat || '만능 회화책'; }
+        }
+        if (!zh && typeof DAILY_CURRICULUM !== 'undefined') {
+          const m2 = DAILY_CURRICULUM.find(x => x && x.ko === clean);
+          if (m2) { zh = m2.zh || ''; if (!source) source = '오늘의 표현'; }
+        }
+        return { zh, question, source: source || '학습 보이스' };
+      }
+
+      function syncVrModalSpeakerUi() {
+        const isZh = state.lang === 'zh';
+        const isJc = vrCurrentSpeaker === 'jingchan';
+        const titleEl = document.getElementById('vrModalTitle');
+        if (titleEl) {
+          titleEl.textContent = isJc
+            ? (isZh ? '🎙️ 靖灿(灿) 原声录音室' : '🎙️ 징찬(灿) 보이스 녹음')
+            : (isZh ? '🎙️ 秀完(完) 原声录音室' : '🎙️ 수완(完) 보이스 녹음');
+        }
+        const swBtn = document.getElementById('vrSpeakerSuwanBtn');
+        const jcBtn = document.getElementById('vrSpeakerJingchanBtn');
+        const hasSw = !!lookupRecordedVoiceUrl(vrCurrentPhrase, 'suwan');
+        const hasJc = !!lookupRecordedVoiceUrl(vrCurrentPhrase, 'jingchan');
+        if (swBtn) {
+          swBtn.className = `vr-speaker-btn ${!isJc ? 'btn-royal' : 'btn-ghost'} py-2 px-2.5 rounded-xl text-xs font-bold whitespace-nowrap truncate`;
+          swBtn.textContent = (isZh ? '❤️ 秀完原声' : '❤️ 수완 보이스') + (hasSw ? ' ✓' : '');
+        }
+        if (jcBtn) {
+          jcBtn.className = `vr-speaker-btn ${isJc ? 'btn-royal' : 'btn-ghost'} py-2 px-2.5 rounded-xl text-xs font-bold whitespace-nowrap truncate`;
+          jcBtn.textContent = (isZh ? '💜 靖灿原声' : '💜 징찬 보이스') + (hasJc ? ' ✓' : '');
+        }
+        const stEl = document.getElementById('vrStatusText');
+        if (stEl && !vrIsRecording) {
+          stEl.textContent = isZh ? '点击下方按钮开始朗读录音' : '아래 버튼을 눌러 문장을 읽어보세요';
+        }
+        const fLbl = document.getElementById('vrFileLabel');
+        if (fLbl) {
+          const inp = fLbl.querySelector('input');
+          fLbl.textContent = isZh ? '🎙️ 本地录音/文件' : '🎙️ 기기 녹음·파일';
+          if (inp) fLbl.appendChild(inp);
+        }
         const delBtn = document.getElementById('vrDeleteBtn');
+        const cancelBtn = document.getElementById('vrCancelBtn');
+        const saveBtn = document.getElementById('vrSaveBtn');
+        if (delBtn) delBtn.textContent = isZh ? '🗑️ 删除此录音' : '🗑️ 기존 녹음 삭제';
+        if (cancelBtn) cancelBtn.textContent = isZh ? '取消' : '취소';
+        if (saveBtn) saveBtn.textContent = isZh ? '💾 保存原声' : '💾 저장하기';
+
+        const existingUrl = lookupRecordedVoiceUrl(vrCurrentPhrase, vrCurrentSpeaker);
         if (existingUrl) {
           vrSetPreview(existingUrl);
           if (delBtn) delBtn.classList.remove('hidden');
@@ -11313,8 +11503,28 @@
           vrSetPreview('');
           if (delBtn) delBtn.classList.add('hidden');
         }
-        document.getElementById('voiceRecorderModal').classList.remove('hidden');
+      }
 
+      function toggleRecordCustomVoice(phraseText, btnEl, explicitSpeaker, extraMeta) {
+        const phrase = String(phraseText || '').trim();
+        if (!phrase) return;
+        vrCurrentPhrase = phrase;
+        const reqSp = explicitSpeaker || (btnEl && btnEl.getAttribute && btnEl.getAttribute('data-speaker')) || (state.myRole || 'suwan');
+        vrCurrentSpeaker = reqSp === 'jingchan' ? 'jingchan' : 'suwan';
+        const btnZh = btnEl && btnEl.getAttribute ? (btnEl.getAttribute('data-zh') || '') : '';
+        const btnQ = btnEl && btnEl.getAttribute ? (btnEl.getAttribute('data-question') || '') : '';
+        const btnSrc = btnEl && btnEl.getAttribute ? (btnEl.getAttribute('data-source') || '') : '';
+        vrCurrentMeta = resolvePhraseMetaInfo(phrase, {
+          zh: (extraMeta && extraMeta.zh) || btnZh,
+          question: (extraMeta && extraMeta.question) || btnQ,
+          source: (extraMeta && extraMeta.source) || btnSrc
+        });
+        document.getElementById('vrPhraseKo').textContent = phrase;
+        document.getElementById('vrPhraseZh').textContent = vrCurrentMeta.zh || '';
+        document.getElementById('vrTimerText').textContent = '00:00';
+        vrUpdateRecBtnUI(false);
+        syncVrModalSpeakerUi();
+        document.getElementById('voiceRecorderModal').classList.remove('hidden');
       }
 
       // Bind Voice Recorder Modal events once
@@ -11330,6 +11540,13 @@
         if (closeBtn) closeBtn.addEventListener('click', closeVoiceRecorderModal);
         if (cancelBtn) cancelBtn.addEventListener('click', closeVoiceRecorderModal);
         if (recBtn) recBtn.addEventListener('click', startVrRecordingNow);
+        document.querySelectorAll('.vr-speaker-btn').forEach(b => {
+          b.addEventListener('click', () => {
+            if (vrIsRecording) stopVrRecordingNow();
+            vrCurrentSpeaker = b.getAttribute('data-vr-sp') === 'jingchan' ? 'jingchan' : 'suwan';
+            syncVrModalSpeakerUi();
+          });
+        });
         if (fileInp) {
           fileInp.addEventListener('change', (e) => {
             const f = e.target.files && e.target.files[0];
@@ -11348,45 +11565,99 @@
         if (saveBtn) {
           saveBtn.addEventListener('click', () => {
             if (!vrCurrentPhrase || !vrPendingDataUrl) return;
-            if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
-            state.customVoices[vrCurrentPhrase] = vrPendingDataUrl;
+            const normAud = (typeof normalizeAudioDataUrl === 'function') ? normalizeAudioDataUrl(vrPendingDataUrl) : vrPendingDataUrl;
+            const spk = vrCurrentSpeaker === 'jingchan' ? 'jingchan' : 'suwan';
+            if (spk === 'jingchan') {
+              if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
+              state.jingchanVoices[vrCurrentPhrase] = normAud;
+            } else {
+              if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
+              state.customVoices[vrCurrentPhrase] = normAud;
+            }
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            const prevMeta = state.studyVoiceMeta[vrCurrentPhrase] || {};
+            state.studyVoiceMeta[vrCurrentPhrase] = {
+              zh: vrCurrentMeta.zh || prevMeta.zh || '',
+              question: vrCurrentMeta.question || prevMeta.question || '',
+              source: vrCurrentMeta.source || prevMeta.source || '학습 보이스',
+              suwanAt: spk === 'suwan' ? Date.now() : (prevMeta.suwanAt || 0),
+              jingchanAt: spk === 'jingchan' ? Date.now() : (prevMeta.jingchanAt || 0)
+            };
             saveSuwanVoicesNow();
             saveState(true);
             if (typeof window.__pushMediaSyncPacket === 'function') {
-              const ext = vrPendingDataUrl.includes('audio/wav') ? 'wav' : (vrPendingDataUrl.includes('audio/mp4') ? 'mp4' : 'webm');
-              window.__pushMediaSyncPacket('custom_voice', { phrase: vrCurrentPhrase }, vrPendingDataUrl, `voice.${ext}`);
+              const ext = normAud.includes('audio/wav') ? 'wav' : (normAud.includes('audio/mp4') ? 'mp4' : 'webm');
+              window.__pushMediaSyncPacket('custom_voice', {
+                phrase: vrCurrentPhrase,
+                speaker: spk,
+                zh: state.studyVoiceMeta[vrCurrentPhrase].zh,
+                question: state.studyVoiceMeta[vrCurrentPhrase].question,
+                source: state.studyVoiceMeta[vrCurrentPhrase].source
+              }, normAud, `voice_${spk}.${ext}`);
             }
             try { playGentleChime(); } catch (_) {}
             closeVoiceRecorderModal();
             try { renderLearn(); } catch (_) {}
             try { renderHome(); } catch (_) {}
-            showToast(state.lang === 'zh' ? '🎧 秀完原声已保存！点喇叭就能听到啦' : '🎧 수완 보이스로 저장됐어요! 이제 스피커를 누르면 바로 들려요');
+            showToast(spk === 'jingchan'
+              ? (state.lang === 'zh' ? '💜 靖灿原声已保存并同步！在「双人原声题库」可随时回听' : '💜 징찬 보이스로 저장·동기화됐어요! [우리 녹음 모음]에서도 모아볼 수 있어요')
+              : (state.lang === 'zh' ? '❤️ 秀完原声已保存并同步！在「双人原声题库」可随时回听' : '❤️ 수완 보이스로 저장·동기화됐어요! [우리 녹음 모음]에서도 모아볼 수 있어요'));
           });
         }
         if (delBtn) {
           delBtn.addEventListener('click', () => {
-            deleteCustomVoice(vrCurrentPhrase);
+            deleteCustomVoice(vrCurrentPhrase, vrCurrentSpeaker);
             closeVoiceRecorderModal();
           });
         }
       })();
 
-      function deleteCustomVoice(phraseText) {
+      function deleteCustomVoice(phraseText, targetSpeaker) {
         const phrase = String(phraseText || '').trim();
-        if (state.customVoices && state.customVoices[phrase]) {
+        if (!phrase) return;
+        const spk = (targetSpeaker === 'jingchan' || targetSpeaker === 'suwan')
+          ? targetSpeaker
+          : ((state.myRole === 'jingchan' && state.jingchanVoices && state.jingchanVoices[phrase]) ? 'jingchan' : ((state.customVoices && state.customVoices[phrase]) ? 'suwan' : 'jingchan'));
+        let removed = false;
+        if (spk === 'jingchan' && state.jingchanVoices && state.jingchanVoices[phrase]) {
+          delete state.jingchanVoices[phrase];
+          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) state.studyVoiceMeta[phrase].jingchanAt = 0;
+          removed = true;
+        } else if (spk === 'suwan' && state.customVoices && state.customVoices[phrase]) {
           delete state.customVoices[phrase];
+          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) state.studyVoiceMeta[phrase].suwanAt = 0;
+          removed = true;
+        }
+        if (removed) {
+          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase] && !state.studyVoiceMeta[phrase].suwanAt && !state.studyVoiceMeta[phrase].jingchanAt) {
+            delete state.studyVoiceMeta[phrase];
+          }
           saveSuwanVoicesNow();
           saveState(true);
+          if (typeof window.__sendChatSignal === 'function') {
+            window.__sendChatSignal('del_custom_voice', { phrase, speaker: spk });
+          }
           renderLearn();
           renderHome();
-          showToast(state.lang === 'zh' ? '已删除录音，恢复默认语音' : '녹음을 삭제하고 기본 음성으로 되돌렸어요.');
+          showToast(state.lang === 'zh' ? '已删除该段原声录音' : '선택한 보이스 녹음을 삭제했어요.');
         }
       }
 
       function suwanVoicePillHtml(phrase) {
-        if (!phrase || !state.customVoices || !state.customVoices[phrase]) return '';
-        const lbl = state.lang === 'zh' ? '🎧 秀完原声' : '🎧 수완 보이스';
-        return `<span class="cw-suwan-voice-pill">${lbl}</span>`;
+        if (!phrase) return '';
+        const isZh = state.lang === 'zh';
+        const meta = (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) || {};
+        const hasSw = !!(lookupRecordedVoiceUrl(phrase, 'suwan') || meta.suwanAt);
+        const hasJc = !!(lookupRecordedVoiceUrl(phrase, 'jingchan') || meta.jingchanAt);
+        if (!hasSw && !hasJc) return '';
+        let out = '';
+        if (hasSw) {
+          out += `<button type="button" class="cw-suwan-voice-pill speak-partner-voice-btn" data-text="${escapeHtml(phrase)}" data-voice-role="suwan" title="${isZh ? '点击播放秀完原声' : '클릭하면 수완 목소리 재생'}">${isZh ? '❤️ 完原声' : '❤️ 수완'}</button>`;
+        }
+        if (hasJc) {
+          out += `<button type="button" class="cw-jingchan-voice-pill speak-partner-voice-btn" data-text="${escapeHtml(phrase)}" data-voice-role="jingchan" title="${isZh ? '点击播放靖灿原声' : '클릭하면 징찬 목소리 재생'}">${isZh ? '💜 灿原声' : '💜 징찬'}</button>`;
+        }
+        return out;
       }
 
       function speakKorean(text) { speakText(text, 'ko-KR'); }
@@ -11596,17 +11867,40 @@
         if (typeof window.__renderQuickPhraseBar === 'function') window.__renderQuickPhraseBar();
         const __zh = state.lang === 'zh';
         const __setI18nId = (id, ko, zh) => { const el = document.getElementById(id); if (el) el.textContent = __zh ? zh : ko; };
-        __setI18nId('hideNotifPrevTitle', '🔒 알림 메시지 미리보기 끄기', '🔒 隐藏通知内容预览');
-        __setI18nId('hideNotifPrevDesc', '켜두면 상단 배너에 내용 대신 "새 메시지가 도착했어요"만 떠요.', '开启后通知横幅仅显示“收到一条新消息”，保护隐私。');
-        __setI18nId('e2eeTitleLabel', '🔐 둘만의 종단간 암호화 (AES-256 E2EE)', '🔐 专属端到端加密 (AES-256 E2EE)');
-        __setI18nId('e2eeDescLabel', '두 사람 폰에 똑같은 비밀 암호키를 입력하면 모든 사진·대화·음성·일기가 AES-256으로 암호화되어 전송돼요.', '两台手机输入相同密钥后，聊天、照片、语音与日记将全程 AES-256 加密传输。');
-        __setI18nId('e2eeSaveBtn', '암호화 켜기', '开启加密');
-        __setI18nId('e2eeClearBtn', '해제', '关闭');
+        __setI18nId('roleSuwanNameLabel', '❤️ 수완(完)', '❤️ 秀完(完)');
+        __setI18nId('chinaModeTitleLabel', '🇨🇳 중국(칭다오) 무VPN 직통 최적화 모드', '🇨🇳 中国大陆免翻墙直连优化模式');
+        __setI18nId('chinaModeDescLabel', '중국 현지 브라우저에서 해외 차단 서버를 건너뛰고 443 직통망·중국어 번역·알리바바 가속을 최우선 연결해요.', '在中国浏览器中自动跳过境外受限节点，优先走 443 端口直连、免翻墙翻译与国内加速源。');
+        __setI18nId('osNotifTestTitle', '🔔 휴대폰 상단 OS 알림 테스트', '🔔 手机系统顶部通知测试');
+        __setI18nId('osNotifTestDesc', '버튼을 누른 뒤 바로 홈 버튼을 눌러 바탕화면으로 나가면 4초 뒤 상단 알림이 울려요(앱 화면을 켜둔 동안엔 중복 방지를 위해 앱 안 배너만 떠요).', '点击按钮后请立即按手机主屏幕键退到桌面，4秒后将弹出系统顶部横幅通知（打开画面时仅显示应用内提示防重复）。');
+        const __osBtn = document.getElementById('testOsNotif4sBtn');
+        if (__osBtn && __osBtn.dataset.busy !== '1') __osBtn.textContent = __zh ? '4秒后测试' : '4초 뒤 테스트';
         __setI18nId('customSoundToneBtn', '🎙️ 내 알림음', '🎙️ 自定义铃声');
+        __setI18nId('suwanLearnResetTitle', '👑 수완 전용 · 한국어 학습 진행도 관리', '👑 秀完专属 · 韩语学习进度管理');
+        __setI18nId('suwanLearnResetDesc', '징찬이의 누적 XP, 레벨, 연속 정답, 오답 노트를 초기화할 수 있어요. (수완 모드에서만 표시됨)', '可重置靖灿的累计经验值、等级、连对记录与错题本（仅在秀完模式下显示）。');
+        __setI18nId('resetLearnProgressBtn', '🔄 한국어 학습 리셋', '🔄 重置韩语进度');
+        __setI18nId('forceAppUpdateBtn', '🔄 최신 업데이트', '🔄 强制更新');
+        const __fUpBtn = document.getElementById('forceAppUpdateBtn');
+        if (__fUpBtn) __fUpBtn.title = __zh ? '清空旧缓存并立即拉取服务器最新版本' : '캐시를 비우고 서버의 최신 버전을 바로 불러와요';
+        __setI18nId('directApkDownloadBtn', '📲 앱 업데이트', '📲 下载安装包');
+        const __cfrSt = document.getElementById('cloudFullRestoreStatus');
+        if (__cfrSt && /서버 목록 조회|正在查询云端/.test(__cfrSt.textContent || '')) {
+          __cfrSt.textContent = __zh ? '正在查询云端记录...' : '서버 목록 조회 중...';
+        }
         const __ahEl = document.getElementById('autoHealLastRunText');
         if (__ahEl && /부팅·재연결|启动与重连/.test(__ahEl.textContent || '')) {
           __ahEl.textContent = __zh ? '启动与重连时自动轻量自检（流畅不卡顿）' : '부팅·재연결 시 가벼운 항목만 자동 점검해요 (버벅거림 없음)';
         }
+        if (typeof updateVaultIndicators === 'function') updateVaultIndicators();
+        if (typeof window.__syncHideNotifPrevUi === 'function') window.__syncHideNotifPrevUi();
+        if (typeof window.__refreshE2eeUi === 'function') window.__refreshE2eeUi();
+        if (typeof window.__updatePinSettingsUI === 'function') window.__updatePinSettingsUI();
+        if (typeof window.__syncAutoNightUi === 'function') window.__syncAutoNightUi();
+        if (typeof window.__refreshLiveSyncUi === 'function') window.__refreshLiveSyncUi();
+        if (typeof window.__renderPartnerHealthUi === 'function') window.__renderPartnerHealthUi();
+        if (typeof window.__refreshBorderlessAppUi === 'function') window.__refreshBorderlessAppUi();
+        if (typeof window.__syncMakerDrawerUi === 'function') window.__syncMakerDrawerUi();
+        try { if (typeof syncVrModalSpeakerUi === 'function') syncVrModalSpeakerUi(); } catch (_) {}
+        if (typeof renderPatchNotes === 'function') renderPatchNotes();
         if (typeof window.__syncQuickStatusUi === 'function') window.__syncQuickStatusUi();
         if (!silent) { saveState(); showToast(state.lang === 'zh' ? '已切换为中文界面 ✨' : '한국어 화면으로 전환되었어요 ✨'); }
       }
@@ -11993,12 +12287,21 @@
             if (spBtn) spBtn.setAttribute('data-text', dEx.ko);
             if (slBtn) slBtn.setAttribute('data-text', dEx.ko);
             const rcBtn = document.getElementById('homeDailyRecBtn');
-            if (rcBtn) { rcBtn.setAttribute('data-text', dEx.ko); rcBtn.textContent = (state.customVoices && state.customVoices[dEx.ko]) ? '💜' : '🎙️'; }
+            const hasSwHome = !!lookupRecordedVoiceUrl(dEx.ko, 'suwan');
+            const hasJcHome = !!lookupRecordedVoiceUrl(dEx.ko, 'jingchan');
+            if (rcBtn) {
+              rcBtn.setAttribute('data-text', dEx.ko);
+              rcBtn.setAttribute('data-zh', dEx.zh || '');
+              rcBtn.setAttribute('data-source', '오늘의 표현');
+              rcBtn.textContent = (hasSwHome || hasJcHome) ? '💜' : '🎙️';
+            }
             const vp = document.getElementById('homeDailyVoicePill');
             if (vp) {
-              const hasV = !!(state.customVoices && state.customVoices[dEx.ko]);
-              vp.classList.toggle('hidden', !hasV);
-              vp.textContent = state.lang === 'zh' ? '🎧 秀完原声' : '🎧 수완 보이스';
+              const hasAnyV = hasSwHome || hasJcHome;
+              vp.classList.toggle('hidden', !hasAnyV);
+              vp.textContent = (hasSwHome && hasJcHome)
+                ? (state.lang === 'zh' ? '💑 双人原声' : '💑 수완·징찬 보이스')
+                : (hasJcHome ? (state.lang === 'zh' ? '💜 靖灿原声' : '💜 징찬 보이스') : (state.lang === 'zh' ? '❤️ 秀完原声' : '❤️ 수완 보이스'));
             }
           }
         } catch (_) {}
@@ -12126,8 +12429,27 @@
         if (goalEl) goalEl.textContent = state.lang === 'zh'
           ? `🎯 今日目标: ${Math.min(DAILY_STUDY_GOAL, todayGoalCnt)}/${DAILY_STUDY_GOAL} 题 · ⚡ 今日XP: ${todayXpNow}/${DAILY_XP_CAP}`
           : `🎯 오늘 목표: ${Math.min(DAILY_STUDY_GOAL, todayGoalCnt)}/${DAILY_STUDY_GOAL}문제 · ⚡ 오늘 XP: ${todayXpNow}/${DAILY_XP_CAP}`;
-        const vcCount = state.customVoices ? Object.keys(state.customVoices).length : 0;
-        if (bmEl) bmEl.textContent = state.lang === 'zh' ? `⭐ 收藏 ${bmCount} 条 · 🎧 秀完原声 ${vcCount} 条` : `⭐ 즐겨찾기 ${bmCount}개 · 🎧 수완 보이스 ${vcCount}개`;
+        const swVcCount = state.customVoices ? Object.keys(state.customVoices).filter(k => state.customVoices[k]).length : 0;
+        const jcVcCount = state.jingchanVoices ? Object.keys(state.jingchanVoices).filter(k => state.jingchanVoices[k]).length : 0;
+        if (bmEl) {
+          bmEl.style.cursor = 'pointer';
+          bmEl.title = state.lang === 'zh' ? '点击查看我们录音的全部题目' : '눌러서 우리가 녹음한 문제 모아보기';
+          bmEl.textContent = state.lang === 'zh'
+            ? `⭐ 收藏 ${bmCount} · ❤️ 秀完原声 ${swVcCount} · 💜 靖灿原声 ${jcVcCount} ›`
+            : `⭐ 즐겨찾기 ${bmCount}개 · ❤️ 수완 ${swVcCount}개 · 💜 징찬 ${jcVcCount}개 녹음 보기 ›`;
+          if (!bmEl.dataset.jumpBound) {
+            bmEl.dataset.jumpBound = '1';
+            bmEl.addEventListener('click', () => {
+              document.getElementById('studyVoicesSubtabBtn')?.click();
+            });
+          }
+        }
+        const svSubBtn = document.getElementById('studyVoicesSubtabBtn');
+        if (svSubBtn) {
+          svSubBtn.textContent = state.lang === 'zh'
+            ? `🎙️ 双人原声录音题库 (❤️ 秀完 ${swVcCount} · 💜 靖灿 ${jcVcCount})`
+            : `🎙️ 우리 녹음 문제·보이스 모음 (❤️ 수완 ${swVcCount} · 💜 징찬 ${jcVcCount})`;
+        }
         const zeroBar = document.getElementById('learnZeroRecoverBar');
         if (zeroBar) {
           const isZeroLearn = (Number(state.learn?.xp || 0) === 0 && Number(state.learn?.solved || 0) === 0);
@@ -12191,8 +12513,7 @@
               <div class="flex items-center gap-1.5 shrink-0">
                 ${(() => { const on = typeof window.__isProblemStarred === 'function' && window.__isProblemStarred(ex.ko, ex.zh); return `<button type="button" class="cw-star-prob-btn ${on ? 'btn-gold' : 'btn-ghost'} w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" data-q="${escapeHtml(ex.ko)}" data-zh="${escapeHtml(ex.zh)}" data-ans="${escapeHtml(ex.ko)}" data-aud="${escapeHtml(ex.ko)}" data-lvl="${state.lang === 'zh' ? '今日学习' : '오늘의 학습'}" title="즐겨찾기">${on ? '⭐' : '☆'}</button>`; })()}${suwanVoicePillHtml(ex.ko)}<button type="button" class="speak-btn btn-royal w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(ex.ko)}" data-lang="ko-KR" title="보통 속도 듣기">${window.getAppIconHtml ? window.getAppIconHtml('speak') : '🔈'}</button>
                 <button type="button" class="speak-btn btn-ghost w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(ex.ko)}" data-lang="ko-KR" data-slow="1" title="천천히 듣기">${window.getAppIconHtml ? window.getAppIconHtml('slow') : '0.7×'}</button>
-                <button type="button" class="rec-voice-btn ${state.customVoices && state.customVoices[ex.ko] ? 'btn-gold' : 'btn-ghost'} w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(ex.ko)}" title="내 목소리 녹음/재녹음">${state.customVoices && state.customVoices[ex.ko] ? '💜' : (window.getAppIconHtml ? window.getAppIconHtml('record') : '🎙️')}</button>
-                ${state.customVoices && state.customVoices[ex.ko] ? `<button type="button" class="del-voice-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(ex.ko)}" title="녹음 삭제">✕</button>` : ''}
+                ${(() => { const myMap = (state.myRole === 'jingchan') ? state.jingchanVoices : state.customVoices; const hasMy = !!(myMap && myMap[ex.ko]); return `<button type="button" class="rec-voice-btn ${hasMy ? 'btn-gold' : 'btn-ghost'} w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(ex.ko)}" data-zh="${escapeHtml(ex.zh)}" data-source="오늘의 표현" title="수완/징찬 목소리 녹음">${hasMy ? '💜' : (window.getAppIconHtml ? window.getAppIconHtml('record') : '🎙️')}</button>${hasMy ? `<button type="button" class="del-voice-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(ex.ko)}" data-speaker="${state.myRole || 'suwan'}" title="녹음 삭제">✕</button>` : ''}`; })()}
               </div>
             </div>
             <div class="nuance-box rounded-xl p-3 text-xs text-sec leading-relaxed">
@@ -12207,6 +12528,7 @@
         renderQuiz();
         renderWrongNotes();
         renderCheatSheet();
+        if (typeof renderStudyVoicesHub === 'function') renderStudyVoicesHub();
         if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('tab-learn'));
       }
 
@@ -12257,11 +12579,19 @@
                 <button type="button" class="speak-btn btn-ghost px-2 py-0.5 rounded-full text-[10px] font-semibold shrink-0 whitespace-nowrap" data-text="${escapeHtml(q.zh)}" data-lang="zh-CN" title="중국어 듣기">🇨🇳🔊</button>
               </div>
             </div>
-            ${q.audio ? `
-              <div class="flex items-center gap-1 shrink-0">
-                ${suwanVoicePillHtml(q.audio)}<button type="button" class="speak-btn btn-royal w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(q.audio)}" data-lang="ko-KR" title="보통 속도">🔊</button>
-                <button type="button" class="speak-btn btn-ghost w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(q.audio)}" data-lang="ko-KR" data-slow="1" title="천천히 듣기">🐢</button>
-              </div>` : ''}
+            ${(() => {
+              const qPhrase = q.audio || ((Array.isArray(q.opts) && typeof q.ans === 'number') ? String(q.opts[q.ans] || '') : '');
+              if (!qPhrase) return '';
+              const myMap = (state.myRole === 'jingchan') ? state.jingchanVoices : state.customVoices;
+              const hasMy = !!(myMap && myMap[qPhrase]);
+              return `
+              <div class="flex items-center gap-1 shrink-0 flex-wrap justify-end">
+                ${suwanVoicePillHtml(qPhrase)}
+                <button type="button" class="speak-btn btn-royal w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(qPhrase)}" data-lang="ko-KR" title="${isZh ? '正常语速播放' : '보통 속도 듣기'}">🔊</button>
+                <button type="button" class="speak-btn btn-ghost w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(qPhrase)}" data-lang="ko-KR" data-slow="1" title="${isZh ? '慢速播放' : '천천히 듣기'}">🐢</button>
+                <button type="button" class="rec-voice-btn ${hasMy ? 'btn-gold' : 'btn-ghost'} w-9 h-9 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(qPhrase)}" data-zh="${escapeHtml(q.zh || '')}" data-question="${escapeHtml(q.q || '')}" data-source="${escapeHtml(meta.nameKo || '단계별 퀴즈')}" title="${isZh ? '录制这道题的原声' : '이 문제 목소리 녹음하기'}">${hasMy ? '💜' : '🎙️'}</button>
+              </div>`;
+            })()}
           </div>
           ${(state.learn.quizInputMode === 'typing' && /[가-힣]/.test(String(q.audio || q.opts[q.ans] || ''))) ? `
             <div class="space-y-2.5 pt-1">
@@ -12753,7 +13083,7 @@
         const cpBadge = document.getElementById('customPhraseCountBadge');
         if (cpBadge) cpBadge.textContent = state.lang === 'zh' ? `${customCnt}条` : `${customCnt}개`;
         const filtered = allPhrases.filter(item => {
-          const catOk = cat === 'all' || (cat === 'bookmarks' ? bmSet.has(item.ko) : item.cat === cat);
+          const catOk = cat === 'all' || (cat === 'bookmarks' ? bmSet.has(item.ko) : (cat === 'recorded' ? !!(lookupRecordedVoiceUrl(item.ko, 'suwan') || lookupRecordedVoiceUrl(item.ko, 'jingchan')) : item.cat === cat));
           const kwOk = !keyword || item.ko.toLowerCase().includes(keyword) || item.zh.toLowerCase().includes(keyword) || (item.nu || '').toLowerCase().includes(keyword);
           return catOk && kwOk;
         });
@@ -12778,8 +13108,7 @@
               </div>
               <div class="flex items-center gap-1 shrink-0">
                 <button type="button" class="bm-cheat-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-xs" data-ko="${escapeHtml(item.ko)}" title="즐겨찾기">${starred ? '⭐' : '☆'}</button>
-                <button type="button" class="rec-voice-btn ${state.customVoices && state.customVoices[item.ko] ? 'btn-gold' : 'btn-ghost'} w-7 h-7 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(item.ko)}" title="내 목소리 녹음">${state.customVoices && state.customVoices[item.ko] ? '💜' : (window.getAppIconHtml ? window.getAppIconHtml('record') : '🎙️')}</button>
-                ${state.customVoices && state.customVoices[item.ko] ? `<button type="button" class="del-voice-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(item.ko)}" title="녹음 삭제">✕</button>` : ''}
+                ${(() => { const myMap = (state.myRole === 'jingchan') ? state.jingchanVoices : state.customVoices; const hasMy = !!(myMap && myMap[item.ko]); return `<button type="button" class="rec-voice-btn ${hasMy ? 'btn-gold' : 'btn-ghost'} w-7 h-7 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(item.ko)}" data-zh="${escapeHtml(item.zh)}" data-source="${escapeHtml(item.cat || '만능 회화책')}" title="수완/징찬 목소리 녹음">${hasMy ? '💜' : (window.getAppIconHtml ? window.getAppIconHtml('record') : '🎙️')}</button>${hasMy ? `<button type="button" class="del-voice-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(item.ko)}" data-speaker="${state.myRole || 'suwan'}" title="녹음 삭제">✕</button>` : ''}`; })()}
                 ${suwanVoicePillHtml(item.ko)}<button type="button" class="speak-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(item.ko)}" data-lang="ko-KR" title="보통 속도">${window.getAppIconHtml ? window.getAppIconHtml('speak') : '🔈'}</button>
                 <button type="button" class="speak-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-xs" data-text="${escapeHtml(item.ko)}" data-lang="ko-KR" data-slow="1" title="천천히 듣기">${window.getAppIconHtml ? window.getAppIconHtml('slow') : '0.7×'}</button>
               </div>
@@ -14653,6 +14982,25 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         });
 
         document.body.addEventListener('click', (e) => {
+          const pVoiceBtn = e.target.closest('.speak-partner-voice-btn');
+          if (pVoiceBtn) {
+            speakText(pVoiceBtn.getAttribute('data-text'), 'ko-KR', pVoiceBtn.getAttribute('data-slow') === '1', pVoiceBtn.getAttribute('data-voice-role'));
+            return;
+          }
+          const duoPlayBtn = e.target.closest('.speak-duo-relay-btn');
+          if (duoPlayBtn) {
+            const phr = duoPlayBtn.getAttribute('data-text');
+            const swU = lookupRecordedVoiceUrl(phr, 'suwan');
+            const jcU = lookupRecordedVoiceUrl(phr, 'jingchan');
+            if (swU && jcU) {
+              playRawRecordedDataUrl(swU, false, () => {
+                setTimeout(() => playRawRecordedDataUrl(jcU, false), 280);
+              });
+            } else if (swU || jcU) {
+              playRawRecordedDataUrl(swU || jcU, false);
+            }
+            return;
+          }
           const speakBtn = e.target.closest('.speak-btn');
           if (speakBtn) { speakText(speakBtn.getAttribute('data-text'), speakBtn.getAttribute('data-lang'), speakBtn.getAttribute('data-slow') === '1'); return; }
           const recBtn = e.target.closest('.rec-voice-btn');
@@ -14660,10 +15008,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const delVBtn = e.target.closest('.del-voice-btn');
           if (delVBtn) {
             const vTxt = delVBtn.getAttribute('data-text');
+            const vSpk = delVBtn.getAttribute('data-speaker') || '';
             openConfirm(
-              state.lang === 'zh' ? '删除原声录音' : '더빙 목소리 삭제',
-              state.lang === 'zh' ? '确定要删除这段原声录音吗？' : '이 더빙 목소리를 삭제할까요?',
-              () => deleteCustomVoice(vTxt)
+              state.lang === 'zh' ? '删除原声录音' : '보이스 녹음 삭제',
+              state.lang === 'zh' ? '确定要删除这段原声录音吗？' : '이 보이스 녹음을 삭제할까요?',
+              () => deleteCustomVoice(vTxt, vSpk)
             );
             return;
           }
@@ -17238,9 +17587,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v94',
+          ver: 'Prime 4 · v97',
           date: '2026-11-26',
-          koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
+          koTitle: 'Prime 4 · v97 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
             '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
@@ -17260,7 +17609,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v94 更新日志' : '📜 灿完时光 Prime 4 · v94 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v97 更新日志' : '📜 灿完时光 Prime 4 · v97 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17678,13 +18027,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const offBtn = document.getElementById('disablePinBtn');
           const isZh = state.lang === 'zh';
           if (badge) {
-            badge.textContent = hasPin ? 'ON' : 'OFF';
+            badge.textContent = hasPin ? (isZh ? '已开启' : 'ON') : (isZh ? '未开启' : 'OFF');
             badge.style.background = hasPin ? 'rgba(16,185,129,0.14)' : 'var(--surface-2)';
             badge.style.color = hasPin ? '#059669' : 'var(--text-muted)';
           }
           if (setBtn) setBtn.textContent = hasPin ? (isZh ? '修改 PIN' : 'PIN 변경') : (isZh ? '设置 PIN' : 'PIN 설정');
-          if (offBtn) offBtn.classList.toggle('hidden', !hasPin);
+          if (offBtn) {
+            offBtn.textContent = isZh ? '解除锁定' : '잠금 해제';
+            offBtn.classList.toggle('hidden', !hasPin);
+          }
         }
+        window.__updatePinSettingsUI = updatePinSettingsUI;
         function renderPinDots() {
           document.querySelectorAll('#pinDotsRow .pin-dot').forEach((dot, idx) => {
             dot.style.background = idx < pinBuffer.length ? 'var(--accent-royal)' : 'transparent';
@@ -18316,13 +18669,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           btn.addEventListener('click', () => {
             const sub = btn.getAttribute('data-subtab');
             document.querySelectorAll('.learn-subtab').forEach(b => {
-              b.className = `learn-subtab ${b === btn ? 'btn-royal' : 'btn-ghost'} py-2 px-2 rounded-xl text-xs font-semibold whitespace-nowrap truncate`;
+              const isVoicesBtn = b.id === 'studyVoicesSubtabBtn';
+              if (isVoicesBtn) {
+                b.className = `learn-subtab ${b === btn ? 'btn-royal' : 'btn-gold'} col-span-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap truncate`;
+              } else {
+                b.className = `learn-subtab ${b === btn ? 'btn-royal' : 'btn-ghost'} py-2 px-2 rounded-xl text-xs font-semibold whitespace-nowrap truncate`;
+              }
             });
-            ['quiz', 'games', 'today', 'review', 'cheat', 'chatbook'].forEach(id => {
+            ['quiz', 'games', 'today', 'review', 'cheat', 'chatbook', 'voices'].forEach(id => {
               const el = document.getElementById(`learn-sub-${id}`);
               if (el) el.classList.toggle('hidden', id !== sub);
             });
-            if (sub === 'chatbook' && typeof renderChatLearnBook === 'function') renderChatLearnBook(); if (sub === 'games') initMiniGamesIfNeeded();
+            if (sub === 'chatbook' && typeof renderChatLearnBook === 'function') renderChatLearnBook();
+            if (sub === 'voices' && typeof renderStudyVoicesHub === 'function') renderStudyVoicesHub();
+            if (sub === 'games') initMiniGamesIfNeeded();
           });
         });
         document.querySelectorAll('.quiz-level-btn').forEach(btn => {
@@ -20609,7 +20969,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (badge) {
             badge.textContent = isJc
               ? (state.lang === 'zh' ? '💜 靖灿(灿) 模式' : '💜 靖灿(灿) 모드')
-              : (state.lang === 'zh' ? '❤️ 完(수완) 模式' : '❤️ 수완(完) 모드');
+              : (state.lang === 'zh' ? '❤️ 秀完(完) 模式' : '❤️ 수완(完) 모드');
           }
           document.querySelectorAll('.role-choice-btn').forEach(btn => {
             const act = btn.getAttribute('data-role') === state.myRole;
@@ -20966,7 +21326,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             else if (emqxAlive) { emqxPill.textContent = isZh ? '🟢 直连' : '🟢 직통'; emqxPill.style.color = '#059669'; }
             else { emqxPill.textContent = isZh ? '🟡 连接中' : '🟡 대기'; emqxPill.style.color = '#d97706'; }
           }
+          const lEmqx = document.getElementById('srvLblEmqx');
+          const lSeoul = document.getElementById('srvLblSeoul');
+          const lNtfy = document.getElementById('srvLblNtfy');
+          if (lEmqx) lEmqx.textContent = isZh ? '🌏 中国直连' : '🌏 중국 직통';
+          if (lSeoul) lSeoul.textContent = isZh ? '⚡ 首尔主服' : '⚡ 서울 메인';
+          if (lNtfy) lNtfy.textContent = isZh ? '🛡️ ntfy 备份' : '🛡️ ntfy 백업';
         }
+        window.__refreshLiveSyncUi = () => {
+          try {
+            updateLiveSyncIndicators(emqxConnected || seoulDirectJoined || syncTransportMode === 'realtime' || syncTransportMode === 'rest', getSyncRoomCode());
+          } catch (_) {}
+        };
 
         function extractMsgTimestamp(m) {
           if (!m) return 0;
@@ -21297,6 +21668,24 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               pushNotification('💓', `${pName}의 보고 싶어 하트!`, `${pName}发来想你的心跳！`, `누적 ${state.heartCount}번째 마음을 보냈어 💜`, `已发送第 ${state.heartCount} 次心动 💜`, 'home', '', 'post', false, inc.myRole);
             }
           }
+          if (inc.studyVoiceMeta && typeof inc.studyVoiceMeta === 'object') {
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            for (const [phr, im] of Object.entries(inc.studyVoiceMeta)) {
+              if (!phr || !im || typeof im !== 'object') continue;
+              const cm = state.studyVoiceMeta[phr] || {};
+              const nextM = {
+                zh: im.zh || cm.zh || '',
+                question: im.question || cm.question || '',
+                source: im.source || cm.source || '',
+                suwanAt: Math.max(Number(cm.suwanAt || 0), Number(im.suwanAt || 0)),
+                jingchanAt: Math.max(Number(cm.jingchanAt || 0), Number(im.jingchanAt || 0))
+              };
+              if (nextM.suwanAt !== Number(cm.suwanAt || 0) || nextM.jingchanAt !== Number(cm.jingchanAt || 0)) {
+                state.studyVoiceMeta[phr] = nextM;
+                changed = true;
+              }
+            }
+          }
           if (inc.learn && typeof inc.learn === 'object') {
             const prevSolved = Number(state.learn?.solved || 0);
             const prevPraiseIds = new Set((state.learn?.praiseStickers || []).map(p => p && p.id).filter(Boolean));
@@ -21378,6 +21767,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (inc.profile.jingchanHealth && Number(inc.profile.jingchanHealth.ts || 0) > Number(state.profile.jingchanHealth?.ts || 0)) {
               state.profile.jingchanHealth = { ...inc.profile.jingchanHealth };
               if (typeof window.__renderPartnerHealthUi === 'function') setTimeout(window.__renderPartnerHealthUi, 0);
+              if ((state.myRole || 'suwan') === 'suwan' && typeof window.__maybeAutoUpgradeOldPartnerOnSight === 'function') {
+                setTimeout(() => window.__maybeAutoUpgradeOldPartnerOnSight('jingchan', state.profile.jingchanHealth), 180);
+              }
             }
             const __myRoleHeal = state.myRole || 'suwan';
             const __incHealTs = Number(inc.profile[__myRoleHeal + 'HealCmdTs'] || 0);
@@ -21933,10 +22325,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           };
         }
 
-        // ---- 3rd Server: Zero-Dependency China-Direct EMQX MQTT over WSS (wss://broker.emqx.io:8084/mqtt) ----
+        // ---- Zero-CDN 4-Pipe Port-443 Cross-Border Engine (AWS Seoul Direct WS:443 + MQTT:443 + EMQX:8084 + ntfy SSE:443) ----
         const __cwBootEpoch = Date.now();
         let emqxWs = null;
         let emqxRxBuf = new Uint8Array(0);
+        let emqxPrimaryOk = false;
+        let mqtt443Ws = null;
+        let mqtt443RxBuf = new Uint8Array(0);
+        let mqtt443Ok = false;
+        let mqtt443BrokerIdx = 0;
+        let mqtt443PingTimer = null;
+        let mqtt443ReconnectTimer = null;
+        let mqtt443SubscribedRoom = '';
+        const MQTT_443_POOL = [
+          'wss://mqtt.eclipseprojects.io:443/mqtt',
+          'wss://test.mosquitto.org:8081/mqtt',
+          'wss://broker.hivemq.com:8884/mqtt'
+        ];
         let emqxConnected = false;
         let emqxLastOkTs = 0;
         let emqxPingTimer = null;
@@ -21945,6 +22350,193 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let emqxPendingQueue = [];
         const emqxEnc = new TextEncoder();
         const emqxDec = new TextDecoder();
+        const RECENT_SIG_IDS = new Set();
+
+        // Engine 1: Zero-CDN Built-in AWS Seoul Phoenix WebSocket (Port 443, ~45ms from Qingdao, 0KB external JS!)
+        let seoulDirectWs = null;
+        let seoulDirectJoined = false;
+        let seoulDirectRoom = '';
+        let seoulDirectHbTimer = null;
+        let seoulDirectReconnTimer = null;
+        let seoulDirectSeq = 1;
+        let seoulDirectJoinRef = '1';
+        let seoulDirectLastRxTs = 0;
+        let seoulDirectPendingQueue = [];
+        let __lastPeerCatchupReplyTs = 0;
+
+        function sendSeoulDirectBroadcast(eventName, payloadObj) {
+          const room = getSyncRoomCode();
+          if (!room || !eventName || !payloadObj) return false;
+          const pushFrame = (wrapped) => {
+            if (!seoulDirectWs || !seoulDirectJoined || seoulDirectWs.readyState !== 1) {
+              if (eventName === 'cw_delta' || eventName === 'cw_sig') {
+                seoulDirectPendingQueue.push({ eventName, payloadObj });
+                if (seoulDirectPendingQueue.length > 16) seoulDirectPendingQueue = seoulDirectPendingQueue.slice(-16);
+              }
+              connectSeoulDirectPhoenixWs();
+              return false;
+            }
+            try {
+              const frame = JSON.stringify({
+                topic: 'realtime:chanwan-bcast-' + room,
+                event: 'broadcast',
+                payload: { type: 'broadcast', event: eventName, payload: wrapped },
+                ref: String(++seoulDirectSeq),
+                join_ref: seoulDirectJoinRef
+              });
+              if (frame.length > 245000) return false;
+              seoulDirectWs.send(frame);
+              sbLastOkTs = Date.now();
+              lastSyncOkTs = Math.max(lastSyncOkTs, sbLastOkTs);
+              return true;
+            } catch (_) { return false; }
+          };
+          if (window.__isE2eeActive && window.__isE2eeActive()) {
+            e2eeWrapPayload(payloadObj).then(w => pushFrame(w)).catch(() => {});
+            return !!(seoulDirectWs && seoulDirectJoined && seoulDirectWs.readyState === 1);
+          }
+          return pushFrame(payloadObj);
+        }
+
+        async function sendSeoulDirectMediaPaced(room, kind, mediaId, meta, rawStr, nowTs) {
+          if (!room || !rawStr) return false;
+          if (!seoulDirectWs || !seoulDirectJoined || seoulDirectWs.readyState !== 1) return false;
+          const senderRole = (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan';
+          if (rawStr.length <= 28000) {
+            return sendSeoulDirectBroadcast('cw_media', {
+              v: 'pro2_media', kind, mediaId, ts: nowTs, clientId: myDeviceClientId, myRole: senderRole, dataUrl: rawStr, meta: meta || {}
+            });
+          }
+          const CHUNK_SZ = 28000;
+          const totalChunks = Math.ceil(rawStr.length / CHUNK_SZ);
+          let sentCnt = 0;
+          for (let i = 0; i < totalChunks; i++) {
+            const ok = sendSeoulDirectBroadcast('cw_media_chunk', {
+              v: 'pro2_media_chunk', transferId: mediaId, mediaId, kind, chunkIndex: i, totalChunks,
+              chunkData: rawStr.slice(i * CHUNK_SZ, (i + 1) * CHUNK_SZ),
+              ts: nowTs, clientId: myDeviceClientId, myRole: senderRole, meta: i === 0 ? (meta || {}) : {}
+            });
+            if (ok) sentCnt++;
+            if (i + 1 < totalChunks) await new Promise(r => setTimeout(r, 35));
+          }
+          return sentCnt === totalChunks;
+        }
+
+        function connectSeoulDirectPhoenixWs() {
+          const room = getSyncRoomCode();
+          if (!room) return;
+          if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+          if (seoulDirectWs && (seoulDirectWs.readyState === 0 || seoulDirectWs.readyState === 1) && seoulDirectRoom === room) return;
+          try { if (seoulDirectWs) seoulDirectWs.close(); } catch (_) {}
+          seoulDirectJoined = false;
+          seoulDirectRoom = room;
+          try {
+            const wsUrl = SUPABASE_URL.replace(/^http/i, 'ws') + '/realtime/v1/websocket?apikey=' + encodeURIComponent(SUPABASE_KEY) + '&vsn=1.0.0';
+            const ws = new WebSocket(wsUrl);
+            seoulDirectWs = ws;
+            const topic = 'realtime:chanwan-bcast-' + room;
+            const myJRef = String(++seoulDirectSeq);
+            seoulDirectJoinRef = myJRef;
+            ws.onopen = () => {
+              if (seoulDirectWs !== ws) return;
+              seoulDirectLastRxTs = Date.now();
+              try {
+                ws.send(JSON.stringify({
+                  topic,
+                  event: 'phx_join',
+                  payload: {
+                    config: {
+                      broadcast: { ack: false, self: false },
+                      presence: { enabled: false },
+                      private: false
+                    }
+                  },
+                  ref: myJRef,
+                  join_ref: myJRef
+                }));
+              } catch (_) {}
+              if (seoulDirectHbTimer) clearInterval(seoulDirectHbTimer);
+              seoulDirectHbTimer = setInterval(() => {
+                if (document.hidden) return;
+                if (seoulDirectWs === ws && ws.readyState === 1) {
+                  if (seoulDirectLastRxTs && (Date.now() - seoulDirectLastRxTs) > 44000) {
+                    try { ws.close(); } catch (_) {}
+                    seoulDirectJoined = false;
+                    connectSeoulDirectPhoenixWs();
+                    return;
+                  }
+                  try {
+                    ws.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++seoulDirectSeq) }));
+                  } catch (_) {}
+                } else if (!seoulDirectJoined) {
+                  connectSeoulDirectPhoenixWs();
+                }
+              }, 18000);
+            };
+            ws.onmessage = (ev) => {
+              if (seoulDirectWs !== ws || !ev || typeof ev.data !== 'string') return;
+              try {
+                seoulDirectLastRxTs = Date.now();
+                const msg = JSON.parse(ev.data);
+                if (!msg || typeof msg !== 'object') return;
+                if (msg.event === 'phx_reply') {
+                  if (msg.topic === topic && msg.payload && msg.payload.status === 'ok') {
+                    seoulDirectJoined = true;
+                    syncTransportMode = 'realtime';
+                    liveSyncSource = { readyState: 1 };
+                    sbLastOkTs = Date.now();
+                    lastSyncOkTs = Date.now();
+                    updateLiveSyncIndicators(true, room);
+                    if (seoulDirectPendingQueue.length) {
+                      const q = seoulDirectPendingQueue.slice();
+                      seoulDirectPendingQueue = [];
+                      q.forEach(it => { if (it) sendSeoulDirectBroadcast(it.eventName, it.payloadObj); });
+                    }
+                    flushSyncOutbox();
+                    setTimeout(() => {
+                      try {
+                        sendChatSignal('request_peer_catchup', { latestTs: Date.now() });
+                        const snapFast = buildEmqxFastPacket(extractLightweightCore(state));
+                        if (snapFast) sendSeoulDirectBroadcast('cw_delta', JSON.parse(snapFast));
+                        if (typeof window.__stampMyHealthQuietly === 'function') window.__stampMyHealthQuietly(true);
+                      } catch (_) {}
+                    }, 450);
+                  }
+                } else if (msg.event === 'broadcast' && msg.payload) {
+                  sbLastOkTs = Date.now();
+                  lastSyncOkTs = Date.now();
+                  const evName = msg.payload.event;
+                  const rawInner = msg.payload.payload;
+                  e2eeUnwrapPayload(rawInner).then((inner) => {
+                    if (!inner || inner.clientId === myDeviceClientId) return;
+                    if (evName === 'cw_delta' && inner.v === 'pro2') {
+                      mergeIncomingCoupleData(inner, true);
+                      updateLiveSyncIndicators(true, room);
+                    } else if (evName === 'cw_sig' && inner.v === 'pro2_signal') {
+                      handleIncomingChatSignal(inner);
+                    } else if (evName === 'cw_media' && inner.v === 'pro2_media') {
+                      handleIncomingMediaPacket(inner, true);
+                    } else if (evName === 'cw_media_chunk' && inner.v === 'pro2_media_chunk') {
+                      handleIncomingMediaChunk(inner, true);
+                    }
+                  }).catch(() => {});
+                } else if (msg.event === 'phx_error' || (msg.event === 'phx_close' && msg.topic === topic)) {
+                  seoulDirectJoined = false;
+                  try { ws.close(); } catch (_) {}
+                }
+              } catch (_) {}
+            };
+            ws.onclose = () => {
+              if (seoulDirectWs !== ws) return;
+              seoulDirectJoined = false;
+              if (seoulDirectHbTimer) { clearInterval(seoulDirectHbTimer); seoulDirectHbTimer = null; }
+              if (seoulDirectReconnTimer) clearTimeout(seoulDirectReconnTimer);
+              seoulDirectReconnTimer = setTimeout(() => { if (!document.hidden) connectSeoulDirectPhoenixWs(); }, 1800);
+              updateLiveSyncIndicators(emqxConnected || ntfyLastOkTs > 0, room);
+            };
+            ws.onerror = () => { if (seoulDirectWs === ws) seoulDirectJoined = false; };
+          } catch (_) {}
+        }
 
         function mqttEncodeLen(len) {
           const out = [];
@@ -21979,23 +22571,34 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function getEmqxTopic(room) {
           return getEmqxRoomPrefix(room) + '/sync';
         }
+        function syncCombinedMqttFlag() {
+          emqxConnected = !!(emqxPrimaryOk || mqtt443Ok);
+          return emqxConnected;
+        }
+        function sendRawFrameToActiveMqttSockets(pktBytes) {
+          let sentAny = false;
+          if (emqxWs && emqxPrimaryOk && emqxWs.readyState === 1) {
+            try { emqxWs.send(pktBytes); sentAny = true; } catch (_) {}
+          }
+          if (mqtt443Ws && mqtt443Ok && mqtt443Ws.readyState === 1) {
+            try { mqtt443Ws.send(pktBytes); sentAny = true; } catch (_) {}
+          }
+          if (sentAny) emqxLastOkTs = Date.now();
+          return sentAny;
+        }
         function publishEmqxRetained(room, subName, jsonStr) {
           if (!room || !subName) return false;
-          if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) return false;
+          if (!syncCombinedMqttFlag()) return false;
           try {
             const topicBytes = mqttStr(getEmqxRoomPrefix(room) + '/' + subName);
             if (!jsonStr) {
-              // Empty payload with 0x31 clears retained message on broker
-              emqxWs.send(mqttPacket(0x31, [topicBytes, new Uint8Array(0)]));
-              return true;
+              return sendRawFrameToActiveMqttSockets(mqttPacket(0x31, [topicBytes, new Uint8Array(0)]));
             }
             const sendRetainedWire = (wireStr) => {
-              if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1 || !wireStr) return false;
+              if (!syncCombinedMqttFlag() || !wireStr) return false;
               const payloadBytes = emqxEnc.encode(wireStr);
               if (payloadBytes.length > 240000) return false;
-              emqxWs.send(mqttPacket(0x31, [topicBytes, payloadBytes]));
-              emqxLastOkTs = Date.now();
-              return true;
+              return sendRawFrameToActiveMqttSockets(mqttPacket(0x31, [topicBytes, payloadBytes]));
             };
             if (window.__isE2eeActive && window.__isE2eeActive()) {
               e2eeWrapString(jsonStr).then(encStr => sendRetainedWire(encStr)).catch(() => {});
@@ -22008,7 +22611,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __lastRetainedVidUploadedId = '';
         async function publishEmqxRetainedVideoVault(room, senderRole, msgId, meta, rawDataUrl) {
           if (!room || !msgId || !rawDataUrl || !String(rawDataUrl).startsWith('data:video/')) return false;
-          if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) return false;
+          if (!syncCombinedMqttFlag()) return false;
           const str = String(rawDataUrl);
           if (str.length > 4200000) return false; // Up to ~3.1MB binary video stored in EMQX Retained Cloud!
           const CHUNK = 115000;
@@ -22106,7 +22709,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         function publishEmqxBackup(room, jsonStr) {
           if (!jsonStr) return false;
-          if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) {
+          if (!syncCombinedMqttFlag()) {
             // Queue for instant flush on CONNACK so Mainland China messages NEVER drop during reconnect!
             emqxPendingQueue.push({ room, jsonStr, ts: Date.now() });
             if (emqxPendingQueue.length > 15) emqxPendingQueue = emqxPendingQueue.slice(-15);
@@ -22115,13 +22718,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           try {
             const sendWire = (wireStr) => {
-              if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1 || !wireStr) return false;
+              if (!syncCombinedMqttFlag() || !wireStr) return false;
               const topicBytes = mqttStr(getEmqxTopic(room));
               const payloadBytes = emqxEnc.encode(wireStr);
               if (payloadBytes.length > 780000) return false;
-              emqxWs.send(mqttPacket(0x30, [topicBytes, payloadBytes]));
-              emqxLastOkTs = Date.now();
-              return true;
+              return sendRawFrameToActiveMqttSockets(mqttPacket(0x30, [topicBytes, payloadBytes]));
             };
             if (window.__isE2eeActive && window.__isE2eeActive()) {
               e2eeWrapString(jsonStr).then(encStr => sendWire(encStr)).catch(() => {});
@@ -22130,25 +22731,204 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             return sendWire(jsonStr);
           } catch (_) { return false; }
         }
+        function handleParsedMqttPayload(room, rawStr, isRetainedMqtt) {
+          emqxLastOkTs = Date.now();
+          lastSyncOkTs = Math.max(lastSyncOkTs, emqxLastOkTs);
+          e2eeUnwrapString(rawStr).then((data) => {
+            if (data && data.clientId !== myDeviceClientId) {
+              const pktTs = Number(data.ts || 0);
+              const isFresh = !isRetainedMqtt && (!pktTs || (Date.now() - pktTs) <= 60000) && (Date.now() - __cwBootEpoch) > 3500;
+              if (data.v === 'pro2') mergeIncomingCoupleData(data, isFresh);
+              else if (data.v === 'cw_rvid_head' || data.v === 'cw_rvid_chunk') handleIncomingRetainedVidPkt(data);
+              else if (data.v === 'cw_recent_media_v1' && typeof window.__applyIncomingRecentMediaPack === 'function') window.__applyIncomingRecentMediaPack(data, false);
+              else if (data.v === 'pro2_signal') {
+                if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
+                  publishEmqxRetained(room, 'sync', '');
+                  if (data.minVer === 'Prime 4 · v97') return;
+                }
+                handleIncomingChatSignal(data);
+              }
+              else if (data.v === 'pro2_media') handleIncomingMediaPacket(data, isFresh);
+              else if (data.v === 'pro2_media_chunk') handleIncomingMediaChunk(data, isFresh);
+            }
+          }).catch(() => {});
+        }
+
+        function onAnyMqttConnack(ws, room) {
+          emqxLastOkTs = Date.now();
+          lastSyncOkTs = Math.max(lastSyncOkTs, emqxLastOkTs);
+          syncCombinedMqttFlag();
+          try {
+            const subWildcard = mqttStr(getEmqxRoomPrefix(room) + '/#');
+            ws.send(mqttPacket(0x82, [new Uint8Array([0, 1]), subWildcard, new Uint8Array([0])]));
+          } catch (_) {}
+          setTimeout(() => {
+            try {
+              const myR = (state && state.myRole) || 'suwan';
+              const snapBody = buildEmqxFastPacket(extractLightweightCore(state));
+              if (snapBody) publishEmqxRetained(room, 'state_' + myR, snapBody);
+              const myLatestVidMsg = ((state && state.chat && state.chat.messages) || []).slice().reverse().find(m => {
+                if (!m || !m.id) return false;
+                const s = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+                const vid = m.videoUrl || (__cwChatMediaCache && __cwChatMediaCache[m.id] && __cwChatMediaCache[m.id].videoUrl);
+                return s === myR && vid && String(vid).startsWith('data:video/') && String(vid).length <= 4200000;
+              });
+              if (myLatestVidMsg && myLatestVidMsg.id !== __lastRetainedVidUploadedId) {
+                const vUrl = myLatestVidMsg.videoUrl || (__cwChatMediaCache[myLatestVidMsg.id] && __cwChatMediaCache[myLatestVidMsg.id].videoUrl);
+                const vMeta = { msgId: myLatestVidMsg.id, sender: myLatestVidMsg.sender, time: myLatestVidMsg.time, original: myLatestVidMsg.original || '동영상을 보냈어요 🎬', translated: myLatestVidMsg.translated || '', tgtLang: myLatestVidMsg.tgtLang || '', category: myLatestVidMsg.photoCat || '✨ 일상 순간' };
+                publishEmqxRetainedVideoVault(room, myR, myLatestVidMsg.id, vMeta, vUrl).catch(() => {});
+              }
+            } catch (_) {}
+          }, 800);
+          updateLiveSyncIndicators(true, room);
+          try { if (!document.hidden && typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
+          try { if (typeof window.__stampMyHealthQuietly === 'function') setTimeout(() => window.__stampMyHealthQuietly(true), 600); } catch (_) {}
+          if (emqxPendingQueue.length) {
+            const qCopy = emqxPendingQueue.slice();
+            emqxPendingQueue = [];
+            let flushedAny = false;
+            qCopy.forEach(item => {
+              if (item && item.jsonStr && publishEmqxBackup(item.room || room, item.jsonStr)) flushedAny = true;
+            });
+            if (flushedAny && typeof window.__markMyPendingMsgsStatus === 'function') {
+              window.__markMyPendingMsgsStatus('sent');
+            }
+          }
+        }
+
+        // Engine 2B: Port-443 Standard HTTPS MQTT Twin (bypasses Qingdao cellular port-8084 filtering!)
+        function connectMqtt443Twin() {
+          const room = getSyncRoomCode();
+          if (!room) return;
+          if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+          if (mqtt443Ws && (mqtt443Ws.readyState === 0 || mqtt443Ws.readyState === 1) && mqtt443SubscribedRoom === room) return;
+          try { if (mqtt443Ws) mqtt443Ws.close(); } catch (_) {}
+          mqtt443Ok = false;
+          syncCombinedMqttFlag();
+          mqtt443SubscribedRoom = room;
+          const brokerUrl = MQTT_443_POOL[mqtt443BrokerIdx % MQTT_443_POOL.length];
+          try {
+            const ws = new WebSocket(brokerUrl, 'mqtt');
+            ws.binaryType = 'arraybuffer';
+            mqtt443Ws = ws;
+            let last443PongTs = Date.now();
+            ws.onopen = () => {
+              if (mqtt443Ws !== ws) return;
+              mqtt443RxBuf = new Uint8Array(0);
+              const cid = 'cw443_' + myDeviceClientId.slice(-9) + '_' + Math.random().toString(36).slice(2, 6);
+              const vh = new Uint8Array([0, 4, 77, 81, 84, 84, 4, 2, 0, 30]);
+              ws.send(mqttPacket(0x10, [vh, mqttStr(cid)]));
+            };
+            ws.onmessage = (ev) => {
+              if (mqtt443Ws !== ws) return;
+              try {
+                const chunk = new Uint8Array(ev.data);
+                let u;
+                if (mqtt443RxBuf.length > 0) {
+                  u = new Uint8Array(mqtt443RxBuf.length + chunk.length);
+                  u.set(mqtt443RxBuf, 0);
+                  u.set(chunk, mqtt443RxBuf.length);
+                } else {
+                  u = chunk;
+                }
+                let pos = 0;
+                while (pos < u.length) {
+                  const pktStart = pos;
+                  const type = u[pos] >> 4;
+                  const flags = u[pos] & 0x0f;
+                  pos++;
+                  let mult = 1, remLen = 0, b = 0, lenComplete = false;
+                  do {
+                    if (pos >= u.length) { pos = pktStart; break; }
+                    b = u[pos++];
+                    remLen += (b & 127) * mult;
+                    mult *= 128;
+                    if ((b & 128) === 0) lenComplete = true;
+                  } while ((b & 128) !== 0 && mult <= 2097152);
+                  if (!lenComplete) { pos = pktStart; break; }
+                  const endPos = pos + remLen;
+                  if (endPos > u.length) { pos = pktStart; break; }
+                  if (type === 2) {
+                    mqtt443Ok = true;
+                    last443PongTs = Date.now();
+                    mqtt443BrokerIdx = 0; // Pin to port 443 whenever reachable
+                    onAnyMqttConnack(ws, room);
+                    if (mqtt443PingTimer) clearInterval(mqtt443PingTimer);
+                    mqtt443PingTimer = setInterval(() => {
+                      if (document.hidden) return;
+                      if (mqtt443Ws === ws && ws.readyState === 1) {
+                        if ((Date.now() - last443PongTs) > 34000) {
+                          try { ws.close(); } catch (_) {}
+                          mqtt443Ok = false;
+                          syncCombinedMqttFlag();
+                          connectMqtt443Twin();
+                          return;
+                        }
+                        try { ws.send(new Uint8Array([0xC0, 0x00])); } catch (_) {}
+                      }
+                    }, 13000);
+                  } else if (type === 13) {
+                    last443PongTs = Date.now();
+                    emqxLastOkTs = Date.now();
+                  } else if (type === 3) {
+                    last443PongTs = Date.now();
+                    const tLen = (u[pos] << 8) | u[pos + 1];
+                    let pStart = pos + 2 + tLen;
+                    const qos = (flags >> 1) & 3;
+                    if (qos > 0) pStart += 2;
+                    if (pStart < endPos) {
+                      const rawStr = emqxDec.decode(u.subarray(pStart, endPos));
+                      handleParsedMqttPayload(room, rawStr, !!(flags & 1));
+                    }
+                  }
+                  pos = endPos;
+                }
+                mqtt443RxBuf = pos < u.length ? u.slice(pos) : new Uint8Array(0);
+                if (mqtt443RxBuf.length > 1200000) mqtt443RxBuf = new Uint8Array(0);
+              } catch (_) { mqtt443RxBuf = new Uint8Array(0); }
+            };
+            ws.onclose = () => {
+              if (mqtt443Ws !== ws) return;
+              const wasOk = mqtt443Ok;
+              mqtt443Ok = false;
+              syncCombinedMqttFlag();
+              if (!wasOk) mqtt443BrokerIdx = (mqtt443BrokerIdx + 1) % MQTT_443_POOL.length;
+              if (mqtt443PingTimer) { clearInterval(mqtt443PingTimer); mqtt443PingTimer = null; }
+              if (mqtt443ReconnectTimer) clearTimeout(mqtt443ReconnectTimer);
+              mqtt443ReconnectTimer = setTimeout(() => { if (!document.hidden) connectMqtt443Twin(); }, 2200);
+              updateLiveSyncIndicators(emqxConnected || seoulDirectJoined || syncTransportMode === 'realtime', room);
+            };
+            ws.onerror = () => { if (mqtt443Ws === ws) { mqtt443Ok = false; syncCombinedMqttFlag(); } };
+          } catch (_) {}
+        }
+
         function connectEmqxChinaDirect() {
           const room = getSyncRoomCode();
           if (!room) return;
           if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+          // Always ensure Port-443 MQTT Twin + Zero-CDN Seoul Direct WS + Live ntfy SSE are running in parallel!
+          connectMqtt443Twin();
+          connectSeoulDirectPhoenixWs();
+          if (typeof connectNtfyLiveSse === 'function') connectNtfyLiveSse();
           if (emqxWs && (emqxWs.readyState === 0 || emqxWs.readyState === 1) && emqxSubscribedRoom === room) return;
           try { if (emqxWs) emqxWs.close(); } catch (_) {}
-          emqxConnected = false;
+          emqxPrimaryOk = false;
+          syncCombinedMqttFlag();
           emqxSubscribedRoom = room;
           try {
             const ws = new WebSocket('wss://broker.emqx.io:8084/mqtt', 'mqtt');
             ws.binaryType = 'arraybuffer';
             emqxWs = ws;
+            let lastPrimaryPongTs = Date.now();
             ws.onopen = () => {
+              if (emqxWs !== ws) return;
               emqxRxBuf = new Uint8Array(0);
               const cid = 'cw_' + myDeviceClientId.slice(-10) + '_' + Math.random().toString(36).slice(2, 6);
               const vh = new Uint8Array([0, 4, 77, 81, 84, 84, 4, 2, 0, 30]); // MQTT 3.1.1, clean, keepalive 30s
               ws.send(mqttPacket(0x10, [vh, mqttStr(cid)]));
             };
             ws.onmessage = (ev) => {
+              if (emqxWs !== ws) return;
               try {
                 const chunk = new Uint8Array(ev.data);
                 let u;
@@ -22177,91 +22957,37 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   const endPos = pos + remLen;
                   if (endPos > u.length) { pos = pktStart; break; }
                   if (type === 2) { // CONNACK
-                    emqxConnected = true;
-                    emqxLastOkTs = Date.now();
-                    lastSyncOkTs = Math.max(lastSyncOkTs, emqxLastOkTs);
-                    const subWildcard = mqttStr(getEmqxRoomPrefix(room) + '/#');
-                    ws.send(mqttPacket(0x82, [new Uint8Array([0, 1]), subWildcard, new Uint8Array([0])]));
-                    setTimeout(() => {
-                      try {
-                        const myR = (state && state.myRole) || 'suwan';
-                        const snapBody = buildEmqxFastPacket(extractLightweightCore(state));
-                        if (snapBody) publishEmqxRetained(room, 'state_' + myR, snapBody);
-                        // Also vault our newest local chat video into EMQX Retained Cloud Slots so offline partner receives it automatically!
-                        const myLatestVidMsg = ((state && state.chat && state.chat.messages) || []).slice().reverse().find(m => {
-                          if (!m || !m.id) return false;
-                          const s = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
-                          const vid = m.videoUrl || (__cwChatMediaCache && __cwChatMediaCache[m.id] && __cwChatMediaCache[m.id].videoUrl);
-                          return s === myR && vid && String(vid).startsWith('data:video/') && String(vid).length <= 4200000;
-                        });
-                        if (myLatestVidMsg && myLatestVidMsg.id !== __lastRetainedVidUploadedId) {
-                          const vUrl = myLatestVidMsg.videoUrl || (__cwChatMediaCache[myLatestVidMsg.id] && __cwChatMediaCache[myLatestVidMsg.id].videoUrl);
-                          const vMeta = { msgId: myLatestVidMsg.id, sender: myLatestVidMsg.sender, time: myLatestVidMsg.time, original: myLatestVidMsg.original || '동영상을 보냈어요 🎬', translated: myLatestVidMsg.translated || '', tgtLang: myLatestVidMsg.tgtLang || '', category: myLatestVidMsg.photoCat || '✨ 일상 순간' };
-                          publishEmqxRetainedVideoVault(room, myR, myLatestVidMsg.id, vMeta, vUrl).catch(() => {});
-                        }
-                      } catch (_) {}
-                    }, 900);
+                    emqxPrimaryOk = true;
+                    lastPrimaryPongTs = Date.now();
+                    onAnyMqttConnack(ws, room);
                     if (emqxPingTimer) clearInterval(emqxPingTimer);
                     emqxPingTimer = setInterval(() => {
                       if (document.hidden) return;
-                      if (emqxWs && emqxWs.readyState === 1) {
-                        // Zombie-socket watchdog: if no PINGRESP or traffic for >32s, force clean reconnect!
-                        if (emqxLastOkTs && (Date.now() - emqxLastOkTs) > 32000) {
-                          try { emqxWs.close(); } catch (_) {}
-                          emqxConnected = false;
+                      if (emqxWs === ws && ws.readyState === 1) {
+                        if ((Date.now() - lastPrimaryPongTs) > 32000) {
+                          try { ws.close(); } catch (_) {}
+                          emqxPrimaryOk = false;
+                          syncCombinedMqttFlag();
                           connectEmqxChinaDirect();
                           return;
                         }
-                        try { emqxWs.send(new Uint8Array([0xC0, 0x00])); } catch (_) {}
-                      } else if (!emqxConnected) {
+                        try { ws.send(new Uint8Array([0xC0, 0x00])); } catch (_) {}
+                      } else if (!emqxPrimaryOk) {
                         connectEmqxChinaDirect();
                       }
                     }, 12000);
-                    updateLiveSyncIndicators(true, room);
-                    try { if (!document.hidden && typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
-                    try { if (typeof window.__stampMyHealthQuietly === 'function') setTimeout(() => window.__stampMyHealthQuietly(true), 600); } catch (_) {}
-                    if (emqxPendingQueue.length) {
-                      const qCopy = emqxPendingQueue.slice();
-                      emqxPendingQueue = [];
-                      let flushedAny = false;
-                      qCopy.forEach(item => {
-                        if (item && item.jsonStr && publishEmqxBackup(item.room || room, item.jsonStr)) flushedAny = true;
-                      });
-                      if (flushedAny && typeof window.__markMyPendingMsgsStatus === 'function') {
-                        window.__markMyPendingMsgsStatus('sent');
-                      }
-                    }
                   } else if (type === 13) { // PINGRESP
+                    lastPrimaryPongTs = Date.now();
                     emqxLastOkTs = Date.now();
                   } else if (type === 3) { // PUBLISH
+                    lastPrimaryPongTs = Date.now();
                     const tLen = (u[pos] << 8) | u[pos + 1];
                     let pStart = pos + 2 + tLen;
                     const qos = (flags >> 1) & 3;
                     if (qos > 0) pStart += 2;
                     if (pStart < endPos) {
                       const rawStr = emqxDec.decode(u.subarray(pStart, endPos));
-                      emqxLastOkTs = Date.now();
-                      lastSyncOkTs = Math.max(lastSyncOkTs, emqxLastOkTs);
-                      const isRetainedMqtt = !!(flags & 1);
-                      e2eeUnwrapString(rawStr).then((data) => {
-                        if (data && data.clientId !== myDeviceClientId) {
-                          const pktTs = Number(data.ts || 0);
-                          const isFresh = !isRetainedMqtt && (!pktTs || (Date.now() - pktTs) <= 60000) && (Date.now() - __cwBootEpoch) > 3500;
-                          if (data.v === 'pro2') mergeIncomingCoupleData(data, isFresh);
-                          else if (data.v === 'cw_rvid_head' || data.v === 'cw_rvid_chunk') handleIncomingRetainedVidPkt(data);
-                          else if (data.v === 'cw_recent_media_v1' && typeof window.__applyIncomingRecentMediaPack === 'function') window.__applyIncomingRecentMediaPack(data, false);
-                          else if (data.v === 'pro2_signal') {
-                            if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
-                              // Clear retained upgrade signal on /sync once received so it never repeats!
-                              publishEmqxRetained(room, 'sync', '');
-                              if (data.minVer === 'Prime 4 · v94') return;
-                            }
-                            handleIncomingChatSignal(data);
-                          }
-                          else if (data.v === 'pro2_media') handleIncomingMediaPacket(data, isFresh);
-                          else if (data.v === 'pro2_media_chunk') handleIncomingMediaChunk(data, isFresh);
-                        }
-                      }).catch(() => {});
+                      handleParsedMqttPayload(room, rawStr, !!(flags & 1));
                     }
                   }
                   pos = endPos;
@@ -22271,13 +22997,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               } catch (_) { emqxRxBuf = new Uint8Array(0); }
             };
             ws.onclose = () => {
-              emqxConnected = false;
+              if (emqxWs !== ws) return;
+              emqxPrimaryOk = false;
+              syncCombinedMqttFlag();
               if (emqxPingTimer) { clearInterval(emqxPingTimer); emqxPingTimer = null; }
               if (emqxReconnectTimer) clearTimeout(emqxReconnectTimer);
-              emqxReconnectTimer = setTimeout(() => { if (!document.hidden) connectEmqxChinaDirect(); }, 2000);
-              updateLiveSyncIndicators(syncTransportMode === 'realtime' || syncTransportMode === 'rest', room);
+              emqxReconnectTimer = setTimeout(() => { if (!document.hidden) connectEmqxChinaDirect(); }, 2500);
+              updateLiveSyncIndicators(emqxConnected || seoulDirectJoined || syncTransportMode === 'realtime' || syncTransportMode === 'rest', room);
             };
-            ws.onerror = () => { emqxConnected = false; };
+            ws.onerror = () => { if (emqxWs === ws) { emqxPrimaryOk = false; syncCombinedMqttFlag(); } };
           } catch (_) {}
         }
 
@@ -22327,13 +23055,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             complimentJar: (coreObj.complimentJar || []).slice(0, 2),
             coupleQuizzes: (coreObj.coupleQuizzes || []).slice(0, 2),
             chat: {
-              messages: (coreObj.chat?.messages || []).slice(-4).map(m => ({
+              messages: (coreObj.chat?.messages || []).slice(-6).map(m => ({
                 id: m.id, ts: m.ts, sender: m.sender, time: m.time,
                 original: String(m.original || '').slice(0, 220),
                 translated: String(m.translated || '').slice(0, 220),
-                pronunciation: String(m.pronunciation || '').slice(0, 120),
+                pronunciation: String(m.pronunciation || '').slice(0, 110),
                 tone: m.tone || '', engine: m.engine || '', tgtLang: m.tgtLang || '',
-                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || []
+                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
+                hasVoice: !!(m.hasVoice || m.audioUrl || String(m.id || '').startsWith('msg_v_')),
+                hasVideo: !!(m.hasVideo || m.videoUrl)
               })),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 2)
             },
@@ -22416,6 +23146,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             makerLayout: coreObj.makerLayout || null,
             lavender: coreObj.lavender || null,
             learn: coreObj.learn || undefined,
+            studyVoiceMeta: coreObj.studyVoiceMeta || undefined,
             complimentJar: (coreObj.complimentJar || []).slice(0, 4),
             coupleQuizzes: (coreObj.coupleQuizzes || []).slice(0, 4),
             chat: {
@@ -22471,13 +23202,60 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try { return JSON.stringify(pkt); } catch (_) { return null; }
         }
 
+        // Engine 3: Real-Time Port-443 ntfy.sh Live EventSource SSE (244ms verified in Qingdao!) + Smart Event-Driven Chat Relay
         let __lastEmergencyNtfySyncTs = 0;
-        async function pushNtfyBackup(room, bodyStr) {
+        let __lastInstantNtfyChatTs = 0;
+        let __lastNtfySentChatFp = '';
+        let __pendingNtfyChatTimer = null;
+        let __ntfyLiveSse = null;
+        let __ntfySseRoom = '';
+        let __ntfySseConnected = false;
+        let __ntfyInitial12hDone = false;
+
+        function computeChatRelayFingerprint(coreObj) {
+          try {
+            const msgs = (coreObj && coreObj.chat && Array.isArray(coreObj.chat.messages)) ? coreObj.chat.messages : [];
+            const last = msgs.length ? msgs[msgs.length - 1] : null;
+            const lastId = last ? String(last.id || '') : '';
+            const lastTr = last && last.translated && !/^⏳/.test(String(last.translated)) ? '1' : '0';
+            const lastEd = last ? Number(last.editedAt || 0) : 0;
+            const lastRx = last && Array.isArray(last.reactions) ? last.reactions.join(',') : '';
+            const delLen = Array.isArray(coreObj && coreObj.deletedMsgIds) ? coreObj.deletedMsgIds.length : 0;
+            return `${msgs.length}:${lastId}:${lastTr}:${lastEd}:${lastRx}:${delLen}`;
+          } catch (_) { return ''; }
+        }
+        // Initialize baseline fingerprint lazily so existing local messages don't unnecessarily fire on boot
+        function ensureInitialChatFpSeeded() {
+          if (!__lastNtfySentChatFp && state && state.chat) {
+            __lastNtfySentChatFp = computeChatRelayFingerprint(state);
+          }
+        }
+
+        async function pushNtfyBackup(room, bodyStr, forceChatInstant) {
           if (!room || !bodyStr) return false;
-          // Reserve ntfy.sh quota strictly for OS push notifications unless BOTH EMQX and Supabase have failed!
-          if ((!__sbStateUnavailable && emqxConnected) || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
-          if ((Date.now() - __lastEmergencyNtfySyncTs) < 45000) return false;
-          __lastEmergencyNtfySyncTs = Date.now();
+          ensureInitialChatFpSeeded();
+          const curFp = computeChatRelayFingerprint(state);
+          const isNewChatAction = !!(forceChatInstant || (curFp && curFp !== __lastNtfySentChatFp));
+          if (isNewChatAction) {
+            const elapsed = Date.now() - __lastInstantNtfyChatTs;
+            if (elapsed < 2200) {
+              // Coalesce rapid bursts (e.g. instant send -> translation completion 0.8s later) so final translated bubble ALWAYS arrives!
+              if (__pendingNtfyChatTimer) clearTimeout(__pendingNtfyChatTimer);
+              __pendingNtfyChatTimer = setTimeout(() => {
+                __pendingNtfyChatTimer = null;
+                const latestNtfy = buildCompactNtfyPacket(extractLightweightCore(state));
+                if (latestNtfy) pushNtfyBackup(room, latestNtfy, true).catch(() => {});
+              }, 2250 - elapsed);
+              return false;
+            }
+            __lastInstantNtfyChatTs = Date.now();
+            __lastNtfySentChatFp = curFp;
+          } else {
+            // Idle background sync (presence/mood/heart): skip ntfy if ANY live WebSocket is active to protect OS push quota!
+            if (emqxConnected || seoulDirectJoined || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
+            if ((Date.now() - __lastEmergencyNtfySyncTs) < 45000) return false;
+            __lastEmergencyNtfySyncTs = Date.now();
+          }
           try {
             const wireBody = await e2eeWrapString(bodyStr);
             if (!wireBody || new Blob([wireBody]).size > 3950) return false;
@@ -22486,7 +23264,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               headers: { 'Content-Type': 'text/plain; charset=utf-8' },
               body: wireBody
             }, 8000);
-            if (res.ok) { ntfyLastOkTs = Date.now(); return true; }
+            if (res.ok) {
+              ntfyLastOkTs = Date.now();
+              lastSyncOkTs = Math.max(lastSyncOkTs, ntfyLastOkTs);
+              return true;
+            }
           } catch (_) {}
           return false;
         }
@@ -22495,45 +23277,87 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const savedNtfyIds = JSON.parse(localStorage.getItem('cw_ntfy_seen_ids_v1') || '[]');
           if (Array.isArray(savedNtfyIds)) savedNtfyIds.forEach(x => NTFY_SEEN_IDS.add(x));
         } catch (_) {}
+
+        async function ingestNtfyEnvelopeObj(env, isLiveHint) {
+          if (!env || env.event !== 'message' || !env.message) return false;
+          if (env.id && NTFY_SEEN_IDS.has(env.id)) return false;
+          if (env.id) {
+            NTFY_SEEN_IDS.add(env.id);
+            if (NTFY_SEEN_IDS.size > 240) NTFY_SEEN_IDS.delete(NTFY_SEEN_IDS.values().next().value);
+            try { localStorage.setItem('cw_ntfy_seen_ids_v1', JSON.stringify(Array.from(NTFY_SEEN_IDS).slice(-140))); } catch (_) {}
+          }
+          ntfyLastOkTs = Date.now();
+          lastSyncOkTs = Math.max(lastSyncOkTs, ntfyLastOkTs);
+          const data = await e2eeUnwrapString(env.message);
+          if (!data || data.clientId === myDeviceClientId) return false;
+          const nowSec = Math.floor(Date.now() / 1000);
+          const ageSec = env.time ? Math.max(0, nowSec - Number(env.time)) : 0;
+          const liveNow = !!isLiveHint && ageSec <= 75 && (Date.now() - __cwBootEpoch) > 3500;
+          if (data.v === 'pro2') {
+            return !!mergeIncomingCoupleData(data, liveNow);
+          } else if (data.v === 'pro2_signal') {
+            handleIncomingChatSignal(data);
+            return true;
+          }
+          return false;
+        }
+
+        function connectNtfyLiveSse() {
+          const room = getSyncRoomCode();
+          if (!room || typeof EventSource === 'undefined') return;
+          if (document.hidden) return;
+          if (__ntfyLiveSse && __ntfySseRoom === room && __ntfyLiveSse.readyState !== 2) return;
+          try { if (__ntfyLiveSse) __ntfyLiveSse.close(); } catch (_) {}
+          __ntfySseConnected = false;
+          __ntfySseRoom = room;
+          try {
+            const sinceParam = __ntfyInitial12hDone ? '3m' : '12h';
+            const sseUrl = `https://ntfy.sh/${encodeURIComponent(getNtfyTopic(room))}/sse?since=${sinceParam}`;
+            const es = new EventSource(sseUrl);
+            __ntfyLiveSse = es;
+            es.onopen = () => {
+              if (__ntfyLiveSse !== es) return;
+              __ntfySseConnected = true;
+              __ntfyInitial12hDone = true;
+              ntfyLastOkTs = Date.now();
+              lastSyncOkTs = Math.max(lastSyncOkTs, ntfyLastOkTs);
+              updateLiveSyncIndicators(true, room);
+            };
+            es.onmessage = (ev) => {
+              if (__ntfyLiveSse !== es || !ev || !ev.data) return;
+              try {
+                const env = JSON.parse(ev.data);
+                ingestNtfyEnvelopeObj(env, true).catch(() => {});
+              } catch (_) {}
+            };
+            es.onerror = () => {
+              if (__ntfyLiveSse !== es) return;
+              __ntfySseConnected = false;
+            };
+          } catch (_) {}
+        }
+
         let __lastEmergencyNtfyPollTs = 0;
         async function pollNtfyBackup(room, isLive) {
           if (!room) return false;
-          // Never poll ntfy.sh while Supabase or EMQX is healthy (prevents HTTP 429 IP ban on ChanwanPushService!)
-          if ((!__sbStateUnavailable && emqxConnected) || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
-          if ((Date.now() - __lastEmergencyNtfyPollTs) < 60000) return false;
+          if (__ntfySseConnected && __ntfyLiveSse && __ntfyLiveSse.readyState === 1 && isLive) return false;
+          const minGap = __ntfyInitial12hDone ? 45000 : 0;
+          if ((Date.now() - __lastEmergencyNtfyPollTs) < minGap) return false;
           __lastEmergencyNtfyPollTs = Date.now();
           try {
-            const res = await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(room))}/json?poll=1&since=10m`, {}, 8000);
+            const sinceWin = __ntfyInitial12hDone ? '30m' : '12h';
+            const res = await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(room))}/json?poll=1&since=${sinceWin}`, {}, 8500);
             if (!res.ok) return false;
+            __ntfyInitial12hDone = true;
             ntfyLastOkTs = Date.now();
             const text = await res.text();
             let mergedAny = false;
-            let addedSeen = false;
-            const nowSec = Math.floor(Date.now() / 1000);
             for (const line of text.split('\n')) {
               if (!line.trim()) continue;
               try {
                 const env = JSON.parse(line);
-                if (!env || env.event !== 'message' || !env.message) continue;
-                if (env.id && NTFY_SEEN_IDS.has(env.id)) continue;
-                if (env.id) {
-                  NTFY_SEEN_IDS.add(env.id);
-                  addedSeen = true;
-                  if (NTFY_SEEN_IDS.size > 200) NTFY_SEEN_IDS.delete(NTFY_SEEN_IDS.values().next().value);
-                }
-                const data = await e2eeUnwrapString(env.message);
-                if (!data || data.clientId === myDeviceClientId) continue;
-                const ageSec = env.time ? (nowSec - Number(env.time)) : 0;
-                const liveNow = !!isLive && ageSec <= 90;
-                if (data.v === 'pro2') {
-                  if (mergeIncomingCoupleData(data, liveNow)) mergedAny = true;
-                } else if (data.v === 'pro2_signal') {
-                  handleIncomingChatSignal(data);
-                }
+                if (await ingestNtfyEnvelopeObj(env, isLive)) mergedAny = true;
               } catch (_) {}
-            }
-            if (addedSeen) {
-              try { localStorage.setItem('cw_ntfy_seen_ids_v1', JSON.stringify(Array.from(NTFY_SEEN_IDS).slice(-120))); } catch (_) {}
             }
             return mergedAny;
           } catch (_) { return false; }
@@ -22640,7 +23464,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // ==================== Prime 4 v58: Schema-Proof Permanent Cloud Media Vault inside couple_sync_state ====================
         // Uses proven couple_sync_state (room_id PK + payload JSONB) so albums, voice letters, avatars & chat media NEVER vanish even if couple_sync_events fails!
-        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v67';
+        const CW_VM_UPLOADED_KEY = 'cw_vm_uploaded_keys_v70';
         function getUploadedVaultSet() {
           try {
             const arr = JSON.parse(localStorage.getItem(CW_VM_UPLOADED_KEY) || '[]');
@@ -22668,7 +23492,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             let h = 0;
             const s = String(m.phrase || fallbackId || '');
             for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-            return cwSafeVaultKey('cv_' + Math.abs(h).toString(36));
+            const spPrefix = m.speaker === 'jingchan' ? 'cv_jc_' : 'cv_';
+            return cwSafeVaultKey(spPrefix + Math.abs(h).toString(36));
           }
           if (kind === 'chat_photo' || kind === 'chat_video' || kind === 'chat_voice') {
             return cwSafeVaultKey('cm_' + (m.msgId || fallbackId) + (m.batchIdx !== undefined ? '_' + m.batchIdx : ''));
@@ -22838,7 +23663,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           if (entry.kind === 'custom_voice') {
             for (const [phr, u] of Object.entries(state.customVoices || {})) {
-              if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr }, phr) === k) return true;
+              if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'suwan' }, phr) === k) return true;
+            }
+            for (const [phr, u] of Object.entries(state.jingchanVoices || {})) {
+              if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'jingchan' }, phr) === k) return true;
             }
           }
           return false;
@@ -22923,13 +23751,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             };
             // Publish compact media pack to EMQX Retained slot if <= 210KB so offline voices/photos arrive in 0.2s even without Supabase DB!
             try {
+              const recentStudyVoices = [];
+              for (const [phr, u] of Object.entries(state.customVoices || {}).slice(-3)) {
+                if (u) recentStudyVoices.push({ phrase: phr, speaker: 'suwan', audioUrl: normalizeAudioDataUrl(u), meta: (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {} });
+              }
+              for (const [phr, u] of Object.entries(state.jingchanVoices || {}).slice(-3)) {
+                if (u) recentStudyVoices.push({ phrase: phr, speaker: 'jingchan', audioUrl: normalizeAudioDataUrl(u), meta: (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {} });
+              }
+              packObj.studyVoices = recentStudyVoices;
               const compactPackStr = JSON.stringify({
                 v: 'cw_recent_media_v1',
                 updatedAt: packObj.updatedAt,
                 avatars,
                 albums: recentAlbums.slice(0, 3),
                 chatMedia: recentChatMedia.slice(-4),
-                voices: recentVoices.slice(0, 2)
+                voices: recentVoices.slice(0, 2),
+                studyVoices: recentStudyVoices.slice(-4)
               });
               if (compactPackStr.length <= 215000) {
                 publishEmqxRetained(room, 'mpack_' + (state.myRole || 'suwan'), compactPackStr);
@@ -22991,6 +23828,24 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   changed = true;
                 }
               }
+            }
+            if (Array.isArray(pack.studyVoices)) {
+              if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
+              if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
+              if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+              for (const sv of pack.studyVoices) {
+                if (!sv || !sv.phrase || !sv.audioUrl) continue;
+                const spk = sv.speaker === 'jingchan' ? 'jingchan' : 'suwan';
+                const dst = spk === 'jingchan' ? state.jingchanVoices : state.customVoices;
+                if (!dst[sv.phrase]) {
+                  dst[sv.phrase] = normalizeAudioDataUrl(sv.audioUrl);
+                  if (sv.meta && typeof sv.meta === 'object') {
+                    state.studyVoiceMeta[sv.phrase] = { ...(state.studyVoiceMeta[sv.phrase] || {}), ...sv.meta };
+                  }
+                  changed = true;
+                }
+              }
+              if (changed) saveSuwanVoicesNow();
             }
             if (Array.isArray(pack.voices)) {
               if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
@@ -23326,8 +24181,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const vaultKey = deriveDeterministicVaultKey(kind, meta, mediaId);
           const nowTs = Date.now();
 
-          // Channel 1: Instant China-Direct EMQX P2P (150KB paced frames so Qingdao<->Korea never drops packets!)
+          // Channel 1A: Instant Dual-MQTT P2P (Port 443 + Port 8084 simultaneously!)
           const emqxPromise = sendEmqxMediaPaced(room, kind, mediaId, meta, rawStr, nowTs).catch(() => false);
+          // Channel 1B: Instant Zero-CDN AWS Seoul Port-443 WebSocket Media Stream (delivers voice/photo/video even when MQTT is blocked!)
+          const seoulMediaPromise = sendSeoulDirectMediaPaced(room, kind, mediaId, meta, rawStr, nowTs).catch(() => false);
           if (kind === 'chat_video' && meta && meta.msgId) { publishEmqxRetainedVideoVault(room, (meta.sender || state.myRole || 'suwan'), meta.msgId, meta, rawStr).catch(() => {}); }
           // Channel 2: Permanent Cloud Vault inside proven couple_sync_state table!
           const vaultPromise = saveVaultItemToCloudState(room, vaultKey, kind, meta, rawStr).catch(() => false);
@@ -23342,9 +24199,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             } catch (_) {}
           }
 
-          const [emqxOk, vaultOk] = await Promise.all([emqxPromise, vaultPromise]);
+          const [emqxOk, seoulMOk, vaultOk] = await Promise.all([emqxPromise, seoulMediaPromise, vaultPromise]);
           pushRecentMediaPack(room).catch(() => {});
-          if (emqxOk || vaultOk || eventsOk) {
+          if (emqxOk || seoulMOk || vaultOk || eventsOk) {
             lastSyncOkTs = Date.now();
             updateLiveSyncIndicators(true, room);
             if (isVidKind) {
@@ -23360,23 +24217,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function sendChatSignal(kind, payload) {
           const room = getSyncRoomCode();
           if (!room) return;
-          const pkt = { v: 'pro2_signal', kind, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan', ...(payload || {}) };
-          // Ephemeral signals go over real-time EMQX + Supabase Broadcast + ntfy (never stored in couple_sync_events)
-          const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync' || kind === 'ping_partner_health' || kind === 'pong_partner_health');
-          if (!isEphemeral) {
-            if (!__sbEventsUnavailable) {
-              insertSupabaseEvent(room, 'signal', pkt).then((ok) => { if (ok) lastSyncOkTs = Date.now(); }).catch(() => {});
-            }
+          const sigId = 'sg_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+          const pkt = { v: 'pro2_signal', sigId, kind, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan', ...(payload || {}) };
+          const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync' || kind === 'request_peer_catchup' || kind === 'ping_partner_health' || kind === 'pong_partner_health');
+          if (!isEphemeral && !__sbEventsUnavailable) {
+            insertSupabaseEvent(room, 'signal', pkt).then((ok) => { if (ok) lastSyncOkTs = Date.now(); }).catch(() => {});
           }
+          // 1) Zero-CDN AWS Seoul Direct Port-443 WebSocket (works in China with 0 CDN!)
+          const sentSeoulDirect = sendSeoulDirectBroadcast('cw_sig', pkt);
+          // 2) Fallback sbChannel only if seoulDirectWs isn't joined yet
           try {
-            if (sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function') {
+            if (!sentSeoulDirect && sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function') {
               sbChannel.send({ type: 'broadcast', event: 'cw_sig', payload: pkt }).catch(() => {});
             }
           } catch (_) {}
+          // 3) Dual-MQTT (Port 443 + Port 8084) + Port-443 ntfy instant relay for critical signals
           try {
             const sStr = JSON.stringify(pkt);
             publishEmqxBackup(room, sStr);
-            if (!isEphemeral && new Blob([sStr]).size <= 3800) pushNtfyBackup(room, sStr);
+            if ((!isEphemeral || kind === 'ping_partner_health') && new Blob([sStr]).size <= 3800) {
+              pushNtfyBackup(room, sStr, kind === 'remote_force_update' || kind === 'delete');
+            }
           } catch (_) {}
         }
         window.__sendChatSignal = sendChatSignal;
@@ -23428,6 +24289,26 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function handleIncomingChatSignal(sig) {
           if (!sig || sig.v !== 'pro2_signal') return;
           if (sig.clientId && sig.clientId === myDeviceClientId) return;
+          if (sig.sigId) {
+            if (RECENT_SIG_IDS.has(sig.sigId)) return;
+            RECENT_SIG_IDS.add(sig.sigId);
+            if (RECENT_SIG_IDS.size > 300) RECENT_SIG_IDS.delete(RECENT_SIG_IDS.values().next().value);
+          }
+          if (sig.kind === 'request_peer_catchup') {
+            if ((Date.now() - __lastPeerCatchupReplyTs) > 2500) {
+              __lastPeerCatchupReplyTs = Date.now();
+              try {
+                const rm = getSyncRoomCode();
+                const fastBody = buildEmqxFastPacket(extractLightweightCore(state));
+                if (fastBody) {
+                  sendSeoulDirectBroadcast('cw_delta', JSON.parse(fastBody));
+                  if (rm) publishEmqxBackup(rm, fastBody);
+                }
+                if (typeof window.__respondToPartnerVaultRequest === 'function') window.__respondToPartnerVaultRequest(sig);
+              } catch (_) {}
+            }
+            return;
+          }
           const pName = sig.myRole === 'suwan' ? '수완(完)' : '靖灿(灿)';
           if (sig.kind === 'request_vault_sync') {
             if (typeof window.__respondToPartnerVaultRequest === 'function') {
@@ -23443,6 +24324,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             window.__cwPartnerPresence[sig.myRole] = { online: !!sig.online, explicitOffline: !sig.online, lastSeen: nextLastSeen };
             if (typeof window.__savePartnerLastSeen === 'function') window.__savePartnerLastSeen(sig.myRole, nextLastSeen);
             if (typeof window.__renderPresenceBadges === 'function') window.__renderPresenceBadges();
+            if (sig.online && typeof window.__maybeAutoUpgradeOldPartnerOnSight === 'function') {
+              const knownH = state.profile ? state.profile[sig.myRole + 'Health'] : null;
+              setTimeout(() => window.__maybeAutoUpgradeOldPartnerOnSight(sig.myRole, knownH, true), 200);
+            }
             if (sig.online && sig.needReply && !document.hidden && typeof window.__broadcastPresenceNow === 'function') {
               window.__broadcastPresenceNow(true, false);
             }
@@ -23553,6 +24438,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!state.pendingVoiceMetaMap || typeof state.pendingVoiceMetaMap !== 'object') state.pendingVoiceMetaMap = {};
               state.pendingVoiceMetaMap[sig.vlId] = { id: sig.vlId, source: sig.source, reactions: sig.reactions, comments: sig.comments, deletedCommentIds: sig.deletedCommentIds, updatedAt: sig.updatedAt };
             }
+          } else if (sig.kind === 'del_custom_voice' && sig.phrase) {
+            const spk = sig.speaker === 'jingchan' ? 'jingchan' : 'suwan';
+            if (spk === 'jingchan' && state.jingchanVoices && state.jingchanVoices[sig.phrase]) {
+              delete state.jingchanVoices[sig.phrase];
+              if (state.studyVoiceMeta && state.studyVoiceMeta[sig.phrase]) state.studyVoiceMeta[sig.phrase].jingchanAt = 0;
+              saveSuwanVoicesNow(); saveState(false); renderLearn(); renderHome();
+            } else if (spk === 'suwan' && state.customVoices && state.customVoices[sig.phrase]) {
+              delete state.customVoices[sig.phrase];
+              if (state.studyVoiceMeta && state.studyVoiceMeta[sig.phrase]) state.studyVoiceMeta[sig.phrase].suwanAt = 0;
+              saveSuwanVoicesNow(); saveState(false); renderLearn(); renderHome();
+            }
           } else if (sig.kind === 'delete' && sig.msgId) {
             if (typeof window.__stopChatVoiceIfPlaying === 'function') window.__stopChatVoiceIfPlaying(sig.msgId);
             if (!Array.isArray(state.deletedMsgIds)) state.deletedMsgIds = [];
@@ -23654,7 +24550,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             (pkt.kind === 'chat_video' && (!(state.chat?.messages || []).some(x => x && x.id === m.msgId && x.videoUrl) || !(state.albums || []).some(a => a && a.id === (m.albumId || `alb_sync_${m.msgId || ''}`) && a.dataUrl))) ||
             (pkt.kind === 'chat_voice' && !(state.chat?.messages || []).some(x => x && x.id === m.msgId && x.audioUrl)) ||
             (pkt.kind === 'voice_letter' && !(state.voiceLetters || []).some(v => v && v.id === m.id && v.audioUrl)) ||
-            (pkt.kind === 'avatar' && !(m.target === 'suwan' ? state.profile?.suwanAvatar : state.profile?.jingchanAvatar))
+            (pkt.kind === 'avatar' && !(m.target === 'suwan' ? state.profile?.suwanAvatar : state.profile?.jingchanAvatar)) ||
+            (pkt.kind === 'custom_voice' && m.phrase && !((m.speaker === 'jingchan' ? state.jingchanVoices : state.customVoices)?.[m.phrase]))
           );
           if (isSelfPkt && !needsRecovery) return false;
           if (processedMediaIds.has(mid) && !needsRecovery) return false;
@@ -23812,11 +24709,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               saveState(false); renderHome(); renderChat();
             }
           } else if (pkt.kind === 'custom_voice' && m.phrase) {
-            if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
-            state.customVoices[m.phrase] = localDataUrl; saveSuwanVoicesNow();
+            const spk = (m.speaker === 'jingchan' || (!m.speaker && pkt.myRole === 'jingchan')) ? 'jingchan' : 'suwan';
+            if (spk === 'jingchan') {
+              if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
+              state.jingchanVoices[m.phrase] = localDataUrl;
+            } else {
+              if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
+              state.customVoices[m.phrase] = localDataUrl;
+            }
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            const prevM = state.studyVoiceMeta[m.phrase] || {};
+            state.studyVoiceMeta[m.phrase] = {
+              zh: m.zh || prevM.zh || '',
+              question: m.question || prevM.question || '',
+              source: m.source || prevM.source || '학습 보이스',
+              suwanAt: spk === 'suwan' ? (pkt.ts || Date.now()) : (prevM.suwanAt || 0),
+              jingchanAt: spk === 'jingchan' ? (pkt.ts || Date.now()) : (prevM.jingchanAt || 0)
+            };
+            saveSuwanVoicesNow();
             changed = true;
             saveState(false); renderLearn(); renderHome();
-            if (isLiveEvent) pushNotification('🎙️', `${pName}의 새 목소리 녹음 도착!`, `${pName}发来新的原声录音！`, `"${m.phrase}" — 이제 🔊로 바로 들을 수 있어요 💜`, `「${m.phrase}」— 现在点 🔊 就能听到原声啦 💜`, 'learn', 'cheat', 'post', false, pkt.myRole);
+            const spNameKo = spk === 'jingchan' ? '징찬(灿)' : '수완(完)';
+            const spNameZh = spk === 'jingchan' ? '靖灿(灿)' : '秀完(完)';
+            if (isLiveEvent) pushNotification('🎙️', `${spNameKo}의 새 학습 보이스 도착!`, `${spNameZh}录制了新的学习原声！`, `"${m.phrase}" — [우리 녹음 모음]에서 바로 들어보세요 💜`, `「${m.phrase}」— 快去「双人原声题库」听听看吧 💜`, 'learn', 'voices', 'post', false, spk);
           } else if (pkt.kind === 'voice_letter') {
             if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
             const vlId = m.id || `vl_${Date.now()}`;
@@ -23921,6 +24836,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             complimentJar: (coreObj.complimentJar || []).slice(0, 80),
             coupleQuizzes: (coreObj.coupleQuizzes || []).slice(0, 50),
             learn: coreObj.learn || {},
+            studyVoiceMeta: coreObj.studyVoiceMeta || {},
             chat: {
               pinnedMsg: coreObj.chat?.pinnedMsg || null,
               messages: (() => {
@@ -24005,10 +24921,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           );
           const __canUpsertSnap = !__sbStateUnavailable && !!window.__cwInitialPullDone && __hasRealLocalData;
 
-          // Broadcast delta instantaneously over Seoul Supabase Realtime WebSocket (0.08s!) if subscribed
+          // Broadcast delta instantaneously over Zero-CDN AWS Seoul Direct Port-443 WebSocket (0.05s, works in Qingdao without external CDN!)
           let sbRealtimeSent = false;
           try {
-            if (sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function' && emqxBody) {
+            if (emqxBody && sendSeoulDirectBroadcast('cw_delta', JSON.parse(emqxBody))) {
+              sbRealtimeSent = true;
+            } else if (sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function' && emqxBody) {
               sbChannel.send({ type: 'broadcast', event: 'cw_delta', payload: JSON.parse(emqxBody) }).catch(() => {});
               sbRealtimeSent = true;
             }
@@ -24063,9 +24981,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           }
         }
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            try {
+              connectSeoulDirectPhoenixWs();
+              connectEmqxChinaDirect();
+              connectNtfyLiveSse();
+            } catch (_) {}
+          }
+        });
         window.addEventListener('online', () => {
           try {
+            connectSeoulDirectPhoenixWs();
             connectEmqxChinaDirect();
+            connectNtfyLiveSse();
             const hasPendingOrFailed = (state.chat?.messages || []).some(m => m && (m.deliveryStatus === 'failed' || m.deliveryStatus === 'sending'));
             if (hasPendingOrFailed) {
               pushCloudSyncDelta(extractLightweightCore(state));
@@ -24157,61 +25086,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function connectLiveSyncStream() {
           const room = getSyncRoomCode();
           if (!room) return;
-          // Priority #1 (China Direct): Connect EMQX Mainland China WebSocket FIRST!
+          // Connect ALL 4 Port-443 / Multi-Region Channels immediately with ZERO external CDN wait!
+          connectSeoulDirectPhoenixWs();
           connectEmqxChinaDirect();
-          // Priority #2: Connect Supabase Seoul Realtime WebSocket in parallel
+          connectNtfyLiveSse();
+          // Optional secondary Postgres CDC listener if supabase-js loaded AND couple_sync_state table exists
           try {
-            if (window.supabase && typeof window.supabase.createClient === 'function') {
+            if (!__sbStateUnavailable && window.supabase && typeof window.supabase.createClient === 'function') {
               if (!sbClient) {
                 sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
                   auth: { persistSession: false, autoRefreshToken: false },
                   realtime: { params: { eventsPerSecond: 10 } }
                 });
               }
-              if (sbChannel) {
-                try { sbClient.removeChannel(sbChannel); } catch (_) {}
-                sbChannel = null;
-              }
               if (window.__sbPgChannel) {
                 try { sbClient.removeChannel(window.__sbPgChannel); } catch (_) {}
                 window.__sbPgChannel = null;
               }
-              // Pure WebSocket Broadcast Channel: NEVER fails with CHANNEL_ERROR even if DB Realtime publication is off!
-              sbChannel = sbClient
-                .channel(`chanwan-bcast-${room}`, { config: { broadcast: { self: false } } })
-                .on('broadcast', { event: 'cw_sig' }, (msg) => {
-                  try {
-                    sbLastOkTs = Date.now();
-                    lastSyncOkTs = Date.now();
-                    if (msg && msg.payload) handleIncomingChatSignal(msg.payload);
-                  } catch (_) {}
-                })
-                .on('broadcast', { event: 'cw_delta' }, (msg) => {
-                  try {
-                    if (msg && msg.payload && msg.payload.clientId !== myDeviceClientId) {
-                      sbLastOkTs = Date.now();
-                      lastSyncOkTs = Date.now();
-                      mergeIncomingCoupleData(msg.payload, true);
-                      updateLiveSyncIndicators(true, room);
-                    }
-                  } catch (_) {}
-                })
-                .subscribe((status) => {
-                  if (status === 'SUBSCRIBED') {
-                    syncTransportMode = 'realtime';
-                    liveSyncSource = { readyState: 1 };
-                    sbLastOkTs = Date.now();
-                    lastSyncOkTs = Date.now();
-                    updateLiveSyncIndicators(true, room);
-                    flushSyncOutbox();
-                  } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-                    liveSyncSource = null;
-                    if (syncTransportMode === 'realtime') syncTransportMode = 'rest';
-                    updateLiveSyncIndicators(sbLastOkTs > 0, room);
-                  }
-                });
-
-              // Optional secondary DB change listener on couple_sync_state (isolated so it never breaks sbChannel!)
               window.__sbPgChannel = sbClient
                 .channel(`chanwan-pgstate-${room}`)
                 .on(
@@ -24247,18 +25138,25 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           respondVaultNow: () => { try { respondToPartnerVaultRequest({}); } catch (_) {} },
           forceReconnectMyNet: async () => {
             try { if (emqxWs) emqxWs.close(); } catch (_) {}
-            emqxWs = null;
-            emqxConnected = false;
-            emqxSubscribedRoom = '';
+            try { if (mqtt443Ws) mqtt443Ws.close(); } catch (_) {}
+            try { if (seoulDirectWs) seoulDirectWs.close(); } catch (_) {}
+            try { if (__ntfyLiveSse) __ntfyLiveSse.close(); } catch (_) {}
+            emqxWs = null; mqtt443Ws = null; seoulDirectWs = null; __ntfyLiveSse = null;
+            emqxPrimaryOk = false; mqtt443Ok = false; emqxConnected = false; seoulDirectJoined = false; __ntfySseConnected = false;
+            emqxSubscribedRoom = ''; mqtt443SubscribedRoom = ''; seoulDirectRoom = ''; __ntfySseRoom = '';
             connectLiveSyncStream();
             try { await flushSyncOutbox(); } catch (_) {}
             try { await pullCloudSync(false); } catch (_) {}
+          },
+          markSbStateAvailable: () => {
+            __sbStateUnavailable = false;
+            try { sessionStorage.removeItem('cw_sb_state_unavail_v1'); } catch (_) {}
           },
           sendRetainedUpgradeSignal: (targetRole, cmdTs) => {
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v94', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v97', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               publishEmqxRetained(rm, 'sync', pkt);
             } catch (_) {}
           },
@@ -24266,7 +25164,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v97', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               const wire = await e2eeWrapString(pkt);
               await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
                 method: 'POST',
@@ -24276,10 +25174,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             } catch (_) {}
           },
           getNetStats: () => ({
-            emqxOk: !!emqxConnected,
-            sbOk: !!(sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime',
-            ntfyOk: !!(ntfyLastOkTs > 0 && (Date.now() - ntfyLastOkTs) < 180000),
-            mode: syncTransportMode,
+            emqxOk: !!(emqxConnected || __ntfySseConnected),
+            mqtt443Ok: !!mqtt443Ok,
+            seoulDirectOk: !!seoulDirectJoined,
+            ntfySseOk: !!__ntfySseConnected,
+            sbOk: !!(seoulDirectJoined || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime'),
+            ntfyOk: !!(__ntfySseConnected || (ntfyLastOkTs > 0 && (Date.now() - ntfyLastOkTs) < 180000)),
+            mode: seoulDirectJoined ? 'realtime' : syncTransportMode,
             outboxCnt: loadSyncOutbox().length
           })
         };
@@ -25468,9 +26369,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             for (const [phr, cvUrl] of customVoiceEntries) {
               const normCv = normalizeAudioDataUrl(cvUrl);
               if (!normCv || !normCv.startsWith('data:audio/')) continue;
-              const meta = { phrase: phr };
-              await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_${Date.now()}`, meta, normCv, Date.now());
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              const meta = { phrase: phr, speaker: 'suwan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
+              await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_sw_${Date.now()}`, meta, normCv, Date.now());
+              await sendSeoulDirectMediaPaced(room, 'custom_voice', `p2p_cv_sw_${Date.now()}`, meta, normCv, Date.now());
               await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normCv);
+            }
+            for (const [phr, jcUrl] of Object.entries(state.jingchanVoices || {}).slice(0, 80)) {
+              const normJc = normalizeAudioDataUrl(jcUrl);
+              if (!normJc || !normJc.startsWith('data:audio/')) continue;
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              const meta = { phrase: phr, speaker: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
+              await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_jc_${Date.now()}`, meta, normJc, Date.now());
+              await sendSeoulDirectMediaPaced(room, 'custom_voice', `p2p_cv_jc_${Date.now()}`, meta, normJc, Date.now());
+              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normJc);
             }
           } catch (_) {} finally {
             setTimeout(() => { __isStreamingVaultToPartner = false; }, 4000);
@@ -25557,10 +26469,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             for (const [phr, cvUrl] of Object.entries(state.customVoices || {})) {
               const normCv = normalizeAudioDataUrl(cvUrl);
               if (!normCv || !normCv.startsWith('data:audio/')) continue;
-              const meta = { phrase: phr };
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              const meta = { phrase: phr, speaker: 'suwan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
               const vk = deriveDeterministicVaultKey('custom_voice', meta, phr);
               if (!isAlreadyBackedUp(vk)) {
                 await saveVaultItemToCloudState(room, vk, 'custom_voice', meta, normCv);
+              }
+            }
+            for (const [phr, jcUrl] of Object.entries(state.jingchanVoices || {})) {
+              const normJc = normalizeAudioDataUrl(jcUrl);
+              if (!normJc || !normJc.startsWith('data:audio/')) continue;
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              const meta = { phrase: phr, speaker: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
+              const vk = deriveDeterministicVaultKey('custom_voice', meta, phr);
+              if (!isAlreadyBackedUp(vk)) {
+                await saveVaultItemToCloudState(room, vk, 'custom_voice', meta, normJc);
               }
             }
             for (const cm of localChatMedia.slice(-40)) {
@@ -26750,6 +27673,333 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         return out;
       }
 
+
+      /* ==================== DUAL-PARTNER RECORDED QUESTIONS & VOICES HUB (v97) ==================== */
+      let svActiveMode = 'list';
+      let svActiveFilter = 'all';
+      let svQuizIdx = 0;
+
+      function collectAllRecordedStudyItems() {
+        const swMap = (state && state.customVoices && typeof state.customVoices === 'object') ? state.customVoices : {};
+        const jcMap = (state && state.jingchanVoices && typeof state.jingchanVoices === 'object') ? state.jingchanVoices : {};
+        const metaMap = (state && state.studyVoiceMeta && typeof state.studyVoiceMeta === 'object') ? state.studyVoiceMeta : {};
+        const keys = new Set([
+          ...Object.keys(swMap).filter(k => !!swMap[k]),
+          ...Object.keys(jcMap).filter(k => !!jcMap[k]),
+          ...Object.keys(metaMap).filter(k => metaMap[k] && (metaMap[k].suwanAt || metaMap[k].jingchanAt))
+        ]);
+        const items = [];
+        for (const phrase of keys) {
+          const clean = String(phrase || '').trim();
+          if (!clean) continue;
+          const swUrl = swMap[clean] || '';
+          const jcUrl = jcMap[clean] || '';
+          const m = metaMap[clean] || {};
+          const hasSw = !!(swUrl || m.suwanAt);
+          const hasJc = !!(jcUrl || m.jingchanAt);
+          if (!hasSw && !hasJc) continue;
+          const resolved = resolvePhraseMetaInfo(clean, m);
+          const latestTs = Math.max(Number(m.suwanAt || 0), Number(m.jingchanAt || 0));
+          items.push({
+            phrase: clean,
+            zh: resolved.zh || '',
+            question: resolved.question || '',
+            source: resolved.source || '학습 보이스',
+            pron: (typeof romanizeKoreanBasic === 'function' && /[가-힣]/.test(clean)) ? romanizeKoreanBasic(clean) : '',
+            hasSw,
+            hasJc,
+            swUrl,
+            jcUrl,
+            latestTs
+          });
+        }
+        items.sort((a, b) => (b.latestTs - a.latestTs) || ((b.hasSw && b.hasJc ? 1 : 0) - (a.hasSw && a.hasJc ? 1 : 0)));
+        return items;
+      }
+
+      function renderStudyVoicesHub() {
+        const listEl = document.getElementById('svRecordedList');
+        const quizEl = document.getElementById('svVoiceQuizWrap');
+        const fltWrap = document.getElementById('svFilterControls');
+        if (!listEl || !quizEl) return;
+
+        const isZh = state.lang === 'zh';
+        const allItems = collectAllRecordedStudyItems();
+        const bothCnt = allItems.filter(x => x.hasSw && x.hasJc).length;
+        const swCnt = allItems.filter(x => x.hasSw).length;
+        const jcCnt = allItems.filter(x => x.hasJc).length;
+
+        const setT = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+        setT('svHubSubTag', isZh ? '🎙️ 秀完 & 靖灿 双人原声录音室' : '🎙️ 수완 & 징찬 듀얼 보이스 스튜디오');
+        setT('svHubTitle', isZh ? '🎧 我们录制的题目与表达合集' : '🎧 우리가 녹음한 문제 · 표현 모아보기');
+        setT('svModeListBtn', isZh ? '🎧 录音合集' : '🎧 녹음 모음');
+        setT('svModeQuizBtn', isZh ? '🎯 原声测验' : '🎯 목소리 퀴즈');
+        setT('svQuickAddLabel', isZh ? '✨ 直接输入新句子或题目并录制原声' : '✨ 새 문장·문제 직접 입력하고 목소리 녹음하기');
+        setT('svQuickRecBtn', isZh ? '🎙️ 录音' : '🎙️ 녹음');
+        const koInp = document.getElementById('svQuickKoInput');
+        const zhInp = document.getElementById('svQuickZhInput');
+        const srchInp = document.getElementById('svSearchInput');
+        if (koInp) koInp.placeholder = isZh ? '输入韩语句子或题目（例：오늘 뭐 먹었어?）' : '한국어 문제 또는 표현 입력 (예: 오늘 뭐 먹었어?)';
+        if (zhInp) zhInp.placeholder = isZh ? '中文意思（留空则自动翻译）' : '중국어 뜻 (비워두면 자동 번역)';
+        if (srchInp) srchInp.placeholder = isZh ? '搜索已录制的题目...' : '녹음한 문제·표현 검색...';
+
+        setT('svFltAll', isZh ? `✨ 全部 ${allItems.length}` : `✨ 전체 ${allItems.length}`);
+        setT('svFltBoth', isZh ? `💑 双人合录 ${bothCnt}` : `💑 둘 다 녹음 ${bothCnt}`);
+        setT('svFltSuwan', isZh ? `❤️ 秀完 ${swCnt}` : `❤️ 수완 ${swCnt}`);
+        setT('svFltJingchan', isZh ? `💜 靖灿 ${jcCnt}` : `💜 징찬 ${jcCnt}`);
+
+        document.querySelectorAll('.sv-mode-btn').forEach(b => {
+          const act = b.getAttribute('data-sv-mode') === svActiveMode;
+          b.className = `sv-mode-btn ${act ? 'btn-royal' : 'btn-ghost'} px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap`;
+        });
+        document.querySelectorAll('.sv-filter-btn').forEach(b => {
+          const act = b.getAttribute('data-sv-filter') === svActiveFilter;
+          b.className = `sv-filter-btn ${act ? 'btn-royal' : 'btn-ghost'} px-2.5 py-1 rounded-full text-[10.5px] font-semibold whitespace-nowrap`;
+        });
+
+        if (svActiveMode === 'quiz') {
+          if (fltWrap) fltWrap.classList.add('hidden');
+          listEl.classList.add('hidden');
+          quizEl.classList.remove('hidden');
+          renderStudyVoicesQuiz(allItems);
+          return;
+        }
+
+        if (fltWrap) fltWrap.classList.remove('hidden');
+        listEl.classList.remove('hidden');
+        quizEl.classList.add('hidden');
+
+        const kw = (srchInp && srchInp.value || '').trim().toLowerCase();
+        const filtered = allItems.filter(it => {
+          if (svActiveFilter === 'both' && !(it.hasSw && it.hasJc)) return false;
+          if (svActiveFilter === 'suwan' && !it.hasSw) return false;
+          if (svActiveFilter === 'jingchan' && !it.hasJc) return false;
+          if (kw && !it.phrase.toLowerCase().includes(kw) && !it.zh.toLowerCase().includes(kw) && !it.question.toLowerCase().includes(kw)) return false;
+          return true;
+        });
+
+        if (!filtered.length) {
+          listEl.innerHTML = `
+            <div class="royal-card rounded-3xl p-6 text-center space-y-2">
+              <div class="text-2xl">🎙️💑</div>
+              <div class="text-sm font-bold">${isZh ? '还没有符合筛选的原声录音哦' : '아직 이 분류에 녹음된 문제·표현이 없어요'}</div>
+              <div class="text-xs text-mut leading-relaxed">${isZh
+                ? '在「今日表达」「分级测验」「万能会话书」点卡片右侧的 🎙️ 按钮，或在上方输入框直接录入句子，秀完和靖灿的录音都会自动汇总到这里 ✨'
+                : '[오늘의 표현] · [단계별 퀴즈] · [만능 회화책] 옆의 🎙️ 버튼을 누르거나 위 입력창에 문장을 적어 녹음하면 수완·징찬 목소리 문제가 여기에 차곡차곡 모여요 ✨'}</div>
+            </div>`;
+          return;
+        }
+
+        listEl.innerHTML = filtered.map((it, idx) => {
+          const srcLabel = isZh ? localizeLearnCatZh(it.source) : it.source;
+          return `
+            <div class="royal-card rounded-3xl p-4 space-y-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0 flex-1 space-y-0.5">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">#${idx + 1} · ${escapeHtml(srcLabel)}</span>
+                    ${(it.hasSw && it.hasJc) ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: rgba(16,185,129,0.14); color: #059669;">${isZh ? '💑 双人已合录' : '💑 둘 다 녹음 완료'}</span>` : ''}
+                  </div>
+                  ${it.question && it.question !== it.phrase ? `<div class="text-[11.5px] font-semibold text-champagne mt-1">Q. ${escapeHtml(it.question)}</div>` : ''}
+                  <div class="text-base font-bold leading-snug break-words mt-0.5">${escapeHtml(it.phrase)}</div>
+                  ${it.zh ? `
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                      <span class="text-xs text-sec break-words">${escapeHtml(it.zh)}</span>
+                      <button type="button" class="speak-btn btn-ghost px-1.5 py-0.5 rounded-full text-[10px] font-semibold shrink-0" data-text="${escapeHtml(it.zh)}" data-lang="zh-CN">🇨🇳🔊</button>
+                    </div>` : ''}
+                  ${it.pron ? `<div class="text-[10.5px] text-mut break-words">[${escapeHtml(it.pron)}]</div>` : ''}
+                </div>
+              </div>
+
+              <!-- Side-by-Side Suwan Voice & Jingchan Voice Controls -->
+              <div class="grid grid-cols-2 gap-2 pt-1.5 border-t" style="border-color: var(--border-subtle);">
+                <div class="rounded-2xl p-2 flex items-center justify-between gap-1" style="background: var(--surface-2); border: 1px solid ${it.hasSw ? 'rgba(244,63,94,0.34)' : 'var(--border-subtle)'};">
+                  ${it.hasSw
+                    ? `<button type="button" class="speak-partner-voice-btn flex-1 min-w-0 text-left text-xs font-bold truncate" style="color: #e11d48;" data-text="${escapeHtml(it.phrase)}" data-voice-role="suwan">❤️ ${isZh ? '听秀完原声 ▶' : '수완 보이스 ▶'}</button>
+                       <div class="flex items-center gap-0.5 shrink-0">
+                         <button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan" title="${isZh ? '重录秀完原声' : '수완 재녹음'}">🎙️</button>
+                         <button type="button" class="del-voice-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(it.phrase)}" data-speaker="suwan" title="${isZh ? '删除' : '삭제'}">✕</button>
+                       </div>`
+                    : `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan">❤️ ${isZh ? '秀完去录音 🎙️' : '수완 녹음하기 🎙️'}</button>`}
+                </div>
+
+                <div class="rounded-2xl p-2 flex items-center justify-between gap-1" style="background: var(--surface-2); border: 1px solid ${it.hasJc ? 'rgba(139,92,246,0.38)' : 'var(--border-subtle)'};">
+                  ${it.hasJc
+                    ? `<button type="button" class="speak-partner-voice-btn flex-1 min-w-0 text-left text-xs font-bold truncate" style="color: #7c3aed;" data-text="${escapeHtml(it.phrase)}" data-voice-role="jingchan">💜 ${isZh ? '听靖灿原声 ▶' : '징찬 보이스 ▶'}</button>
+                       <div class="flex items-center gap-0.5 shrink-0">
+                         <button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan" title="${isZh ? '重录靖灿原声' : '징찬 재녹음'}">🎙️</button>
+                         <button type="button" class="del-voice-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(it.phrase)}" data-speaker="jingchan" title="${isZh ? '删除' : '삭제'}">✕</button>
+                       </div>`
+                    : `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan">💜 ${isZh ? '靖灿去录音 🎙️' : '징찬 녹음하기 🎙️'}</button>`}
+                </div>
+              </div>
+
+              ${(it.hasSw && it.hasJc) ? `
+                <div class="flex justify-end">
+                  <button type="button" class="speak-duo-relay-btn btn-gold px-3 py-1 rounded-full text-[11px] font-bold" data-text="${escapeHtml(it.phrase)}">🔁 ${isZh ? '双人连播 (秀完 → 靖灿)' : '둘의 목소리 이어듣기 (수완 → 징찬)'}</button>
+                </div>` : ''}
+            </div>`;
+        }).join('');
+      }
+
+      function renderStudyVoicesQuiz(allItems) {
+        const quizEl = document.getElementById('svVoiceQuizWrap');
+        if (!quizEl) return;
+        const isZh = state.lang === 'zh';
+        const playable = (allItems || []).filter(x => (x.swUrl || x.jcUrl) && (x.zh || x.question));
+        if (playable.length < 1) {
+          quizEl.innerHTML = `
+            <div class="royal-card rounded-3xl p-6 text-center space-y-2">
+              <div class="text-2xl">🎧🎯</div>
+              <div class="text-sm font-bold">${isZh ? '先录制至少 1 道原声题目即可开始测验！' : '목소리가 녹음된 표현이 1개 이상 있으면 바로 우리 목소리 퀴즈가 열려요!'}</div>
+              <div class="text-xs text-mut">${isZh ? '用秀完和靖灿的真实声音出听力题，答对可获得 +15 XP 💜' : '수완·징찬의 실제 목소리를 듣고 뜻을 맞히는 특별 퀴즈예요 (+15 XP) 💜'}</div>
+            </div>`;
+          return;
+        }
+        const target = playable[svQuizIdx % playable.length];
+        const speakerToPlay = (target.swUrl && target.jcUrl)
+          ? ((svQuizIdx % 2 === 0) ? 'suwan' : 'jingchan')
+          : (target.swUrl ? 'suwan' : 'jingchan');
+        const spBadge = speakerToPlay === 'jingchan'
+          ? (isZh ? '💜 靖灿原声出题' : '💜 징찬 보이스 문제')
+          : (isZh ? '❤️ 秀完原声出题' : '❤️ 수완 보이스 문제');
+        const correctMeaning = target.zh || target.phrase;
+        const distractorPool = (typeof CHEAT_SHEET_72 !== 'undefined' ? CHEAT_SHEET_72 : [])
+          .map(x => x.zh)
+          .filter(z => z && z !== correctMeaning);
+        const distractors = [];
+        let seedIdx = (svQuizIdx * 7 + target.phrase.length * 3) % Math.max(1, distractorPool.length);
+        while (distractors.length < 3 && distractorPool.length > 3) {
+          const cand = distractorPool[seedIdx % distractorPool.length];
+          if (cand && !distractors.includes(cand)) distractors.push(cand);
+          seedIdx += 5;
+        }
+        const options = [correctMeaning, ...distractors];
+        for (let i = options.length - 1; i > 0; i--) {
+          const j = (svQuizIdx + i * 3) % (i + 1);
+          const tmp = options[i]; options[i] = options[j]; options[j] = tmp;
+        }
+
+        quizEl.innerHTML = `
+          <div class="royal-card rounded-3xl p-5 space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full" style="background: var(--accent-royal-soft); color: var(--accent-royal);">${spBadge}</span>
+              <span class="text-xs text-mut font-semibold">#${(svQuizIdx % playable.length) + 1} / ${playable.length}</span>
+            </div>
+            <div class="royal-subcard rounded-2xl p-4 text-center space-y-3">
+              <div class="text-xs text-sec font-semibold">${isZh ? '点击下方播放键，听听TA说的是哪一句？🎧' : '아래 재생 버튼을 눌러 우리 목소리를 듣고 알맞은 뜻을 골라보세요 🎧'}</div>
+              <div class="flex items-center justify-center gap-2">
+                <button type="button" class="speak-partner-voice-btn btn-royal px-5 py-2.5 rounded-full text-xs font-bold" data-text="${escapeHtml(target.phrase)}" data-voice-role="${speakerToPlay}">🔊 ${isZh ? '播放原声' : '목소리 듣기'}</button>
+                <button type="button" class="speak-partner-voice-btn btn-ghost px-4 py-2.5 rounded-full text-xs font-semibold" data-text="${escapeHtml(target.phrase)}" data-voice-role="${speakerToPlay}" data-slow="1">🐢 ${isZh ? '慢速听' : '천천히'}</button>
+              </div>
+              <div id="svQuizRevealPhrase" class="hidden text-base font-bold text-gold pt-1">${escapeHtml(target.phrase)}</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="svQuizOptsGrid">
+              ${options.map(opt => `<button type="button" class="sv-quiz-opt-btn royal-subcard hover:border-purple-400 rounded-2xl p-3 text-left text-xs font-semibold transition" data-ans="${escapeHtml(opt)}" data-correct="${opt === correctMeaning ? '1' : '0'}">${escapeHtml(opt)}</button>`).join('')}
+            </div>
+            <div id="svQuizFeedback" class="hidden rounded-2xl p-3 text-xs font-bold text-center"></div>
+            <div class="flex justify-end">
+              <button type="button" id="svQuizNextBtn" class="btn-royal px-4 py-1.5 rounded-full text-xs font-bold">${isZh ? '下一道原声题 →' : '다음 목소리 문제 →'}</button>
+            </div>
+          </div>`;
+
+        // Auto-play once gently when user clicks next
+        quizEl.querySelectorAll('.sv-quiz-opt-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (quizEl.dataset.answered === '1') return;
+            quizEl.dataset.answered = '1';
+            const ok = btn.getAttribute('data-correct') === '1';
+            const fb = document.getElementById('svQuizFeedback');
+            const rev = document.getElementById('svQuizRevealPhrase');
+            if (rev) rev.classList.remove('hidden');
+            if (ok) {
+              btn.style.borderColor = '#10b981';
+              btn.style.background = 'rgba(16,185,129,0.14)';
+              if (typeof grantStudyXpSafely === 'function') grantStudyXpSafely(15);
+              if (fb) {
+                fb.classList.remove('hidden');
+                fb.style.background = 'rgba(16,185,129,0.14)';
+                fb.style.color = '#059669';
+                fb.textContent = isZh ? `🎉 答对啦！+15 XP · 原句：「${target.phrase}」` : `🎉 정답이에요! +15 XP · "${target.phrase}"`;
+              }
+              saveState(true);
+            } else {
+              btn.style.borderColor = '#f43f5e';
+              btn.style.background = 'rgba(244,63,94,0.12)';
+              if (fb) {
+                fb.classList.remove('hidden');
+                fb.style.background = 'rgba(244,63,94,0.12)';
+                fb.style.color = '#e11d48';
+                fb.textContent = isZh ? `💡 正确答案是：「${correctMeaning}」（${target.phrase}）` : `💡 정답은 "${correctMeaning}" (${target.phrase}) 이에요!`;
+              }
+            }
+          });
+        });
+        document.getElementById('svQuizNextBtn')?.addEventListener('click', () => {
+          quizEl.dataset.answered = '0';
+          svQuizIdx++;
+          renderStudyVoicesHub();
+          const itemsNow = collectAllRecordedStudyItems().filter(x => (x.swUrl || x.jcUrl) && (x.zh || x.question));
+          if (itemsNow.length) {
+            const nxt = itemsNow[svQuizIdx % itemsNow.length];
+            const sp = (nxt.swUrl && nxt.jcUrl) ? ((svQuizIdx % 2 === 0) ? 'suwan' : 'jingchan') : (nxt.swUrl ? 'suwan' : 'jingchan');
+            speakText(nxt.phrase, 'ko-KR', false, sp);
+          }
+        });
+      }
+
+      (function bindStudyVoicesHubEvents() {
+        document.addEventListener('click', (e) => {
+          const mBtn = e.target && e.target.closest('.sv-mode-btn');
+          if (mBtn) {
+            svActiveMode = mBtn.getAttribute('data-sv-mode') || 'list';
+            renderStudyVoicesHub();
+            return;
+          }
+          const fBtn = e.target && e.target.closest('.sv-filter-btn');
+          if (fBtn) {
+            svActiveFilter = fBtn.getAttribute('data-sv-filter') || 'all';
+            renderStudyVoicesHub();
+            return;
+          }
+          const openRec = e.target && e.target.closest('.sv-open-rec-btn');
+          if (openRec) {
+            toggleRecordCustomVoice(
+              openRec.getAttribute('data-text'),
+              openRec,
+              openRec.getAttribute('data-speaker'),
+              {
+                zh: openRec.getAttribute('data-zh') || '',
+                question: openRec.getAttribute('data-question') || '',
+                source: openRec.getAttribute('data-source') || ''
+              }
+            );
+            return;
+          }
+        });
+        document.getElementById('svSearchInput')?.addEventListener('input', () => renderStudyVoicesHub());
+        document.getElementById('svQuickAddForm')?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const koInp = document.getElementById('svQuickKoInput');
+          const zhInp = document.getElementById('svQuickZhInput');
+          const rawKo = String(koInp && koInp.value || '').trim();
+          let rawZh = String(zhInp && zhInp.value || '').trim();
+          if (!rawKo) {
+            showToast(state.lang === 'zh' ? '请先输入要录制的韩语表达或题目 🎙️' : '녹음할 문장이나 문제를 먼저 입력해 주세요 🎙️');
+            return;
+          }
+          if (!rawZh && typeof translateWithAutoRetry === 'function') {
+            try {
+              const trObj = await translateWithAutoRetry(rawKo, 'lover');
+              if (trObj && trObj.translated) rawZh = trObj.translated;
+            } catch (_) {}
+          }
+          if (koInp) koInp.value = '';
+          if (zhInp) zhInp.value = '';
+          toggleRecordCustomVoice(rawKo, null, state.myRole || 'suwan', { zh: rawZh, source: '직접 녹음' });
+        });
+      })();
+
       function renderChatLearnBook() {
         const bookList = document.getElementById('cbBookList');
         const quizWrap = document.getElementById('cbQuizWrap');
@@ -26793,7 +28043,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           bookList.innerHTML = filtered.map(p => {
             const isSw = p.speaker === 'suwan';
-            const spLabel = isSw ? (isZh ? '❤️ 完 발언 · 完说的' : '❤️ 수완 발언') : (isZh ? '💜 靖灿说的' : '💜 징찬 발언');
+            const spLabel = isSw ? (isZh ? '❤️ 秀完说的' : '❤️ 수완 발언') : (isZh ? '💜 靖灿说的' : '💜 징찬 발언');
             const spBg = isSw ? 'rgba(244,63,94,0.12)' : 'rgba(139,92,246,0.14)';
             const spCol = isSw ? '#e11d48' : '#7c3aed';
             return `
@@ -26807,8 +28057,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                     <div class="text-sm font-bold leading-snug break-words flex-1 min-w-0">${escapeHtml(p.ko)}</div>
                     <div class="flex items-center gap-1 shrink-0">
                       ${(() => { const on = typeof window.__isProblemStarred === 'function' && window.__isProblemStarred(p.ko, p.zh); return `<button type="button" class="cw-star-prob-btn ${on ? 'btn-gold' : 'btn-ghost'} w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold" data-q="${escapeHtml(p.ko)}" data-zh="${escapeHtml(p.zh)}" data-ans="${escapeHtml(p.ko)}" data-aud="${escapeHtml(p.ko)}" data-lvl="${isZh ? '聊天课本' : '우리 대화'}" title="즐겨찾기">${on ? '⭐' : '☆'}</button>`; })()}
+                      ${suwanVoicePillHtml(p.ko)}
                       <button type="button" class="speak-btn btn-royal w-7 h-7 rounded-full flex items-center justify-center text-[11px]" data-text="${escapeHtml(p.ko)}" data-lang="ko-KR" title="한국어 듣기">🔊</button>
                       <button type="button" class="speak-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[11px]" data-text="${escapeHtml(p.ko)}" data-lang="ko-KR" data-slow="1" title="천천히 듣기">🐢</button>
+                      <button type="button" class="rec-voice-btn btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-[11px]" data-text="${escapeHtml(p.ko)}" data-zh="${escapeHtml(p.zh)}" data-source="우리 대화" title="목소리 녹음">🎙️</button>
                     </div>
                   </div>
                   <div class="flex items-center justify-between gap-2">
@@ -28433,7 +29685,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (tEl) tEl.textContent = isZh ? '🔒 隐藏通知消息预览' : '🔒 알림 메시지 미리보기 끄기';
           if (dEl) dEl.textContent = isZh ? '开启后横幅只显示“收到一条新消息 💌”，保护隐私。' : '켜두면 상단 배너에 내용 대신 "새 메시지가 왔습니다 💌"만 떠요.';
           if (btn) {
-            btn.textContent = on ? (isZh ? '🔒 已开启' : '🔒 ON') : 'OFF';
+            btn.textContent = on ? (isZh ? '🔒 已开启' : '🔒 ON') : (isZh ? '关闭' : 'OFF');
             btn.className = `${on ? 'btn-royal' : 'btn-ghost'} px-3 py-1.5 rounded-full text-xs font-bold shrink-0 whitespace-nowrap`;
           }
         };
@@ -28456,8 +29708,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v94)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v94';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v97)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v97';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -28545,15 +29797,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (r && r.ok) {
                 const txt = await r.text();
                 const m = txt.match(/SW_VER\s*=\s*['"]([^'"]+)['"]/);
-                if (m && m[1] && m[1] !== RUNNING_SW_VER && !sessionStorage.getItem('cw_auto_up_' + m[1])) {
-                  sessionStorage.setItem('cw_auto_up_' + m[1], '1');
+                const prevTryTs = m && m[1] ? Number(sessionStorage.getItem('cw_auto_up_' + m[1]) || 0) : 0;
+                if (m && m[1] && m[1] !== RUNNING_SW_VER && (!prevTryTs || (Date.now() - prevTryTs) > 25000)) {
+                  sessionStorage.setItem('cw_auto_up_' + m[1], String(Date.now()));
                   const act = document.activeElement;
                   const typing = !!(act && (act.tagName === 'INPUT' || act.tagName === 'TEXTAREA') && String(act.value || '').trim().length > 0);
                   if (!typing) await forcePurgeCacheAndUpdate(false);
                 }
               }
             } catch (_) {}
-          }, 2200);
+          }, 1800);
         }
 
         if (typeof window.ChanwanNative !== 'undefined' && 'serviceWorker' in navigator) {
@@ -28610,7 +29863,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const ALLOWED_IDS = new Set([
             "liveNotifBanner", "notifBackdrop", "notifPanel", "avatarFileInput", "cityModal", "customMoodModal",
             "patchNotesModal", "chatVaultModal", "pinLockOverlay", "photoLightboxModal",
-            "confirmModal", "toastBox", "cwUniversalEmojiWrap", "voiceRecorderModal", "speechPracticeModal", "makerModeDrawer", "autoNightNoticeModal", "cwMsgContextBackdrop", "cwMsgContextMenu", "cwChatBgModal", "cwMicPermModal"
+            "confirmModal", "toastBox", "cwUniversalEmojiWrap", "voiceRecorderModal", "speechPracticeModal", "makerModeDrawer", "autoNightNoticeModal", "cwMsgContextBackdrop", "cwMsgContextMenu", "cwChatBgModal", "cwMicPermModal", "cwAppModeModal", "cwInAppUpdateModal", "cwWebAppPromptBar"
           ]);
           const sweep = () => {
             try {
@@ -29488,9 +30741,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         function syncToggleUi() {
           if (!toggleBtn) return;
           const on = isEnabled();
-          toggleBtn.textContent = on ? 'ON' : 'OFF';
+          const isZh = state && state.lang === 'zh';
+          toggleBtn.textContent = on ? (isZh ? '开启' : 'ON') : (isZh ? '关闭' : 'OFF');
           toggleBtn.className = `${on ? 'btn-royal' : 'btn-ghost'} px-3 py-1 rounded-full text-[11px] font-bold shrink-0 whitespace-nowrap`;
         }
+        window.__syncAutoNightUi = syncToggleUi;
         function getViewerLocalClockParts() {
           const myR = (state && state.myRole) || 'suwan';
           const tz = (state && state.cities && state.cities[myR] && state.cities[myR].tz)
@@ -29581,7 +30836,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v94';
+        const APP_VER_NOW = 'Prime 4 · v97';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -29674,7 +30929,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
           const pName = pR === 'jingchan' ? (isZh ? '靖灿(灿)' : '징찬(灿)') : (isZh ? '秀完(完)' : '수완(完)');
           if (title) title.textContent = isZh ? `📡 ${pName} 手机运行状态远程监控` : `📡 ${pName} 폰 작동 상태 원격 모니터`;
+          const pBtnEl = document.getElementById('pingPartnerHealthBtn');
+          const cBtnEl = document.getElementById('testChinaEnvSimBtn');
           const rBtnEl = document.getElementById('remoteRefreshPartnerBtn');
+          if (pBtnEl && !pBtnEl.disabled) pBtnEl.textContent = isZh ? '📡 实时Ping检测' : '📡 실시간 핑 점검';
+          if (cBtnEl && !cBtnEl.disabled) cBtnEl.textContent = isZh ? '🌏 中国网络诊断' : '🌏 중국망 진단';
           if (rBtnEl && !rBtnEl.disabled) rBtnEl.textContent = isZh ? '🛠️ 远程修复连接' : '🛠️ 원격 연결복구';
 
           const h = state && state.profile ? state.profile[pR + 'Health'] : null;
@@ -29881,6 +31140,35 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
         });
 
+        let __lastAutoSightUpgradePushTs = 0;
+        function parsePrimeVerNum(vStr) {
+          const m = String(vStr || '').match(/Prime\s*4\s*·\s*v(\d+)/i);
+          return m ? Number(m[1]) : 0;
+        }
+        window.__maybeAutoUpgradeOldPartnerOnSight = function(pRole, pHealth, fromLivePresence) {
+          try {
+            if (!pRole || pRole === ((state && state.myRole) || 'suwan')) return;
+            const myVerNum = parsePrimeVerNum(APP_VER_NOW);
+            const pVerNum = pHealth && pHealth.ver ? parsePrimeVerNum(pHealth.ver) : 0;
+            const queuedHealTs = Number((state && state.profile && state.profile[pRole + 'HealCmdTs']) || 0);
+            const isRecentSight = fromLivePresence || (pHealth && pHealth.ts && (Date.now() - Number(pHealth.ts)) < 65000);
+            if (!isRecentSight) return;
+            if ((pVerNum > 0 && pVerNum < myVerNum) || (queuedHealTs > 0 && pVerNum < myVerNum)) {
+              if ((Date.now() - __lastAutoSightUpgradePushTs) < 40000) return;
+              __lastAutoSightUpgradePushTs = Date.now();
+              const br = getBridge();
+              const cmdTs = Date.now();
+              if (!state.profile) state.profile = {};
+              state.profile[pRole + 'HealCmdTs'] = cmdTs;
+              if (br) {
+                try { br.sendSignal('remote_force_update', { targetRole: pRole, cmdTs, minVer: APP_VER_NOW }); } catch (_) {}
+                try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pRole, cmdTs); } catch (_) {}
+                try { br.sendEmergencyNtfyHeal(pRole, cmdTs); } catch (_) {}
+              }
+            }
+          } catch (_) {}
+        };
+
         document.getElementById('remoteRefreshPartnerBtn')?.addEventListener('click', () => {
           const btn = document.getElementById('remoteRefreshPartnerBtn');
           const isZh = state && state.lang === 'zh';
@@ -29899,7 +31187,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
 
           if (br) {
-            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v94' }); } catch (_) {}
+            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v97' }); } catch (_) {}
             try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pR, cmdTs); } catch (_) {}
             try { br.sendEmergencyNtfyHeal(pR, cmdTs); } catch (_) {}
             try { br.requestVaultNow(); } catch (_) {}
@@ -29980,24 +31268,40 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               .catch(() => ({ ok: false }));
 
             const [sbRes, ntRes, mmRes, npmRes] = await Promise.all([sbP, ntP, mmP, npmP]);
-            const emqxStr = net.emqxOk
-              ? (isZh ? '🟢 实时直连 + 离线云缓存正常' : '🟢 실시간 직통 + 오프라인 보관 정상')
+            if (sbRes.ok && br && typeof br.markSbStateAvailable === 'function') {
+              br.markSbStateAvailable();
+            }
+            const pipeCnt = (net.seoulDirectOk ? 1 : 0) + (net.mqtt443Ok ? 1 : 0) + (net.emqxOk ? 1 : 0) + ((net.ntfySseOk || ntRes.ok) ? 1 : 0);
+            const emqxStr = (net.seoulDirectOk || net.mqtt443Ok || net.emqxOk)
+              ? (isZh ? `🟢 443端口多路直连正常 (${pipeCnt}通道并发)` : `🟢 443포트 4중 무차단 직통 가동 중 (${Math.max(1, pipeCnt)}채널 동시연결)`)
               : (isZh ? '🟡 重连中' : '🟡 재연결 중');
             const sbStr = sbRes.ok
-              ? (isZh ? `🟢 首尔主库正常 (${sbRes.ms}ms · ${sbRes.kb}KB)` : `🟢 서울 DB 정상 (${sbRes.ms}ms · ${sbRes.kb}KB 경량)`)
-              : ((net.emqxOk || ntRes.ok)
-                  ? (isZh ? `🟢 直连云缓存 + ntfy双备份正常 (${ntRes.ok ? ntRes.ms + 'ms' : '自动守护'})` : `🟢 직통 보관소 + ntfy 백업 정상 (${ntRes.ok ? ntRes.ms + 'ms' : '자동 가동'} · 별도 DB 불필요)`)
+              ? (isZh ? `🟢 首尔永久云库正常 (${sbRes.ms}ms · ${sbRes.kb}KB)` : `🟢 서울 영구DB + 443 실시간 정상 (${sbRes.ms}ms · ${sbRes.kb}KB)`)
+              : ((net.seoulDirectOk || net.emqxOk || ntRes.ok)
+                  ? (isZh ? `🟢 首尔443直连 + ntfy 12h云缓存正常 (${ntRes.ok ? ntRes.ms + 'ms' : '实时流'})` : `🟢 서울443 직통 + ntfy 12시간 보관 정상 (${ntRes.ok ? ntRes.ms + 'ms' : '실시간 SSE'})`)
                   : (isZh ? '⚠️ 响应延迟' : '⚠️ 응답 지연'));
             const mmStr = mmRes.ok ? `🟢 ${isZh ? '正常' : '정상'} (${mmRes.ms}ms · "${escapeHtml(mmRes.tr)}")` : (isZh ? '🟡 内置词典待命' : '🟡 내장 사전 백업 대기');
-            const cdnStr = npmRes.ok ? `🟢 ${isZh ? '正常' : '정상'} (${npmRes.ms}ms)` : (isZh ? '🟡 备用源' : '🟡 백업 CDN 사용');
+            const cdnStr = npmRes.ok ? `🟢 ${isZh ? '正常' : '정상'} (${npmRes.ms}ms · 무CDN 내장완료)` : (isZh ? '🟢 内置零CDN直连引擎' : '🟢 외부CDN 불필요(내장엔진 가동)');
+            const sqlBtnHtml = (!sbRes.ok && sbRes.status === 404 && !isZh)
+              ? `<div class="mt-1.5 pt-1.5" style="border-top: 1px dashed var(--border-subtle);"><button type="button" id="copySbSqlSetupBtn" class="px-2.5 py-1 rounded-lg text-[11px] font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">📋 서울 영구DB 테이블 생성 SQL 복사 (선택 · 10초 완성)</button></div>`
+              : '';
 
             out.innerHTML = `
               <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境实测结果' : '🌏 중국(칭다오) 징찬이 경로 실측 결과'}</div>
-              <div>• ${isZh ? 'EMQX 中国直连通道' : 'EMQX 중국 직통 웹소켓'}: <b>${emqxStr}</b></div>
+              <div>• ${isZh ? '443端口跨国直连引擎' : '443 무차단 직통 웹소켓'}: <b>${emqxStr}</b></div>
               <div>• ${isZh ? '云端消息与离线存储' : '클라우드 메시지·오프라인 보관'}: <b>${sbStr}</b></div>
               <div>• ${isZh ? '中国免翻墙翻译引擎' : '중국 무VPN 번역 서버'}: <b>${mmStr}</b></div>
-              <div>• ${isZh ? '阿里云(npmmirror)加速' : '알리바바(npmmirror) 중국 CDN'}: <b>${cdnStr}</b></div>
+              <div>• ${isZh ? '无CDN内置直连核心' : '알리바바 CDN · 무CDN 내장코어'}: <b>${cdnStr}</b></div>
+              ${sqlBtnHtml}
             `;
+            document.getElementById('copySbSqlSetupBtn')?.addEventListener('click', () => {
+              const sqlTxt = "create table if not exists public.couple_sync_state (room_id text primary key, payload jsonb not null default '{}'::jsonb);\nalter table public.couple_sync_state disable row level security;\ngrant all on table public.couple_sync_state to anon, authenticated;";
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(sqlTxt).then(() => {
+                  showToast('📋 서울 영구DB SQL이 복사됐어요! Supabase SQL Editor에 붙여넣고 Run을 누르면 영구 보관소까지 켜져요 💜');
+                }).catch(() => {});
+              }
+            });
             // Also push slimmed <35KB snapshot right now so any old bloated snapshot in Supabase is cleaned immediately!
             if (br) { try { br.pushFull(); } catch (_) {} }
           } finally {
@@ -30655,7 +31959,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v94 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v97 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
@@ -31311,7 +32615,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
     const MAKER_KEY = 'cw_maker_layout_v1';
     const DEFAULT_CARDS = ['profile', 'translator', 'missions', 'lovetemp', 'lavender', 'widgets', 'weekly'];
-    const DEFAULT_STUDY = ['today', 'quiz', 'cheat', 'chatbook', 'review', 'games'];
+    const DEFAULT_STUDY = ['today', 'quiz', 'cheat', 'chatbook', 'review', 'games', 'voices'];
     const DEFAULT_SPACE = ['record', 'memory', 'promise', 'play'];
     const DEFAULT_SPACESUBS = ['diary', 'qa', 'balance', 'tmi', 'album', 'voice', 'capsule', 'jar', 'calendar', 'bucket', 'datemap', 'coupon', 'anniv-jump', 'food', 'fortune', 'quiz', 'drawquiz', 'rps', 'truthdare'];
     const DEFAULT_SETTINGS = ['role', 'font', 'theme', 'icon', 'notif', 'ai', 'maker', 'heal', 'backup'];
@@ -31337,7 +32641,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           cheat: { ko: '📖 만능 회화책', zh: '📖 万能会话书' },
           chatbook: { ko: '💬 우리 대화', zh: '💬 聊天学韩语' },
           review: { ko: '📌 오답 노트', zh: '📌 错题复习本' },
-          games: { ko: '🎮 미니게임', zh: '🎮 趣味小游戏' }
+          games: { ko: '🎮 미니게임', zh: '🎮 趣味小游戏' },
+          voices: { ko: '🎙️ 우리 녹음 모음', zh: '🎙️ 双人原声题库' }
         }
       },
       space: {
@@ -31670,8 +32975,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       setTxt('mkToggleCenterBtn', currentMaker.centerControls ? (isZh ? '🎯 按钮居中: ON' : '🎯 버튼 중앙정렬: ON') : (isZh ? '🎯 按钮居中: OFF' : '🎯 버튼 중앙정렬: OFF'));
       setTxt('mkToggleEnergyBtn', currentMaker.showEnergy ? (isZh ? '🔋 能量条: 显示' : '🔋 에너지 게이지: 표시') : (isZh ? '🔋 能量条: 隐藏' : '🔋 에너지 게이지: 숨김'));
 
+      const accLblMap = isZh
+        ? { default: '默认', lavender: '紫罗兰', rose: '玫瑰', sky: '天蓝', emerald: '薄荷', gold: '香槟' }
+        : { default: '기본', lavender: '보라', rose: '로즈', sky: '블루', emerald: '민트', gold: '골드' };
       document.querySelectorAll('.mk-accent-btn').forEach(btn => {
-        const isOn = btn.getAttribute('data-accent') === currentMaker.accentOverride;
+        const ak = btn.getAttribute('data-accent') || 'default';
+        if (accLblMap[ak]) btn.textContent = accLblMap[ak];
+        const isOn = ak === currentMaker.accentOverride;
         btn.style.outline = isOn ? '2px solid var(--accent-royal)' : '';
       });
 
@@ -31702,6 +33012,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       }
     }
 
+    window.__syncMakerDrawerUi = syncMakerDrawerUi;
     const makerToast = (koMsg, zhMsg) => {
       try {
         const st = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
@@ -32495,6 +33806,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       || /^(Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)|PRC)$/i.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
   } catch (_) {}
   var urls = isCnTz ? [
+    'https://npm.elemecdn.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
     'https://registry.npmmirror.com/@supabase/supabase-js/2.49.4/files/dist/umd/supabase.min.js',
     'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js'

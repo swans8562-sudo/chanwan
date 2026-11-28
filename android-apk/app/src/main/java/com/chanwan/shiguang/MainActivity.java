@@ -49,7 +49,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 67;
+    private static final int APK_BUILD_VER = 70;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;

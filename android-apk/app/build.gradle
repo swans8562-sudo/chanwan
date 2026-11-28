@@ -8,8 +8,8 @@ android {
         applicationId "com.chanwan.shiguang"
         minSdk 24
         targetSdk 34
-        versionCode 67
-        versionName "67.0-prime4-v94"
+        versionCode 70
+        versionName "70.0-prime4-v97"
     }
 
     signingConfigs {

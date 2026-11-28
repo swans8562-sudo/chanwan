@@ -1,4 +1,4 @@
-const SW_VER = 'chanwan-sw-prime4-v94';
+const SW_VER = 'chanwan-sw-prime4-v97';
 const PRECACHE_URLS = [
   './',
   './index.html',
@@ -54,19 +54,26 @@ self.addEventListener('fetch', (e) => {
   const isNav = e.request.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('/index.html');
 
   if (isNav) {
-    // Fast Network-First (3.8s) so Jingchan's Huawei Browser ALWAYS gets the latest deployed version on 1st refresh,
-    // with instant offline cache fallback if GitHub Pages is temporarily slow!
+    // China-Safe Network-First (9.5s for 2.2MB HTML over Qingdao 4G/5G) + Background 30s Cache Refresh so Huawei Browser NEVER gets stuck on an old version!
     e.respondWith((async () => {
       const cache = await caches.open(SW_VER);
       try {
-        const freshRes = await fetchCompleteHtmlWithTimeout(e.request, 3800);
+        const freshRes = await fetchCompleteHtmlWithTimeout(e.request, 9500);
         cache.put('./index.html', freshRes.clone()).catch(() => {});
         cache.put('./', freshRes.clone()).catch(() => {});
         return freshRes;
       } catch (_) {
         const cached = (await cache.match('./index.html')) || (await cache.match('./'));
-        if (cached) return cached;
-        return fetchCompleteHtmlWithTimeout(e.request, 12000);
+        if (cached) {
+          e.waitUntil(
+            fetchCompleteHtmlWithTimeout(e.request, 30000).then((bgRes) => {
+              cache.put('./index.html', bgRes.clone()).catch(() => {});
+              cache.put('./', bgRes.clone()).catch(() => {});
+            }).catch(() => {})
+          );
+          return cached;
+        }
+        return fetchCompleteHtmlWithTimeout(e.request, 25000);
       }
     })());
     return;
