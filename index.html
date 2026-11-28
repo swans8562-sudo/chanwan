@@ -17,7 +17,7 @@
   <meta name="format-detection" content="telephone=no" />
   <meta id="colorSchemeMeta" name="color-scheme" content="light dark" />
   <meta id="themeColorMeta" name="theme-color" content="#120d1f" />
-  <link rel="manifest" href="./manifest_clean.json?v=32" />
+  <link rel="manifest" href="./manifest_clean.json?v=33" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
@@ -2629,6 +2629,26 @@
       contain: layout style;
       transition: none !important;
     }
+    #tab-settings.active {
+      display: flex !important;
+      flex-direction: column;
+    }
+    .cw-setting-cat-hidden {
+      display: none !important;
+    }
+    .cw-set-cat-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 9.8px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: var(--accent-royal-soft);
+      color: var(--accent-royal);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
     html.cw-kb-open .cw-msg-bubble,
     html.cw-kb-open .royal-card,
     html.cw-kb-open .royal-subcard {
@@ -2664,7 +2684,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v106: App-Wide Couture Boutique Elevation
+       Prime 4 · v107: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2908,7 +2928,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v106: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v107: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4780,10 +4800,28 @@
 
     </section>
 
-    <!-- ==================== TAB 7: 설정 ==================== -->
-    <section id="tab-settings" class="tab-panel space-y-4">
+    <!-- ==================== TAB 7: 설정 (5-Category Clean Hub) ==================== -->
+    <section id="tab-settings" class="tab-panel space-y-3.5">
+      <!-- Sticky-Top 5-Category Filter Bar for Clean, Instant Settings Navigation -->
+      <div id="settingsCatNavCard" class="royal-card-gold rounded-2xl p-3 space-y-2" style="order: 0;">
+        <div class="flex items-center justify-between gap-2 px-0.5">
+          <div class="text-sm font-bold flex items-center gap-1.5 min-w-0">
+            <span>⚙️</span>
+            <span id="settingsHubTitle" class="truncate">설정 빠른 분류</span>
+          </div>
+          <span id="settingsHubSubBadge" class="cw-set-cat-tag">⚡ 수리·터보·연결</span>
+        </div>
+        <div id="settingsCategoryBar" class="grid grid-cols-5 gap-1 p-1 rounded-xl" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+          <button type="button" class="setting-cat-btn btn-royal py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate" data-set-cat="sync">⚡ 수리·연결</button>
+          <button type="button" class="setting-cat-btn btn-ghost py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate" data-set-cat="ai">🌐 번역·알림</button>
+          <button type="button" class="setting-cat-btn btn-ghost py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate" data-set-cat="design">🎨 화면·모드</button>
+          <button type="button" class="setting-cat-btn btn-ghost py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate" data-set-cat="security">🔐 보안·백업</button>
+          <button type="button" class="setting-cat-btn btn-ghost py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate" data-set-cat="all">📋 전체</button>
+        </div>
+      </div>
+
       <!-- NEW v12.0: Individual User Mode (Suwan Mode vs Jingchan Mode) + Partner-Only Alerts -->
-      <div data-setting-card="role" class="royal-card-gold rounded-3xl p-5 space-y-3.5">
+      <div data-setting-card="role" data-setting-cat="design" class="royal-card-gold rounded-3xl p-5 space-y-3.5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="min-w-0">
             <h2 class="text-base font-bold flex items-center gap-2"><span>👤</span> <span data-i18n="myRoleTitle">내 프로필 모드 설정 (수완 / 징찬)</span></h2>
@@ -4811,7 +4849,7 @@
           </label>
         </div>
       </div>
-      <div data-setting-card="font" class="royal-card-gold rounded-3xl p-5 space-y-3.5">
+      <div data-setting-card="font" data-setting-cat="design" class="royal-card-gold rounded-3xl p-5 space-y-3.5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="min-w-0">
             <h2 class="text-base font-bold flex items-center gap-2"><span>🔤</span> <span data-i18n="fontStudioTitle">다양한 글꼴 & 글자 크기 설정</span></h2>
@@ -4863,7 +4901,7 @@
 
       </div>
 
-      <div data-setting-card="theme" class="royal-card rounded-3xl p-5 space-y-3">
+      <div data-setting-card="theme" data-setting-cat="design" class="royal-card rounded-3xl p-5 space-y-3">
         <h2 class="text-base font-bold flex items-center gap-2"><span>🎨</span> <span data-i18n="themeStudioTitle">파스텔 로얄 디자인 모드 전환</span></h2>
 
         <!-- Collapsible Drawer 1: Light Mode Themes (5) -->
@@ -4975,7 +5013,7 @@
       </div>
 
       <!-- Icon Style Mode Card (Pastel Illustration / Minimalist Line / Classic Emoji) -->
-      <div data-setting-card="icon" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
+      <div data-setting-card="icon" data-setting-cat="design" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
         <div>
           <h3 class="text-base font-bold flex items-center gap-2"><span>🎨</span> <span data-i18n="iconStyleTitle">앱 아이콘 그림체 모드</span></h3>
           <p class="text-xs text-sec mt-0.5" data-i18n="iconStyleDesc">하단 탭과 메신저 아이콘을 파스텔 일러스트 그림체·미니멀 라인·클래식 이모지로 바로 바꿔보세요.</p>
@@ -5006,13 +5044,16 @@
         </div>
       </div>
 
-      <div data-setting-card="notif" class="royal-card-gold rounded-3xl p-4 sm:p-5 space-y-3.5">
-        <div>
-          <h3 class="text-base font-bold flex items-center gap-2"><span>📱</span> <span data-i18n="appSuiteTitle">알림 · 다운로드 · 중국 사용 설정</span></h3>
-          <p class="text-xs text-sec mt-0.5" data-i18n="appSuiteDesc">휴대폰 알림, 앱 파일 다운로드, 중국 직통 사용을 한곳에서 관리해요.</p>
+      <div data-setting-card="notif" data-setting-cat="ai" class="royal-card-gold rounded-3xl p-4 sm:p-5 space-y-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base font-bold flex items-center gap-2"><span>🔔</span> <span data-i18n="appSuiteTitle">알림음 · 상단 배너 · 전체화면 설정</span></h3>
+            <p class="text-xs text-sec mt-0.5" data-i18n="appSuiteDesc">휴대폰 알림음, 상단 배너 테스트, 전체화면 앱 모드를 관리해요.</p>
+          </div>
+          <span class="cw-set-cat-tag">알림·화면</span>
         </div>
 
-        <!-- Borderless Fullscreen & Home-Screen App Mode Card (Especially for Jingchan's Huawei Browser) -->
+        <!-- Borderless Fullscreen & Home-Screen App Mode Card -->
         <div id="webAppModeSettingCard" class="royal-subcard rounded-2xl p-3.5 space-y-2.5" style="border: 1px solid var(--border-accent);">
           <div class="flex items-center justify-between gap-2">
             <div class="text-xs font-bold flex items-center gap-1.5 min-w-0">
@@ -5025,20 +5066,6 @@
             <button id="settingToggleFsBtn" type="button" class="btn-royal py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap">⛶ 지금 전체화면 켜기</button>
             <button id="settingOpenAppGuideBtn" type="button" class="btn-gold py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap">📲 바탕화면 앱 설치</button>
           </div>
-        </div>
-
-        <!-- Mainland China (Qingdao) No-VPN Direct Optimization Mode Toggle -->
-        <div id="chinaModeSettingRow" class="royal-subcard rounded-2xl p-3.5 flex items-center justify-between gap-2.5" style="border: 1px solid var(--border-accent);">
-          <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold flex items-center gap-1.5">
-              <span id="chinaModeTitleLabel">🇨🇳 중국(칭다오) 무VPN 직통 최적화 모드</span>
-            </div>
-            <div id="chinaModeDescLabel" class="text-[10.5px] text-mut mt-0.5 leading-snug">중국 현지 브라우저에서 해외 차단 서버를 건너뛰고 443 직통망·중국어 번역·알리바바 가속을 최우선 연결해요.</div>
-          </div>
-          <label class="inline-flex items-center gap-1.5 cursor-pointer shrink-0">
-            <input id="toggleChinaMode" type="checkbox" class="w-4 h-4 accent-purple-600" />
-            <span id="chinaModeStateLabel" class="text-xs font-bold text-gold whitespace-nowrap">자동</span>
-          </label>
         </div>
 
         <!-- Notification Sound & Closed-App Banner Settings -->
@@ -5092,12 +5119,29 @@
             </div>
             <button id="testOsNotif4sBtn" type="button" class="btn-royal px-3 py-1.5 rounded-full text-xs font-bold shrink-0 whitespace-nowrap">4초 뒤 테스트</button>
           </div>
+        </div>
+      </div>
 
+      <!-- Dedicated Card: Cross-Border Live Server Connection, Jingchan Remote Monitor & China Direct Mode -->
+      <div data-setting-card="sync" data-setting-cat="sync" class="royal-card-gold rounded-3xl p-4 sm:p-5 space-y-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>🌏</span> <span id="syncHubCardTitle" class="truncate">한·중 실시간 연결 & 징찬 원격 모니터</span></h3>
+          <span class="cw-set-cat-tag">실시간 통신</span>
         </div>
 
+        <div id="chinaModeSettingRow" class="royal-subcard rounded-2xl p-3.5 flex items-center justify-between gap-2.5" style="border: 1px solid var(--border-accent);">
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-bold flex items-center gap-1.5">
+              <span id="chinaModeTitleLabel">🇨🇳 중국(칭다오) 무VPN 직통 최적화 모드</span>
+            </div>
+            <div id="chinaModeDescLabel" class="text-[10.5px] text-mut mt-0.5 leading-snug">중국 현지 브라우저에서 해외 차단 서버를 건너뛰고 443 직통망·중국어 번역·알리바바 가속을 최우선 연결해요.</div>
+          </div>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer shrink-0">
+            <input id="toggleChinaMode" type="checkbox" class="w-4 h-4 accent-purple-600" />
+            <span id="chinaModeStateLabel" class="text-xs font-bold text-gold whitespace-nowrap">자동</span>
+          </label>
+        </div>
 
-
-        <!-- Plus 1.4: China-Korea Live Server Sync Status & Manual Sync Card -->
         <div class="royal-subcard rounded-2xl p-3.5 space-y-2.5" style="border: 1px solid var(--border-accent);">
           <div class="flex items-center justify-between gap-2">
             <div class="text-xs font-bold flex items-center gap-1.5 min-w-0">
@@ -5138,8 +5182,14 @@
             <div id="chinaSimResultBox" class="hidden rounded-xl px-2.5 py-2 text-[10.5px] leading-relaxed" style="background: var(--surface-1); border: 1px solid var(--border-accent);"></div>
           </div>
         </div>
+      </div>
 
-
+      <!-- Dedicated Card: Privacy & Security (AES-256 E2EE + 4-Digit PIN Lock) -->
+      <div data-setting-card="security" data-setting-cat="security" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>🔐</span> <span id="secHubCardTitle" class="truncate">사생활 보호 & 기기 잠금</span></h3>
+          <span class="cw-set-cat-tag">보안·잠금</span>
+        </div>
 
         <!-- AES-256-GCM End-to-End Encryption (E2EE) & Private Channel Isolation -->
         <div class="royal-subcard rounded-2xl p-3.5 space-y-2.5 border" style="border-color: var(--border-accent);">
@@ -5179,7 +5229,7 @@
       </div>
 
       <!-- Easy AI Translation & Gemini API Key Settings Card -->
-      <div data-setting-card="ai" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
+      <div data-setting-card="ai" data-setting-cat="ai" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between gap-2">
           <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>🌐</span> <span class="truncate" data-i18n="transSettingsTitle">한·중 AI 번역 설정</span></h3>
           <span id="geminiKeyStatusBadge" class="text-[10.5px] font-bold px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap" style="background: var(--accent-royal-soft); color: var(--accent-royal);">⚡ 무료 3중 번역</span>
@@ -5203,7 +5253,7 @@
       </div>
 
       <!-- Prime 3 v33-v34: Maker Mode (Live Layout, Spacing & Alignment Editor with Auto-Sync) -->
-      <div data-setting-card="maker" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
+      <div data-setting-card="maker" data-setting-cat="design" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between gap-2">
           <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>📐</span> <span class="truncate" data-i18n="makerModeTitle">메이커 모드 (실시간 배치·간격 편집)</span></h3>
           <span class="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap" style="background: rgba(16,185,129,0.14); color: #059669;" data-i18n="makerAutoSyncBadge">🟢 자동 동기화</span>
@@ -5215,34 +5265,46 @@
         </div>
       </div>
 
-      <!-- Self-Heal & Auto Error Memo Card -->
-      <div data-setting-card="heal" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+      <!-- Self-Heal + 1-Minute Automatic Turbo Speed-Up Card -->
+      <div data-setting-card="heal" data-setting-cat="sync" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3.5">
         <div class="flex items-center justify-between gap-2">
-          <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>🛠️</span> <span class="truncate" data-i18n="selfHealTitle">앱 자가 복구 & 자동 오류 메모</span></h3>
+          <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>⚡</span> <span class="truncate" data-i18n="selfHealTitle">자동 수리 & 1분 터보 속도업</span></h3>
           <span id="selfHealStatusPill" class="text-[10.5px] font-bold px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap" style="background: rgba(16,185,129,0.14); color: #059669;">🟢 정상</span>
         </div>
-        <p class="text-[11px] text-sec leading-relaxed" data-i18n="selfHealDesc">접속 상태·알림 채널·읽음처리·동기화 꼬임을 버튼 한 번으로 바로 수리하고, 코드 오류는 자동 메모해 둬요.</p>
-        <div class="rounded-2xl px-3 py-2.5 flex items-center justify-between gap-2.5" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
-          <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold flex items-center gap-1.5"><span>🤖</span> <span data-i18n="autoHealTitle">스마트 자동 자가진단</span></div>
-            <div id="autoHealLastRunText" class="text-[10.5px] text-mut mt-0.5 truncate">1분마다 접속·알림·읽음·속도업을 자동 실행해요</div>
+        <p class="text-[11px] text-sec leading-relaxed" data-i18n="selfHealDesc">1분마다 접속·알림·읽음 수리와 메모리·키보드 터보 속도업이 자동 작동하며, 원할 때 바로 실행할 수도 있어요.</p>
+        <div class="space-y-2">
+          <div class="rounded-2xl px-3 py-2.5 flex items-center justify-between gap-2.5" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold flex items-center gap-1.5"><span>🤖</span> <span data-i18n="autoHealTitle">1분 자동 자가수리 (접속·알림·읽음)</span></div>
+              <div id="autoHealLastRunText" class="text-[10.5px] text-mut mt-0.5 truncate">1분마다 접속·알림·읽음 수리를 자동 실행해요</div>
+            </div>
+            <label class="inline-flex items-center gap-1.5 text-[11px] font-bold cursor-pointer shrink-0">
+              <input id="autoSelfHealToggle" type="checkbox" checked class="w-4 h-4 accent-purple-600 rounded" />
+              <span data-i18n="autoHealOnLabel">자동 켜짐</span>
+            </label>
           </div>
-          <label class="inline-flex items-center gap-1.5 text-[11px] font-bold cursor-pointer shrink-0">
-            <input id="autoSelfHealToggle" type="checkbox" checked class="w-4 h-4 accent-purple-600 rounded" />
-            <span data-i18n="autoHealOnLabel">자동 켜짐</span>
-          </label>
+          <div class="rounded-2xl px-3 py-2.5 flex items-center justify-between gap-2.5" style="background: var(--surface-2); border: 1px solid var(--border-accent);">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold flex items-center gap-1.5"><span>⚡</span> <span id="autoTurboTitleLabel">1분 자동 터보 모드 (메모리·키보드 가속)</span></div>
+              <div id="autoTurboLastRunText" class="text-[10.5px] text-mut mt-0.5 truncate">1분마다 비활성 캐시 정리·GPU 가속을 자동 실행해요</div>
+            </div>
+            <label class="inline-flex items-center gap-1.5 text-[11px] font-bold cursor-pointer shrink-0">
+              <input id="autoTurboModeToggle" type="checkbox" checked class="w-4 h-4 accent-purple-600 rounded" />
+              <span id="autoTurboOnLabel" class="text-gold">터보 켜짐</span>
+            </label>
+          </div>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <button id="selfHealNowBtn" type="button" class="btn-royal flex-1 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap" data-i18n="selfHealRunBtn">🛠️ 지금 자가 복구</button>
-          <button id="turboSpeedUpNowBtn" type="button" class="btn-gold px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap">⚡ 지금 속도업</button>
-          <button id="copyErrorMemoBtn" type="button" class="btn-ghost px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap" data-i18n="copyErrMemoBtn">📋 오류 복사</button>
-          <button id="clearErrorMemoBtn" type="button" class="btn-ghost px-2.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap" data-i18n="clearErrMemoBtn">🗑️ 비우기</button>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="selfHealNowBtn" type="button" class="btn-royal py-2.5 px-3 rounded-xl text-xs font-bold whitespace-nowrap" data-i18n="selfHealRunBtn">🛠️ 지금 자가 복구</button>
+          <button id="turboSpeedUpNowBtn" type="button" class="btn-gold py-2.5 px-3 rounded-xl text-xs font-bold whitespace-nowrap">⚡ 지금 속도업</button>
+          <button id="copyErrorMemoBtn" type="button" class="btn-ghost py-2 px-3 rounded-xl text-xs font-semibold whitespace-nowrap" data-i18n="copyErrMemoBtn">📋 오류 메모 복사</button>
+          <button id="clearErrorMemoBtn" type="button" class="btn-ghost py-2 px-3 rounded-xl text-xs font-semibold whitespace-nowrap" data-i18n="clearErrMemoBtn">🗑️ 기록 비우기</button>
         </div>
         <div id="selfHealReportBox" class="hidden rounded-2xl p-3 text-[11px] leading-relaxed" style="background: var(--surface-2); border: 1px solid var(--border-accent);"></div>
         <div id="autoErrorMemoList" class="rounded-2xl p-3 text-[11px] text-mut max-h-40 overflow-y-auto space-y-1.5" style="background: var(--surface-2); border: 1px solid var(--border-subtle);"></div>
       </div>
 
-      <div data-setting-card="backup" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3.5">
+      <div data-setting-card="backup" data-setting-cat="security" class="royal-card rounded-3xl p-4 sm:p-5 space-y-3.5">
         <h3 class="text-base font-bold flex items-center gap-2"><span>🛡️</span> <span data-i18n="backupTitle">우리 기록 안전 보관 & 백업</span></h3>
         <div id="vaultSummaryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center"></div>
         <!-- Cloud Full Data & Media Recovery (Unlimited Paginated Pull for Both Partners) -->
@@ -5287,7 +5349,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v106</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v107</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5999,14 +6061,14 @@
           themeDarkDrawerTitle: '🌙 다크 모드 (4종)',
           autoNightDarkTitle: '🌙 밤 9시 이후 자동 랜덤 다크모드',
           autoNightDarkDesc: '각자 현지 시간 밤 9시가 되면 다크 테마 4종 중 랜덤으로 자동 전환돼요.',
-          selfHealTitle: '앱 자가 복구 & 자동 오류 메모',
-          selfHealDesc: '접속 상태·알림 채널·읽음처리·동기화 꼬임을 버튼 한 번으로 바로 수리하고, 코드 오류는 자동 메모해 둬요.',
+          selfHealTitle: '자동 수리 & 1분 터보 속도업',
+          selfHealDesc: '1분마다 접속·알림·읽음 수리와 메모리·키보드 터보 속도업이 자동 작동하며, 원할 때 바로 실행할 수도 있어요.',
           selfHealRunBtn: '🛠️ 지금 자가 복구', makerModeTitle: '메이커 모드 (실시간 배치·간격 편집)', makerAutoSyncBadge: '🟢 자동 동기화', makerModeDesc: '재배포 없이 카드 간격·여백·글자 크기·중앙정렬·상단 상태바·홈 카드 순서를 직접 조절하면 상대방 폰에도 실시간 자동 반영돼요.', makerOpenBtn: '🎨 실시간 편집 창 열기', makerCopyBtn: '📋 복사', makerPasteBtn: '📥 붙여넣기', makerResetBtn: '🔄 기본값',
           copyErrMemoBtn: '📋 오류 메모 복사',
           clearErrMemoBtn: '🗑️ 비우기',
-          transSettingsTitle: '한·중 AI 번역 설정',
-          transSettingsDesc: '기본 무료 3중 병렬 번역이 자동 작동하며, 무료 Gemini API 키를 넣으면 연인체·줄임말까지 더 자연스럽게 번역돼요.',
-          geminiKeyStepTitle: '🔑 Gemini 무료 키 연결 (선택)',
+          transSettingsTitle: '한·중 Google · Gemini 99% 번역',
+          transSettingsDesc: 'Google 또는 Gemini API 키를 넣으면 연인체·줄임말까지 99% 정밀 AI 번역으로 즉시 작동해요.',
+          geminiKeyStepTitle: '🔑 Google · Gemini API 키 연결 (99% 정밀)',
           geminiGetKeyLink: '🔗 무료 키 받기',
           phGeminiKey: 'AIzaSy... 키 붙여넣기',
           geminiKeySaveBtn: '💾 키 저장',
@@ -6199,7 +6261,7 @@
           saveKeyBtn: '저장',
           clearKeyBtn: '해제',
           toggleNuanceLabel: '번역할 때 뜻과 뉘앙스 해설 함께 보기',
-          appSuiteTitle: '알림 · 다운로드 · 중국 사용 설정',
+          appSuiteTitle: '알림음 · 상단 배너 · 전체화면 설정',
           cloudSyncTitle: '☁️ 실시간 자동 연결 (서로 글·메신저 공유)',
           cloudSyncDesc: '별도 코드 입력 없이 수완 ↔ 靖灿이 자동으로 연결되어 메신저·일기·메모·기분·공부 기록이 실시간 공유돼요.',
           phCloudRoom: '둘만의 비밀 방 코드 (예: chanwan-2026)',
@@ -6350,14 +6412,14 @@
           themeDarkDrawerTitle: '🌙 深色模式 (4款)',
           autoNightDarkTitle: '🌙 晚9点后自动随机深色模式',
           autoNightDarkDesc: '各自当地时间满21:00后，自动在4款深色主题中随机切换。',
-          selfHealTitle: '应用自检修复 & 自动错误备忘',
-          selfHealDesc: '同步卡顿、重复记录与角标异常可一键自动修复；需修改代码的异常会自动记入下方备忘录。',
+          selfHealTitle: '自动修复 & 每1分钟极速涡轮',
+          selfHealDesc: '每1分钟自动修复在线·通知·已读并执行内存与键盘提速，也可随时手动一键加速。',
           selfHealRunBtn: '🛠️ 立即一键修复',
           copyErrMemoBtn: '📋 复制错误备忘',
           clearErrMemoBtn: '🗑️ 清空',
-          transSettingsTitle: '中韩 AI 翻译设置',
-          transSettingsDesc: '默认自动启用免费三引擎并发翻译；填入免费 Gemini API 密钥后，恋人语气与网络用语会更自然。',
-          geminiKeyStepTitle: '🔑 绑定免费 Gemini 密钥（可选）',
+          transSettingsTitle: '中韩 Google · Gemini 99% 翻译',
+          transSettingsDesc: '填入 Google 或 Gemini API 密钥即可启用 99% 精度恋人语境精译引擎。',
+          geminiKeyStepTitle: '🔑 绑定 Google · Gemini 密钥（99% 精译）',
           geminiGetKeyLink: '🔗 免费获取密钥',
           phGeminiKey: '粘贴 AIzaSy... 密钥',
           geminiKeySaveBtn: '💾 保存密钥',
@@ -6564,7 +6626,7 @@
           saveKeyBtn: '保存密钥',
           clearKeyBtn: '清除',
           toggleNuanceLabel: '翻译结果自动显示核心含义、语感与情感语气',
-          appSuiteTitle: '通知 · 下载 · 中国直连设置',
+          appSuiteTitle: '提示音 · 顶部通知 · 全屏应用设置',
           cloudSyncTitle: '☁️ 情侣实时云同步（双方共享消息与日记）',
           cloudSyncDesc: '无需输入暗号，完 ↔ 灿已自动实时连接，聊天、日记、备忘录、心情与学习记录即时同步。',
           phCloudRoom: '输入两人专属暗号 (例：chanwan-2026)',
@@ -8682,8 +8744,10 @@
           ['cw_trans_fast_cache_v1', 'cw_trans_fast_cache_v2', 'cw_trans_fast_cache_v3', 'cw_trans_fast_cache_v4', 'cw_trans_fast_cache_v5'].forEach(k => {
             try { localStorage.removeItem(k); } catch (_) {}
           });
-          const curM = localStorage.getItem('cw_gemini_active_model_v1') || '';
-          if (/gemini-3\.[568]/i.test(curM)) localStorage.removeItem('cw_gemini_active_model_v1');
+          __cwDiscoveredModelsCache = null;
+          __cwDiscoveredModelsTs = 0;
+          localStorage.removeItem('cw_gemini_verified_ok_v107');
+          localStorage.removeItem('cw_gemini_active_model_v1');
         } catch (_) {}
       }
       window.__resetTransKeyCacheAndCooldowns = __resetTransKeyCacheAndCooldowns;
@@ -8734,15 +8798,15 @@
           return {
             original: rawText,
             translated: cleanTr,
-            altTranslated: '',
+            altTranslated: (analysis && Array.isArray(analysis.alts) && analysis.alts[0] && analysis.alts[0] !== cleanTr) ? String(analysis.alts[0]) : '',
             pronunciation: '',
             tone: ensureToneLeadingEmoji(String(analysis.tone || '')),
             toneZh: '',
             nuance: String(analysis.nuance || ''),
             nuanceZh: '',
-            engine: 'Google Cloud 공식 키 번역 🔑',
+            engine: 'Google 공식 API 키 AI 🔑',
             tgtLang,
-            accuracy: 98
+            accuracy: 99
           };
         } catch (_) {
           clearTimeout(tm);
@@ -8750,6 +8814,82 @@
         }
       }
       window.__callGoogleCloudKeyTranslate = __callGoogleCloudKeyTranslate;
+
+      let __cwDiscoveredModelsCache = null;
+      let __cwDiscoveredModelsTs = 0;
+      async function __discoverLiveGeminiModels(gKey) {
+        if (__cwDiscoveredModelsCache && (Date.now() - __cwDiscoveredModelsTs) < 1800000) {
+          return __cwDiscoveredModelsCache;
+        }
+        const ctrl = new AbortController();
+        const tm = setTimeout(() => ctrl.abort(), 4200);
+        try {
+          const lr = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(gKey)}`, { signal: ctrl.signal });
+          clearTimeout(tm);
+          if (!lr.ok) {
+            try {
+              const ej = await lr.json();
+              if (ej && ej.error && ej.error.message) window.__cwLastGeminiErr = `HTTP ${lr.status}: ${String(ej.error.message).slice(0, 90)}`;
+            } catch (_) {}
+            return [];
+          }
+          const lj = await lr.json();
+          const rawList = Array.isArray(lj && lj.models) ? lj.models : [];
+          const names = rawList
+            .filter(m => m && Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.indexOf('generateContent') !== -1)
+            .map(m => String(m.name || '').replace(/^models\//, ''))
+            .filter(n => n && /^gemini/i.test(n) && !/tts|image|audio|live|embedding|imagen|veo|aqa|learnlm|vision|robotics|computer-use/i.test(n));
+          const scoreModel = (nm) => {
+            if (nm === 'gemini-2.5-flash') return 100;
+            if (nm === 'gemini-2.5-flash-lite') return 98;
+            if (/^gemini-3.*flash-lite/i.test(nm)) return 96;
+            if (/^gemini-3.*flash/i.test(nm)) return 94;
+            if (/^gemini-2\.5-flash/i.test(nm)) return 92;
+            if (/flash-lite/i.test(nm)) return 88;
+            if (/flash/i.test(nm) && !/8b/i.test(nm)) return 85;
+            if (/flash/i.test(nm)) return 80;
+            return 60;
+          };
+          names.sort((a, b) => scoreModel(b) - scoreModel(a));
+          if (names.length) {
+            __cwDiscoveredModelsCache = names;
+            __cwDiscoveredModelsTs = Date.now();
+          }
+          return names;
+        } catch (_) {
+          clearTimeout(tm);
+          return [];
+        }
+      }
+
+      function __parseGeminiCoupleJsonSafely(rawTxt) {
+        if (!rawTxt) return null;
+        const cleaned = String(rawTxt).replace(/```json/gi, '').replace(/```/g, '').trim();
+        const m = cleaned.match(/\{[\s\S]*\}/);
+        if (m) {
+          try {
+            const p = JSON.parse(m[0]);
+            if (p && p.translated) return p;
+          } catch (_) {}
+        }
+        // Resilient field extraction if model output was truncated mid-nuance or had unescaped inner quotes!
+        const grab = (k) => {
+          const rx = new RegExp('"' + k + '"\\s*:\\s*"((?:\\.|[^"\\])*)"');
+          const hit = cleaned.match(rx);
+          return hit ? hit[1].replace(/\\"/g, '"').replace(/\\n/g, ' ').trim() : '';
+        };
+        const tr = grab('translated');
+        if (!tr) return null;
+        return {
+          translated: tr,
+          altTranslated: grab('altTranslated'),
+          pronunciation: grab('pronunciation'),
+          toneKo: grab('toneKo'),
+          toneZh: grab('toneZh'),
+          nuanceKo: grab('nuanceKo'),
+          nuanceZh: grab('nuanceZh')
+        };
+      }
 
       async function __callGeminiCoupleTranslate(rawText, toneOverride) {
         if (isMainlandChinaClient()) return null;
@@ -8761,16 +8901,17 @@
         const isOrigZh = /[一-鿿]/.test(rawText) && !/[가-힣]/.test(rawText);
         const tgtLang = isOrigZh ? 'ko' : 'zh';
         const prompt = isOrigZh
-          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역, 嗯嗯->응응, 嘿嘿->헤헤, 嘻嘻->히히. 절대 [捂脸], [破涕为笑], [笑哭], [亲亲], [偷笑], [流泪] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 웃음/울음 이모티콘을 번역문에 붙이지 말 것! JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","toneKo":"짧은 한국어 감정 태그(예: 다정한 챙김)","toneZh":"简短中文语气标签(例: 暖心照顾)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`
-          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 한국어 카톡 애교체·구어체(ㅇ받침, 줄임말, 감탄사 '어머머/어머'는 이모티콘 없이 '哎呀呀/天哪'로만 번역, '아이 이뻐/예뻐'는 절대 孩子로 오역하지 말고 '哎呀真漂亮呀/真好看呀', '오구/오구오구/우쭈쭈 잘했어'는 '哎哟真棒呀/乖乖真厉害', '~하고오께/~올께/~하께/~가께'는 '~하고 올게/할게/갈게(马上回来/我去...就回来)', '뭐하고오께'는 의문문이 아니라 '我去忙点事马上回来呀', 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것, 절대 [捂脸], [破涕为笑], [笑哭], [呲牙], [偷笑], [亲亲], [害羞], [流泪], [委屈], [裂开] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 얼굴 이모티콘(😂,🤣,😭 등)을 번역문·대안번역문에 자동으로 붙이지 말 것(ㅠㅠ/ㅜㅜ도 이모티콘 없이 글자 呜呜로만 번역할 것), 중국어 번역문에 한글 자모(ㅎㅎ,ㅋㅋ,ㅠㅠ) 남기지 말고 嘿嘿/哈哈/呜呜로 번역할 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역(위챗 대괄호 이모티콘 절대 금지)","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개(위챗 대괄호 이모티콘 절대 금지)","pronunciation":"병음","toneKo":"짧은 한국어 감정 태그(예: 다정한 연인체)","toneZh":"简短中文语气标签(例: 甜蜜恋人语气)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`;
+          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역, 嗯嗯->응응, 嘿嘿->헤헤, 嘻嘻->히히. 절대 [捂脸], [破涕为笑], [笑哭], [亲亲], [偷笑], [流泪] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 웃음/울음 이모티콘을 번역문에 붙이지 말 것! JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","toneKo":"짧은 한국어 감정 태그(예: 다정한 챙김)","toneZh":"简短中文语气标签(例: 暖心照顾)","nuanceKo":"한국어 1문장 말투 설명","nuanceZh":"中文1句语气解析"}. 원문: ${rawText}`
+          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 한국어 카톡 애교체·구어체(ㅇ받침, 줄임말, 감탄사 '어머머/어머'는 이모티콘 없이 '哎呀呀/天哪'로만 번역, '아이 이뻐/예뻐'는 절대 孩子로 오역하지 말고 '哎呀真漂亮呀/真好看呀', '오구/오구오구/우쭈쭈 잘했어'는 '哎哟真棒呀/乖乖真厉害', '~하고오께/~올께/~하께/~가께'는 '~하고 올게/할게/갈게(马上回来/我去...就回来)', '뭐하고오께'는 의문문이 아니라 '我去忙点事马上回来呀', 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것, 절대 [捂脸], [破涕为笑], [笑哭], [呲牙], [偷笑], [亲亲], [害羞], [流泪], [委屈], [裂开] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 얼굴 이모티콘(😂,🤣,😭 등)을 번역문·대안번역문에 자동으로 붙이지 말 것(ㅠㅠ/ㅜㅜ도 이모티콘 없이 글자 呜呜로만 번역할 것), 중국어 번역문에 한글 자모(ㅎㅎ,ㅋㅋ,ㅠㅠ) 남기지 말고 嘿嘿/哈哈/呜呜로 번역할 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 중국어 대안 번역 1개","pronunciation":"병음","toneKo":"짧은 한국어 감정 태그(예: 다정한 연인체)","toneZh":"简短中文语气标签(例: 甜蜜恋人语气)","nuanceKo":"한국어 1문장 말투 설명","nuanceZh":"中文1句语气解析"}. 원문: ${rawText}`;
         window.__cwLastGeminiErr = '';
-        const __gemStartTs = Date.now();
-        const tryModel = async (modelName, disableThinking, timeoutMs = 3400) => {
+        const tryModelOnce = async (modelName, withZeroThink, timeoutMs) => {
           const ctrl = new AbortController();
           const tm = setTimeout(() => ctrl.abort(), timeoutMs);
           try {
-            const genCfg = { responseMimeType: 'application/json', maxOutputTokens: 280 };
-            if (disableThinking || /gemini-2\.5/i.test(modelName)) genCfg.thinkingConfig = { thinkingBudget: 0 };
+            const genCfg = { responseMimeType: 'application/json', maxOutputTokens: 1024 };
+            if (withZeroThink && /^gemini-2\.5-flash/i.test(modelName)) {
+              genCfg.thinkingConfig = { thinkingBudget: 0 };
+            }
             const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(gKey)}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -8782,72 +8923,98 @@
             });
             clearTimeout(tm);
             if (!r.ok) {
-              window.__cwLastGeminiErr = `${modelName} HTTP ${r.status}`;
-              return { ok: false, status: r.status, json: null };
+              let errDetail = `${modelName} HTTP ${r.status}`;
+              try {
+                const ej = await r.json();
+                if (ej && ej.error && ej.error.message) errDetail = `${modelName} (${r.status}): ${String(ej.error.message).slice(0, 80)}`;
+              } catch (_) {}
+              window.__cwLastGeminiErr = errDetail;
+              return { ok: false, status: r.status, parsed: null };
             }
-            return { ok: true, status: 200, json: await r.json() };
+            const j = await r.json();
+            const parts = (j && j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts) || [];
+            let fullTxt = '';
+            for (let pi = 0; pi < parts.length; pi++) {
+              if (parts[pi] && parts[pi].text && !parts[pi].thought) fullTxt += parts[pi].text;
+            }
+            if (!fullTxt && parts[0] && parts[0].text) fullTxt = parts[0].text;
+            const parsed = __parseGeminiCoupleJsonSafely(fullTxt);
+            if (!parsed || !parsed.translated) {
+              window.__cwLastGeminiErr = `${modelName}: empty_json`;
+              return { ok: false, status: 422, parsed: null };
+            }
+            return { ok: true, status: 200, parsed };
           } catch (err) {
             clearTimeout(tm);
-            window.__cwLastGeminiErr = `${modelName} ${err && err.name === 'AbortError' ? 'timeout' : 'network'}`;
-            return { ok: false, status: 0, json: null };
+            window.__cwLastGeminiErr = `${modelName} ${err && err.name === 'AbortError' ? '응답시간 초과' : '네트워크 오류'}`;
+            return { ok: false, status: 0, parsed: null };
           }
         };
+        const tryModel = async (modelName, timeoutMs = 5200) => {
+          const useZT = /^gemini-2\.5-flash/i.test(modelName);
+          let res = await tryModelOnce(modelName, useZT, timeoutMs);
+          if (!res.ok && res.status === 400 && useZT) {
+            res = await tryModelOnce(modelName, false, timeoutMs);
+          }
+          return res;
+        };
         try {
-          const cachedDisc = (() => {
-            try {
-              const cm = (localStorage.getItem('cw_gemini_active_model_v1') || '').trim();
-              return /gemini-3\.[568]/i.test(cm) ? '' : cm;
-            } catch (_) { return ''; }
+          const verifiedM = (() => {
+            try { return (localStorage.getItem('cw_gemini_verified_ok_v107') || '').trim(); } catch (_) { return ''; }
           })();
-          const modelChain = [];
-          if (cachedDisc) modelChain.push([cachedDisc, true]);
-          ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'].forEach(m => {
-            if (!modelChain.some(x => x[0] === m)) modelChain.push([m, true]);
+          const triedSet = new Set();
+          const baseChain = [];
+          if (verifiedM) baseChain.push(verifiedM);
+          ['gemini-2.5-flash', 'gemini-2.5-flash-lite'].forEach(m => {
+            if (!baseChain.includes(m)) baseChain.push(m);
           });
-          let resp = { ok: false, status: 0, json: null };
-          let usedModel = cachedDisc || 'gemini-3.5-flash-lite';
-          for (let __mi = 0; __mi < modelChain.length; __mi++) {
-            if (__mi > 0 && (Date.now() - __gemStartTs) > 4200) break;
-            const [mName, noThink] = modelChain[__mi];
-            resp = await tryModel(mName, noThink, __mi === 0 ? 2800 : 2000);
-            if (resp.ok && resp.json) {
+          let resp = { ok: false, status: 0, parsed: null };
+          let usedModel = verifiedM || 'gemini-2.5-flash';
+          for (let __mi = 0; __mi < baseChain.length; __mi++) {
+            const mName = baseChain[__mi];
+            triedSet.add(mName);
+            resp = await tryModel(mName, 5200);
+            if (resp.ok && resp.parsed) {
               usedModel = mName;
-              window.__cwGemToCnt = 0; try { localStorage.setItem('cw_gemini_active_model_v1', mName); } catch (_) {}
+              window.__cwGemToCnt = 0;
+              try {
+                localStorage.setItem('cw_gemini_verified_ok_v107', mName);
+                localStorage.setItem('cw_gemini_active_model_v1', mName);
+              } catch (_) {}
               break;
             }
-            if (resp.status === 403 || resp.status === 401 || resp.status === 0) break;
+            if (resp.status === 401) break;
           }
-          // Future-proof auto-discovery: if all known model names 404, query /v1beta/models to pick the live Flash model automatically!
-          if (!resp.ok && resp.status === 404) {
-            try {
-              const lr = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(gKey)}`);
-              if (lr.ok) {
-                const lj = await lr.json();
-                const list = Array.isArray(lj.models) ? lj.models : [];
-                const pick = list.find(m => m && Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent') && /flash/i.test(m.name || '') && !/tts|image|audio|live|embedding/i.test(m.name || ''));
-                if (pick && pick.name) {
-                  const cleanM = String(pick.name).replace(/^models\//, '');
-                  resp = await tryModel(cleanM, false);
-                  if (resp.ok && resp.json) {
-                    usedModel = cleanM;
-                    try { localStorage.setItem('cw_gemini_active_model_v1', cleanM); } catch (_) {}
-                  }
-                }
+          // Live Auto-Discovery on ANY non-401 failure (400/403/404/422/429/503/timeout)!
+          if (!resp.ok && resp.status !== 401) {
+            const liveList = await __discoverLiveGeminiModels(gKey);
+            let extraTries = 0;
+            for (let li = 0; li < liveList.length && extraTries < 3; li++) {
+              const cand = liveList[li];
+              if (triedSet.has(cand)) continue;
+              triedSet.add(cand);
+              extraTries++;
+              resp = await tryModel(cand, 5500);
+              if (resp.ok && resp.parsed) {
+                usedModel = cand;
+                window.__cwGemToCnt = 0;
+                try {
+                  localStorage.setItem('cw_gemini_verified_ok_v107', cand);
+                  localStorage.setItem('cw_gemini_active_model_v1', cand);
+                } catch (_) {}
+                break;
               }
-            } catch (_) {}
+            }
           }
-          if (!resp.ok || !resp.json) {
-            if (resp.status === 0) { window.__cwGemToCnt = (window.__cwGemToCnt || 0) + 1; if (window.__cwGemToCnt >= 2) __cwEngineSkipUntil.gemini = Date.now() + 5 * 60 * 1000; } else if (resp.status === 400 || resp.status === 403 || resp.status === 429) __cwEngineSkipUntil.gemini = Date.now() + 60000;
+          if (!resp.ok || !resp.parsed) {
             const gcloudFallback = await __callGoogleCloudKeyTranslate(rawText, toneOverride);
             if (gcloudFallback && gcloudFallback.translated) return gcloudFallback;
+            if (resp.status === 401 || resp.status === 403) {
+              __cwEngineSkipUntil.gemini = Date.now() + 45000;
+            }
             return null;
           }
-          const j = resp.json;
-          const txt = j?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          const m = txt.match(/\{[\s\S]*\}/);
-          if (!m) return null;
-          const p = JSON.parse(m[0]);
-          if (!p || !p.translated) return null;
+          const p = resp.parsed;
           const __cleanTr = stripUnrequestedAutoEmojis(String(p.translated).trim(), rawText);
           const __cleanAlt = p.altTranslated ? stripUnrequestedAutoEmojis(String(p.altTranslated).trim(), rawText) : '';
           return {
@@ -8859,12 +9026,13 @@
             toneZh: ensureToneLeadingEmoji(String(p.toneZh || '').trim()),
             nuance: String(p.nuanceKo || p.nuance || '').trim(),
             nuanceZh: String(p.nuanceZh || '').trim(),
-            engine: `Gemini (${usedModel})`,
+            engine: `Gemini AI (${usedModel})`,
             tgtLang,
             accuracy: 99
           };
         } catch (_) {
-          __cwEngineSkipUntil.gemini = Date.now() + 180000;
+          const gcloudCatch = await __callGoogleCloudKeyTranslate(rawText, toneOverride);
+          if (gcloudCatch && gcloudCatch.translated) return gcloudCatch;
           return null;
         }
       }
@@ -12469,6 +12637,17 @@
         const __turboBtnI18n = document.getElementById('turboSpeedUpNowBtn');
         if (__turboBtnI18n && __turboBtnI18n.dataset.busy !== '1') {
           __turboBtnI18n.textContent = __zh ? '⚡ 立即提速' : '⚡ 지금 속도업';
+        }
+        const __atEl = document.getElementById('autoTurboLastRunText');
+        if (__atEl) {
+          if (window.__lastAutoTurboStatusObj) {
+            __atEl.textContent = __zh ? window.__lastAutoTurboStatusObj.zh : window.__lastAutoTurboStatusObj.ko;
+          } else {
+            __atEl.textContent = __zh ? '每1分钟自动清理闲置缓存并保持GPU加速' : '1분마다 비활성 캐시 정리·GPU 가속을 자동 실행해요';
+          }
+        }
+        if (typeof window.__switchSettingsCategory === 'function') {
+          window.__switchSettingsCategory(window.__activeSettingsCat || 'sync', false);
         }
         if (typeof updateVaultIndicators === 'function') updateVaultIndicators();
         if (typeof window.__syncHideNotifPrevUi === 'function') window.__syncHideNotifPrevUi();
@@ -18238,9 +18417,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v106',
+          ver: 'Prime 4 · v107',
           date: '2026-11-26',
-          koTitle: 'Prime 4 · v106 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
+          koTitle: 'Prime 4 · v107 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
             '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
@@ -18260,7 +18439,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v106 更新日志' : '📜 灿完时光 Prime 4 · v106 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v107 更新日志' : '📜 灿完时光 Prime 4 · v107 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -23450,7 +23629,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               else if (data.v === 'pro2_signal') {
                 if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
                   publishEmqxRetained(room, 'sync', '');
-                  if (data.minVer === 'Prime 4 · v106') return;
+                  if (data.minVer === 'Prime 4 · v107') return;
                 }
                 handleIncomingChatSignal(data);
               }
@@ -26008,7 +26187,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v106', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v107', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               publishEmqxRetained(rm, 'sync', pkt);
             } catch (_) {}
           },
@@ -26016,7 +26195,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v106', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v107', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               const wire = await e2eeWrapString(pkt);
               await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
                 method: 'POST',
@@ -26806,6 +26985,122 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (document.hidden) return;
           runSilentAutoHeal('interval_1m');
         }, 60000);
+
+        // Dedicated 1-Minute (60,000ms) Automatic Turbo Mode Scheduler!
+        let __cwAutoTurboRunCount = 0;
+        const autoTurboToggleEl = document.getElementById('autoTurboModeToggle');
+        const syncAutoTurboLabel = () => {
+          const isZh = state && state.lang === 'zh';
+          const on = !autoTurboToggleEl || autoTurboToggleEl.checked;
+          const lbl = document.getElementById('autoTurboOnLabel');
+          if (lbl) lbl.textContent = on ? (isZh ? '涡轮开启' : '터보 켜짐') : (isZh ? '已暂停' : '꺼짐');
+          const ttl = document.getElementById('autoTurboTitleLabel');
+          if (ttl) ttl.textContent = isZh ? '每1分钟自动涡轮模式（内存·键盘提速）' : '1분 자동 터보 모드 (메모리·키보드 가속)';
+        };
+        if (autoTurboToggleEl) {
+          try {
+            autoTurboToggleEl.checked = localStorage.getItem('cw_auto_turbo_1m_v1') !== '0';
+          } catch (_) {}
+          autoTurboToggleEl.addEventListener('change', () => {
+            try { localStorage.setItem('cw_auto_turbo_1m_v1', autoTurboToggleEl.checked ? '1' : '0'); } catch (_) {}
+            syncAutoTurboLabel();
+            const isZh = state && state.lang === 'zh';
+            if (autoTurboToggleEl.checked) {
+              runOneMinuteAutoTurbo('toggle_on');
+              showToast(isZh ? '⚡ 已开启每1分钟自动涡轮提速！' : '⚡ 1분마다 자동 터보 모드가 작동해요!');
+            } else {
+              showToast(isZh ? '⏸️ 已暂停自动涡轮（可随时点立即提速）' : '⏸️ 1분 자동 터보 모드를 잠시 껐어요');
+            }
+          });
+        }
+        function runOneMinuteAutoTurbo(reason) {
+          try {
+            if (localStorage.getItem('cw_auto_turbo_1m_v1') === '0') return;
+            if (window.__isActivelyTyping && window.__isActivelyTyping()) {
+              setTimeout(() => runOneMinuteAutoTurbo(reason), 5000);
+              return;
+            }
+            const res = runAppTurboSpeedUp({ manual: false, auto1m: true, reason });
+            __cwAutoTurboRunCount++;
+            const tStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const cleanedCnt = (res.blobsFreed || 0) + (res.domTrimmed || 0) + (res.cacheTrimmed || 0);
+            const koLine = cleanedCnt > 0
+              ? `⚡ ${tStr} 1분 자동 터보 완료 (${cleanedCnt}건 경량화 · 누적 ${__cwAutoTurboRunCount}회)`
+              : `⚡ ${tStr} 1분 자동 터보 작동 중 (누적 ${__cwAutoTurboRunCount}회 · GPU·키보드 가속 유지)`;
+            const zhLine = cleanedCnt > 0
+              ? `⚡ ${tStr} 每1分钟自动涡轮完成（清理 ${cleanedCnt} 项 · 累计 ${__cwAutoTurboRunCount} 次）`
+              : `⚡ ${tStr} 每1分钟自动涡轮运行中（累计 ${__cwAutoTurboRunCount} 次 · GPU·键盘加速）`;
+            window.__lastAutoTurboStatusObj = { ko: koLine, zh: zhLine, ts: Date.now() };
+            const tEl = document.getElementById('autoTurboLastRunText');
+            if (tEl) tEl.textContent = (state && state.lang === 'zh') ? zhLine : koLine;
+            syncAutoTurboLabel();
+          } catch (_) {}
+        }
+        window.__runOneMinuteAutoTurbo = runOneMinuteAutoTurbo;
+        setTimeout(() => runOneMinuteAutoTurbo('boot'), 2400);
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) setTimeout(() => runOneMinuteAutoTurbo('resume'), 1400);
+        });
+        if (window.__cwOneMinuteAutoTurboTimer) clearInterval(window.__cwOneMinuteAutoTurboTimer);
+        window.__cwOneMinuteAutoTurboTimer = setInterval(() => {
+          if (document.hidden) return;
+          runOneMinuteAutoTurbo('interval_1m');
+        }, 60000);
+
+        // Clean 5-Category Settings Hub Controller (#settingsCategoryBar)
+        const SETTING_CAT_META = {
+          sync:     { ko: '⚡ 수리 · 터보 · 한중연결', zh: '⚡ 修复 · 涡轮 · 中韩直连', btnKo: '⚡ 수리·연결', btnZh: '⚡ 修复·连接' },
+          ai:       { ko: '🌐 AI 번역 · 알림 · 전체화면', zh: '🌐 AI 翻译 · 通知 · 全屏', btnKo: '🌐 번역·알림', btnZh: '🌐 翻译·通知' },
+          design:   { ko: '🎨 프로필 · 글꼴 · 테마 · 그림체', zh: '🎨 身份 · 字体 · 主题 · 图标', btnKo: '🎨 화면·모드', btnZh: '🎨 界面·模式' },
+          security: { ko: '🔐 보안 잠금 · 백업 · 업데이트', zh: '🔐 安全锁 · 备份 · 更新', btnKo: '🔐 보안·백업', btnZh: '🔐 安全·备份' },
+          all:      { ko: '📋 전체 설정 한눈에 보기', zh: '📋 全部设置一览', btnKo: '📋 전체', btnZh: '📋 全部' }
+        };
+        function switchSettingsCategory(cat, savePref) {
+          const validCat = SETTING_CAT_META[cat] ? cat : 'sync';
+          window.__activeSettingsCat = validCat;
+          if (savePref !== false) {
+            try { sessionStorage.setItem('cw_settings_cat_v1', validCat); } catch (_) {}
+          }
+          const isZh = state && state.lang === 'zh';
+          const setSec = document.getElementById('tab-settings');
+          if (setSec) {
+            setSec.querySelectorAll('[data-setting-card]').forEach(card => {
+              const c = card.getAttribute('data-setting-cat') || 'all';
+              const show = (validCat === 'all') || (c === validCat);
+              card.classList.toggle('cw-setting-cat-hidden', !show);
+            });
+          }
+          document.querySelectorAll('.setting-cat-btn').forEach(btn => {
+            const bCat = btn.getAttribute('data-set-cat');
+            const act = (bCat === validCat);
+            btn.className = `setting-cat-btn ${act ? 'btn-royal' : 'btn-ghost'} py-2 px-1 rounded-lg text-[11px] font-bold whitespace-nowrap truncate`;
+            if (SETTING_CAT_META[bCat]) {
+              btn.textContent = isZh ? SETTING_CAT_META[bCat].btnZh : SETTING_CAT_META[bCat].btnKo;
+            }
+          });
+          const subBadge = document.getElementById('settingsHubSubBadge');
+          if (subBadge && SETTING_CAT_META[validCat]) {
+            subBadge.textContent = isZh ? SETTING_CAT_META[validCat].zh : SETTING_CAT_META[validCat].ko;
+          }
+          const hubTitle = document.getElementById('settingsHubTitle');
+          if (hubTitle) hubTitle.textContent = isZh ? '设置分类中心' : '설정 빠른 분류';
+          const syncTitle = document.getElementById('syncHubCardTitle');
+          if (syncTitle) syncTitle.textContent = isZh ? '中韩实时直连 & 靖灿手机远程监控' : '한·중 실시간 연결 & 징찬 원격 모니터';
+          const secTitle = document.getElementById('secHubCardTitle');
+          if (secTitle) secTitle.textContent = isZh ? '隐私加密 & 设备密码锁' : '사생활 보호 & 기기 잠금';
+        }
+        window.__switchSettingsCategory = switchSettingsCategory;
+        document.querySelectorAll('.setting-cat-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchSettingsCategory(btn.getAttribute('data-set-cat') || 'sync', true);
+          });
+        });
+        try {
+          const savedSetCat = sessionStorage.getItem('cw_settings_cat_v1') || 'sync';
+          switchSettingsCategory(savedSetCat, false);
+        } catch (_) {
+          switchSettingsCategory('sync', false);
+        }
 
         const saveRoomBtn = document.getElementById('saveCloudRoomBtn');
         const pullSyncBtn = document.getElementById('pullCloudSyncBtn');
@@ -31020,8 +31315,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v106)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v106';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v107)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v107';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -32159,7 +32454,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v106';
+        const APP_VER_NOW = 'Prime 4 · v107';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -32555,7 +32850,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           if (br) {
             const sendForceBurst = () => {
-              try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v106' }); } catch (_) {}
+              try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v107' }); } catch (_) {}
             };
             sendForceBurst();
             setTimeout(sendForceBurst, 1500);
@@ -33500,7 +33795,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v106 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v107 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
@@ -33710,8 +34005,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               const res = await translateWithAutoRetry(sample, 'lover', 'MyMemory');
               if (testBox) {
                 if (res && res.translated) {
-                  const usedKeyEngine = String(res.engine || '').includes('Gemini') || String(res.engine || '').includes('Google');
-                  const gWarn = (!usedKeyEngine && window.__cwLastGeminiErr) ? `<div class="mt-0.5 text-[10px] text-rose-500">⚠️ 키 응답 참고: ${escapeHtml(window.__cwLastGeminiErr)}</div>` : '';
+                  const usedKeyEngine = String(res.engine || '').includes('Gemini') || String(res.engine || '').includes('공식 API 키');
+                  const gWarn = (!usedKeyEngine && window.__cwLastGeminiErr) ? `<div class="mt-0.5 text-[10px] text-rose-400">💡 키 상태 확인: ${escapeHtml(window.__cwLastGeminiErr)} (현재 기본 엔진으로 자동 백업 번역됨)</div>` : '';
                   testBox.innerHTML = `<div class="font-bold" style="color:#059669;">✅ ${isZh ? '翻译正常' : '연결 성공'} (${escapeHtml(res.engine || 'AI')} · ${res.accuracy || 95}%)</div>${gWarn}<div class="mt-0.5 text-main">${escapeHtml(sample)} → <b>${escapeHtml(res.translated)}</b></div>${res.altTranslated ? `<div class="mt-0.5 text-mut">💡 ${isZh ? '参考译文' : '다른 번역'}: ${escapeHtml(res.altTranslated)}</div>` : ''}`;
                 } else {
                   testBox.textContent = isZh ? '⚠️ 暂时无法连接翻译服务器，请稍后再试' : '⚠️ 번역 서버 응답이 지연되고 있어요. 잠시 후 다시 시도해 주세요';
@@ -33839,13 +34134,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             : (lang === 'zh'
               ? `韩国恋人(秀完)用中文发来的消息，可能语序或用词略微生硬。请帮中国女友(靖灿)一眼看懂原本意思，只返回严格 JSON(绝对不要添加 [捂脸]、[破涕为笑]、[亲亲]、[流泪] 等微信方括号表情标签): {"natural":"最自然的中文表达","intent":"原本想表达的意思和语气说明(1-2句)","tip":"可以温柔教给对方的一句地道中文(没有就留空)"}。原文: ${clean}`
               : `韩国恋人(秀完)用韩语发来的消息。请帮中国女友(靖灿)一眼看懂地道含义、语气和隐藏关心，只返回严格 JSON(오빠 必须译为哥哥，绝对不要添加 [捂脸]、[破涕为笑]、[亲亲]、[流泪] 等微信方括号表情标签): {"natural":"最自然温柔的中文意思","intent":"韩语表达的真实语气与语境解析(1-2句)","tip":"顺便学一个实用的韩语小表达(没有就留空)"}。原文: ${clean}`);
-          const __discM = (() => { try { return (localStorage.getItem('cw_gemini_active_model_v1') || '').trim(); } catch (_) { return ''; } })();
+          const __discM = (() => { try { return (localStorage.getItem('cw_gemini_verified_ok_v107') || localStorage.getItem('cw_gemini_active_model_v1') || '').trim(); } catch (_) { return ''; } })();
           const __pModels = [];
-          if (__discM) __pModels.push(__discM);
-          ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'].forEach(m => { if (!__pModels.includes(m)) __pModels.push(m); });
+          if (__discM && !/gemini-3\.[568]/i.test(__discM)) __pModels.push(__discM);
+          ['gemini-2.5-flash', 'gemini-2.5-flash-lite'].forEach(m => { if (!__pModels.includes(m)) __pModels.push(m); });
           let r = null;
           for (const __pm of __pModels) {
             try {
+              const __pCfg = { responseMimeType: 'application/json', maxOutputTokens: 900 };
+              if (/^gemini-2\.5-flash/i.test(__pm)) __pCfg.thinkingConfig = { thinkingBudget: 0 };
               r = await fetchT(
                 `https://generativelanguage.googleapis.com/v1beta/models/${__pm}:generateContent?key=${encodeURIComponent(gKey)}`,
                 {
@@ -33853,12 +34150,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 260, thinkingConfig: /gemini-3\.5-flash-lite/i.test(__pm) ? { thinkingLevel: 'minimal' } : (/gemini-3\.[68]-flash/i.test(__pm) ? { thinkingLevel: 'low' } : { thinkingBudget: 0 }) }
+                    generationConfig: __pCfg
                   })
                 },
-                4500
+                5200
               );
-              if (r && r.ok) { try { localStorage.setItem('cw_gemini_active_model_v1', __pm); } catch (_) {} break; }
+              if (r && r.ok) { try { localStorage.setItem('cw_gemini_verified_ok_v107', __pm); localStorage.setItem('cw_gemini_active_model_v1', __pm); } catch (_) {} break; }
               if (r && (r.status === 403 || r.status === 401)) break;
             } catch (_) { r = null; }
           }
@@ -34168,7 +34465,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     const DEFAULT_STUDY = ['today', 'quiz', 'cheat', 'chatbook', 'review', 'games', 'voices'];
     const DEFAULT_SPACE = ['record', 'memory', 'promise', 'play'];
     const DEFAULT_SPACESUBS = ['diary', 'qa', 'balance', 'tmi', 'album', 'voice', 'capsule', 'jar', 'calendar', 'bucket', 'datemap', 'coupon', 'anniv-jump', 'food', 'fortune', 'quiz', 'drawquiz', 'rps', 'truthdare'];
-    const DEFAULT_SETTINGS = ['role', 'font', 'theme', 'icon', 'notif', 'ai', 'maker', 'heal', 'backup'];
+    const DEFAULT_SETTINGS = ['heal', 'sync', 'ai', 'notif', 'role', 'font', 'theme', 'icon', 'maker', 'security', 'backup'];
     const DEFAULT_DOCK = ['home', 'learn', 'translator', 'diary', 'settings'];
     const SCOPE_DEFS = {
       home: {
@@ -34235,11 +34532,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           font: { ko: '🔤 글꼴 & 글자 크기', zh: '🔤 字体与字号' },
           theme: { ko: '🎨 디자인 테마 (9종)', zh: '🎨 主题配色 (9种)' },
           icon: { ko: '🖼️ 앱 아이콘 그림체', zh: '🖼️ 图标风格模式' },
-          notif: { ko: '📱 알림·다운로드·중국 설정', zh: '📱 通知·安装·中国直连' },
-          ai: { ko: '🌐 한·중 AI 번역 설정', zh: '🌐 中韩 AI 翻译设置' },
+          sync: { ko: '🌏 한·중 연결 & 징찬 원격 모니터', zh: '🌏 中韩直连与远程监控' },
+          notif: { ko: '🔔 알림음·배너·전체화면 설정', zh: '🔔 提示音·横幅·全屏设置' },
+          ai: { ko: '🌐 Google·Gemini 99% 번역', zh: '🌐 Google·Gemini 99% 翻译' },
           maker: { ko: '📐 메이커 모드 (숨김 잠금)', zh: '📐 创客模式 (不可隐藏)' },
-          heal: { ko: '🛠️ 앱 자가 복구 & 오류 메모', zh: '🛠️ 自愈修复与错误备忘' },
-          backup: { ko: '🛡️ 안전 보관 & JSON 백업', zh: '🛡️ 安全保管与备份' }
+          heal: { ko: '⚡ 자동 수리 & 1분 터보 속도업', zh: '⚡ 自动修复与1分钟涡轮提速' },
+          security: { ko: '🔐 사생활 암호화 & PIN 잠금', zh: '🔐 端到端加密与PIN锁' },
+          backup: { ko: '🛡️ 백업 · 전체복구 · 업데이트', zh: '🛡️ 备份·完整恢复·版本更新' }
         }
       },
       dock: {

@@ -53,7 +53,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 79;
+    private static final int APK_BUILD_VER = 80;
     private static volatile byte[] sCachedBestHtmlBytes = null;
     private static volatile int sCachedBestHtmlVer = 0;
     private static volatile long sLastOtaCheckMs = 0L;
