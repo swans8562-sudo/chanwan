@@ -2508,7 +2508,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v74: App-Wide Couture Boutique Elevation
+       Prime 4 · v84: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2640,6 +2640,59 @@
       border: 1px solid rgba(224, 194, 255, 0.16) !important;
       box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
     }
+    .cw-chat-avatar-spacer {
+      width: 38px !important;
+      min-width: 38px !important;
+      height: 1px !important;
+      flex-shrink: 0 !important;
+    }
+    #chatMessagesList > .cw-msg-row.cw-grouped-followup {
+      margin-top: 4px !important;
+    }
+    .cw-msg-row.partner.cw-grouped-followup .cw-msg-bubble {
+      border-radius: 16px 20px 20px 16px !important;
+    }
+    .cw-msg-row.mine.cw-grouped-followup .cw-msg-bubble {
+      border-radius: 20px 16px 16px 20px !important;
+    }
+    #chatTypingIndicator {
+      display: none !important;
+    }
+    @keyframes cwTypingWave {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.42; }
+      30% { transform: translateY(-3.5px); opacity: 1; }
+    }
+    .cw-typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--accent-royal);
+      display: inline-block;
+      animation: cwTypingWave 1.15s infinite ease-in-out;
+    }
+    .cw-typing-dot:nth-child(2) { animation-delay: 0.16s; }
+    .cw-typing-dot:nth-child(3) { animation-delay: 0.32s; }
+    .cw-inchat-typing-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 5px 18px 18px 18px;
+      background: var(--bubble-jingchan);
+      border: 1px solid rgba(192, 164, 232, 0.30);
+      box-shadow: 0 6px 16px -10px rgba(68, 42, 118, 0.16);
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .cw-grouped-followup .cw-inchat-typing-bubble {
+      border-radius: 15px 18px 18px 15px;
+    }
+    [data-dark="1"] .cw-inchat-typing-bubble {
+      border-color: rgba(224, 194, 255, 0.16);
+      box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.6);
+    }
     #chatForm .royal-input {
       border-radius: 22px !important;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(252, 249, 255, 0.96) 100%) !important;
@@ -2699,7 +2752,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v74: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v84: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -2859,7 +2912,7 @@
       <!-- Right: Uniform 38x38 Theme & Single Language Toggles -->
       <div class="flex items-center justify-end gap-2 relative z-10 shrink-0">
         <button id="cycleThemeBtn" type="button" class="header-icon-btn text-[15px]" title="테마 분위기 바꾸기" aria-label="테마 분위기 바꾸기">
-          <span id="themeIcon">🌸</span>
+          <span id="themeIcon" class="cw-ui-ico inline-flex items-center justify-center" data-orig-emoji="☀️">☀️</span>
         </button>
 
         <button id="langToggleBtn" type="button" class="header-icon-btn header-lang-btn relative" aria-label="한국어·중국어 전환" title="한국어 ↔ 中文">
@@ -3771,6 +3824,7 @@
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
+            <button id="chatVoicePrevRerecBtn" type="button" class="btn-ghost px-2.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap inline-flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5"/><path d="M20 4v4.5h-4.5"/></svg><span>재녹음</span></button>
             <button id="chatVoicePrevCancelBtn" type="button" class="btn-ghost px-2.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap inline-flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg><span>취소</span></button>
             <button id="chatVoicePrevSendBtn" type="button" class="btn-royal px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap inline-flex items-center gap-1"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg><span>전송</span></button>
           </div>
@@ -4766,6 +4820,14 @@
             </div>
             <button id="toggleHideNotifPrevBtn" type="button" class="btn-ghost px-3 py-1.5 rounded-full text-xs font-bold shrink-0 whitespace-nowrap">OFF</button>
           </div>
+          <!-- 4-Second Background OS Notification Self-Test -->
+          <div class="royal-subcard rounded-2xl p-3 flex items-center justify-between gap-2.5">
+            <div class="min-w-0">
+              <div class="text-xs font-bold" id="osNotifTestTitle">🔔 휴대폰 상단 OS 알림 테스트</div>
+              <div class="text-[10.5px] text-mut mt-0.5 leading-snug" id="osNotifTestDesc">버튼을 누른 뒤 바로 홈 버튼을 눌러 바탕화면으로 나가면 4초 뒤 상단 알림이 울려요(앱 화면을 켜둔 동안엔 중복 방지를 위해 앱 안 배너만 떠요).</div>
+            </div>
+            <button id="testOsNotif4sBtn" type="button" class="btn-royal px-3 py-1.5 rounded-full text-xs font-bold shrink-0 whitespace-nowrap">4초 뒤 테스트</button>
+          </div>
 
         </div>
 
@@ -4937,13 +4999,15 @@
           </div>
           <button id="resetLearnProgressBtn" type="button" class="btn-ghost px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 shrink-0 whitespace-nowrap" style="border-color: rgba(244,63,94,0.35);">🔄 한국어 학습 리셋</button>
         </div>
-        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t text-[11px]" style="border-color: var(--border-subtle);">
-          <div class="text-mut" id="lastSavedInfo">마지막 저장: 방금 전</div>
-          <div class="inline-flex items-center gap-1.5 flex-wrap">
-            <span class="text-mut" data-i18n="appVersionLabel">앱 버전</span>
-            <span id="appVersionBadgePill" class="px-2.5 py-0.5 rounded-full font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">灿完时光 Prime 4 · v74</span>
-            <button id="forceAppUpdateBtn" type="button" class="btn-ghost px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
-            <button id="directApkDownloadBtn" type="button" class="btn-gold px-2.5 py-0.5 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 앱 바로 업데이트</button>
+        <div class="space-y-2 pt-2.5 border-t text-[11px]" style="border-color: var(--border-subtle);">
+          <div class="flex items-center justify-between gap-2 text-[10.5px] text-mut px-0.5">
+            <span id="lastSavedInfo" class="truncate">마지막 저장: 방금 전</span>
+            <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 items-center">
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v84</span>
+            <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
+            <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
         </div>
       </div>
@@ -5501,11 +5565,11 @@
       function isMainlandChinaClient() {
         try {
           const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-          if (/Asia\/Seoul/i.test(tz)) return false;
-          if (/Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)/i.test(tz)) return true;
+          if (/Asia\/(Seoul|Tokyo)/i.test(tz)) return false;
+          if (/^(Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing|Kashgar)|PRC|CTT)$/i.test(tz)) return true;
           if (new Date().getTimezoneOffset() === -480) return true;
           const ua = navigator.userAgent || '';
-          if (/HuaweiBrowser|HarmonyOS|MicroMessenger|baiduboxapp|Baidu|Quark|UCBrowser|MQQBrowser|HONOR/i.test(ua) && /^zh/i.test(navigator.language || '')) return true;
+          if (/HuaweiBrowser|HarmonyOS|ArkWeb|HBPC|MicroMessenger|baiduboxapp|Baidu|Quark|UCBrowser|MQQBrowser|HONOR|VivoBrowser|HeyTapBrowser|OppoBrowser|MiuiBrowser|Xiaomi/i.test(ua)) return true;
         } catch (_) {}
         return false;
       }
@@ -6520,7 +6584,7 @@
           const sendJson = (topic, attempt = 0) => {
             fetch('https://ntfy.sh', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
               body: JSON.stringify({
                 topic,
                 title: cleanTitle,
@@ -6984,15 +7048,19 @@
         // - App in Foreground: ONLY play gentle chime + show in-app banner (#liveNotifBanner), ZERO phone OS banner!
         // - App in Background/Closed: fire phone OS banner (for web/PWA; Native APK handles background OS banners via ChanwanPushService).
         if (!isAppForeground) {
-          if (!hasNativeApk) {
-            let cleanOsTitle = String(title || '').replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+/u, '').trim();
-            cleanOsTitle = cleanOsTitle
-              .replace(/의\s*새\s*메시지.*$/, '')
-              .replace(/님의\s*새\s*메시지.*$/, '')
-              .replace(/发来的新消息.*$/, '')
-              .replace(/的新消息.*$/, '')
-              .trim() || (isZh ? '秀完' : '징찬');
-            const cleanOsBody = String(osBody || '').replace(/[💌💜✨]+$/u, '').replace(/\s+/g, ' ').trim();
+          let cleanOsTitle = String(title || '').replace(/^[\s\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+/u, '').trim();
+          cleanOsTitle = cleanOsTitle
+            .replace(/의\s*새\s*메시지.*$/, '')
+            .replace(/님의\s*새\s*메시지.*$/, '')
+            .replace(/发来的新消息.*$/, '')
+            .replace(/的新消息.*$/, '')
+            .trim() || (isZh ? '秀完' : '징찬');
+          const cleanOsBody = String(osBody || '').replace(/[💌💜✨]+$/u, '').replace(/\s+/g, ' ').trim();
+          if (hasNativeApk) {
+            if (typeof window.ChanwanNative.showOsNotification === 'function') {
+              try { window.ChanwanNative.showOsNotification('💜 ' + cleanOsTitle, cleanOsBody); } catch (_) {}
+            }
+          } else {
             fireSystemNotification(cleanOsTitle, cleanOsBody, item.tab, item.sub);
           }
           return;
@@ -7763,9 +7831,14 @@
           if (/히힇|히히/.test(__pOrig) && !/嘻嘻/.test(__pOut)) __pOut = __pOut.replace(/呵呵/g, '嘻嘻');
           outText = __pOut;
         } else if (tgtLang === 'ko') {
-          // Never translate boyfriend '哥/哥哥' as '형님/형/동생' in couple chat!
+          // Never translate boyfriend '哥/哥哥' as '형님/형/동생' in couple chat, and fix '嗯嗯' -> '응응' (never '음음')!
           if (/哥|欧巴/.test(__pOrig)) {
             __pOut = __pOut.replace(/형님|형아/g, '오빠').replace(/(^|[\s,])형(?=[은는이가의를도와,.\s?!]|$)/g, '$1오빠');
+          }
+          if (/嗯嗯/.test(__pOrig)) {
+            __pOut = __pOut.replace(/음음+/g, '응응');
+          } else if (/^嗯[呀呐啦哦~\s]*$/.test(__pOrig.trim())) {
+            __pOut = __pOut.replace(/^음(?=[!.~\s]|$)/, '응');
           }
           outText = __pOut;
         }
@@ -7790,12 +7863,12 @@
               .replace(/수고하셨습니다\.?$/g, '오늘도 수고했어');
           }
           if (toneMode === 'cute') {
-            s = s.replace(/보고 싶어[.!]?$/, '보고 시퍼잉~ 🥰').replace(/사랑해[.!]?$/, '사랑행~ 💕').replace(/뭐 하고 있어\?$/, '뭐 하고 이써~?');
-            if (!/[~?!💕🥰💜✨]$/.test(s) && s.length < 40) s = s.replace(/\.$/, '') + '~';
+            s = s.replace(/보고 싶어[.!]?$/, '보고 시퍼잉~').replace(/사랑해[.!]?$/, '사랑행~').replace(/뭐 하고 있어\?$/, '뭐 하고 이써~?');
+            if (!/[~?!]$/.test(s) && s.length < 40) s = s.replace(/\.$/, '') + '~';
           } else if (toneMode === 'playful') {
-            if (!/[ㅋㅎ?!😄😆]$/.test(s) && s.length < 45) s = s.replace(/\.$/, '') + ' ㅎㅎ';
+            if (!/[ㅋㅎ?!]$/.test(s) && s.length < 45) s = s.replace(/\.$/, '') + ' ㅎㅎ';
           } else if (toneMode === 'warm') {
-            s = s.replace(/수고했어[.!]?$/, '오늘도 정말 수고 많았어 🌷').replace(/괜찮아[.!]?$/, '괜찮아, 내가 항상 옆에 있어 🌷');
+            s = s.replace(/수고했어[.!]?$/, '오늘도 정말 수고 많았어').replace(/괜찮아[.!]?$/, '괜찮아, 내가 항상 옆에 있어');
           }
         } else if (tgtLang === 'zh') {
           const origStr = String(origText || '');
@@ -7823,16 +7896,53 @@
             s = /[？?]+$/.test(s) ? s.replace(/[？?]+$/, '呜呜') : (s + ' 呜呜');
           }
           if (toneMode === 'cute') {
-            s = s.replace(/好想你呀?。?$/, '超级想你嘛~ 🥰').replace(/我爱你呀?。?$/, '最爱你啦~ 💕');
-            if (!/[呀啦嘛呢~？！?!💕🥰💜✨]$/.test(s) && s.length < 36) s = s.replace(/。$/, '') + '嘛~';
+            s = s.replace(/好想你呀?。?$/, '超级想你嘛~').replace(/我爱你呀?。?$/, '最爱你啦~');
+            if (!/[呀啦嘛呢~？！?!]$/.test(s) && s.length < 36) s = s.replace(/。$/, '') + '嘛~';
           } else if (toneMode === 'playful') {
-            if (!/[哈嘿？！?!😄😆]$/.test(s) && s.length < 36) s = s.replace(/。$/, '') + ' 哈哈';
+            if (!/[哈嘿？！?!]$/.test(s) && s.length < 36) s = s.replace(/。$/, '') + ' 哈哈';
           } else if (toneMode === 'warm') {
-            s = s.replace(/辛苦啦?。?$/, '今天也辛苦啦，抱抱你 🌷').replace(/没关系。?$/, '没关系的，我一直都在 🌷');
+            s = s.replace(/辛苦啦?。?$/, '今天也辛苦啦，抱抱你').replace(/没关系。?$/, '没关系的，我一直都在');
           }
         }
-        return enforceCoupleNameGlossary(s, tgtLang, origText);
+        return stripUnrequestedAutoEmojis(enforceCoupleNameGlossary(s, tgtLang, origText), origText);
       }
+
+      function stripUnrequestedAutoEmojis(outStr, origRaw) {
+        let out = String(outStr || '');
+        if (!out) return out;
+        const orig = String(origRaw || '');
+        // 1) Unconditionally strip ALL WeChat [...] bracket emoticons from translations & alt translations!
+        const wcRx = /\[(捂脸|旺柴|破涕为笑|笑哭|呲牙|偷笑|亲亲|害羞|愉快|奸笑|机智|吃瓜|让我看看|裂开|委屈|可怜|拥抱|抱抱|色|微笑|调皮|憨笑|坏笑|嘿哈|哇|666|加油|好的|耶|Emm|天啊|打脸|翻白眼|叹气|苦涩|皱眉|汗|发呆|流泪|大哭|发怒|惊讶|困|睡|疑问|嘘|晕|再见|鼓掌|哈欠|玫瑰|爱心|心碎|嘴唇|猪头|强|合十|红包|哭|笑|心|飞吻|比心|可爱|泪|呜呜|爱你|亲|月亮|太阳|晚安|早安|發呆|嘆氣|皺眉|發怒|驚訝|疑問|暈|再見|擁抱|親親|調皮|壞笑|打臉|苦澀|愛心|豬頭|強|紅包)\]/g;
+        out = out.replace(wcRx, '');
+        if (typeof window.__WECHAT_OFFICIAL_EMOTICONS !== 'undefined' && Array.isArray(window.__WECHAT_OFFICIAL_EMOTICONS)) {
+          out = out.replace(/\[[^\[\]]{1,6}\]/g, (m) => {
+            return window.__WECHAT_OFFICIAL_EMOTICONS.some(e => e && e.tag === m) ? '' : m;
+          });
+        }
+        // 2) Strip unrequested AI-hallucinated laughing/crying yellow face emojis (😂, 🤣, 😅, 😭) ONLY if not in original,
+        //    while 100% preserving normal couple/UI Unicode emojis (💜, ❤️, 💕, 🌙, ☀️, ✨, 😘, 🤗, etc.)!
+        const unreqFaceRx = /(?:😂|🤣|😅|😆|🤭|🫣|🤦(?:\u200D[♂♀]\uFE0F?)?|😭|😢)/g;
+        const origFaces = new Set(orig.match(unreqFaceRx) || []);
+        out = out.replace(unreqFaceRx, (m) => origFaces.has(m) ? m : '');
+        return out.replace(/\s{2,}/g, ' ').trim();
+      }
+      function sanitizeTransResultObj(res, origRaw) {
+        if (!res || typeof res !== 'object') return res;
+        const src = String(origRaw != null ? origRaw : (res.original || ''));
+        if (res.translated) res.translated = stripUnrequestedAutoEmojis(res.translated, src);
+        if (res.altTranslated) res.altTranslated = stripUnrequestedAutoEmojis(res.altTranslated, src);
+        if (res.literal && typeof res.literal === 'string') res.literal = stripUnrequestedAutoEmojis(res.literal, src);
+        if (Array.isArray(res.alts)) {
+          res.alts = res.alts.map(a => {
+            if (typeof a === 'string') return stripUnrequestedAutoEmojis(a, src);
+            if (a && typeof a === 'object' && a.text) return { ...a, text: stripUnrequestedAutoEmojis(a.text, src) };
+            return a;
+          });
+        }
+        return res;
+      }
+      window.__stripUnrequestedAutoEmojis = stripUnrequestedAutoEmojis;
+      window.__sanitizeTransResultObj = sanitizeTransResultObj;
 
       const DEFAULT_ALBUM_FOLDERS = [
         '💑 우리·셀카', '🍽️ 맛집·카페', '✈️ 여행·풍경', '🐾 귀여운·동물', '🎁 선물·기념', '📱 캡처·기록', '✨ 일상 순간'
@@ -7873,6 +7983,10 @@
       }
 
       async function _coreTranslate(rawText, toneOverride, opts) {
+        const __res = await _coreTranslateInner(rawText, toneOverride, opts);
+        return sanitizeTransResultObj(__res, rawText);
+      }
+      async function _coreTranslateInner(rawText, toneOverride, opts) {
         const skipEngine = (opts && opts.skipEngine) || '';
         const isRetryPass = !!(opts && opts._isRetry);
         const origRawText = (rawText || '').trim();
@@ -7920,7 +8034,7 @@
             polite: 'polite respectful formal tone (정중한 존댓말 / 礼貌敬语)'
           };
           const styleDesc = styleMap[toneMode] || styleMap.lover;
-          const prompt = `You are the highest-tier Korean-Chinese bilingual translator and cultural nuance specialist. Translate into natural, native-level ${tgtLang === 'zh' ? 'Simplified Chinese' : 'Korean'} using a ${styleDesc}. Return ONLY JSON with keys: "translated", "pronunciation" (Pinyin if Chinese, Hangul/romanization guide if Korean), "literal" (meaning in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "tone" (short tone tag in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "nuance" (1-2 clear sentences in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'} explaining subtle feeling and context), "alts" (array of 2 natural alternative expressions), "accuracy" (integer 90-99 estimating translation precision). Text: ${text}`;
+          const prompt = `You are the highest-tier Korean-Chinese bilingual translator and cultural nuance specialist. Translate into natural, native-level ${tgtLang === 'zh' ? 'Simplified Chinese' : 'Korean'} using a ${styleDesc}. STRICT RULE: NEVER output any WeChat [bracket emoticon tags] such as [捂脸], [破涕为笑], [笑哭], [亲亲], [偷笑], or [流泪], and never add unrequested laughing/crying face emojis. Return ONLY JSON with keys: "translated", "pronunciation" (Pinyin if Chinese, Hangul/romanization guide if Korean), "literal" (meaning in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "tone" (short tone tag in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'}), "nuance" (1-2 clear sentences in ${state.lang === 'zh' ? 'Simplified Chinese' : 'Korean'} explaining subtle feeling and context), "alts" (array of 2 natural alternative expressions without emojis), "accuracy" (integer 90-99 estimating translation precision). Text: ${text}`;
           const models = [
             { id: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash-Lite ⚡', minAcc: 95, maxAcc: 99, timeout: 8000 },
             { id: 'gemini-3.8-flash', label: 'Gemini 3.8 Flash 👑', minAcc: 96, maxAcc: 99, timeout: 10000 },
@@ -8002,6 +8116,9 @@
           return { original: text, translated: zOut, srcLang: 'ko', tgtLang: 'zh', pronunciation: 'Jìngcàn', literal: '靖灿', tone: '💜 커플 이름 고정 번역', nuance: '징찬 이름은 앱 전체에서 항상 「靖灿」으로 고정 번역돼요.', alts: ['靖灿'], accuracy: 100, engine: '커플 이름 고정 사전 💜' };
         }
         const ZH_COUPLE_EXACT = [
+          { rx: /^嗯{2,}[呀啦嘛哦~]*$/, ko: '응응', alt: '응!' },
+          { rx: /^嗯[呀呐啦哦~]?$/, ko: '응', alt: '응응' },
+          { rx: /^好哒[呀~]*$/, ko: '응 알겠어!', alt: '오케이!' },
           { rx: /^(?:欧巴|哥哥)[,，\s]*(?:你在干嘛|在干嘛呀?|在干什么呢?|忙什么呢)$/, ko: '오빠, 지금 뭐 해?', alt: '오빠 뭐 하고 있어?' },
           { rx: /^(?:欧巴|哥哥)[,，\s]*(?:吃饭了吗|吃了吗|吃过饭了吗)$/, ko: '오빠, 밥 먹었어?', alt: '오빠 식사했어?' },
           { rx: /^(?:我刚下班|刚下班呀?|下班啦|下班了)$/, ko: '나 방금 퇴근했어!', alt: '이제 막 일 끝났어!' },
@@ -8184,7 +8301,7 @@
       }
 
       // 0ms Local Phrase Cache + Gemini 2.5 Flash Priority #1 + 0.3s 1st-Arrival Fast Free Race!
-      const __cwTransCacheKey = 'cw_trans_fast_cache_v1';
+      const __cwTransCacheKey = 'cw_trans_fast_cache_v5';
       let __cwTransCacheMem = null;
       function __getTransCache() {
         if (__cwTransCacheMem) return __cwTransCacheMem;
@@ -8221,8 +8338,8 @@
         const isOrigZh = /[一-鿿]/.test(rawText) && !/[가-힣]/.test(rawText);
         const tgtLang = isOrigZh ? 'ko' : 'zh';
         const prompt = isOrigZh
-          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 카톡 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭(우리 애기 등)이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역. 嘿嘿->헤헤, 嘻嘻->히히. JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","toneKo":"짧은 한국어 감정 태그(예: 다정한 챙김)","toneZh":"简短中文语气标签(例: 暖心照顾)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`
-          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 실제 위챗 대화입니다. 한국어 카톡 애교체·구어체(ㅇ받침, 줄임말, 감탄사 '아이 이뻐/예뻐'는 절대 孩子로 오역하지 말고 '哎呀真漂亮呀/真好看呀', '오구/오구오구/우쭈쭈 잘했어'는 '哎哟真棒呀/乖乖真厉害', '~하고오께/~올께/~하께/~가께'는 '~하고 올게/할게/갈게(马上回来/我去...就回来)', '뭐하고오께'는 의문문이 아니라 '我去忙点事马上回来呀', 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것, 원문에 [捂脸][亲亲] 같은 위챗 이모티콘 태그가 있으면 그대로 유지할 것, 중국어 번역문에 절대 한글 자모(ㅎㅎ,ㅋㅋ,ㅠㅠ) 남기지 말고 嘿嘿/哈哈/呜呜로 번역할 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개","pronunciation":"병음","toneKo":"짧은 한국어 감정 태그(예: 다정한 연인체)","toneZh":"简短中文语气标签(例: 甜蜜恋人语气)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`;
+          ? `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 중국어 원문을 과장 없이 원문 길이와 뜻에 딱 맞는 가장 자연스러운 한국어 연인 구어체(반말)로 번역하세요. 규칙: 원문에 없는 애칭이나 문장을 억지로 덧붙이지 말 것(예: 早上好->좋은 아침!). 哥/哥哥/欧巴는 무조건 '오빠'로 번역, 嗯嗯->응응, 嘿嘿->헤헤, 嘻嘻->히히. 절대 [捂脸], [破涕为笑], [笑哭], [亲亲], [偷笑], [流泪] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 웃음/울음 이모티콘을 번역문에 붙이지 말 것! JSON만 반환: {"translated":"가장 자연스러운 번역문","altTranslated":"조금 다른 느낌의 자연스러운 대안 번역 1개","pronunciation":"","toneKo":"짧은 한국어 감정 태그(예: 다정한 챙김)","toneZh":"简短中文语气标签(例: 暖心照顾)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`
+          : `한국인 남자친구(수완/秀完)와 중국인 여자친구(징찬/靖灿)의 다정한 커플 메신저 대화입니다. 한국어 카톡 애교체·구어체(ㅇ받침, 줄임말, 감탄사 '어머머/어머'는 이모티콘 없이 '哎呀呀/天哪'로만 번역, '아이 이뻐/예뻐'는 절대 孩子로 오역하지 말고 '哎呀真漂亮呀/真好看呀', '오구/오구오구/우쭈쭈 잘했어'는 '哎哟真棒呀/乖乖真厉害', '~하고오께/~올께/~하께/~가께'는 '~하고 올게/할게/갈게(马上回来/我去...就回来)', '뭐하고오께'는 의문문이 아니라 '我去忙点事马上回来呀', 오타 장찬/정찬->징찬, 헤헤/헤헿->嘿嘿)를 정확히 이해해 실제 중국 연인이 쓰는 자연스러운 구어체로 번역하세요. 규칙: 원문에 없는 말 덧붙이지 말 것, 절대 [捂脸], [破涕为笑], [笑哭], [呲牙], [偷笑], [亲亲], [害羞], [流泪], [委屈], [裂开] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 얼굴 이모티콘(😂,🤣,😭 등)을 번역문·대안번역문에 자동으로 붙이지 말 것(ㅠㅠ/ㅜㅜ도 이모티콘 없이 글자 呜呜로만 번역할 것), 중국어 번역문에 한글 자모(ㅎㅎ,ㅋㅋ,ㅠㅠ) 남기지 말고 嘿嘿/哈哈/呜呜로 번역할 것. 수완->秀完, 징찬/장찬->靖灿(절대 张灿/俊灿/静蝉 등 오역·중복 금지), 인사 '안녕'은 嗨/你好呀 사용. JSON만 반환: {"translated":"가장 자연스러운 중국어 번역(위챗 대괄호 이모티콘 절대 금지)","altTranslated":"조금 다른 느낌의 자연스러운 중국어 대안 번역 1개(위챗 대괄호 이모티콘 절대 금지)","pronunciation":"병음","toneKo":"짧은 한국어 감정 태그(예: 다정한 연인체)","toneZh":"简短中文语气标签(例: 甜蜜恋人语气)","nuanceKo":"반드시 한국어로 작성한 1문장 말투·뉘앙스 설명","nuanceZh":"必须用中文写的1句语气解析"}. 원문: ${rawText}`;
         window.__cwLastGeminiErr = '';
         const __gemStartTs = Date.now();
         const tryModel = async (modelName, disableThinking, timeoutMs = 2800) => {
@@ -8303,10 +8420,12 @@
           if (!m) return null;
           const p = JSON.parse(m[0]);
           if (!p || !p.translated) return null;
+          const __cleanTr = stripUnrequestedAutoEmojis(String(p.translated).trim(), rawText);
+          const __cleanAlt = p.altTranslated ? stripUnrequestedAutoEmojis(String(p.altTranslated).trim(), rawText) : '';
           return {
             original: rawText,
-            translated: String(p.translated).trim(),
-            altTranslated: (p.altTranslated && String(p.altTranslated).trim() !== String(p.translated).trim()) ? String(p.altTranslated).trim() : '',
+            translated: __cleanTr,
+            altTranslated: (__cleanAlt && __cleanAlt !== __cleanTr) ? __cleanAlt : '',
             pronunciation: String(p.pronunciation || '').trim(),
             tone: String(p.toneKo || p.tone || '').trim(),
             toneZh: String(p.toneZh || '').trim(),
@@ -8329,15 +8448,13 @@
         const wcTagsFound = fullRaw.match(wcTagRx) || [];
         const cleanRaw = wcTagsFound.length ? fullRaw.replace(wcTagRx, ' ').replace(/\s{2,}/g, ' ').trim() : fullRaw;
         if (!cleanRaw) {
-          return { original: fullRaw, translated: wcTagsFound.join(''), altTranslated: '', pronunciation: '', tone: '😊 위챗 이모티콘', toneKo: '😊 위챗 이모티콘', toneZh: '😊 微信表情', nuance: '', nuanceKo: '', nuanceZh: '', accuracy: 100, engine: 'WeChat Emoticon' };
+          return { original: fullRaw, translated: '', altTranslated: '', pronunciation: '', tone: '😊 이모티콘', toneKo: '😊 이모티콘', toneZh: '😊 表情', nuance: '', nuanceKo: '', nuanceZh: '', accuracy: 100, engine: 'Emoticon' };
         }
         const reattachWcTags = (resObj) => {
-          if (!resObj || !wcTagsFound.length) return resObj;
-          const suffix = ' ' + wcTagsFound.join('');
-          if (resObj.translated && !wcTagRx.test(resObj.translated)) resObj.translated = String(resObj.translated).trim() + suffix;
-          wcTagRx.lastIndex = 0;
-          if (resObj.altTranslated && !wcTagRx.test(resObj.altTranslated)) resObj.altTranslated = String(resObj.altTranslated).trim() + suffix;
+          if (!resObj) return resObj;
           resObj.original = fullRaw;
+          if (resObj.translated) resObj.translated = stripUnrequestedAutoEmojis(resObj.translated, cleanRaw);
+          if (resObj.altTranslated) resObj.altTranslated = stripUnrequestedAutoEmojis(resObj.altTranslated, cleanRaw);
           return resObj;
         };
         const isManualRetry = !!prevEngineLabel;
@@ -8346,7 +8463,7 @@
         if (!isManualRetry) {
           const hit = __getTransCache()[cacheKey];
           const hitOk = hit && hit.translated && (hit.tgtLang === 'zh' ? !/[가-힣]/.test(hit.translated) : !/[\u4e00-\u9fff]/.test(hit.translated));
-          if (hitOk) return reattachWcTags({ ...hit, original: cleanRaw });
+          if (hitOk) return sanitizeTransResultObj(reattachWcTags({ ...hit, original: cleanRaw }), fullRaw);
         }
         // 1) Priority #1: Saved Gemini 2.5 Flash API Key (natural couple slang, ㅇ-받침, names, zero mistranslation!)
         if (!isManualRetry || !String(prevEngineLabel || '').includes('Gemini')) {
@@ -8451,9 +8568,8 @@
         });
         candidates.sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0));
         let best = { ...candidates[0], original: cleanRaw, autoRetried: !isManualRetry };
-        if (best && best.translated && isTargetOk(best.translated, best.tgtLang)) __saveTransCache(cacheKey, best);
         if (best && best.translated) {
-          best.translated = enforceCoupleNameGlossary(best.translated, best.tgtLang, rawText);
+          best.translated = stripUnrequestedAutoEmojis(enforceCoupleNameGlossary(best.translated, best.tgtLang, rawText), cleanRaw);
           const bestNorm = normKey(best.translated);
           const maxAltLen = Math.max(36, rawText.length * 4 + 14);
           const distinctAlt = candidates.find(c =>
@@ -8475,7 +8591,9 @@
             }
           } catch (_) {}
         }
-        return reattachWcTags(best);
+        if (best && best.altTranslated) best.altTranslated = stripUnrequestedAutoEmojis(best.altTranslated, cleanRaw);
+        if (best && best.translated && isTargetOk(best.translated, best.tgtLang)) __saveTransCache(cacheKey, best);
+        return sanitizeTransResultObj(reattachWcTags(best), fullRaw);
       }
 
       function analyzeSmartCoupleTone(origText, transText) {
@@ -10212,18 +10330,79 @@
           }
         } catch (_) {}
       }
+      function detectAudioMimeFromB64(b64Sample, declaredMime) {
+        try {
+          const clean = String(b64Sample || '').replace(/\s+/g, '').slice(0, 64);
+          if (clean.length >= 16) {
+            const bin = atob(clean.slice(0, 24));
+            if (bin.slice(0, 4) === 'RIFF' && bin.slice(8, 12) === 'WAVE') return 'audio/wav';
+            if (bin.charCodeAt(0) === 0x1A && bin.charCodeAt(1) === 0x45 && bin.charCodeAt(2) === 0xDF && bin.charCodeAt(3) === 0xA3) return 'audio/webm';
+            if (bin.slice(0, 4) === 'OggS') return 'audio/ogg';
+            if (bin.slice(4, 8) === 'ftyp') return 'audio/mp4';
+            if (bin.slice(0, 3) === 'ID3' || (bin.charCodeAt(0) === 0xFF && (bin.charCodeAt(1) & 0xE0) === 0xE0)) return 'audio/mpeg';
+            if (bin.slice(0, 5) === '#!AMR') return 'audio/amr';
+          }
+        } catch (_) {}
+        const d = String(declaredMime || '').toLowerCase();
+        if (d.includes('wav')) return 'audio/wav';
+        if (d.includes('webm')) return 'audio/webm';
+        if (d.includes('ogg') || d.includes('opus')) return 'audio/ogg';
+        if (d.includes('mpeg') || d.includes('mp3')) return 'audio/mpeg';
+        if (d.includes('3gp') || d.includes('amr')) return 'audio/3gpp';
+        if (d.includes('aac')) return 'audio/aac';
+        return 'audio/mp4';
+      }
       function normalizeAudioDataUrl(raw) {
         if (!raw || typeof raw !== 'string') return '';
-        if (raw.startsWith('data:audio/')) return raw;
-        if (/^data:(video\/(mp4|webm|ogg|3gpp)|application\/octet-stream|);base64,/i.test(raw)) {
-          const m = raw.match(/^data:([^;]*);base64,/i);
-          const sub = m && m[1] ? m[1].toLowerCase() : '';
-          const targetMime = sub.includes('webm') ? 'audio/webm' : (sub.includes('ogg') ? 'audio/ogg' : 'audio/mp4');
-          return raw.replace(/^data:[^;]*;base64,/i, `data:${targetMime};base64,`);
+        const trimmed = raw.trim();
+        const commaIdx = trimmed.indexOf(',');
+        if (commaIdx > 0 && /^data:/i.test(trimmed)) {
+          const head = trimmed.slice(5, commaIdx);
+          if (/;base64/i.test(head)) {
+            const decl = head.split(';')[0] || '';
+            const b64 = trimmed.slice(commaIdx + 1);
+            const trueMime = detectAudioMimeFromB64(b64, decl);
+            if (decl.toLowerCase() === trueMime && trimmed.startsWith('data:audio/')) return trimmed;
+            return `data:${trueMime};base64,${b64}`;
+          }
         }
-        return raw;
+        return trimmed;
       }
       window.__normalizeAudioDataUrl = normalizeAudioDataUrl;
+
+      const __cwAudioBlobCache = new Map();
+      function preparePlayableAudioAsset(rawUrl) {
+        const norm = normalizeAudioDataUrl(rawUrl);
+        if (!norm) return null;
+        if (!norm.startsWith('data:')) return { blobUrl: norm, bytes: null, mime: 'audio/mp4' };
+        const cacheKey = `${norm.length}:${norm.slice(0, 48)}:${norm.slice(-24)}`;
+        const hit = __cwAudioBlobCache.get(cacheKey);
+        if (hit) return hit;
+        try {
+          const commaIdx = norm.indexOf(',');
+          if (commaIdx < 0) return { blobUrl: norm, bytes: null, mime: 'audio/mp4' };
+          const b64 = norm.slice(commaIdx + 1).replace(/\s+/g, '');
+          const decl = norm.slice(5, commaIdx).split(';')[0] || 'audio/mp4';
+          const mime = detectAudioMimeFromB64(b64, decl);
+          const bin = atob(b64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          const blob = new Blob([bytes], { type: mime });
+          const blobUrl = URL.createObjectURL(blob);
+          const out = { blobUrl, bytes, mime };
+          if (__cwAudioBlobCache.size > 60) {
+            const firstK = __cwAudioBlobCache.keys().next().value;
+            const old = __cwAudioBlobCache.get(firstK);
+            if (old && old.blobUrl && old.blobUrl.startsWith('blob:')) { try { URL.revokeObjectURL(old.blobUrl); } catch (_) {} }
+            __cwAudioBlobCache.delete(firstK);
+          }
+          __cwAudioBlobCache.set(cacheKey, out);
+          return out;
+        } catch (_) {
+          return { blobUrl: norm, bytes: null, mime: 'audio/mp4' };
+        }
+      }
+      window.__preparePlayableAudioAsset = preparePlayableAudioAsset;
 
       async function requestSafeAudioStream() {
         if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
@@ -10691,11 +10870,26 @@
       let vrIsRecording = false;
 
       function encodePcmToWavDataUrl(floatBuffers, sampleRate) {
+        const inRate = Number(sampleRate) || 16000;
+        const outRate = Math.min(inRate, 12000);
         let totalLen = 0;
         for (const b of floatBuffers) totalLen += b.length;
-        const merged = new Float32Array(totalLen);
+        const rawMerged = new Float32Array(totalLen);
         let offset = 0;
-        for (const b of floatBuffers) { merged.set(b, offset); offset += b.length; }
+        for (const b of floatBuffers) { rawMerged.set(b, offset); offset += b.length; }
+        let merged = rawMerged;
+        if (inRate > outRate && rawMerged.length > 0) {
+          const ratio = inRate / outRate;
+          const outLen = Math.max(1, Math.floor(rawMerged.length / ratio));
+          merged = new Float32Array(outLen);
+          for (let i = 0; i < outLen; i++) {
+            const start = Math.floor(i * ratio);
+            const end = Math.min(rawMerged.length, Math.floor((i + 1) * ratio));
+            let sum = 0, cnt = 0;
+            for (let j = start; j < end; j++) { sum += rawMerged[j]; cnt++; }
+            merged[i] = cnt > 0 ? (sum / cnt) : rawMerged[start];
+          }
+        }
         const buffer = new ArrayBuffer(44 + merged.length * 2);
         const view = new DataView(buffer);
         const writeStr = (pos, str) => { for (let i = 0; i < str.length; i++) view.setUint8(pos + i, str.charCodeAt(i)); };
@@ -10706,8 +10900,8 @@
         view.setUint32(16, 16, true);
         view.setUint16(20, 1, true);
         view.setUint16(22, 1, true);
-        view.setUint32(24, sampleRate || 16000, true);
-        view.setUint32(28, (sampleRate || 16000) * 2, true);
+        view.setUint32(24, outRate, true);
+        view.setUint32(28, outRate * 2, true);
         view.setUint16(32, 2, true);
         view.setUint16(34, 16, true);
         writeStr(36, 'data');
@@ -11105,9 +11299,13 @@
         const iconEl = document.getElementById('themeIcon');
         const themeBtn = document.getElementById('cycleThemeBtn');
         if (iconEl) {
-          delete iconEl.dataset.origEmoji;
-          iconEl.classList.add('cw-keep-native-emoji');
+          iconEl.classList.remove('cw-keep-native-emoji');
+          iconEl.classList.add('cw-ui-ico', 'inline-flex', 'items-center', 'justify-center');
+          iconEl.dataset.origEmoji = valid.icon;
           iconEl.textContent = valid.icon;
+          if (typeof window.syncAllTabIconsToStyle === 'function') {
+            window.syncAllTabIconsToStyle(null, iconEl);
+          }
         }
         if (themeBtn) themeBtn.title = state.lang === 'zh' ? valid.labelZh : valid.labelKo;
         const hdrThIco = document.getElementById('headerThemeToggleIcon');
@@ -11279,6 +11477,7 @@
         if (__ahEl && /부팅·재연결|启动与重连/.test(__ahEl.textContent || '')) {
           __ahEl.textContent = __zh ? '启动与重连时自动轻量自检（流畅不卡顿）' : '부팅·재연결 시 가벼운 항목만 자동 점검해요 (버벅거림 없음)';
         }
+        if (typeof window.__syncQuickStatusUi === 'function') window.__syncQuickStatusUi();
         if (!silent) { saveState(); showToast(state.lang === 'zh' ? '已切换为中文界面 ✨' : '한국어 화면으로 전환되었어요 ✨'); }
       }
 
@@ -11506,21 +11705,22 @@
       /* ============================================================
          8. RENDERERS
          ============================================================ */
-      function formatMoodByLang(raw) {
+      function formatMoodByLang(raw, forceLang) {
         const s = String(raw || '').trim();
         if (!s || !s.includes('·')) return s;
         const parts = (s.includes(' · ') ? s.split(' · ') : s.split('·')).map(p => p.trim());
         if (parts.length < 2) return s;
         const koPart = parts[0];
         const zhPart = parts.slice(1).join(' · ');
-        // Preserve leading emoji when switching to Chinese!
-        const emojiMatch = koPart.match(/^(\S+\s+)/);
-        const leadEmoji = (emojiMatch && /[^a-zA-Z0-9가-힣\u4e00-\u9fff]/.test(emojiMatch[1])) ? emojiMatch[1] : '';
-        if (state.lang === 'zh') {
-          return (leadEmoji && !zhPart.startsWith(leadEmoji.trim())) ? `${leadEmoji}${zhPart}` : zhPart;
+        const emojiMatch = koPart.match(/^([^a-zA-Z0-9가-힣\u4e00-\u9fff\s]+)\s*/);
+        const leadEmoji = emojiMatch ? (emojiMatch[1] + ' ') : '';
+        const targetLang = forceLang || (state && state.lang) || 'ko';
+        if (targetLang === 'zh') {
+          return (leadEmoji && !zhPart.startsWith(emojiMatch[1])) ? `${leadEmoji}${zhPart}` : zhPart;
         }
         return koPart;
       }
+      window.__formatMoodByLang = formatMoodByLang;
 
       function populateMoodSelect(selectId, currentVal) {
         const sel = document.getElementById(selectId);
@@ -12711,6 +12911,57 @@
       }
       window.__updateChatDeliveryBadgesInPlace = updateChatDeliveryBadgesInPlace;
 
+      window.__cwPartnerTypingRole = '';
+      window.__cwPartnerTypingUntil = 0;
+      window.__buildInChatTypingRowHtml = function(partnerRole, prevWasSamePartner) {
+        const pRole = partnerRole === 'suwan' ? 'suwan' : 'jingchan';
+        const isZh = state.lang === 'zh';
+        const avSrc = (state.profile && state.profile[pRole + 'Avatar']) || (state.avatars && state.avatars[pRole]) || '';
+        const sShort = pRole === 'suwan' ? (isZh ? '秀完' : '수완') : (isZh ? '靖灿' : '징찬');
+        const sBadge = pRole === 'suwan' ? (isZh ? '秀完 (수완)' : '수완 · 完') : (isZh ? '靖灿 (징찬)' : '징찬 · 靖灿');
+        const avBg = pRole === 'suwan' ? 'linear-gradient(135deg, #8b5cf6, #c084fc)' : 'linear-gradient(135deg, #ec4899, #a855f7)';
+        const avHtml = prevWasSamePartner
+          ? `<div class="cw-chat-avatar-spacer" aria-hidden="true"></div>`
+          : `<div class="cw-chat-avatar" style="background: ${avBg};">${avSrc ? `<img src="${avSrc}" alt="${sShort}" loading="lazy" decoding="async" class="w-full h-full object-cover" />` : sShort}</div>`;
+        const nameHtml = prevWasSamePartner
+          ? ''
+          : `<div class="text-[10.5px] font-bold px-1 pb-0.5 leading-none flex items-center gap-1" style="color: var(--accent-royal);">${escapeHtml(sBadge)}</div>`;
+        const statusTxt = isZh ? `${sShort} 正在输入中... 💜` : `${sShort}님이 입력 중이에요... 💜`;
+        return `<div id="cwInChatTypingRow" class="cw-msg-row partner${prevWasSamePartner ? ' cw-grouped-followup' : ''}" data-sender="${pRole}">${avHtml}<div class="cw-msg-col">${nameHtml}<div class="cw-msg-bubble rounded-2xl px-3.5 py-2 border" style="background: var(--bubble-jingchan); border-color: var(--border-subtle); color: var(--accent-royal);"><span class="text-xs font-semibold leading-snug inline-flex items-center gap-1">${escapeHtml(statusTxt)}</span></div></div></div>`;
+      };
+      window.__setInChatTypingState = function(partnerRole, isActive) {
+        const listEl = document.getElementById('chatMessagesList');
+        if (!isActive || !partnerRole) {
+          window.__cwPartnerTypingRole = '';
+          window.__cwPartnerTypingUntil = 0;
+          const ex = document.getElementById('cwInChatTypingRow');
+          if (ex) ex.remove();
+          return;
+        }
+        const pRole = partnerRole === 'suwan' ? 'suwan' : 'jingchan';
+        window.__cwPartnerTypingRole = pRole;
+        window.__cwPartnerTypingUntil = Date.now() + 3800;
+        if (!listEl) return;
+        const nearBottom = (listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight) < 130;
+        const rows = listEl.querySelectorAll('.cw-msg-row:not(#cwInChatTypingRow)');
+        const lastRow = rows.length ? rows[rows.length - 1] : null;
+        const prevWasSamePartner = !!(lastRow && lastRow.getAttribute('data-sender') === pRole);
+        const htmlFrag = window.__buildInChatTypingRowHtml(pRole, prevWasSamePartner);
+        const existing = document.getElementById('cwInChatTypingRow');
+        if (existing) {
+          existing.outerHTML = htmlFrag;
+        } else {
+          listEl.insertAdjacentHTML('beforeend', htmlFrag);
+        }
+        const insertedRow = document.getElementById('cwInChatTypingRow');
+        if (insertedRow && typeof window.syncAllTabIconsToStyle === 'function') {
+          window.syncAllTabIconsToStyle(null, insertedRow);
+        }
+        if (nearBottom) {
+          requestAnimationFrame(() => { try { listEl.scrollTop = listEl.scrollHeight; } catch (_) {} });
+        }
+      };
+
       function renderChat() {
         const isSuwan = state.chat.activeSender === 'suwan';
         document.getElementById('senderSuwanBtn').className = `px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${isSuwan ? 'btn-gold' : 'btn-ghost'}`;
@@ -12792,8 +13043,8 @@
               } catch (_) {}
             }
             const localDisplayTime = formatMsgLocalTime(m);
-            const isGroupedFollowup = !dateDividerHtml && prevSenderKey === normSender && prevTimeKey === localDisplayTime && curDateKey === prevDateKey;
-            prevDateKey = curDateKey;
+            const isGroupedFollowup = !dateDividerHtml && prevSenderKey === normSender && (!curDateKey || curDateKey === prevDateKey);
+            prevDateKey = curDateKey || prevDateKey;
             prevSenderKey = normSender;
             prevTimeKey = localDisplayTime;
 
@@ -12807,17 +13058,22 @@
             const avBg = normSender === 'suwan' ? 'linear-gradient(135deg, #8b5cf6, #c084fc)' : 'linear-gradient(135deg, #ec4899, #a855f7)';
             const avatarHtml = mine
               ? ''
-              : `<div class="cw-chat-avatar" style="background: ${avBg};">${avSrc ? `<img src="${avSrc}" alt="${senderDisplayName}" loading="lazy" decoding="async" class="w-full h-full object-cover" />` : senderDisplayName}</div>`;
-            const partnerNameHtml = mine
+              : (isGroupedFollowup
+                  ? `<div class="cw-chat-avatar-spacer" aria-hidden="true"></div>`
+                  : `<div class="cw-chat-avatar" style="background: ${avBg};">${avSrc ? `<img src="${avSrc}" alt="${senderDisplayName}" loading="lazy" decoding="async" class="w-full h-full object-cover" />` : senderDisplayName}</div>`);
+            const partnerNameHtml = (mine || isGroupedFollowup)
               ? ''
               : `<div class="text-[10.5px] font-bold px-1 pb-0.5 leading-none flex items-center gap-1" style="color: var(--accent-royal);">${escapeHtml(senderFullBadge)}</div>`;
             const hasMedia = !!(m.photoUrl || m.videoUrl || (Array.isArray(m.photoUrls) && m.photoUrls.length));
-            const isAutoVoiceCap = !!(m.audioUrl && String(m.audioUrl).startsWith('data:audio/')) && /^(🎙️\s*)?(음성 메시지|语音消息)(\s*🎙️)?$/.test(String(m.original || '').trim());
-            const isAutoMediaCaption = isAutoVoiceCap || (hasMedia && /^(🎞️ \[(움짤|动图)\]|사진( \d+장)?을 보냈어요 📷|동영상을 보냈어요 🎬|分享了(一张|\s*\d+\s*张)照片 📷|分享了一段视频 🎬)$/.test(String(m.original || '').trim()));
-            const isMissingVideoBubble = !m.videoUrl && /^(동영상을 보냈어요 🎬|分享了一段视频 🎬)$/.test(String(m.original || '').trim());
-            const isMissingPhotoBubble = !hasMedia && (/^(사진( \d+장)?을 보냈어요 📷|分享了(一张|\s*\d+\s*张)照片 📷)$/.test(String(m.original || '').trim()) || String(m.id || '').startsWith('msg_img_'));
-            const isMissingVoiceBubble = !m.audioUrl && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || /^(🎙️\s*)?(음성 메시지|语音消息|음성 메시지를 보냈어요|发来一条语音消息)(\s*🎙️)?$/.test(String(m.original || '').trim()) || String(m.id || '').startsWith('msg_v_'));
-            const showText = !isAutoMediaCaption && String(m.original || '').trim().length > 0;
+            const _origTrim = String(m.original || '').trim();
+            const isVoiceTextCap = /^(?:🎙️\s*)?(?:음성 메시지|语音消息|음성 메시지를 보냈어요|发来一条语音消息|发送了一条语音)(?:\s*🎙️)?$/.test(_origTrim);
+            const isPhotoTextCap = /^(?:📷\s*)?(?:사진(?:\s*\d+장)?을 보냈어요|分享了(?:一张|\s*\d+\s*张)照片|发送了一张照片)(?:\s*📷)?$/.test(_origTrim);
+            const isVideoTextCap = /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(_origTrim);
+            const isMissingVideoBubble = !m.videoUrl && isVideoTextCap;
+            const isMissingPhotoBubble = !hasMedia && (isPhotoTextCap || String(m.id || '').startsWith('msg_img_'));
+            const isMissingVoiceBubble = !m.audioUrl && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || isVoiceTextCap || String(m.id || '').startsWith('msg_v_'));
+            const isAutoMediaCaption = isVoiceTextCap || isMissingVoiceBubble || isMissingPhotoBubble || isMissingVideoBubble || (hasMedia && (/^🎞️ \[(움짤|动图)\]$/.test(_origTrim) || isPhotoTextCap || isVideoTextCap));
+            const showText = !isAutoMediaCaption && _origTrim.length > 0;
             const isPureWcMsg = showText && !hasMedia && !m.sticker && typeof window.isPureWechatEmoticonMsg === 'function' && window.isPureWechatEmoticonMsg(String(m.original || '').trim());
             const isPurePunctMsg = showText && !hasMedia && !m.sticker && !isPureWcMsg && /^[?!.,~…·\-_:;'"()[\]{}+=/*\\|\s？！？。，、]+$/.test(String(m.original || '').trim());
             const isEmojiMsg = isPureWcMsg || (showText && !hasMedia && !m.sticker && !isPurePunctMsg && !/[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\u4e00-\u9fff]/.test(String(m.original || '').trim()));
@@ -12844,7 +13100,7 @@
                           : `<span class="cw-delivery-badge inline-flex items-center gap-1" data-msg-id="${escapeHtml(m.id)}"><span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full font-bold" style="background: rgba(16,185,129,0.14); color: #059669;">✓ ${state.lang === 'zh' ? '已发送' : '전송됨'}</span><span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal); opacity: 0.88;">💌 ${state.lang === 'zh' ? '未读' : '안 읽음'}</span></span>`)))
               : '';
             return `${dateDividerHtml}
-              <div class="cw-msg-row ${mine ? 'mine' : 'partner'}">
+              <div class="cw-msg-row ${mine ? 'mine' : 'partner'}${isGroupedFollowup ? ' cw-grouped-followup' : ''}" data-sender="${normSender}">
                 ${avatarHtml}
                 <div class="cw-msg-col">
                   ${partnerNameHtml}
@@ -12853,7 +13109,7 @@
                     ${m.replyTo ? `<div class="rounded-lg px-2 py-1 text-[11px] border-l-2" style="background: ${mine ? 'rgba(255,255,255,0.14)' : 'var(--surface-2)'}; border-color: ${mine ? '#f9e6ff' : 'var(--accent-royal)'};"><div class="font-bold opacity-85">↩️ ${escapeHtml(m.replyTo.author || '')}</div><div class="truncate opacity-90 cw-keep-native-emoji">${escapeHtml(m.replyTo.text || '')}</div></div>` : ''}
                     ${isMissingVideoBubble ? `<button type="button" onclick="if(typeof window.__pullCloudSync==='function'){if(window.__cwApi&&window.__cwApi.showToast)window.__cwApi.showToast((window.__cwApi.getState&&window.__cwApi.getState()?.lang==='zh')?'🎬 正在从云端拉取视频...':'🎬 서버에서 동영상을 불러오는 중...');window.__pullCloudSync(true);}" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎬 ${state.lang === 'zh' ? '点击加载视频' : '동영상 불러오기'}</button>` : ''}
                     ${isMissingPhotoBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">📷 ${state.lang === 'zh' ? '正在同步照片 · 点此立即加载' : '사진 동기화 중 · 눌러서 바로 보기'}</button>` : ''}
-                    ${isMissingVoiceBubble ? `<button type="button" onclick="if(typeof window.__pullRecentMediaNow==='function')window.__pullRecentMediaNow(true);if(typeof window.__pullCloudSync==='function')window.__pullCloudSync(true);" class="cw-voice-play-btn w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎙️ ${state.lang === 'zh' ? '正在同步语音 · 点此立即加载' : '음성 동기화 중 · 눌러서 바로 듣기'}</button>` : ''}
+                    ${isMissingVoiceBubble ? `<button type="button" data-msg-id="${escapeHtml(m.id)}" onclick="if(typeof window.__recoverMissingVoiceNow==='function')window.__recoverMissingVoiceNow('${escapeHtml(m.id)}');" class="cw-voice-play-btn w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.2)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};">🎙️ ${state.lang === 'zh' ? '正在同步语音 · 点此立即加载' : '음성 동기화 중 · 눌러서 바로 듣기'}</button>` : ''}
                     ${m.sticker ? `<div class="flex justify-center py-0.5 cw-keep-native-emoji">${(Number.isInteger(m.stickerIdx) && m.stickerIdx < 28 && typeof getPastelStickerSvg === 'function') ? getPastelStickerSvg(m.stickerIdx, 62) : `<div class="text-5xl leading-none">${m.sticker}</div>`}</div>` : ''}
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">${CW_MEDIA_SVG.play}</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0 inline-flex items-center">${CW_MEDIA_SVG.waveMini}</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
@@ -12866,8 +13122,8 @@
                       <div class="pt-1.5 mt-1 space-y-1.5" style="border-top: 1px solid ${mine ? 'rgba(255,255,255,0.2)' : 'rgba(139,92,246,0.12)'};">
                         <div class="flex items-start justify-between gap-2">
                           <div class="min-w-0 flex-1">
-                            <div class="${mine ? 'cw-trans-sub text-[0.85rem] font-medium' : 'cw-trans-main text-[0.98rem] font-bold'} leading-snug break-words cw-keep-native-emoji" style="opacity: ${mine ? '0.86' : '1'};">${isFailedTrans ? (state.lang === 'zh' ? '翻译准确度较低，请点重译' : '번역이 부정확해요 · 재번역을 눌러주세요') : (window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml((() => { let _t = String(m.translated || '').replace(/^\s*-\s+/, ''); if (/[\u4e00-\u9fff]/.test(_t) && !/[가-힣]/.test(_t)) { _t = _t.replace(/\s*ㅎ{3,}/g, /哈哈/.test(_t) ? '' : ' 哈哈哈').replace(/\s*ㅎ{2}/g, /嘿嘿|哈哈/.test(_t) ? '' : ' 嘿嘿').replace(/\s*ㅋ{2,}/g, /哈哈/.test(_t) ? '' : ' 哈哈').replace(/\s*[ㅠㅜ]{2,}/g, /呜呜/.test(_t) ? '' : ' 呜呜').replace(/[ㅎㅋㅠㅜ]+/g, '').trim(); } return _t; })()), 21) : escapeHtml(m.translated || ''))}</div>
-                            ${(!isFailedTrans && m.altTranslated && m.altTranslated !== m.translated) ? `<div class="cw-alt-trans text-[11px] mt-1 leading-snug break-words" style="opacity: ${mine ? '0.82' : '0.76'};"><b>${state.lang === 'zh' ? '参考译文' : '다른 번역'}:</b> ${window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml(String(m.altTranslated || '').replace(/[ㅎㅋㅠㅜ]+/g, '').trim()), 18) : escapeHtml(String(m.altTranslated || '').replace(/[ㅎㅋㅠㅜ]+/g, '').trim())}</div>` : ''}
+                            <div class="${mine ? 'cw-trans-sub text-[0.85rem] font-medium' : 'cw-trans-main text-[0.98rem] font-bold'} leading-snug break-words cw-keep-native-emoji" style="opacity: ${mine ? '0.86' : '1'};">${isFailedTrans ? (state.lang === 'zh' ? '翻译准确度较低，请点重译' : '번역이 부정확해요 · 재번역을 눌러주세요') : escapeHtml((() => { let _t = String(m.translated || '').replace(/^\s*-\s+/, ''); if (typeof window.__stripUnrequestedAutoEmojis === 'function' && !m.sticker) { _t = window.__stripUnrequestedAutoEmojis(_t, m.original || ''); } if (/[\u4e00-\u9fff]/.test(_t) && !/[가-힣]/.test(_t)) { _t = _t.replace(/\s*ㅎ{3,}/g, /哈哈/.test(_t) ? '' : ' 哈哈哈').replace(/\s*ㅎ{2}/g, /嘿嘿|哈哈/.test(_t) ? '' : ' 嘿嘿').replace(/\s*ㅋ{2,}/g, /哈哈/.test(_t) ? '' : ' 哈哈').replace(/\s*[ㅠㅜ]{2,}/g, /呜呜/.test(_t) ? '' : ' 呜呜').replace(/[ㅎㅋㅠㅜ]+/g, '').trim(); } return _t; })())}</div>
+                            ${(!isFailedTrans && m.altTranslated && m.altTranslated !== m.translated) ? `<div class="cw-alt-trans text-[11px] mt-1 leading-snug break-words" style="opacity: ${mine ? '0.82' : '0.76'};"><b>${state.lang === 'zh' ? '参考译文' : '다른 번역'}:</b> ${(() => { let _at = String(m.altTranslated || '').replace(/[ㅎㅋㅠㅜ]+/g, '').trim(); if (typeof window.__stripUnrequestedAutoEmojis === 'function' && !m.sticker) _at = window.__stripUnrequestedAutoEmojis(_at, m.original || ''); return _at ? escapeHtml(_at) : ''; })()}</div>` : ''}
                           </div>
                           ${!isFailedTrans ? `<button type="button" class="speak-btn opacity-65 hover:opacity-100 shrink-0 pt-0.5 inline-flex items-center" data-text="${escapeHtml(m.translated)}" data-lang="${m.tgtLang === 'zh' ? 'zh-CN' : 'ko-KR'}" title="${state.lang === 'zh' ? '朗读译文' : '번역 듣기'}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>` : ''}
                         </div>
@@ -12961,7 +13217,9 @@
                 </div>
               </div>
             `;
-          }).join('');
+          }).join('') + ((window.__cwPartnerTypingRole && Date.now() < (window.__cwPartnerTypingUntil || 0) && typeof window.__buildInChatTypingRowHtml === 'function')
+            ? window.__buildInChatTypingRowHtml(window.__cwPartnerTypingRole, prevSenderKey === window.__cwPartnerTypingRole)
+            : '');
           const olderBtn = document.getElementById('chatLoadOlderBtn');
           if (olderBtn) {
             olderBtn.addEventListener('click', () => {
@@ -12982,6 +13240,8 @@
             });
           });
           if (typeof window.__refreshIconSlots === 'function') window.__refreshIconSlots(listEl);
+          const __typingRowInChat = document.getElementById('cwInChatTypingRow');
+          if (__typingRowInChat && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, __typingRowInChat);
           const __cwForceBot = !!window.__cwForceScrollBottom;
           window.__cwForceScrollBottom = false;
           if (typeof window.__cwPreserveChatScroll === 'number') {
@@ -13481,7 +13741,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       function renderBilingualCard(origText, transText, pronText, compact) {
         const orig = String(origText || '');
-        const trans = String(transText || '');
+        const trans = stripUnrequestedAutoEmojis(String(transText || ''), orig);
         const origIsKo = /[가-힣]/.test(orig);
         const isZhMode = state.lang === 'zh';
         // When app is in Chinese mode and original is Korean (or vice versa), promote the user's preferred language to TOP primary!
@@ -14578,7 +14838,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
           saveState(true); renderHome();
           pushNotification('💜', '수완의 기분 변경', '秀完更新了心情', state.profile.suwanMood, state.profile.suwanMood, 'home', '', 'post', false, 'suwan');
-          try { if (typeof sendPartnerNativePush === 'function') sendPartnerNativePush('기분 변경', String(state.profile.suwanMood || '').split('·').pop().trim() || state.profile.suwanMood); } catch (_) {}
+          try { if (typeof sendPartnerNativePush === 'function') sendPartnerNativePush('기분 변경', formatMoodByLang(state.profile.suwanMood || '', 'zh') || state.profile.suwanMood); } catch (_) {}
         });
         document.getElementById('jingchanMoodSelect').addEventListener('change', (e) => {
           if ((state.myRole || 'suwan') !== 'jingchan') {
@@ -15826,14 +16086,28 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
             if (!stickerGrid.__cwWcDelegated) {
               stickerGrid.__cwWcDelegated = true;
+              stickerGrid.addEventListener('pointerdown', (ev) => {
+                const b = ev.target && ev.target.closest ? ev.target.closest('.insert-wc-emoji-btn') : null;
+                if (b) b.__cwDirectDownTs = Date.now();
+              }, { passive: true });
+              stickerGrid.addEventListener('touchstart', (ev) => {
+                const b = ev.target && ev.target.closest ? ev.target.closest('.insert-wc-emoji-btn') : null;
+                if (b) b.__cwDirectDownTs = Date.now();
+              }, { passive: true });
               stickerGrid.addEventListener('click', (ev) => {
-                if (window.__cwToggleTouchActive || (stickerTray && !stickerTray.__cwPointerStartedInside && ev.detail > 0) || (Date.now() - (window.__cwDrawerOpenedAt || 0) < 150)) {
+                const openedAgo = Date.now() - (window.__cwDrawerOpenedAt || 0);
+                if (window.__cwToggleTouchActive || (stickerTray && !stickerTray.__cwPointerStartedInside && ev.detail > 0) || openedAgo < 340) {
                   ev.preventDefault();
                   ev.stopPropagation();
                   return;
                 }
                 const btn = ev.target && ev.target.closest ? ev.target.closest('.insert-wc-emoji-btn') : null;
                 if (!btn) return;
+                if (ev.detail > 0 && (!btn.__cwDirectDownTs || (Date.now() - btn.__cwDirectDownTs) > 1200 || btn.__cwDirectDownTs < (window.__cwDrawerOpenedAt || 0) + 180)) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  return;
+                }
                 ev.preventDefault();
                 const icon = btn.getAttribute('data-icon') || '';
                 const openEditBox = document.querySelector('[id^="editMsgBox_"]:not(.hidden)');
@@ -16319,66 +16593,117 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           showToast(state.lang === 'zh' ? '🎙️ 语音消息已发送！' : '🎙️ 음성 메시지를 보냈어요!');
           pushNotification('🎙️', `${senderName}의 음성 메시지`, `${senderName}发来语音消息`, '메신저에서 바로 들어보세요 💜', '快去聊天里听听吧 💜', 'translator', 'messenger', 'post', false, sender);
         };
-        window.__receiveNativeRecordedVoice = (dataUrl, sec) => {
-          document.getElementById('cwMicPermModal')?.classList.add('hidden');
-          const norm = normalizeAudioDataUrl(String(dataUrl || ''));
-          if (norm && norm.startsWith('data:audio/')) {
-            sendQuickVoiceBubble(norm);
-          }
-        };
-        let pendingVoiceDataUrl = '', pendingVoiceAudio = null, pendingVoicePlaying = false;
+        let pendingVoiceDataUrl = '', pendingVoiceAudio = null, pendingVoicePlaying = false, pendingVoiceSec = 1, pendingVoiceWebCtx = null, pendingVoiceWebSrc = null;
         const setPrevPlayBtnState = (playing) => {
           const pBtn = document.getElementById('chatVoicePrevPlayBtn');
           if (!pBtn) return;
           pBtn.classList.toggle('cw-prev-playing', !!playing);
           pBtn.innerHTML = playing ? CW_MEDIA_SVG.stop : CW_MEDIA_SVG.play;
         };
-        const closeVoiceConfirmBar = () => {
+        const stopPendingVoicePlayback = () => {
           if (pendingVoiceAudio) { try { pendingVoiceAudio.pause(); } catch (_) {} pendingVoiceAudio = null; }
+          if (pendingVoiceWebSrc) { try { pendingVoiceWebSrc.stop(); } catch (_) {} pendingVoiceWebSrc = null; }
           pendingVoicePlaying = false;
+          setPrevPlayBtnState(false);
+        };
+        const closeVoiceConfirmBar = () => {
+          stopPendingVoicePlayback();
           pendingVoiceDataUrl = '';
           const bar = document.getElementById('chatVoiceConfirmBar');
-          setPrevPlayBtnState(false);
           if (bar) bar.classList.add('hidden');
         };
-        const openVoiceConfirmBar = (dataUrl, sec) => {
-          if (!dataUrl || !String(dataUrl).startsWith('data:audio/')) return;
+        const openVoiceConfirmBar = (rawDataUrl, sec) => {
+          const dataUrl = normalizeAudioDataUrl(String(rawDataUrl || ''));
+          if (!dataUrl || !dataUrl.startsWith('data:audio/')) return;
           closeVoiceConfirmBar();
           pendingVoiceDataUrl = dataUrl;
+          pendingVoiceSec = Math.max(1, Math.round(Number(sec) || 1));
           const isZh = state.lang === 'zh';
-          const mm = String(Math.floor(sec / 60)).padStart(2, '0');
-          const ss = String(sec % 60).padStart(2, '0');
+          const mm = String(Math.floor(pendingVoiceSec / 60)).padStart(2, '0');
+          const ss = String(pendingVoiceSec % 60).padStart(2, '0');
           const bar = document.getElementById('chatVoiceConfirmBar');
           const ttl = document.getElementById('chatVoicePrevTitle');
           const sub = document.getElementById('chatVoicePrevSub');
+          const rBtn = document.getElementById('chatVoicePrevRerecBtn');
           const cBtn = document.getElementById('chatVoicePrevCancelBtn');
           const sBtn = document.getElementById('chatVoicePrevSendBtn');
           if (ttl) ttl.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: var(--accent-royal); flex-shrink:0;"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg><span>${isZh ? `录音完成 (${mm}:${ss})` : `음성 녹음 완료 (${mm}:${ss})`}</span>`;
-          if (sub) sub.textContent = isZh ? '先试听确认后再发送哦' : '미리 들어보고 확인 후 전송해 주세요';
+          if (sub) sub.textContent = isZh ? '点左侧 ▶ 试听，点右侧「发送」才发出' : '왼쪽 ▶ 미리듣기 후 「전송」을 눌러야 보내져요';
+          if (rBtn) rBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.5"/><path d="M20 4v4.5h-4.5"/></svg><span>${isZh ? '重录' : '재녹음'}</span>`;
           if (cBtn) cBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg><span>${isZh ? '取消' : '취소'}</span>`;
           if (sBtn) sBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg><span>${isZh ? '发送' : '전송'}</span>`;
           if (bar) bar.classList.remove('hidden');
         };
-        document.getElementById('chatVoicePrevPlayBtn')?.addEventListener('click', () => {
+        window.__receiveNativeRecordedVoice = (dataUrl, sec) => {
+          document.getElementById('cwMicPermModal')?.classList.add('hidden');
+          const norm = normalizeAudioDataUrl(String(dataUrl || ''));
+          if (norm && norm.startsWith('data:audio/')) {
+            openVoiceConfirmBar(norm, Math.max(1, Math.round(Number(sec) || 1)));
+          }
+        };
+        document.getElementById('chatVoicePrevPlayBtn')?.addEventListener('click', async () => {
           if (!pendingVoiceDataUrl) return;
-          if (pendingVoicePlaying && pendingVoiceAudio) {
-            try { pendingVoiceAudio.pause(); } catch (_) {}
-            pendingVoicePlaying = false;
-            setPrevPlayBtnState(false);
+          if (pendingVoicePlaying) {
+            stopPendingVoicePlayback();
             return;
           }
+          const sub = document.getElementById('chatVoicePrevSub');
+          const isZh = state.lang === 'zh';
+          const asset = preparePlayableAudioAsset(pendingVoiceDataUrl);
+          const fallbackWebAudio = async () => {
+            if (!asset || !asset.bytes) { stopPendingVoicePlayback(); return; }
+            try {
+              const AC = window.AudioContext || window.webkitAudioContext;
+              if (!pendingVoiceWebCtx) pendingVoiceWebCtx = new AC();
+              if (pendingVoiceWebCtx.state === 'suspended') await pendingVoiceWebCtx.resume();
+              const audioBuf = await pendingVoiceWebCtx.decodeAudioData(asset.bytes.buffer.slice(0));
+              const src = pendingVoiceWebCtx.createBufferSource();
+              src.buffer = audioBuf;
+              src.connect(pendingVoiceWebCtx.destination);
+              pendingVoiceWebSrc = src;
+              pendingVoicePlaying = true;
+              setPrevPlayBtnState(true);
+              if (sub) sub.textContent = isZh ? '正在试听...' : '미리듣기 재생 중...';
+              src.onended = () => {
+                stopPendingVoicePlayback();
+                if (sub) sub.textContent = isZh ? '试听完成 · 点击「发送」即可发出' : '미리듣기 완료 · 「전송」을 누르면 보내져요';
+              };
+              src.start(0);
+            } catch (_) {
+              stopPendingVoicePlayback();
+              showToast(isZh ? '预览播放失败，请重录一次' : '미리듣기 재생에 실패했어요. 다시 녹음해 주세요');
+            }
+          };
           try {
-            pendingVoiceAudio = new Audio(pendingVoiceDataUrl);
-            pendingVoiceAudio.onended = () => { pendingVoicePlaying = false; setPrevPlayBtnState(false); };
-            pendingVoiceAudio.onerror = () => { pendingVoicePlaying = false; setPrevPlayBtnState(false); };
+            pendingVoiceAudio = new Audio(asset ? asset.blobUrl : pendingVoiceDataUrl);
+            pendingVoiceAudio.setAttribute('playsinline', '');
+            pendingVoiceAudio.setAttribute('webkit-playsinline', '');
+            pendingVoiceAudio.ontimeupdate = () => {
+              if (!pendingVoiceAudio || !sub) return;
+              const cur = Math.floor(pendingVoiceAudio.currentTime || 0);
+              const tot = (pendingVoiceAudio.duration && Number.isFinite(pendingVoiceAudio.duration)) ? Math.max(1, Math.round(pendingVoiceAudio.duration)) : pendingVoiceSec;
+              sub.textContent = isZh ? `正在试听 ${cur}s / ${tot}s` : `미리듣기 중 ${cur}초 / ${tot}초`;
+            };
+            pendingVoiceAudio.onended = () => {
+              stopPendingVoicePlayback();
+              if (sub) sub.textContent = isZh ? '试听完成 · 点击「发送」即可发出' : '미리듣기 완료 · 「전송」을 누르면 보내져요';
+            };
+            pendingVoiceAudio.onerror = () => { fallbackWebAudio(); };
             pendingVoicePlaying = true;
             setPrevPlayBtnState(true);
-            pendingVoiceAudio.play().catch(() => { pendingVoicePlaying = false; setPrevPlayBtnState(false); });
-          } catch (_) {}
+            const pr = pendingVoiceAudio.play();
+            if (pr && typeof pr.catch === 'function') pr.catch(() => fallbackWebAudio());
+          } catch (_) {
+            fallbackWebAudio();
+          }
+        });
+        document.getElementById('chatVoicePrevRerecBtn')?.addEventListener('click', () => {
+          closeVoiceConfirmBar();
+          startCmVoiceRecording(true);
         });
         document.getElementById('chatVoicePrevCancelBtn')?.addEventListener('click', () => {
           closeVoiceConfirmBar();
-          showToast(state.lang === 'zh' ? '已取消语音发送' : '음성 메시지 전송을 취소했어요');
+          showToast(state.lang === 'zh' ? '已取消语音发送' : '음성 녹음을 취소했어요');
         });
         document.getElementById('chatVoicePrevSendBtn')?.addEventListener('click', () => {
           const urlToSend = pendingVoiceDataUrl;
@@ -16394,11 +16719,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (cmUsingNativeBridgeRec && window.ChanwanNative && typeof window.ChanwanNative.stopNativeAudioRecord === 'function') {
             cmUsingNativeBridgeRec = false;
             const recMs = Date.now() - cmStartTs;
+            const sec = Math.max(1, Math.round(recMs / 1000));
             let b64Url = '';
             try { b64Url = String(window.ChanwanNative.stopNativeAudioRecord() || ''); } catch (_) {}
             cmCleanup();
             if (recMs >= 600 && b64Url.startsWith('data:audio/')) {
-              sendQuickVoiceBubble(b64Url);
+              openVoiceConfirmBar(b64Url, sec);
             } else {
               showToast(state.lang === 'zh' ? '录音时间太短已取消（请录满1秒）' : '녹음이 너무 짧아 취소됐어요 (1초 이상 말씀해 주세요)');
             }
@@ -16413,7 +16739,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const sec = Math.max(1, Math.round((Date.now() - cmStartTs) / 1000));
             const sr = cmPcmCtx ? cmPcmCtx.sampleRate : 16000;
             const wav = encodePcmToWavDataUrl(cmPcmBufs, sr);
-            cmPcmBufs = []; cmCleanup(); sendQuickVoiceBubble(wav);
+            cmPcmBufs = []; cmCleanup(); openVoiceConfirmBar(wav, sec);
             return;
           }
           cmCleanup();
@@ -16470,6 +16796,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           if (cmIsRec) { stopCmRec(); return; }
           if (cmConnecting) return;
+          closeVoiceConfirmBar();
           try { if (typeof stopVoiceRecognition === 'function') stopVoiceRecognition(); } catch (_) {}
 
           // Engine 0 (100% Bulletproof Native APK MediaRecorder — bypasses WebView getUserMedia bugs completely!)
@@ -16549,29 +16876,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             let ok = false;
             if (typeof MediaRecorder !== 'undefined') {
               try {
-                const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
-                const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+                const mime = ['audio/mp4;codecs=mp4a.40.2', 'audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'].find(m => { try { return MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m); } catch (_) { return false; } }) || '';
+                const recOpts = mime ? { mimeType: mime, audioBitsPerSecond: 24000 } : { audioBitsPerSecond: 24000 };
+                let rec = null;
+                try { rec = new MediaRecorder(stream, recOpts); } catch (_) { rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
                 const chunks = [];
                 cmRec = rec;
                 rec.ondataavailable = (ev) => { if (ev.data && ev.data.size > 0) chunks.push(ev.data); };
                 rec.onstop = () => {
                   try {
                     const recMs = Date.now() - cmStartTs;
-                    const outMime = (rec.mimeType || mime || (chunks[0] && chunks[0].type) || 'audio/webm').split(';')[0];
+                    const outMime = (rec.mimeType || mime || (chunks[0] && chunks[0].type) || 'audio/mp4').split(';')[0];
                     const blob = new Blob(chunks, { type: outMime });
-                    if (recMs >= 600 && blob.size > 400) {
+                    if (recMs >= 600 && blob.size > 250) {
                       const sec = Math.max(1, Math.round(recMs / 1000));
                       const r = new FileReader();
                       r.onloadend = () => {
-                        let dUrl = String(r.result || '');
-                        if (dUrl.startsWith('data:video/')) dUrl = 'data:audio/' + dUrl.slice(11);
-                        sendQuickVoiceBubble(dUrl);
+                        const dUrl = normalizeAudioDataUrl(String(r.result || ''));
+                        openVoiceConfirmBar(dUrl, sec);
                       };
                       r.readAsDataURL(blob);
                     } else if (cmPcmBufs.length) {
                       const sec = Math.max(1, Math.round(recMs / 1000));
                       const sr = cmPcmCtx ? cmPcmCtx.sampleRate : 16000;
-                      sendQuickVoiceBubble(encodePcmToWavDataUrl(cmPcmBufs, sr));
+                      openVoiceConfirmBar(encodePcmToWavDataUrl(cmPcmBufs, sr), sec);
                     } else {
                       showToast(state.lang === 'zh' ? '录音时间太短已自动取消（请录满1秒）' : '녹음이 너무 짧아 취소됐어요 (1초 이상 말씀해 주세요)');
                     }
@@ -16735,7 +17063,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const r = new FileReader();
           r.onloadend = () => {
             const dUrl = normalizeAudioDataUrl(String(r.result || ''));
-            sendQuickVoiceBubble(dUrl);
+            openVoiceConfirmBar(dUrl, 1);
           };
           r.readAsDataURL(f);
           inp.value = '';
@@ -16745,7 +17073,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v74',
+          ver: 'Prime 4 · v84',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -16767,7 +17095,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v74 更新日志' : '📜 灿完时光 Prime 4 · v74 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v84 更新日志' : '📜 灿完时光 Prime 4 · v84 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17536,7 +17864,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           '⚡':'bolt',
           '🎉':'party','🎊':'party','🎈':'party',
           '🌱':'sprout','🌿':'sprout','🍀':'sprout',
-          '🌷':'flower','🌸':'flower','🪻':'flower','💐':'flower','🌹':'flower','🌻':'flower','🌺':'flower',
+          '🌷':'flower','🌸':'flower','🪻':'flower','💐':'flower','🌹':'flower','🥀':'flower','🌻':'flower','🌺':'flower',
           '✏️':'pen','✏':'pen','🪶':'pen','📝':'pen','✒️':'pen','🖋️':'pen','🗒️':'pen',
           '💌':'mail','💬':'mail','💭':'mail','✉️':'mail','📩':'mail',
           '🖼️':'photo','🖼':'photo','📷':'photo','📸':'photo','🎞️':'photo','🎬':'photo','🎥':'photo',
@@ -17566,7 +17894,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           '🎮':'game','🧩':'game','🎲':'game',
           '📌':'pin','📍':'pin','🔖':'pin','🧭':'pin',
           '☀️':'sun','☀':'sun',
-          '🌙':'moon','🌛':'moon','🌃':'moon',
+          '🌙':'moon','🌛':'moon','🌃':'moon','🖤':'moon',
           '☁️':'cloud','☁':'cloud','🌤️':'cloud','⛅':'cloud','🌧️':'cloud','❄️':'cloud','🌈':'cloud',
           '📁':'folder','📂':'folder','📦':'folder',
           '🇨🇳':'cn','🇰🇷':'kr','🇬🇧':'en','🇺🇸':'en','🔤':'en','🗣️':'speaker','🗣':'speaker','★':'star',
@@ -17719,6 +18047,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const root = targetEl || document.querySelector('.tab-panel.active') || document.body;
             window.__refreshIconSlots(document);
             syncAllTabIconsToStyle(m, document.querySelector('header'));
+          if (typeof window.__syncQuickStatusUi === 'function') window.__syncQuickStatusUi();
             if (root && root !== document.querySelector('header')) syncAllTabIconsToStyle(m, root);
           }, 24);
         };
@@ -17767,6 +18096,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const key = el.getAttribute('data-ico');
             if (pack[key]) el.innerHTML = pack[key];
           });
+          syncAllTabIconsToStyle(m, document.querySelector('header'));
           syncAllTabIconsToStyle(m);
           document.querySelectorAll('.icon-style-btn').forEach(btn => {
             const act = btn.getAttribute('data-istyle') === m;
@@ -18708,13 +19038,140 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let vlRecorder = null, vlStream = null, vlTimer = null, vlMaxTimer = null, vlStartTs = 0, vlIsRec = false, vlConnecting = false;
         let vlPcmCtx = null, vlPcmProc = null, vlPcmBufs = [];
 
+        function isMessengerVoiceItem(v) {
+          if (!v) return false;
+          if (v.source === 'messenger') return true;
+          if (String(v.id || '').startsWith('vl_chat_')) return true;
+          if (/메신저 음성|聊天语音/.test(String(v.tag || ''))) return true;
+          return false;
+        }
+        window.__isMessengerVoiceItem = isMessengerVoiceItem;
+
+        function localizeVoiceTag(v, isZh) {
+          if (isMessengerVoiceItem(v)) return isZh ? '💬 聊天语音' : '💬 메신저 음성';
+          const raw = String(v && v.tag || '🎙️').trim();
+          const mapKoToZh = {
+            '☀️ 굿모닝': '☀️ 早安',
+            '🌙 굿나잇': '🌙 晚安',
+            '💜 보고 싶어': '💜 好想你',
+            '💪 응원해': '💪 加油打气',
+            '💌 깜짝 편지': '💌 惊喜语音'
+          };
+          const mapZhToKo = {
+            '☀️ 早安': '☀️ 굿모닝',
+            '🌙 晚安': '🌙 굿나잇',
+            '💜 好想你': '💜 보고 싶어',
+            '💪 加油打气': '💪 응원해',
+            '💌 惊喜语音': '💌 깜짝 편지'
+          };
+          return isZh ? (mapKoToZh[raw] || raw) : (mapZhToKo[raw] || raw);
+        }
+
+        function normalizeVlReactions(arr) {
+          if (!Array.isArray(arr)) return [];
+          const out = [];
+          const seen = new Set();
+          arr.forEach(r => {
+            if (!r) return;
+            const em = typeof r === 'string' ? r : String(r.emoji || '');
+            const by = (typeof r === 'object' && r.by) ? r.by : '';
+            if (!em) return;
+            const k = `${em}|${by}`;
+            if (seen.has(k)) return;
+            seen.add(k);
+            out.push({ emoji: em, by: by || 'suwan' });
+          });
+          return out;
+        }
+
+        function syncChatVoicesIntoMailbox() {
+          if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
+          const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
+          let changed = false;
+          // 1) Normalize source field on existing items
+          state.voiceLetters.forEach(v => {
+            if (v && isMessengerVoiceItem(v) && v.source !== 'messenger') {
+              v.source = 'messenger';
+              changed = true;
+            }
+          });
+          // 2) Ensure every Messenger voice message with audioUrl is present in Voice Mailbox
+          const existingIds = new Set(state.voiceLetters.map(v => v && v.id).filter(Boolean));
+          (state.chat?.messages || []).forEach(m => {
+            if (!m || !m.id || !m.audioUrl || !String(m.audioUrl).startsWith('data:audio/')) return;
+            const vlId = `vl_chat_${m.id}`;
+            if (delVl.has(vlId) || existingIds.has(vlId)) return;
+            const dStr = m.ts ? new Date(Number(m.ts)).toISOString().slice(0, 10) : getKstDateString();
+            state.voiceLetters.unshift({
+              id: vlId,
+              sender: (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan',
+              source: 'messenger',
+              tag: state.lang === 'zh' ? '💬 聊天语音' : '💬 메신저 음성',
+              note: '',
+              translated: '',
+              date: dStr,
+              time: m.time || '',
+              audioUrl: normalizeAudioDataUrl(m.audioUrl),
+              reactions: Array.isArray(m.reactions) ? m.reactions.map(em => typeof em === 'string' ? { emoji: em, by: state.myRole || 'suwan' } : em) : [],
+              comments: []
+            });
+            existingIds.add(vlId);
+            changed = true;
+          });
+          // 3) Apply any pendingVoiceMetaMap entries that arrived before audio bytes
+          if (state.pendingVoiceMetaMap && typeof state.pendingVoiceMetaMap === 'object') {
+            state.voiceLetters.forEach(v => {
+              if (!v || !v.id) return;
+              const pm = state.pendingVoiceMetaMap[v.id];
+              if (!pm) return;
+              if (Array.isArray(pm.reactions) && pm.reactions.length) v.reactions = normalizeVlReactions(pm.reactions);
+              if (Array.isArray(pm.comments) && pm.comments.length) {
+                if (!Array.isArray(v.comments)) v.comments = [];
+                const cIds = new Set(v.comments.map(c => c && c.id));
+                pm.comments.forEach(c => { if (c && c.id && !cIds.has(c.id)) { v.comments.push(c); cIds.add(c.id); } });
+              }
+              delete state.pendingVoiceMetaMap[v.id];
+              changed = true;
+            });
+          }
+          if (changed) {
+            try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
+          }
+        }
+
+        function broadcastVoiceMetaNow(vItem) {
+          if (!vItem || !vItem.id) return;
+          vItem.updatedAt = Date.now();
+          try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
+          if (typeof window.__sendChatSignal === 'function') {
+            window.__sendChatSignal('vl_meta', {
+              vlId: vItem.id,
+              source: isMessengerVoiceItem(vItem) ? 'messenger' : (vItem.source || 'letter'),
+              reactions: normalizeVlReactions(vItem.reactions || []),
+              comments: Array.isArray(vItem.comments) ? vItem.comments.slice(-20) : [],
+              deletedCommentIds: Array.isArray(vItem.deletedCommentIds) ? vItem.deletedCommentIds.slice(-20) : [],
+              updatedAt: vItem.updatedAt
+            });
+          }
+          saveState(true);
+        }
+
+        const VL_QUICK_REACTS = ['❤️', '🥰', '🥺', '😂', '👏', '💜'];
+
         function renderVoiceLetters() {
           const list = document.getElementById('voiceLetterList');
           if (!list) return;
+          // Do not clobber active typing inside a reply input!
+          const actEl = document.activeElement;
+          if (actEl && actEl.classList && actEl.classList.contains('vl-comment-input') && String(actEl.value || '').trim().length > 0) {
+            return;
+          }
+          syncChatVoicesIntoMailbox();
           const isZh = state.lang === 'zh';
+          const myRole = state.myRole || 'suwan';
           const allItems = Array.isArray(state.voiceLetters) ? state.voiceLetters : [];
-          const letterItems = allItems.filter(v => v && v.source !== 'messenger');
-          const chatItems = allItems.filter(v => v && v.source === 'messenger');
+          const letterItems = allItems.filter(v => v && !isMessengerVoiceItem(v));
+          const chatItems = allItems.filter(v => v && isMessengerVoiceItem(v));
           const activeF = window.__vlFilter || 'all';
           const items = activeF === 'letter' ? letterItems : (activeF === 'messenger' ? chatItems : allItems);
 
@@ -18737,32 +19194,214 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             list.querySelectorAll('.cw-inline-vault-restore-btn').forEach(b => b.addEventListener('click', () => { if (typeof window.__runFullCloudDataRestore === 'function') window.__runFullCloudDataRestore(false); }));
             return;
           }
-          list.innerHTML = filterHtml + items.map(v => `
+
+          list.innerHTML = filterHtml + items.map(v => {
+            const normReacts = normalizeVlReactions(v.reactions);
+            const grouped = new Map();
+            normReacts.forEach(r => {
+              if (!grouped.has(r.emoji)) grouped.set(r.emoji, new Set());
+              grouped.get(r.emoji).add(r.by);
+            });
+            const reactBtnsHtml = VL_QUICK_REACTS.map(em => {
+              const whoSet = grouped.get(em);
+              const cnt = whoSet ? whoSet.size : 0;
+              const mineOn = !!(whoSet && whoSet.has(myRole));
+              const whoTag = cnt > 0
+                ? Array.from(whoSet).map(rk => rk === 'suwan' ? (isZh ? '完' : '수완') : (isZh ? '灿' : '징찬')).join('·')
+                : '';
+              return `<button type="button" class="vl-react-btn cw-keep-native-emoji px-2 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1 transition active:scale-95" style="background:${mineOn ? 'var(--accent-royal-soft)' : 'var(--surface-2)'}; border:1px solid ${mineOn ? 'var(--accent-royal)' : 'var(--border-subtle)'}; color:${mineOn ? 'var(--accent-royal)' : 'var(--text-secondary)'};" data-vid="${escapeHtml(v.id)}" data-em="${em}"><span>${em}</span>${whoTag ? `<span class="text-[10px] font-bold">${escapeHtml(whoTag)}</span>` : ''}</button>`;
+            }).join('');
+
+            const comments = Array.isArray(v.comments) ? v.comments : [];
+            const commentsHtml = comments.map(c => {
+              const isMyCmt = (c.authorRole ? c.authorRole === myRole : isMyAuthoredItem(c));
+              const cAuthorBadge = (c.authorRole === 'jingchan' || String(c.author || '').includes('靖灿'))
+                ? '💜 靖灿(灿)'
+                : '❤️ 수완(完)';
+              const cleanTr = (c.translated && typeof window.__stripUnrequestedAutoEmojis === 'function')
+                ? window.__stripUnrequestedAutoEmojis(c.translated, c.text || '')
+                : (c.translated || '');
+              return `
+                <div class="rounded-xl px-2.5 py-1.5 text-[11px]" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="font-bold text-gold">${cAuthorBadge}</span>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-[10px] text-mut">${escapeHtml(c.time || '')}</span>
+                      ${isMyCmt ? `<button type="button" class="del-vl-cmt-btn text-[10px] text-mut hover:text-rose-400" data-vid="${escapeHtml(v.id)}" data-cid="${escapeHtml(c.id)}">✕</button>` : ''}
+                    </div>
+                  </div>
+                  <div class="text-main font-medium break-words mt-0.5">${escapeHtml(c.text || '')}</div>
+                  ${cleanTr && cleanTr !== c.text ? `<div class="text-[10.5px] font-semibold break-words mt-0.5" style="color: var(--accent-royal);">${escapeHtml(cleanTr)}</div>` : ''}
+                </div>`;
+            }).join('');
+
+            const normUrl = v.audioUrl ? normalizeAudioDataUrl(v.audioUrl) : '';
+            const dlHref = normUrl ? __cwMediaUrl(normUrl, 'audio/mp4') : '';
+            const senderBadge = (v.sender === 'suwan' || String(v.sender || '').includes('수완')) ? '❤️ 수완(完)' : '💜 靖灿(灿)';
+
+            return `
             <article class="royal-card rounded-3xl p-4 space-y-2.5">
               <div class="flex items-center justify-between gap-2 text-xs">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="font-bold text-gold">${v.sender === 'suwan' ? '❤️ 수완(完)' : '💜 靖灿(灿)'}</span>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">${escapeHtml(v.tag || '🎙️')}</span>
+                  <span class="font-bold text-gold">${senderBadge}</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">${escapeHtml(localizeVoiceTag(v, isZh))}</span>
                   <span class="text-[11px] text-mut">${escapeHtml(v.date || '')} ${escapeHtml(v.time || '')}</span>
                 </div>
-                <button type="button" class="del-vl-btn text-xs text-mut hover:text-rose-400" data-id="${escapeHtml(v.id)}">✕</button>
+                <div class="flex items-center gap-2 shrink-0">
+                  ${dlHref ? `<a href="${dlHref}" download="chanwan_voice_${escapeHtml(v.id)}.m4a" class="text-xs text-mut hover:text-purple-500" title="${isZh ? '保存语音' : '음성 파일 저장'}">📥</a>` : ''}
+                  <button type="button" class="del-vl-btn text-xs text-mut hover:text-rose-400" data-id="${escapeHtml(v.id)}">✕</button>
+                </div>
               </div>
-              ${v.audioUrl ? `<audio controls preload="metadata" src="${__cwMediaUrl(normalizeAudioDataUrl(v.audioUrl), 'audio/mp4')}" class="w-full h-10"></audio>` : ''}
+              ${normUrl ? `<button type="button" class="cw-vl-play-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-left transition active:scale-[0.99]" style="background: var(--surface-2); border: 1px solid var(--border-subtle); color: var(--accent-royal);" data-vid="${escapeHtml(v.id)}"><span class="cw-v-ico w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition" style="background: var(--accent-royal); color: #ffffff;">${CW_MEDIA_SVG.play}</span><div class="flex-1 min-w-0 space-y-1.5"><div class="flex items-center justify-between gap-2 text-xs font-bold"><span class="cw-v-lbl truncate">${isZh ? '点击播放语音（全格式兼容）' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[11px] opacity-85 tabular-nums shrink-0 inline-flex items-center">${CW_MEDIA_SVG.waveMini}</span></div><div class="w-full h-1.5 rounded-full overflow-hidden" style="background: rgba(139,92,246,0.18);"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background: var(--accent-royal);"></div></div></div></button>` : ''}
               ${v.note ? renderBilingualCard(v.note, v.translated || '', '', true) : ''}
-            </article>
-          `).join('');
-          list.querySelectorAll('.vl-filter-btn').forEach(b => b.addEventListener('click', () => { window.__vlFilter = b.getAttribute('data-vlf') || 'all'; renderVoiceLetters(); }));
+              <div class="pt-1.5 border-t space-y-2" style="border-color: var(--border-subtle);">
+                <div class="flex items-center gap-1 flex-wrap">${reactBtnsHtml}</div>
+                ${commentsHtml ? `<div class="space-y-1.5">${commentsHtml}</div>` : ''}
+                <form class="vl-comment-form flex items-center gap-1.5" data-vid="${escapeHtml(v.id)}">
+                  <input type="text" class="vl-comment-input royal-input flex-1 min-w-0 rounded-full px-3 py-1.5 text-[11.5px]" placeholder="${isZh ? '💬 给这条语音留一句回复（自动翻译）...' : '💬 음성메시지에 답글 남기기 (자동 번역)...'}" autocomplete="off" />
+                  <button type="submit" class="btn-royal px-3 py-1.5 rounded-full text-[11px] font-bold shrink-0 whitespace-nowrap">${isZh ? '发送' : '등록'}</button>
+                </form>
+              </div>
+            </article>`;
+          }).join('');
+
+          list.querySelectorAll('.vl-filter-btn').forEach(b => b.addEventListener('click', () => {
+            window.__vlFilter = b.getAttribute('data-vlf') || 'all';
+            renderVoiceLetters();
+          }));
+
+          list.querySelectorAll('.cw-vl-play-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const vid = btn.getAttribute('data-vid');
+              const target = (state.voiceLetters || []).find(x => x && x.id === vid);
+              if (!target || !target.audioUrl) return;
+              if (typeof window.__playChatVoiceMsg === 'function') {
+                window.__playChatVoiceMsg(`vlplay_${vid}`, target.audioUrl, btn);
+              }
+            });
+          });
+
+          list.querySelectorAll('.vl-react-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const vid = btn.getAttribute('data-vid');
+              const em = btn.getAttribute('data-em');
+              const target = (state.voiceLetters || []).find(x => x && x.id === vid);
+              if (!target || !em) return;
+              const curRole = state.myRole || 'suwan';
+              let reacts = normalizeVlReactions(target.reactions);
+              const idx = reacts.findIndex(r => r.emoji === em && r.by === curRole);
+              const added = idx < 0;
+              if (idx >= 0) reacts.splice(idx, 1);
+              else reacts.push({ emoji: em, by: curRole });
+              target.reactions = reacts;
+              // Sync reaction onto paired Messenger voice bubble if linked!
+              if (String(vid).startsWith('vl_chat_')) {
+                const msgId = String(vid).slice('vl_chat_'.length);
+                const chatMsg = (state.chat?.messages || []).find(m => m && m.id === msgId);
+                if (chatMsg) {
+                  chatMsg.reactions = Array.from(new Set(reacts.map(r => r.emoji))).slice(0, 12);
+                  if (typeof window.__sendChatSignal === 'function') {
+                    window.__sendChatSignal('react', { msgId, reactions: chatMsg.reactions });
+                  }
+                }
+              }
+              broadcastVoiceMetaNow(target);
+              renderVoiceLetters();
+              if (added) {
+                const whoKo = curRole === 'jingchan' ? '징찬' : '수완';
+                const whoZh = curRole === 'jingchan' ? '靖灿' : '秀完';
+                pushNotification(em, `${whoKo}이 음성메시지에 공감했어요`, `${whoZh}给语音点了表情互动`, `${em} 리액션을 남겼어요 💜`, `留下了 ${em} 互动 💜`, 'diary', 'voice', 'post', false, curRole);
+                try { sendPartnerNativePush(`🎙️ ${whoKo}님의 음성 리액션`, `${em} 음성우체통에 리액션을 남겼어요 💜`); } catch (_) {}
+              }
+            });
+          });
+
+          list.querySelectorAll('.del-vl-cmt-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const vid = btn.getAttribute('data-vid');
+              const cid = btn.getAttribute('data-cid');
+              const target = (state.voiceLetters || []).find(x => x && x.id === vid);
+              if (!target || !Array.isArray(target.comments)) return;
+              openConfirm(
+                state.lang === 'zh' ? '删除回复' : '답글 삭제',
+                state.lang === 'zh' ? '确定要删除这条语音回复吗？' : '이 음성 답글을 삭제할까요?',
+                () => {
+                  target.comments = target.comments.filter(c => c && c.id !== cid);
+                  if (!Array.isArray(target.deletedCommentIds)) target.deletedCommentIds = [];
+                  if (cid && !target.deletedCommentIds.includes(cid)) target.deletedCommentIds.push(cid);
+                  broadcastVoiceMetaNow(target);
+                  renderVoiceLetters();
+                }
+              );
+            });
+          });
+
+          list.querySelectorAll('.vl-comment-form').forEach(form => {
+            form.addEventListener('submit', async (ev) => {
+              ev.preventDefault();
+              const vid = form.getAttribute('data-vid');
+              const inp = form.querySelector('.vl-comment-input');
+              const text = inp ? inp.value.trim() : '';
+              if (!text || !vid) return;
+              const target = (state.voiceLetters || []).find(x => x && x.id === vid);
+              if (!target) return;
+              inp.value = '';
+              const curRole = state.myRole || 'suwan';
+              const authorLabel = curRole === 'jingchan' ? '靖灿(灿)' : '수완(完)';
+              const cmtId = `vlc_${Date.now()}_${Math.random().toString(36).slice(2, 5)}`;
+              const timeStr = new Date().toLocaleTimeString(state.lang === 'zh' ? 'zh-CN' : 'ko-KR', { hour: '2-digit', minute: '2-digit' });
+              const cmtObj = {
+                id: cmtId,
+                authorRole: curRole,
+                author: authorLabel,
+                time: timeStr,
+                text,
+                translated: state.lang === 'zh' ? '⏳ 正在翻译...' : '⏳ 번역 중...'
+              };
+              if (!Array.isArray(target.comments)) target.comments = [];
+              target.comments.push(cmtObj);
+              broadcastVoiceMetaNow(target);
+              renderVoiceLetters();
+
+              let trText = '';
+              try {
+                const trRes = await geminiTranslate(text, 'lover');
+                if (trRes && trRes.translated) {
+                  trText = typeof window.__stripUnrequestedAutoEmojis === 'function'
+                    ? window.__stripUnrequestedAutoEmojis(trRes.translated, text)
+                    : trRes.translated;
+                }
+              } catch (_) {}
+              const liveTarget = (state.voiceLetters || []).find(x => x && x.id === vid);
+              const liveCmt = liveTarget && Array.isArray(liveTarget.comments) ? liveTarget.comments.find(c => c && c.id === cmtId) : null;
+              if (liveCmt) {
+                liveCmt.translated = trText || '';
+                broadcastVoiceMetaNow(liveTarget);
+                renderVoiceLetters();
+              }
+              const whoKo = curRole === 'jingchan' ? '징찬' : '수완';
+              const whoZh = curRole === 'jingchan' ? '靖灿' : '秀完';
+              const origIsKo = /[가-힣]/.test(text) && !/[\u4e00-\u9fff]/.test(text);
+              const koBody = origIsKo ? text : (trText || text);
+              const zhBody = origIsKo ? (trText || text) : text;
+              pushNotification('🎙️', `${whoKo}이 음성우체통에 답글을 남겼어요`, `${whoZh}在语音信箱留下了回复`, koBody, zhBody, 'diary', 'voice', 'post', false, curRole);
+              try { sendPartnerNativePush(`🎙️ ${whoKo}님의 음성 답글`, trText || text); } catch (_) {}
+            });
+          });
+
           list.querySelectorAll('.del-vl-btn').forEach(btn => {
             btn.addEventListener('click', () => {
               const vid = btn.getAttribute('data-id');
               openConfirm(
-                state.lang === 'zh' ? '删除语音信件' : '음성편지 삭제',
-                state.lang === 'zh' ? '确定要删除这条语音信件吗？' : '이 음성편지를 삭제할까요?',
+                state.lang === 'zh' ? '删除语音' : '음성 삭제',
+                state.lang === 'zh' ? '确定要从语音信箱删除这条语音吗？' : '음성우체통에서 이 음성을 삭제할까요?',
                 () => {
+                  if (typeof window.__stopChatVoiceIfPlaying === 'function') window.__stopChatVoiceIfPlaying(`vlplay_${vid}`);
                   if (!Array.isArray(state.deletedVoiceIds)) state.deletedVoiceIds = [];
-                if (!state.deletedVoiceIds.includes(vid)) state.deletedVoiceIds.push(vid); if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('delete_voice', { vlId: vid });
-                state.voiceLetters = (state.voiceLetters || []).filter(x => x.id !== vid);
-                try { idbPut('voice_letters_vault_v1', state.voiceLetters); idbPut('deleted_voices_vault_v1', state.deletedVoiceIds); } catch (_) {}
+                  if (!state.deletedVoiceIds.includes(vid)) state.deletedVoiceIds.push(vid);
+                  if (typeof window.__sendChatSignal === 'function') window.__sendChatSignal('delete_voice', { vlId: vid });
+                  state.voiceLetters = (state.voiceLetters || []).filter(x => x.id !== vid);
+                  try { idbPut('voice_letters_vault_v1', state.voiceLetters); idbPut('deleted_voices_vault_v1', state.deletedVoiceIds); } catch (_) {}
                   saveState(true); renderVoiceLetters();
                 }
               );
@@ -19933,10 +20572,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         function loadSyncOutbox() {
           try {
+            if (!localStorage.getItem('cw_clear_stuck_outbox_v84')) {
+              localStorage.setItem('cw_clear_stuck_outbox_v84', '1');
+              localStorage.removeItem(SYNC_OUTBOX_KEY);
+              return [];
+            }
             const raw = localStorage.getItem(SYNC_OUTBOX_KEY);
             const arr = raw ? JSON.parse(raw) : [];
             if (!Array.isArray(arr)) return [];
-            const cleaned = arr.filter(x => x && x.kind !== 'signal' && (x.tries || 0) < (x.kind === 'media' ? 4 : 2));
+            const now = Date.now();
+            const cleaned = arr.filter(x => x && x.kind !== 'signal' && (x.tries || 0) < (x.kind === 'media' ? 4 : 2) && (!x.ts || (now - Number(x.ts)) < 300000));
             if (cleaned.length !== arr.length) {
               try { localStorage.setItem(SYNC_OUTBOX_KEY, JSON.stringify(cleaned)); } catch (_) {}
             }
@@ -19944,6 +20589,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {
             return [];
           }
+        }
+
+        function clearOutboxByDedupe(dedupeKind) {
+          try {
+            const raw = localStorage.getItem(SYNC_OUTBOX_KEY);
+            if (!raw) return;
+            const arr = JSON.parse(raw);
+            if (!Array.isArray(arr) || !arr.length) return;
+            const next = arr.filter(x => x && x.dedupeKind !== dedupeKind && x.kind !== dedupeKind);
+            if (next.length !== arr.length) {
+              localStorage.setItem(SYNC_OUTBOX_KEY, JSON.stringify(next));
+              updateLiveSyncIndicators(syncTransportMode === 'realtime' || syncTransportMode === 'rest', getSyncRoomCode());
+            }
+          } catch (_) {}
         }
 
         function saveSyncOutbox(list) {
@@ -20084,10 +20743,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         window.__e2eeUnwrapPayload = e2eeUnwrapPayload;
 
         function getSyncRoomCode() {
-          if (cwE2eePrivateRoom) return cwE2eePrivateRoom;
           if (!state.settings) state.settings = {};
           if (!state.settings.cloudSyncRoom) state.settings.cloudSyncRoom = DEFAULT_COUPLE_ROOM;
-          const rCode = String(state.settings.cloudSyncRoom).trim().replace(/[^a-zA-Z0-9_-]/g, '') || DEFAULT_COUPLE_ROOM;
+          const rCode = cwE2eePrivateRoom || String(state.settings.cloudSyncRoom).trim().replace(/[^a-zA-Z0-9_-]/g, '') || DEFAULT_COUPLE_ROOM;
           if (window.ChanwanNative && typeof window.ChanwanNative.setRoom === 'function' && window.__lastSyncedNatRoom !== rCode) {
             window.__lastSyncedNatRoom = rCode;
             try { window.ChanwanNative.setRoom(rCode); } catch (_) {}
@@ -20142,7 +20800,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const ntfyPill = document.getElementById('ntfyServerPill');
           const nowTs = Date.now();
           const sbAlive = !isOffline && (syncTransportMode === 'realtime' || syncTransportMode === 'rest' || (sbLastOkTs > 0 && (nowTs - sbLastOkTs) < 90000));
-          const ntfyAlive = !isOffline && (ntfyLastOkTs > 0 && (nowTs - ntfyLastOkTs) < 90000);
+          const ntfyAlive = !isOffline && (sbAlive || emqxConnected || (ntfyLastOkTs > 0 && (nowTs - ntfyLastOkTs) < 300000));
           if (sbPill) {
             if (isOffline) { sbPill.textContent = isZh ? '🔴 离线' : '🔴 오프라인'; sbPill.style.color = '#e11d48'; }
             else if (syncTransportMode === 'realtime') { sbPill.textContent = isZh ? '🟢 实时' : '🟢 실시간'; sbPill.style.color = '#059669'; }
@@ -20316,14 +20974,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               return m;
             }).filter(m => {
               if (!m || !m.id || delSet.has(m.id)) return false;
-              const isRecentVoice = m.ts && (Date.now() - Number(m.ts)) < 240000;
+              const isRecentVoice = m.ts && !String(m.id || '').startsWith('msg_push_prev_') && (Date.now() - Number(m.ts)) < 86400000;
               const isGhostVoice = !isRecentVoice && (m.tone === '🎙️ 보이스 챗' || m.tone === '🎙️ 음성 메시지' || m.original === '🎙️ 음성 메시지' || m.original === '🎙️ 语音消息') && (!m.audioUrl || !String(m.audioUrl).startsWith('data:audio/'));
               return !isGhostVoice;
             });
             const existingMap = new Map((state.chat.messages || []).map(x => [x && x.id, x]));
+            let __mediaHydratedInMerge = false;
             for (const cm of cleanIncomingMsgs) {
+              if (cm && cm.audioUrl) cm.audioUrl = normalizeAudioDataUrl(cm.audioUrl);
               const ex = existingMap.get(cm.id);
-              if (!ex) continue;
+              if (!ex) {
+                if (cm && (cm.audioUrl || cm.photoUrl || cm.videoUrl)) __mediaHydratedInMerge = true;
+                continue;
+              }
+              if (cm.audioUrl && !ex.audioUrl) { ex.audioUrl = cm.audioUrl; changed = true; chatChanged = true; __mediaHydratedInMerge = true; }
+              if (cm.photoUrl && !ex.photoUrl) { ex.photoUrl = cm.photoUrl; changed = true; chatChanged = true; __mediaHydratedInMerge = true; }
+              if (cm.videoUrl && !ex.videoUrl) { ex.videoUrl = cm.videoUrl; changed = true; chatChanged = true; __mediaHydratedInMerge = true; }
               const __cmIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(cm.translated || '').trim());
               const __exIsPending = /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(ex.translated || '').trim());
               if (cm.readByPartner && !ex.readByPartner) {
@@ -20358,6 +21024,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const filteredCur = (state.chat.messages || []).filter(m => m && m.id && !delSet.has(m.id));
             state.chat.messages = sortChatMessagesStable(mergeById(filteredCur, cleanIncomingMsgs, false, true));
             if (state.chat.messages.length !== beforeCount) { changed = true; chatChanged = true; }
+            if (__mediaHydratedInMerge) { try { persistMediaVaultsNow(true); } catch (_) {} }
             setTimeout(() => { if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
               try { if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.update().catch(() => {}))); } catch (_) {} }, 600);
           }
@@ -20790,6 +21457,61 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
             });
           }
+          // Voice Mailbox lightweight metadata sync (replies & reactions on auto voice messages & voice letters!)
+          if (Array.isArray(inc.voiceMeta) && inc.voiceMeta.length) {
+            if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
+            const vlMap = new Map(state.voiceLetters.map(v => [v && v.id, v]));
+            let vlMetaChanged = false;
+            inc.voiceMeta.forEach(vm => {
+              if (!vm || !vm.id) return;
+              const curV = vlMap.get(vm.id);
+              if (!curV) {
+                if ((Array.isArray(vm.comments) && vm.comments.length) || (Array.isArray(vm.reactions) && vm.reactions.length)) {
+                  if (!state.pendingVoiceMetaMap || typeof state.pendingVoiceMetaMap !== 'object') state.pendingVoiceMetaMap = {};
+                  state.pendingVoiceMetaMap[vm.id] = vm;
+                }
+                return;
+              }
+              if (vm.source === 'messenger' && curV.source !== 'messenger') { curV.source = 'messenger'; vlMetaChanged = true; }
+              const delCmtSet = new Set([...(Array.isArray(curV.deletedCommentIds) ? curV.deletedCommentIds : []), ...(Array.isArray(vm.deletedCommentIds) ? vm.deletedCommentIds : [])]);
+              if (delCmtSet.size) {
+                curV.deletedCommentIds = Array.from(delCmtSet).slice(-30);
+                if (Array.isArray(curV.comments)) {
+                  const bLen = curV.comments.length;
+                  curV.comments = curV.comments.filter(c => c && !delCmtSet.has(c.id));
+                  if (curV.comments.length !== bLen) vlMetaChanged = true;
+                }
+              }
+              if (Array.isArray(vm.comments) && vm.comments.length) {
+                if (!Array.isArray(curV.comments)) curV.comments = [];
+                const cMap = new Map(curV.comments.map(c => [c && c.id, c]));
+                vm.comments.forEach(ic => {
+                  if (!ic || !ic.id || delCmtSet.has(ic.id)) return;
+                  const ec = cMap.get(ic.id);
+                  if (!ec) {
+                    curV.comments.push(ic);
+                    cMap.set(ic.id, ic);
+                    vlMetaChanged = true;
+                  } else if (ic.translated && !/^⏳/.test(ic.translated) && (!ec.translated || /^⏳/.test(ec.translated))) {
+                    ec.translated = ic.translated;
+                    vlMetaChanged = true;
+                  }
+                });
+              }
+              const incUpd = Number(vm.updatedAt || 0);
+              const curUpd = Number(curV.updatedAt || 0);
+              if (Array.isArray(vm.reactions) && (incUpd > curUpd || (!curUpd && vm.reactions.length !== (Array.isArray(curV.reactions) ? curV.reactions.length : 0)))) {
+                curV.reactions = vm.reactions.slice(0, 20);
+                if (incUpd > curUpd) curV.updatedAt = incUpd;
+                vlMetaChanged = true;
+              }
+            });
+            if (vlMetaChanged) {
+              changed = true;
+              try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
+              if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+            }
+          }
           // Prime 2 Game 1: Drawing Quiz sync
           if (Array.isArray(inc.drawQuizzes) && inc.drawQuizzes.length) {
             if (!Array.isArray(state.drawQuizzes)) state.drawQuizzes = [];
@@ -20975,7 +21697,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const __pMsgAgeMs = (newestPartnerMsg && newestPartnerMsg.ts) ? (Date.now() - Number(newestPartnerMsg.ts)) : 0;
             const __isFreshPartnerMsg = !!(newestPartnerMsg && !newestPartnerMsg.read && (!newestPartnerMsg.ts || (__pMsgAgeMs >= -60000 && __pMsgAgeMs < 120000)));
             if (isLiveEvent && __isFreshPartnerMsg) {
-              try { const tb = document.getElementById('chatTypingIndicator'); if (tb) tb.classList.add('hidden'); } catch (_) {}
+              try { if (typeof window.__setInChatTypingState === 'function') window.__setInChatTypingState('', false); } catch (_) {}
               const pName = newestPartnerMsg.sender === 'suwan' ? '수완(完)' : '靖灿(灿)';
               const origTxtN = String(newestPartnerMsg.original || '');
               const rawTrN = String(newestPartnerMsg.translated || '').trim();
@@ -21316,17 +22038,28 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             coupleQuizzes: (coreObj.coupleQuizzes || []).slice(0, 4),
             chat: {
               pinnedMsg: coreObj.chat?.pinnedMsg || null,
-              messages: (coreObj.chat?.messages || []).slice(-8).map(m => ({
-                id: m.id, ts: m.ts, sender: m.sender, time: m.time,
-                original: String(m.original || '').slice(0, 500),
-                translated: String(m.translated || '').slice(0, 500),
-                altTranslated: String(m.altTranslated || '').slice(0, 400),
-                pronunciation: String(m.pronunciation || '').slice(0, 220),
-                tone: m.tone || '', toneZh: m.toneZh || '', nuance: String(m.nuance || '').slice(0, 180), nuanceZh: String(m.nuanceZh || '').slice(0, 180),
-                engine: m.engine || '', tgtLang: m.tgtLang || '',
-                accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
-                replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx
-              })),
+              messages: (() => {
+                const liveMap = new Map(((state && state.chat && state.chat.messages) || []).map(x => [x && x.id, x]));
+                const slice8 = (coreObj.chat?.messages || []).slice(-8);
+                let voiceEmbedCnt = 0;
+                return slice8.map((m, idx) => {
+                  const liveM = liveMap.get(m.id) || (__cwChatMediaCache && __cwChatMediaCache[m.id]) || m;
+                  const rawAud = (liveM && liveM.audioUrl) ? String(liveM.audioUrl) : '';
+                  const embedAud = (rawAud && rawAud.length <= 170000 && idx >= slice8.length - 4 && voiceEmbedCnt < 3) ? (++voiceEmbedCnt, normalizeAudioDataUrl(rawAud)) : '';
+                  return {
+                    id: m.id, ts: m.ts, sender: m.sender, time: m.time,
+                    original: String(m.original || '').slice(0, 500),
+                    translated: String(m.translated || '').slice(0, 500),
+                    altTranslated: String(m.altTranslated || '').slice(0, 400),
+                    pronunciation: String(m.pronunciation || '').slice(0, 220),
+                    tone: m.tone || '', toneZh: m.toneZh || '', nuance: String(m.nuance || '').slice(0, 180), nuanceZh: String(m.nuanceZh || '').slice(0, 180),
+                    engine: m.engine || '', tgtLang: m.tgtLang || '',
+                    accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
+                    replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx,
+                    audioUrl: embedAud || undefined
+                  };
+                });
+              })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 3)
             },
             diaries: (coreObj.diaries || []).slice(0, 2),
@@ -21342,6 +22075,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             albumFoldersCustomized: !!coreObj.albumFoldersCustomized,
             albumFoldersUpdatedAt: Number(coreObj.albumFoldersUpdatedAt || 0),
             albumMeta: coreObj.albumMeta || undefined,
+            voiceMeta: (state.voiceLetters || []).filter(v => v && v.id && ((Array.isArray(v.comments) && v.comments.length) || (Array.isArray(v.reactions) && v.reactions.length))).slice(0, 60).map(v => ({
+              id: v.id,
+              source: (typeof window.__isMessengerVoiceItem === 'function' && window.__isMessengerVoiceItem(v)) ? 'messenger' : (v.source || 'letter'),
+              reactions: Array.isArray(v.reactions) ? v.reactions.slice(0, 16) : [],
+              comments: Array.isArray(v.comments) ? v.comments.slice(-15) : [],
+              deletedCommentIds: Array.isArray(v.deletedCommentIds) ? v.deletedCommentIds.slice(-15) : [],
+              updatedAt: Number(v.updatedAt || 0)
+            })),
             customFoods: Array.isArray(coreObj.customFoods) ? coreObj.customFoods.slice(0, 30) : undefined,
             balanceGame: coreObj.balanceGame || undefined,
             dateStamps: coreObj.dateStamps || undefined,
@@ -21354,8 +22095,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try { return JSON.stringify(pkt); } catch (_) { return null; }
         }
 
+        let __lastEmergencyNtfySyncTs = 0;
         async function pushNtfyBackup(room, bodyStr) {
           if (!room || !bodyStr) return false;
+          // Reserve ntfy.sh quota strictly for OS push notifications unless BOTH EMQX and Supabase have failed!
+          if (emqxConnected || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
+          if ((Date.now() - __lastEmergencyNtfySyncTs) < 45000) return false;
+          __lastEmergencyNtfySyncTs = Date.now();
           try {
             const wireBody = await e2eeWrapString(bodyStr);
             if (!wireBody || new Blob([wireBody]).size > 3950) return false;
@@ -21373,8 +22119,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const savedNtfyIds = JSON.parse(localStorage.getItem('cw_ntfy_seen_ids_v1') || '[]');
           if (Array.isArray(savedNtfyIds)) savedNtfyIds.forEach(x => NTFY_SEEN_IDS.add(x));
         } catch (_) {}
+        let __lastEmergencyNtfyPollTs = 0;
         async function pollNtfyBackup(room, isLive) {
           if (!room) return false;
+          // Never poll ntfy.sh while Supabase or EMQX is healthy (prevents HTTP 429 IP ban on ChanwanPushService!)
+          if (emqxConnected || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
+          if ((Date.now() - __lastEmergencyNtfyPollTs) < 60000) return false;
+          __lastEmergencyNtfyPollTs = Date.now();
           try {
             const res = await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(room))}/json?poll=1&since=10m`, {}, 8000);
             if (!res.ok) return false;
@@ -21425,7 +22176,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             .replace(/\?kind=eq\.[a-zA-Z0-9_-]+&/g, '?');
         }
 
+        let __sbEventsUnavailable = false;
+        try { if (sessionStorage.getItem('cw_sb_ev_unavail_v1') === '1') __sbEventsUnavailable = true; } catch (_) {}
+
         async function fetchSbEventsCompat(url, timeoutMs) {
+          if (__sbEventsUnavailable) return { ok: false, status: 404, json: async () => null };
           const useUrl = (__sbHasKindCol === false) ? stripSbKindParam(url) : url;
           let res = await fetchWithTimeout(useUrl, { headers: sbHeaders() }, timeoutMs || SYNC_FETCH_TIMEOUT_MS);
           if (res.status === 400 && useUrl.includes('kind=eq.')) {
@@ -21436,10 +22191,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             __sbHasKindCol = true;
             try { localStorage.setItem('cw_sb_has_kind_col_v1', '1'); } catch (_) {}
           }
+          if ([400, 401, 403, 404, 422].includes(res.status)) {
+            __sbEventsUnavailable = true;
+            try { sessionStorage.setItem('cw_sb_ev_unavail_v1', '1'); } catch (_) {}
+          }
           return res;
         }
-
-        let __sbEventsUnavailable = false;
         async function insertSupabaseEvent(room, kind, payloadObj) {
           if (__sbEventsUnavailable) return false;
           const wirePayload = await e2eeWrapPayload(payloadObj);
@@ -21469,6 +22226,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           if ([400, 401, 403, 404, 422].includes(res.status)) {
             __sbEventsUnavailable = true;
+            try { sessionStorage.setItem('cw_sb_ev_unavail_v1', '1'); } catch (_) {}
             return false;
           }
           if (!res.ok) throw new Error('sb_insert_' + res.status);
@@ -21493,7 +22251,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               payload: wirePayload,
               updated_at: Date.now()
             })
-          }, customTimeoutMs || SYNC_FETCH_TIMEOUT_MS);
+          }, customTimeoutMs || Math.max(SYNC_FETCH_TIMEOUT_MS, 10000));
           if (!res.ok) throw new Error('sb_upsert_' + res.status);
           sbLastOkTs = Date.now();
           lastSyncOkTs = Date.now();
@@ -21749,14 +22507,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }));
 
             const recentChatMedia = (state.chat?.messages || [])
-              .filter(m => m && m.id && !delMsg.has(m.id) && ((m.photoUrl && String(m.photoUrl).length <= 210000) || (m.audioUrl && String(m.audioUrl).length <= 240000)))
+              .filter(m => m && m.id && !delMsg.has(m.id) && ((m.photoUrl && String(m.photoUrl).length <= 210000) || (m.audioUrl && String(m.audioUrl).length <= 750000)))
               .slice(-12)
               .map(m => ({
                 id: m.id, ts: m.ts, sender: m.sender, time: m.time,
                 original: m.original || '', translated: m.translated || '', tgtLang: m.tgtLang || '',
                 photoCat: m.photoCat || '✨ 일상 순간',
                 photoUrl: (m.photoUrl && String(m.photoUrl).length <= 210000) ? m.photoUrl : '',
-                audioUrl: (m.audioUrl && String(m.audioUrl).length <= 240000) ? normalizeAudioDataUrl(m.audioUrl) : ''
+                audioUrl: (m.audioUrl && String(m.audioUrl).length <= 750000) ? normalizeAudioDataUrl(m.audioUrl) : ''
               }));
 
             const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
@@ -21764,8 +22522,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               .filter(v => v && v.id && !delVl.has(v.id) && v.audioUrl && String(v.audioUrl).length <= 240000)
               .slice(0, 8)
               .map(v => ({
-                id: v.id, sender: v.sender || state.myRole || 'suwan', tag: v.tag || '🎙️',
+                id: v.id, sender: v.sender || state.myRole || 'suwan', source: (typeof window.__isMessengerVoiceItem === 'function' && window.__isMessengerVoiceItem(v)) ? 'messenger' : (v.source || 'letter'), tag: v.tag || '🎙️',
                 note: v.note || '', translated: v.translated || '', date: v.date || '', time: v.time || '',
+                reactions: Array.isArray(v.reactions) ? v.reactions.slice(0, 16) : [], comments: Array.isArray(v.comments) ? v.comments.slice(-15) : [],
                 audioUrl: normalizeAudioDataUrl(v.audioUrl)
               }));
 
@@ -21926,19 +22685,31 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             const remaining = [];
             for (const item of list) {
-              if (!item || !item.payloadObj) continue;
+              if (!item || !item.payloadObj || item.kind === 'signal') continue;
               try {
-                if (item.kind === 'delta' && item.payloadObj) {
-                  const compactOut = buildCompactNtfyPacket(item.payloadObj);
-                  if (compactOut) publishEmqxBackup(room, compactOut);
+                if (item.kind === 'delta') {
+                  if (!window.__cwInitialPullDone) {
+                    window.__cwPendingPostPullSync = true;
+                    continue;
+                  }
+                  const liveCore = extractLightweightCore(state);
+                  const liveEmqx = buildEmqxFastPacket(liveCore);
+                  const emqxDelivered = liveEmqx ? publishEmqxBackup(room, liveEmqx) : false;
+                  const liveSnap = buildSyncPayload(liveCore, true);
+                  let snapDelivered = false;
+                  try {
+                    snapDelivered = await upsertSupabaseStateSnapshot(room, liveSnap, 11000);
+                  } catch (_) {
+                    if (!emqxDelivered) throw _;
+                  }
+                } else {
+                  await insertSupabaseEvent(room, item.kind, item.payloadObj);
                 }
-                await insertSupabaseEvent(room, item.kind, item.payloadObj);
-                if (item.kind === 'delta') await upsertSupabaseStateSnapshot(room, item.payloadObj);
                 lastSyncOkTs = Date.now();
                 markMyPendingMsgsStatus('sent');
               } catch (_) {
                 item.tries = (item.tries || 0) + 1;
-                const maxTries = item.kind === 'media' ? 5 : 2;
+                const maxTries = item.kind === 'media' ? 4 : 2;
                 if (item.tries < maxTries) remaining.push(item);
               }
             }
@@ -22186,11 +22957,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           // Ephemeral signals go over real-time EMQX + Supabase Broadcast + ntfy (never stored in couple_sync_events)
           const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync');
           if (!isEphemeral) {
-            insertSupabaseEvent(room, 'signal', pkt).then(() => {
-              lastSyncOkTs = Date.now();
-            }).catch(() => {
-              enqueueOutboxPacket('signal', pkt, 'signal');
-            });
+            if (!__sbEventsUnavailable) {
+              insertSupabaseEvent(room, 'signal', pkt).then((ok) => { if (ok) lastSyncOkTs = Date.now(); }).catch(() => {});
+            }
           }
           try {
             if (sbChannel && syncTransportMode === 'realtime' && typeof sbChannel.send === 'function') {
@@ -22275,25 +23044,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (sig.kind === 'typing') {
             const myRoleNow = state.myRole || 'suwan';
             if (!sig.myRole || sig.myRole === myRoleNow) return;
-            const box = document.getElementById('chatTypingIndicator');
             if (sig.active === false) {
               if (partnerTypingHideTimer) { clearTimeout(partnerTypingHideTimer); partnerTypingHideTimer = null; }
-              if (box) box.classList.add('hidden');
+              if (typeof window.__setInChatTypingState === 'function') window.__setInChatTypingState('', false);
               return;
             }
             const ageMs = Math.abs(Date.now() - Number(sig.ts || 0));
-            if (!sig.ts || ageMs > 7000) return; // Ignore any stale/cached typing event (>7s old)!
-            const dispName = sig.myRole === 'suwan'
-              ? (state.lang === 'zh' ? '秀完' : '수완')
-              : (state.lang === 'zh' ? '靖灿' : '징찬');
-            const txt = document.getElementById('chatTypingText');
-            if (txt) txt.textContent = state.lang === 'zh' ? `${dispName} 正在输入中... 💜` : `${dispName}님이 입력 중이에요... 💜`;
-            if (box) {
-              box.classList.remove('hidden');
-              if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, box);
-            }
+            if (!sig.ts || ageMs > 7000) return;
+            if (typeof window.__setInChatTypingState === 'function') window.__setInChatTypingState(sig.myRole, true);
             if (partnerTypingHideTimer) clearTimeout(partnerTypingHideTimer);
-            partnerTypingHideTimer = setTimeout(() => { if (box) box.classList.add('hidden'); }, 3800);
+            partnerTypingHideTimer = setTimeout(() => {
+              if (typeof window.__setInChatTypingState === 'function') window.__setInChatTypingState('', false);
+            }, 3800);
           } else if (sig.kind === 'read') {
             let changed = false;
             const myRole = state.myRole || 'suwan';
@@ -22321,6 +23083,39 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (target) {
               target.reactions = sig.reactions.slice(0, 12);
               saveState(false); renderChat();
+            }
+            const pairedVl = (state.voiceLetters || []).find(v => v && v.id === `vl_chat_${sig.msgId}`);
+            if (pairedVl && sig.myRole) {
+              pairedVl.reactions = sig.reactions.map(em => ({ emoji: em, by: sig.myRole }));
+              try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
+              if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+            }
+          } else if (sig.kind === 'vl_meta' && sig.vlId) {
+            if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
+            const vTarget = state.voiceLetters.find(v => v && v.id === sig.vlId);
+            if (vTarget) {
+              if (sig.source === 'messenger') vTarget.source = 'messenger';
+              const delC = new Set([...(Array.isArray(vTarget.deletedCommentIds) ? vTarget.deletedCommentIds : []), ...(Array.isArray(sig.deletedCommentIds) ? sig.deletedCommentIds : [])]);
+              vTarget.deletedCommentIds = Array.from(delC).slice(-30);
+              if (Array.isArray(sig.reactions)) vTarget.reactions = sig.reactions.slice(0, 20);
+              if (Array.isArray(sig.comments)) {
+                if (!Array.isArray(vTarget.comments)) vTarget.comments = [];
+                const cMap = new Map(vTarget.comments.map(c => [c && c.id, c]));
+                sig.comments.forEach(ic => {
+                  if (!ic || !ic.id || delC.has(ic.id)) return;
+                  const ec = cMap.get(ic.id);
+                  if (!ec) { vTarget.comments.push(ic); cMap.set(ic.id, ic); }
+                  else if (ic.translated && !/^⏳/.test(ic.translated)) ec.translated = ic.translated;
+                });
+                vTarget.comments = vTarget.comments.filter(c => c && !delC.has(c.id));
+              }
+              vTarget.updatedAt = Math.max(Number(vTarget.updatedAt || 0), Number(sig.updatedAt || Date.now()));
+              try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
+              saveState(false);
+              if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+            } else {
+              if (!state.pendingVoiceMetaMap || typeof state.pendingVoiceMetaMap !== 'object') state.pendingVoiceMetaMap = {};
+              state.pendingVoiceMetaMap[sig.vlId] = { id: sig.vlId, source: sig.source, reactions: sig.reactions, comments: sig.comments, deletedCommentIds: sig.deletedCommentIds, updatedAt: sig.updatedAt };
             }
           } else if (sig.kind === 'delete' && sig.msgId) {
             if (typeof window.__stopChatVoiceIfPlaying === 'function') window.__stopChatVoiceIfPlaying(sig.msgId);
@@ -22686,7 +23481,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             learn: coreObj.learn || {},
             chat: {
               pinnedMsg: coreObj.chat?.pinnedMsg || null,
-              messages: (coreObj.chat?.messages || []).slice(-lim.msg),
+              messages: (() => {
+                const liveMap = new Map(((state && state.chat && state.chat.messages) || []).map(x => [x && x.id, x]));
+                const arr = (coreObj.chat?.messages || []).slice(-lim.msg);
+                const voiceIdsKeep = new Set(
+                  arr.filter(x => {
+                    const lm = liveMap.get(x && x.id) || (__cwChatMediaCache && __cwChatMediaCache[x && x.id]);
+                    return !!(lm && lm.audioUrl && String(lm.audioUrl).length <= 260000);
+                  }).slice(-10).map(x => x.id)
+                );
+                return arr.map(m => {
+                  if (!m || !voiceIdsKeep.has(m.id)) return m;
+                  const lm = liveMap.get(m.id) || (__cwChatMediaCache && __cwChatMediaCache[m.id]);
+                  return (lm && lm.audioUrl) ? { ...m, audioUrl: normalizeAudioDataUrl(lm.audioUrl) } : m;
+                });
+              })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, lim.qa)
             },
             diaries: (coreObj.diaries || []).slice(0, lim.diary),
@@ -22710,7 +23519,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             rpsGame: coreObj.rpsGame || null,
             truthDare: coreObj.truthDare || null,
             customFoods: (coreObj.customFoods || []).slice(0, 40),
-            albumMeta: (state.albums || []).slice(0, 250).map(a => ({ id: a.id, category: a.category || '', categoryUpdatedAt: Number(a.categoryUpdatedAt || 0), comments: Array.isArray(a.comments) ? a.comments.slice(-15) : [] }))
+            albumMeta: (state.albums || []).slice(0, 250).map(a => ({ id: a.id, category: a.category || '', categoryUpdatedAt: Number(a.categoryUpdatedAt || 0), comments: Array.isArray(a.comments) ? a.comments.slice(-15) : [] })),
+            voiceMeta: (state.voiceLetters || []).slice(0, 150).map(v => ({
+              id: v.id,
+              source: (typeof window.__isMessengerVoiceItem === 'function' && window.__isMessengerVoiceItem(v)) ? 'messenger' : (v.source || 'letter'),
+              reactions: Array.isArray(v.reactions) ? v.reactions.slice(0, 20) : [],
+              comments: Array.isArray(v.comments) ? v.comments.slice(-20) : [],
+              deletedCommentIds: Array.isArray(v.deletedCommentIds) ? v.deletedCommentIds.slice(-20) : [],
+              updatedAt: Number(v.updatedAt || 0)
+            }))
           };
         }
 
@@ -22765,8 +23582,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           const sbOk = sbRealtimeSent || (sbEvRes.status === 'fulfilled' && !!sbEvRes.value) || (sbSnapRes.status === 'fulfilled' && !!sbSnapRes.value);
           const ntfyOk = ntfyRes.status === 'fulfilled' && !!ntfyRes.value;
-          if (sbOk) sbLastOkTs = Date.now();
-          else enqueueOutboxPacket('delta', payload, 'delta');
+          if (sbOk) {
+            sbLastOkTs = Date.now();
+            clearOutboxByDedupe('delta');
+          } else if (!window.__cwInitialPullDone) {
+            window.__cwPendingPostPullSync = true;
+          } else if (!emqxOk) {
+            enqueueOutboxPacket('delta', payload, 'delta');
+          } else {
+            clearOutboxByDedupe('delta');
+          }
 
           if (emqxOk || sbOk || ntfyOk) {
             lastSyncOkTs = Date.now();
@@ -23002,17 +23827,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             // Fire ALL pull channels simultaneously so China mobile NEVER stalls on a single slow server!
             const [ntfyPull, snapPull, evPull, mediaPull] = await Promise.allSettled([
               (!bothRealtimeHealthy || manual || (window.__sbPollTick % 4 === 1)) ? pollNtfyBackup(room, isLivePull) : Promise.resolve(false),
-              shouldPullSnap ? fetchWithTimeout(snapUrl, { headers: sbHeaders() }, SYNC_FETCH_TIMEOUT_MS).then(async r => {
+              shouldPullSnap ? fetchWithTimeout(snapUrl, { headers: sbHeaders() }, Math.max(SYNC_FETCH_TIMEOUT_MS, 9500)).then(async r => {
                 if (!r.ok) return null;
                 sbLastOkTs = Date.now();
-                const d = await r.json();
-                try {
-                  if (Array.isArray(d) && d[0] && d[0].payload) {
-                    const fastDec = await e2eeUnwrapPayload(d[0].payload);
-                    if (fastDec) mergeIncomingCoupleData(fastDec, false);
-                  }
-                } catch (_) {}
-                return d;
+                return await r.json();
               }) : Promise.resolve(null),
               (!__sbEventsUnavailable ? fetchSbEventsCompat(evUrl, SYNC_FETCH_TIMEOUT_MS).then(async r => {
                 if (!r.ok) return null;
@@ -23106,11 +23924,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
             }
             if (!anyServerOk) throw new Error('all_servers_unreachable');
+            const wasFirstPull = !window.__cwInitialPullDone;
             window.__cwInitialPullDone = true;
             lastSyncOkTs = Date.now();
             if (syncTransportMode !== 'realtime') syncTransportMode = 'rest';
-            updateLiveSyncIndicators(true, room);
             await flushSyncOutbox();
+            if (window.__cwPendingPostPullSync || (wasFirstPull && loadSyncOutbox().length > 0)) {
+              window.__cwPendingPostPullSync = false;
+              pushFullCloudSync().catch(() => {});
+            }
+            updateLiveSyncIndicators(true, room);
             if (manual === true) {
               await pushFullCloudSync();
               showToast(mergedAny
@@ -23189,7 +24012,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (typeof switchTransSubtab === 'function') switchTransSubtab('messenger');
 
             const cleanBody = String(pushBody || '').trim();
-            const isGeneric = !cleanBody || /^(새 메시지가 도착했어요|收到一条新消息)$/.test(cleanBody);
+            const isGeneric = !cleanBody || /^(새 메시지가 도착했어요|收到一条新消息|발신|음성 메시지.*|사진.*보냈어요|동영상.*보냈어요|움짤을 보냈어요|.*发送了一条语音|.*发送了一张照片|.*发送了一段视频|.*发送了一张动图)$/.test(cleanBody);
             const isNonChat = /밸런스|게임|하트비트|커플공간|기분|상태|默契|心跳|空间|心情|状态/.test(String(pushTitle || ''));
             if (!isGeneric && !isNonChat) {
               if (!state.chat) state.chat = { messages: [] };
@@ -23703,11 +24526,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               grid.innerHTML = `
                 <div>
                   <div class="flex items-center justify-between px-1 mb-1">
-                    <span class="text-[10.5px] font-semibold text-mut">${isZhU ? '微信经典表情' : '위챗 이모티콘'}</span>
+                    <span class="text-[10.5px] font-semibold text-mut">${isZhU ? '常用表情' : '감성 이모지'}</span>
                     <button type="button" id="cwUEmojiBackBtn" class="btn-ghost px-2 py-0.5 rounded-lg text-[11px] font-bold" title="지우기">⌫</button>
                   </div>
-                  <div class="grid grid-cols-7 gap-1 text-center">
-                    ${(window.__WECHAT_OFFICIAL_EMOTICONS || []).map(em => `<button type="button" class="cw-u-em-pick flex flex-col items-center justify-center gap-0.5 py-1 rounded-xl active:scale-90" data-tok="${escapeHtml(em.tag)}">${window.getWechatEmoticonSvg ? window.getWechatEmoticonSvg(em.tag, 28) : em.tag}<span class="text-[9px] text-mut truncate max-w-[40px]">${escapeHtml(isZhU ? em.zh : em.ko)}</span></button>`).join('')}
+                  <div class="grid grid-cols-8 gap-1 text-center cw-keep-native-emoji">
+                    ${EMOJIS.map(em => `<button type="button" class="cw-u-em-pick text-[21px] leading-none py-1.5 rounded-xl active:scale-90 transition" data-tok="${escapeHtml(em)}">${em}</button>`).join('')}
                   </div>
                 </div>
               `;
@@ -23921,9 +24744,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __lastVaultReqSentTs = 0;
         let __isStreamingVaultToPartner = false;
 
-        function requestPartnerVaultSync(reason) {
+        function requestPartnerVaultSync(reason, priorityMsgId) {
           const now = Date.now();
-          if ((now - __lastVaultReqSentTs) < 6000 && reason !== 'manual_restore') return;
+          if ((now - __lastVaultReqSentTs) < 6000 && reason !== 'manual_restore' && !priorityMsgId) return;
           __lastVaultReqSentTs = now;
           const haveAlbums = (state.albums || []).filter(a => a && a.id && a.dataUrl).map(a => a.id).slice(0, 160);
           const haveVoices = (state.voiceLetters || []).filter(v => v && v.id && v.audioUrl).map(v => v.id).slice(0, 100);
@@ -23933,6 +24756,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (state.profile?.jingchanAvatar) haveAvatars.push('jingchan');
           sendChatSignal('request_vault_sync', {
             reason: reason || 'auto',
+            priorityMsgId: priorityMsgId || '',
             haveLearnXp: Number(state.learn?.xp || 0),
             haveLearnSolved: Number(state.learn?.solved || 0),
             haveAlbums,
@@ -23942,6 +24766,57 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           });
         }
         window.__requestPartnerVaultSync = requestPartnerVaultSync;
+
+        window.__recoverMissingVoiceNow = async function(msgId) {
+          const isZh = state.lang === 'zh';
+          showToast(isZh ? '🎙️ 正在高速拉取对方语音...' : '🎙️ 상대방 음성을 불러오는 중...');
+          const room = getSyncRoomCode();
+          // 1) Instant local check from voiceLetters or IDB chat media cache
+          const findTarget = () => (state.chat?.messages || []).find(x => x && x.id === msgId);
+          let target = findTarget();
+          if (target && !target.audioUrl) {
+            const cachedCm = (__cwChatMediaCache && __cwChatMediaCache[msgId]) || null;
+            if (cachedCm && cachedCm.audioUrl) {
+              target.audioUrl = normalizeAudioDataUrl(cachedCm.audioUrl);
+            } else {
+              const vlMatch = (state.voiceLetters || []).find(v => v && v.audioUrl && (v.id === 'vl_chat_' + msgId || (target.time && v.time === target.time && v.sender === target.sender)));
+              if (vlMatch) target.audioUrl = normalizeAudioDataUrl(vlMatch.audioUrl);
+            }
+          }
+          // 2) Ask partner's active device over EMQX China Direct + pull RecentMediaPack + Cloud Vault simultaneously!
+          if (!target || !target.audioUrl) {
+            try { requestPartnerVaultSync('manual_restore', msgId); } catch (_) {}
+            await Promise.allSettled([
+              pullRecentMediaPack(room, false),
+              fetchCloudVaultManifest(room).then(items => restoreVaultBatchParallel(room, items)),
+              pullCloudSync(false)
+            ]);
+          }
+          target = findTarget();
+          if (target && target.audioUrl) {
+            persistMediaVaultsNow(true);
+            saveState(false);
+            renderChat();
+            setTimeout(() => {
+              const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
+              if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
+            }, 80);
+            return true;
+          }
+          // Wait 1.4s for partner P2P EMQX stream if partner is online
+          await new Promise(r => setTimeout(r, 1400));
+          target = findTarget();
+          if (target && target.audioUrl) {
+            renderChat();
+            setTimeout(() => {
+              const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
+              if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
+            }, 80);
+            return true;
+          }
+          showToast(isZh ? '🎙️ 已向对方设备请求重传语音，对方在线时将自动恢复' : '🎙️ 상대방 기기에 음성 재전송을 요청했어요. 상대방 접속 시 자동 복구돼요');
+          return false;
+        };
 
         async function respondToPartnerVaultRequest(sig) {
           if (__isStreamingVaultToPartner) return;
@@ -23972,13 +24847,44 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           __isStreamingVaultToPartner = true;
           try {
+            // #0 MESSENGER PRIORITY FIRST: newest chat voices & photos stream immediately (never blocked behind albums!)
+            const priId = String(sig?.priorityMsgId || '');
+            const orderedChatM = missingChatM.slice().reverse().sort((a, b) => {
+              const aPri = (priId && a.id === priId) ? 2 : (a.audioUrl ? 1 : 0);
+              const bPri = (priId && b.id === priId) ? 2 : (b.audioUrl ? 1 : 0);
+              return bPri - aPri;
+            });
+            for (const cm of orderedChatM) {
+              if (cm.audioUrl) {
+                const normChatAud = normalizeAudioDataUrl(cm.audioUrl);
+                if (normChatAud && normChatAud.startsWith('data:audio/')) {
+                  const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang };
+                  await sendEmqxMediaPaced(room, 'chat_voice', `p2p_cvmsg_${cm.id}`, meta, normChatAud, cm.ts || Date.now());
+                  await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_voice', meta, cm.id), 'chat_voice', meta, normChatAud);
+                }
+              } else if (cm.photoUrl && String(cm.photoUrl).startsWith('data:image/')) {
+                const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간' };
+                await sendEmqxMediaPaced(room, 'chat_photo', `p2p_cm_${cm.id}`, meta, cm.photoUrl, cm.ts || Date.now());
+                await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_photo', meta, cm.id), 'chat_photo', meta, cm.photoUrl);
+              }
+              await new Promise(r => setTimeout(r, 90));
+            }
             await pushFullCloudSync();
+            await pushRecentMediaPack(room).catch(() => {});
             for (const rk of missingAvs) {
               const avUrl = state.profile[rk + 'Avatar'];
               if (avUrl) {
                 await sendEmqxMediaPaced(room, 'avatar', `av_${rk}_${Date.now()}`, { target: rk }, avUrl, Date.now());
                 await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('avatar', { target: rk }, rk), 'avatar', { target: rk }, avUrl);
               }
+            }
+            for (const vl of missingVoices) {
+              const normAud = normalizeAudioDataUrl(vl.audioUrl);
+              if (!normAud || !normAud.startsWith('data:audio/')) continue;
+              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'jingchan', source: (typeof window.__isMessengerVoiceItem === 'function' && window.__isMessengerVoiceItem(vl)) ? 'messenger' : (vl.source || 'letter'), tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
+              await sendEmqxMediaPaced(room, 'voice_letter', `p2p_vl_${vl.id}`, meta, normAud, Date.now());
+              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('voice_letter', meta, vl.id), 'voice_letter', meta, normAud);
+              await new Promise(r => setTimeout(r, 140));
             }
             for (const alb of missingAlbums) {
               const mKind = String(alb.mediaType || '').includes('video') ? 'album_video' : 'album_photo';
@@ -23987,35 +24893,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               await saveVaultItemToCloudState(room, deriveDeterministicVaultKey(mKind, meta, alb.id), mKind, meta, alb.dataUrl);
               await new Promise(r => setTimeout(r, 140));
             }
-            for (const vl of missingVoices) {
-              const normAud = normalizeAudioDataUrl(vl.audioUrl);
-              if (!normAud || !normAud.startsWith('data:audio/')) continue;
-              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'jingchan', tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
-              await sendEmqxMediaPaced(room, 'voice_letter', `p2p_vl_${vl.id}`, meta, normAud, Date.now());
-              await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('voice_letter', meta, vl.id), 'voice_letter', meta, normAud);
-              await new Promise(r => setTimeout(r, 140));
-            }
             for (const [phr, cvUrl] of customVoiceEntries) {
               const normCv = normalizeAudioDataUrl(cvUrl);
               if (!normCv || !normCv.startsWith('data:audio/')) continue;
               const meta = { phrase: phr };
               await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_${Date.now()}`, meta, normCv, Date.now());
               await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normCv);
-            }
-            for (const cm of missingChatM) {
-              if (cm.photoUrl && String(cm.photoUrl).startsWith('data:image/')) {
-                const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang, category: cm.photoCat || '✨ 일상 순간' };
-                await sendEmqxMediaPaced(room, 'chat_photo', `p2p_cm_${cm.id}`, meta, cm.photoUrl, cm.ts || Date.now());
-                await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_photo', meta, cm.id), 'chat_photo', meta, cm.photoUrl);
-              } else if (cm.audioUrl) {
-                const normChatAud = normalizeAudioDataUrl(cm.audioUrl);
-                if (normChatAud && normChatAud.startsWith('data:audio/')) {
-                  const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original, translated: cm.translated, tgtLang: cm.tgtLang };
-                  await sendEmqxMediaPaced(room, 'chat_voice', `p2p_cvmsg_${cm.id}`, meta, normChatAud, cm.ts || Date.now());
-                  await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_voice', meta, cm.id), 'chat_voice', meta, normChatAud);
-                }
-              }
-              await new Promise(r => setTimeout(r, 120));
             }
           } catch (_) {} finally {
             setTimeout(() => { __isStreamingVaultToPartner = false; }, 4000);
@@ -24092,7 +24975,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             for (const vl of localVoices.slice(0, 50)) {
               const normAud = normalizeAudioDataUrl(vl.audioUrl);
               if (!normAud || !normAud.startsWith('data:audio/')) continue;
-              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'suwan', tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
+              const meta = { id: vl.id, sender: vl.sender || state.myRole || 'suwan', source: (typeof window.__isMessengerVoiceItem === 'function' && window.__isMessengerVoiceItem(vl)) ? 'messenger' : (vl.source || 'letter'), tag: vl.tag || '🎙️', note: vl.note || '', translated: vl.translated || '', date: vl.date || '', time: vl.time || '' };
               const vk = deriveDeterministicVaultKey('voice_letter', meta, vl.id);
               if (!isAlreadyBackedUp(vk)) {
                 await saveVaultItemToCloudState(room, vk, 'voice_letter', meta, normAud);
@@ -25618,11 +26501,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         };
         document.addEventListener('pointerdown', unlockOnce, { once: true, passive: true });
 
+        let activeWebCtx = null, activeWebSrc = null, activeWebRaf = 0;
+        const stopActiveWebAudio = () => {
+          if (activeWebRaf) { cancelAnimationFrame(activeWebRaf); activeWebRaf = 0; }
+          if (activeWebSrc) { try { activeWebSrc.onended = null; activeWebSrc.stop(); } catch (_) {} activeWebSrc = null; }
+        };
         window.__stopChatVoiceIfPlaying = function(targetMsgId) {
           try {
-            if (!activeAudio) return;
             if (!targetMsgId || activeMsgId === targetMsgId) {
-              activeAudio.pause();
+              stopActiveWebAudio();
+              if (activeAudio) { try { activeAudio.pause(); } catch (_) {} }
               if (activeBtn) resetBtnUi(activeBtn);
               activeMsgId = '';
               activeBtn = null;
@@ -25637,20 +26525,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             activeAudio.setAttribute('webkit-playsinline', '');
           }
           // Toggle pause if tapping the currently playing voice bubble
-          if (!isAutoPlay && activeMsgId === msgId && !activeAudio.paused) {
-            activeAudio.pause();
-            resetBtnUi(activeBtn);
-            activeMsgId = '';
-            activeBtn = null;
+          if (!isAutoPlay && activeMsgId === msgId && ((activeAudio && !activeAudio.paused) || activeWebSrc)) {
+            window.__stopChatVoiceIfPlaying(msgId);
             return;
           }
           if (activeBtn && activeBtn !== btnEl) resetBtnUi(activeBtn);
+          stopActiveWebAudio();
           try { activeAudio.pause(); } catch (_) {}
           activeMsgId = msgId;
           activeBtn = btnEl || document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
-          activeAudio.src = audioUrl;
-          activeAudio.currentTime = 0;
 
+          const asset = preparePlayableAudioAsset(audioUrl);
           const updateUiPlaying = () => {
             if (!activeBtn) return;
             const ico = activeBtn.querySelector('.cw-v-ico');
@@ -25659,8 +26544,66 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (lbl) lbl.textContent = state.lang === 'zh' ? '正在播放 · 点击停止' : '재생 중 · 눌러서 정지';
           };
 
+          let triedWebFallback = false;
+          const playViaWebAudioFallback = async () => {
+            if (triedWebFallback) return;
+            triedWebFallback = true;
+            if (!asset || !asset.bytes) {
+              resetBtnUi(activeBtn);
+              activeMsgId = '';
+              activeBtn = null;
+              if (!isAutoPlay) showToast(state.lang === 'zh' ? '语音播放失败，请重试' : '음성 재생에 실패했어요. 다시 눌러주세요');
+              return;
+            }
+            try {
+              const AC = window.AudioContext || window.webkitAudioContext;
+              if (!activeWebCtx) activeWebCtx = new AC();
+              if (activeWebCtx.state === 'suspended') await activeWebCtx.resume();
+              const buf = await activeWebCtx.decodeAudioData(asset.bytes.buffer.slice(0));
+              const src = activeWebCtx.createBufferSource();
+              src.buffer = buf;
+              src.connect(activeWebCtx.destination);
+              activeWebSrc = src;
+              updateUiPlaying();
+              const startedAt = activeWebCtx.currentTime;
+              const totDur = Math.max(0.5, buf.duration || 1);
+              const tick = () => {
+                if (!activeWebSrc || activeMsgId !== msgId || !activeBtn) return;
+                const elap = Math.min(totDur, activeWebCtx.currentTime - startedAt);
+                const pct = Math.min(100, Math.round((elap / totDur) * 100));
+                const bar = activeBtn.querySelector('.cw-v-bar');
+                const tm = activeBtn.querySelector('.cw-v-time');
+                if (bar) bar.style.width = `${pct}%`;
+                if (tm) tm.textContent = `${Math.floor(elap)}s/${Math.max(1, Math.round(totDur))}s`;
+                if (elap < totDur) activeWebRaf = requestAnimationFrame(tick);
+              };
+              activeWebRaf = requestAnimationFrame(tick);
+              src.onended = () => {
+                stopActiveWebAudio();
+                resetBtnUi(activeBtn);
+                activeMsgId = '';
+                activeBtn = null;
+              };
+              src.start(0);
+            } catch (_) {
+              stopActiveWebAudio();
+              resetBtnUi(activeBtn);
+              activeMsgId = '';
+              activeBtn = null;
+              if (!isAutoPlay) showToast(state.lang === 'zh' ? '当前设备暂不支持该语音格式，请让对方重录一次' : '음성 형식을 재생하지 못했어요. 다시 눌러주세요');
+            }
+          };
+
           activeAudio.ontimeupdate = () => {
-            if (!activeBtn || !activeAudio.duration || !Number.isFinite(activeAudio.duration)) return;
+            if (!activeBtn) return;
+            if (!activeAudio.duration || !Number.isFinite(activeAudio.duration)) {
+              const sInf = Math.floor(activeAudio.currentTime || 0);
+              const barInf = activeBtn.querySelector('.cw-v-bar');
+              const tmInf = activeBtn.querySelector('.cw-v-time');
+              if (barInf) barInf.style.width = `${Math.min(95, (sInf % 12) * 8 + 15)}%`;
+              if (tmInf) tmInf.textContent = `${sInf}s`;
+              return;
+            }
             const pct = Math.min(100, Math.round((activeAudio.currentTime / activeAudio.duration) * 100));
             const bar = activeBtn.querySelector('.cw-v-bar');
             const tm = activeBtn.querySelector('.cw-v-time');
@@ -25677,21 +26620,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             activeBtn = null;
           };
           activeAudio.onerror = () => {
-            resetBtnUi(activeBtn);
-            activeMsgId = '';
-            activeBtn = null;
-            if (!isAutoPlay) showToast(state.lang === 'zh' ? '语音播放失败，请重试' : '음성 재생에 실패했어요. 다시 눌러주세요');
+            playViaWebAudioFallback();
           };
+          activeAudio.src = asset ? asset.blobUrl : audioUrl;
+          activeAudio.currentTime = 0;
 
           const p = activeAudio.play();
           if (p && typeof p.then === 'function') {
             p.then(() => {
               updateUiPlaying();
             }).catch(() => {
-              resetBtnUi(activeBtn);
-              activeMsgId = '';
               if (isAutoPlay) {
+                resetBtnUi(activeBtn);
+                activeMsgId = '';
                 showToast(state.lang === 'zh' ? '🎙️ 收到新语音消息，点击气泡立即播放' : '🎙️ 새 음성 메시지가 도착했어요! 말풍선을 눌러 들으세요');
+              } else {
+                playViaWebAudioFallback();
               }
             });
           } else {
@@ -26940,8 +27884,28 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v74)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v74';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v84)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v84';
+        try {
+          if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
+            localStorage.setItem('cw_clean_auto_wechat_v83', '1');
+            ['cw_trans_fast_cache_v1', 'cw_trans_fast_cache_v2', 'cw_trans_fast_cache_v3', 'cw_trans_fast_cache_v4', 'cw_couple_trans_cache_v4', 'cw_polish_cache_v1', 'cw_polish_cache_v2', 'cw_polish_cache_v3', 'cw_polish_cache_v4'].forEach(k => localStorage.removeItem(k));
+            __cwTransCacheMem = {};
+            ['cw_quick_phrases_ko_v1', 'cw_quick_phrases_zh_v1'].forEach(qk => {
+              try {
+                const rawQp = JSON.parse(localStorage.getItem(qk) || 'null');
+                if (Array.isArray(rawQp)) {
+                  const fixedQp = rawQp.map(x => String(x || '')
+                    .replace(/^보고 싶어$/, '보고 싶어 💜')
+                    .replace(/^잘 자$/, '잘 자 🌙')
+                    .replace(/^好想你$/, '好想你 💜')
+                    .replace(/^晚安$/, '晚安 🌙'));
+                  localStorage.setItem(qk, JSON.stringify(fixedQp));
+                }
+              } catch (_) {}
+            });
+          }
+        } catch (_) {}
         async function forcePurgeCacheAndUpdate(manualClick) {
           try {
             if (manualClick) {
@@ -26961,6 +27925,37 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         window.__forcePurgeCacheAndUpdate = forcePurgeCacheAndUpdate;
         document.getElementById('forceAppUpdateBtn')?.addEventListener('click', () => forcePurgeCacheAndUpdate(true));
+        document.getElementById('testOsNotif4sBtn')?.addEventListener('click', (ev) => {
+          const btn = ev.currentTarget;
+          const isZh = state.lang === 'zh';
+          if (btn.dataset.busy === '1') return;
+          btn.dataset.busy = '1';
+          const origTxt = btn.textContent;
+          btn.textContent = isZh ? '4秒后响铃...' : '4초 뒤 알림...';
+          showToast(isZh ? '🔔 请立即按手机主屏幕键退到后台！4秒后将弹出系统顶部通知' : '🔔 지금 바로 홈 버튼을 눌러 바탕화면으로 나가보세요! 4초 뒤 상단 OS 알림이 울려요');
+          setTimeout(() => {
+            btn.dataset.busy = '0';
+            btn.textContent = origTxt;
+            const myRole = (state && state.myRole) || 'suwan';
+            const room = (typeof getSyncRoomCode === 'function' ? getSyncRoomCode() : '') || 'chanwan-suwan-jingchan-live2026';
+            const myTopic = `${room}-${myRole}`;
+            const tTitle = isZh ? '💜 灿完时光 · 系统通知测试' : '💜 징찬 · 알림 테스트';
+            const tBody = isZh ? '系统顶部横幅通知连接正常 ✨' : '상단 OS 푸시 알림이 정상 연결되었어요 💜';
+            const clickUrl = location.protocol.startsWith('http') ? (location.origin + location.pathname) : 'https://swans8562-sudo.github.io/chanwan/';
+            fetch('https://ntfy.sh', {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ topic: myTopic, title: tTitle, message: tBody, priority: 5, click: clickUrl })
+            }).catch(() => {});
+            if (window.ChanwanNative && typeof window.ChanwanNative.showOsNotification === 'function') {
+              try { window.ChanwanNative.showOsNotification(tTitle, tBody); } catch (_) {}
+            } else if (!document.hidden) {
+              showToast(isZh ? '💡 测试信号已发送（打开App画面时防重复只显示应用内提示，退到桌面即可看到系统横幅）' : '💡 테스트 신호 전송 완료! (앱을 켜둔 채로는 중복 방지를 위해 상단창을 숨기니, 누르자마자 홈 화면으로 나가서 확인해 보세요)');
+            } else {
+              fireSystemNotification(tTitle, tBody, 'translator', 'messenger');
+            }
+          }, 4000);
+        });
         document.getElementById('notifBellBtn')?.addEventListener('click', () => {
           setTimeout(() => {
             const panel = document.getElementById('notifPanel');
@@ -27087,6 +28082,79 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         } catch (_) {}
 
         await loadState();
+        try {
+          if (!localStorage.getItem('cw_clean_wechat_msgs_v83')) {
+            localStorage.setItem('cw_clean_wechat_msgs_v83', '1');
+            let __cleanedAny = false;
+            if (state.chat && Array.isArray(state.chat.messages)) {
+              state.chat.messages.forEach(m => {
+                if (!m || m.sticker) return;
+                if (m.original && /[가-힣]/.test(m.original) && /\s*\[裂开\]$/.test(m.original)) {
+                  m.original = String(m.original).replace(/\s*\[裂开\]$/, '').trim();
+                  __cleanedAny = true;
+                }
+                if (m.translated && !/^⏳/.test(m.translated)) {
+                  const ct = stripUnrequestedAutoEmojis(m.translated, m.original || '');
+                  if (ct !== m.translated) { m.translated = ct; __cleanedAny = true; }
+                }
+                if (m.altTranslated) {
+                  const ca = stripUnrequestedAutoEmojis(m.altTranslated, m.original || '');
+                  if (ca !== m.altTranslated) { m.altTranslated = ca; __cleanedAny = true; }
+                }
+                if (m.polishObj && m.polishObj.natural) {
+                  m.polishObj.natural = stripUnrequestedAutoEmojis(m.polishObj.natural, m.original || '');
+                }
+              });
+            }
+            ['diaries', 'memos', 'buckets', 'capsules', 'complimentJar', 'transHistory'].forEach(arrKey => {
+              if (!Array.isArray(state[arrKey])) return;
+              state[arrKey].forEach(it => {
+                if (!it) return;
+                const srcT = it.content || it.text || it.original || it.title || '';
+                if (it.translated) {
+                  const ct = stripUnrequestedAutoEmojis(it.translated, srcT);
+                  if (ct && ct !== it.translated) { it.translated = ct; __cleanedAny = true; }
+                }
+                if (it.titleTranslated && it.title) {
+                  const ctt = stripUnrequestedAutoEmojis(it.titleTranslated, it.title);
+                  if (ctt && ctt !== it.titleTranslated) { it.titleTranslated = ctt; __cleanedAny = true; }
+                }
+              });
+            });
+            if (__cleanedAny) saveState(false);
+          }
+          if (!localStorage.getItem('cw_clean_messenger_v80')) {
+            localStorage.setItem('cw_clean_messenger_v80', '1');
+            let __fixedV80 = false;
+            if (state.chat && Array.isArray(state.chat.messages)) {
+              // Remove fake notification preview bubbles for voice/media if real message exists, or hydrate from voiceLetters
+              state.chat.messages = state.chat.messages.filter(m => {
+                if (!m) return false;
+                if (String(m.id || '').startsWith('msg_push_prev_') && !m.audioUrl && !m.photoUrl && !m.videoUrl && /음성 메시지|사진.*보냈어요|동영상.*보냈어요/.test(String(m.original || ''))) {
+                  const vlMatch = (state.voiceLetters || []).find(v => v && v.audioUrl && v.sender === m.sender && v.time === m.time);
+                  if (vlMatch) {
+                    m.id = 'msg_v_' + (m.ts || Date.now());
+                    m.audioUrl = normalizeAudioDataUrl(vlMatch.audioUrl);
+                    m.original = '🎙️ 음성 메시지';
+                    m.translated = '🎙️ 语音消息';
+                    m.tone = '🎙️ 보이스 챗';
+                    delete m.__tempPushPreview;
+                    __fixedV80 = true;
+                    return true;
+                  }
+                  const hasRealNearby = state.chat.messages.some(o => o && o !== m && o.sender === m.sender && Math.abs(Number(o.ts || 0) - Number(m.ts || 0)) < 90000 && (o.audioUrl || String(o.id || '').startsWith('msg_v_')));
+                  if (hasRealNearby) { __fixedV80 = true; return false; }
+                }
+                if (/嗯嗯/.test(String(m.original || '')) && /음음/.test(String(m.translated || ''))) {
+                  m.translated = String(m.translated).replace(/음음+/g, '응응');
+                  __fixedV80 = true;
+                }
+                return true;
+              });
+            }
+            if (__fixedV80) { persistMediaVaultsNow(true); saveState(false); }
+          }
+        } catch (_) {}
         try {
           if (isMainlandChinaClient()) {
             if (!state.settings) state.settings = {};
@@ -28147,49 +29215,83 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 state.albums = state.albums.filter(a => a && !delSetH.has(a.id));
                 ghostAlbRemoved = Math.max(0, beforeH - state.albums.length);
               }
-              // Run heavy IDB + cloud I/O asynchronously right after paint so the UI responds in 0ms!
-              setTimeout(() => {
+              // Run heavy IDB + cloud I/O asynchronously right after paint and update Row 5 to ✅ 완료 when finished!
+              setTimeout(async () => {
                 try { if (typeof saveSuwanVoicesNow === 'function') saveSuwanVoicesNow(); } catch (_) {}
                 try { if (typeof persistMediaVaultsNow === 'function') persistMediaVaultsNow(); } catch (_) {}
                 try { if (typeof flushIdbStateNow === 'function') flushIdbStateNow(); } catch (_) {}
                 try { saveState(true); } catch (_) {}
                 try { if (typeof window.__connectEmqxNow === 'function') window.__connectEmqxNow(); } catch (_) {}
-                try { if (typeof window.__flushSyncOutbox === 'function') window.__flushSyncOutbox(); } catch (_) {}
-                try { if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false); } catch (_) {}
-                try { if (typeof window.__broadcastPresenceNow === 'function') window.__broadcastPresenceNow(true, true); } catch (_) {}
+                try { if (typeof window.__reconnectLiveSync === 'function') window.__reconnectLiveSync(); } catch (_) {}
+                await Promise.allSettled([
+                  (typeof window.__flushSyncOutbox === 'function') ? Promise.resolve(window.__flushSyncOutbox()) : Promise.resolve(),
+                  (typeof window.__pullCloudSync === 'function') ? Promise.resolve(window.__pullCloudSync(false)) : Promise.resolve(),
+                  (typeof window.__broadcastPresenceNow === 'function') ? Promise.resolve(window.__broadcastPresenceNow(true, true)) : Promise.resolve()
+                ]);
+                const r5 = document.getElementById('cwHealRow5');
+                if (r5) {
+                  r5.textContent = isZh
+                    ? '5. ✅ 完成 · EMQX直连·待发重传·云端与在线状态同步完成'
+                    : '5. ✅ 완료 · EMQX·미전송 재전송·클라우드·접속 상태 동기화 완료';
+                }
               }, 35);
               rows.push(ghostAlbRemoved > 0
-                ? (isZh ? `4. 🔧 修复 · 永久金库已保存并清理残留已删照片 ${ghostAlbRemoved} 张` : `4. 🔧 복구 · 영구 금고 재저장 및 삭제된 사진 잔재 ${ghostAlbRemoved}건 정리`)
+                ? (isZh ? `4. ✅ 完成 · 永久金库已保存并清理残留已删照片 ${ghostAlbRemoved} 张` : `4. ✅ 완료 · 영구 금고 재저장 및 삭제된 사진 잔재 ${ghostAlbRemoved}건 정리 완료`)
                 : (isZh ? '4. ✅ 正常 · 照片/语音永久金库与全部数据已重新保存' : '4. ✅ 정상 · 사진·음성 영구 금고 및 전체 상태 재저장 완료'));
 
-              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence (queued non-blocking above)
-              rows.push(isZh ? '5. 🔧 同步 · EMQX直连重连·云端拉取·在线状态已刷新' : '5. 🔧 복구 · EMQX·미전송 재전송·클라우드·접속 상태 재동기화');
+              // 5. EMQX China Direct + Outbox flush + Cloud pull + Presence (updates #cwHealRow5 to ✅ 완료)
+              rows.push(isZh ? '5. ⏳ 同步中 · 正在重连 EMQX·重传队列·同步在线状态...' : '5. ⏳ 동기화 중 · EMQX·미전송 재전송·클라우드·접속 상태 연결 중...');
 
               // 6. Samsung/Android App Badge & Stray OS Notification Cleanup
+              const myRNow = state.myRole || 'suwan';
+              if (Array.isArray(state.notifications)) {
+                let cleanedStaleNotif = false;
+                state.notifications.forEach(n => {
+                  if (n && n.unread && (n.fromRole === myRNow || (n.createdAt && (Date.now() - Number(n.createdAt)) >= 86400000))) {
+                    n.unread = false;
+                    cleanedStaleNotif = true;
+                  }
+                });
+                if (cleanedStaleNotif) {
+                  saveState(false);
+                  if (typeof renderNotifications === 'function') renderNotifications();
+                }
+              }
               const unreadCnt = (state.notifications || []).filter(n => n && n.unread).length;
-              let badgeCleared = false;
               if (unreadCnt === 0) {
                 if (typeof clearAllAppBadgesAndOsNotifs === 'function') {
                   clearAllAppBadgesAndOsNotifs();
-                  badgeCleared = true;
                 } else if (navigator.clearAppBadge) {
-                  try { await navigator.clearAppBadge(); badgeCleared = true; } catch (_) {}
+                  try { await navigator.clearAppBadge(); } catch (_) {}
                 }
               }
-              rows.push(badgeCleared
-                ? (isZh ? '6. 🔧 修复 · 已强制清除桌面角标与残留系统通知' : '6. 🔧 복구 · 홈 화면 아이콘 배지 및 잔여 시스템 알림 초기화 완료')
+              rows.push(unreadCnt === 0
+                ? (isZh ? '6. ✅ 完成 · 桌面图标角标与残留系统通知已清理完毕' : '6. ✅ 완료 · 홈 화면 아이콘 배지 및 잔여 시스템 알림 초기화 완료')
                 : (isZh ? `6. ✅ 正常 · 应用通知角标正常 (未读 ${unreadCnt})` : `6. ✅ 정상 · 앱 알림 배지 정상 (안 읽음 ${unreadCnt}건)`));
 
-              // 7. Theme + Maker Mode + Forced Full-Screen Icon Style Re-apply
+              // 7. Theme + Font + Maker Mode + Forced Full-Screen Icon Style & Pending Translation Re-apply
               applyTheme(state.theme, true);
+              if (typeof applyFont === 'function') applyFont(state.font, true);
+              if (typeof applyDockFont === 'function') applyDockFont(state.dockFont, true);
               if (typeof window.__applyMakerLayout === 'function' && state.makerLayout) {
                 window.__applyMakerLayout(state.makerLayout, true);
               }
               const savedIconMode = localStorage.getItem('chanwan_icon_style_v1') || (state.settings && state.settings.iconStyle) || 'pastel';
               if (typeof window.__refreshIconSlots === 'function') window.__refreshIconSlots(document);
-              if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
+              if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(savedIconMode, document.body);
               try { renderChat(); renderHome(); renderNotifications(); } catch (_) {}
-              rows.push(isZh ? `7. 🔧 刷新 · 主题·排版·待译消息与图标风格(${savedIconMode})已刷新` : `7. 🔧 복구 · 테마·배치·미번역 문구·아이콘(${savedIconMode}) 즉시 새로고침`);
+              const hasPendingTr = (state.chat?.messages || []).some(m => m && /^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim()));
+              if (hasPendingTr && typeof autoResolvePendingTranslations === 'function') {
+                rows.push(isZh ? `7. ⏳ 刷新中 · 正在补译待译消息并刷新图标(${savedIconMode})...` : `7. ⏳ 복구 중 · 미번역 문구 재번역 및 아이콘(${savedIconMode}) 새로고침 중...`);
+                setTimeout(async () => {
+                  try { await autoResolvePendingTranslations(); } catch (_) {}
+                  const r7 = document.getElementById('cwHealRow7');
+                  if (r7) r7.textContent = isZh ? `7. ✅ 完成 · 主题·字体·待译消息与图标(${savedIconMode})刷新完成` : `7. ✅ 완료 · 테마·글꼴·미번역 문구·아이콘(${savedIconMode}) 새로고침 완료`;
+                }, 50);
+              } else {
+                if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
+                rows.push(isZh ? `7. ✅ 完成 · 主题·字体·排版与图标(${savedIconMode})刷新完成` : `7. ✅ 완료 · 테마·글꼴·배치·아이콘(${savedIconMode}) 새로고침 완료`);
+              }
 
               // 8. Layout & spacing auto-fit
               const fitCnt = autoFixLayoutSpacing();
@@ -28225,7 +29327,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (reportEl) {
               reportEl.classList.remove('hidden');
               reportEl.innerHTML = `<div class="font-bold mb-1.5" style="color:#059669;">${isZh ? '✅ 应用内 10 项自检修复报告：' : '✅ 앱 자가 복구 10개 항목 점검 리포트:'}</div>` +
-                rows.map((x, idx) => `<div ${idx === 8 ? 'id="cwHealRow9" ' : ''}class="py-0.5">${escapeHtml(x)}</div>`).join('');
+                rows.map((x, idx) => `<div ${idx === 4 ? 'id="cwHealRow5" ' : (idx === 6 ? 'id="cwHealRow7" ' : (idx === 8 ? 'id="cwHealRow9" ' : ''))}class="py-0.5">${escapeHtml(x)}</div>`).join('');
             }
             runBtn.dataset.busy = '0';
             runBtn.textContent = origBtnTxt;
@@ -28238,7 +29340,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 v45 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v84 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
@@ -28525,7 +29627,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 (function initPartnerIntentPolish() {
     if (window.__cwPartnerPolishReady) return;
     window.__cwPartnerPolishReady = true;
-    const CACHE_KEY = 'cw_polish_cache_v2';
+    const CACHE_KEY = 'cw_polish_cache_v5';
 
     function loadCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') || {}; } catch (_) { return {}; } }
     function saveCache(obj) {
@@ -28552,19 +29654,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const cache = loadCache();
       if (cache[ck] && cache[ck].natural) return cache[ck];
 
-      // 1. Gemini 2.5 Flash (uses saved API key from Settings for best nuance & intent understanding!)
-      const gKey = (typeof window.__getActiveGeminiKey === 'function' ? window.__getActiveGeminiKey() : (localStorage.getItem('cw_gemini_api_key_v1') || '')).trim();
+      const stCheckCn = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
+      const inChinaNow = !!(stCheckCn && stCheckCn.settings && stCheckCn.settings.chinaMode) || (typeof window.__isMainlandChinaClient === 'function' && window.__isMainlandChinaClient());
+
+      // 1. Gemini Flash (uses saved API key in Korea/global; skipped in 0ms in Mainland China where Google is GFW-blocked!)
+      const gKey = !inChinaNow ? (typeof window.__getActiveGeminiKey === 'function' ? window.__getActiveGeminiKey() : (localStorage.getItem('cw_gemini_api_key_v1') || '')).trim() : '';
       if (gKey) {
         try {
           const stNow = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
           const readerIsZh = !!(stNow && (stNow.lang === 'zh' || stNow.myRole === 'jingchan'));
           const prompt = !readerIsZh
             ? (lang === 'ko'
-              ? `중국인 연인(징찬)이 한국어를 배우며 보낸 메시지예요. 문법이나 어순이 어색할 수 있어요. 한국인 남자친구(수완)가 오해 없이 원래 의도를 단번에 이해할 수 있도록 JSON만 반환하세요(哥哥/오빠 호칭 유지): {"natural":"가장 자연스러운 한국어 문장","intent":"원래 말하려던 의도와 뉘앙스 풀이 (1~2문장, 부드럽게)","tip":"징찬에게 다정하게 알려줄 수 있는 짧은 한국어 표현 팁 (없으면 빈 문자열)"}. 원문: ${clean}`
-              : `중국인 연인(징찬)이 중국어로 보낸 메시지예요. 한국인 남자친구(수완)가 직역이 아닌 실제 연인 간 속뜻과 다정한 뉘앙스까지 단번에 이해할 수 있도록 JSON만 반환하세요(哥哥는 반드시 '오빠'로 번역): {"natural":"가장 자연스럽고 다정한 한국어 뜻","intent":"중국어 표현의 속뜻·맥락·감정 풀이 (1~2문장)","tip":"원문에서 알아두면 좋은 핵심 중국어 표현 1가지 (없으면 빈 문자열)"}. 원문: ${clean}`)
+              ? `중국인 연인(징찬)이 한국어를 배우며 보낸 메시지예요. 문법이나 어순이 어색할 수 있어요. 한국인 남자친구(수완)가 오해 없이 원래 의도를 단번에 이해할 수 있도록 JSON만 반환하세요(哥哥/오빠 호칭 유지, 절대 [捂脸], [破涕为笑], [亲亲], [流泪] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 얼굴 이모티콘 붙이지 말 것): {"natural":"가장 자연스러운 한국어 문장","intent":"원래 말하려던 의도와 뉘앙스 풀이 (1~2문장, 부드럽게)","tip":"징찬에게 다정하게 알려줄 수 있는 짧은 한국어 표현 팁 (없으면 빈 문자열)"}. 원문: ${clean}`
+              : `중국인 연인(징찬)이 중국어로 보낸 메시지예요. 한국인 남자친구(수완)가 직역이 아닌 실제 연인 간 속뜻과 다정한 뉘앙스까지 단번에 이해할 수 있도록 JSON만 반환하세요(哥哥는 반드시 '오빠'로 번역, 절대 [捂脸], [破涕为笑], [亲亲], [流泪] 같은 대괄호 위챗 이모티콘 태그나 원문에 없는 얼굴 이모티콘 붙이지 말 것): {"natural":"가장 자연스럽고 다정한 한국어 뜻","intent":"중국어 표현의 속뜻·맥락·감정 풀이 (1~2문장)","tip":"원문에서 알아두면 좋은 핵심 중국어 표현 1가지 (없으면 빈 문자열)"}. 원문: ${clean}`)
             : (lang === 'zh'
-              ? `韩国恋人(秀完)用中文发来的消息，可能语序或用词略微生硬。请帮中国女友(靖灿)一眼看懂原本意思，只返回严格 JSON: {"natural":"最自然的中文表达","intent":"原本想表达的意思和语气说明(1-2句)","tip":"可以温柔教给对方的一句地道中文(没有就留空)"}。原文: ${clean}`
-              : `韩国恋人(秀完)用韩语发来的消息。请帮中国女友(靖灿)一眼看懂地道含义、语气和隐藏关心，只返回严格 JSON(오빠 必须译为哥哥): {"natural":"最自然温柔的中文意思","intent":"韩语表达的真实语气与语境解析(1-2句)","tip":"顺便学一个实用的韩语小表达(没有就留空)"}。原文: ${clean}`);
+              ? `韩国恋人(秀完)用中文发来的消息，可能语序或用词略微生硬。请帮中国女友(靖灿)一眼看懂原本意思，只返回严格 JSON(绝对不要添加 [捂脸]、[破涕为笑]、[亲亲]、[流泪] 等微信方括号表情标签): {"natural":"最自然的中文表达","intent":"原本想表达的意思和语气说明(1-2句)","tip":"可以温柔教给对方的一句地道中文(没有就留空)"}。原文: ${clean}`
+              : `韩国恋人(秀完)用韩语发来的消息。请帮中国女友(靖灿)一眼看懂地道含义、语气和隐藏关心，只返回严格 JSON(오빠 必须译为哥哥，绝对不要添加 [捂脸]、[破涕为笑]、[亲亲]、[流泪] 等微信方括号表情标签): {"natural":"最自然温柔的中文意思","intent":"韩语表达的真实语气与语境解析(1-2句)","tip":"顺便学一个实用的韩语小表达(没有就留空)"}。原文: ${clean}`);
           const __discM = (() => { try { return (localStorage.getItem('cw_gemini_active_model_v1') || '').trim(); } catch (_) { return ''; } })();
           const __pModels = [];
           if (__discM) __pModels.push(__discM);
@@ -28595,10 +29700,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (m) {
               const parsed = JSON.parse(m[0]);
               if (parsed && parsed.natural) {
+                const _cleanFn = window.__stripUnrequestedAutoEmojis || ((s) => s);
                 const out = {
-                  natural: String(parsed.natural).trim(),
-                  intent: String(parsed.intent || '').trim(),
-                  tip: String(parsed.tip || '').trim()
+                  natural: _cleanFn(String(parsed.natural).trim(), clean),
+                  intent: _cleanFn(String(parsed.intent || '').trim(), ''),
+                  tip: _cleanFn(String(parsed.tip || '').trim(), clean)
                 };
                 cache[ck] = out; saveCache(cache);
                 return out;
@@ -28608,7 +29714,33 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         } catch (_) {}
       }
 
-      // 2. Free Fallback: Direct natural translation (cross-lang) or Round-trip reconstruction (same-lang)
+      // 2. Mainland China Direct Fallback (0ms Google skip -> instant MyMemory + message cached translation!)
+      if (inChinaNow) {
+        try {
+          const stFbCn = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
+          const readerIsZhCn = !!(stFbCn && (stFbCn.lang === 'zh' || stFbCn.myRole === 'jingchan'));
+          const pair = readerIsZhCn ? (lang === 'ko' ? 'ko|zh-CN' : 'zh-CN|ko') : (lang === 'zh' ? 'zh-CN|ko' : 'ko|zh-CN');
+          const rMm = await fetchT(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=${pair}`, {}, 3200);
+          if (rMm && rMm.ok) {
+            const dMm = await rMm.json();
+            let trCn = String(dMm?.responseData?.translatedText || '').trim();
+            if (trCn && trCn !== clean) {
+              if (readerIsZhCn && /오빠/.test(clean)) trCn = trCn.replace(/我?弟弟|兄弟|老兄/g, '哥哥');
+              if (!readerIsZhCn && /哥哥|欧巴/.test(clean)) trCn = trCn.replace(/형님|형아/g, '오빠');
+              const outCn = {
+                natural: (window.__stripUnrequestedAutoEmojis ? window.__stripUnrequestedAutoEmojis(trCn, clean) : trCn),
+                intent: readerIsZhCn ? '已通过大陆直连引擎解析韩语原文的自然含义与温柔语气。' : '중국 직통 엔진으로 원문의 자연스러운 의미를 풀이했어요.',
+                tip: ''
+              };
+              cache[ck] = outCn; saveCache(cache);
+              return outCn;
+            }
+          }
+        } catch (_) {}
+        return null;
+      }
+
+      // 3. Global Free Fallback: Direct natural translation (cross-lang) or Round-trip reconstruction (same-lang)
       try {
         const stFb = window.__cwBridge && window.__cwBridge.getState ? window.__cwBridge.getState() : null;
         const readerIsZhFb = !!(stFb && (stFb.lang === 'zh' || stFb.myRole === 'jingchan'));
@@ -28623,7 +29755,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!readerIsZhFb && /哥哥|欧巴/.test(clean)) trTxt = trTxt.replace(/형님/g, '오빠').replace(/형아/g, '오빠');
               if (readerIsZhFb && /오빠/.test(clean)) trTxt = trTxt.replace(/我?弟弟|兄弟|老兄/g, '哥哥');
               const out = {
-                natural: trTxt,
+                natural: (window.__stripUnrequestedAutoEmojis ? window.__stripUnrequestedAutoEmojis(trTxt, clean) : trTxt),
                 intent: !readerIsZhFb
                   ? '중국어 원문의 의미를 한국어로 자연스럽게 풀어낸 뜻이에요. (설정에 Gemini 키가 있으면 속뜻·뉘앙스까지 더 정교하게 설명해 줘요)'
                   : '已将韩语原文自然转译为中文含义（配置 Gemini 密钥可获得更细腻的语境解析）。',
@@ -28647,7 +29779,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 const backTxt = Array.isArray(d2?.[0]) ? d2[0].map(x => x?.[0] || '').join('').trim() : '';
                 if (backTxt) {
                   const out = {
-                    natural: backTxt,
+                    natural: (window.__stripUnrequestedAutoEmojis ? window.__stripUnrequestedAutoEmojis(backTxt, clean) : backTxt),
                     intent: lang === 'ko'
                       ? `중국어 의미(${midTxt}) 기준으로 자연스럽게 다시 풀어낸 문장이에요.`
                       : `结合韩语语义（${midTxt}）还原出的更自然表达。`,
@@ -28730,13 +29862,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       const partnerVal = String(st.profile[partnerKey] || '');
       const pill = document.getElementById('chatPartnerStatusPill');
       if (pill) {
-        const cleanPartner = partnerVal ? (isZh ? (partnerVal.split('·')[1] || partnerVal).trim() : partnerVal.split('·')[0].trim()) : '';
-        if (pill.dataset.cwLastMood === cleanPartner) return;
-        pill.dataset.cwLastMood = cleanPartner;
+        let cleanPartner = '';
+        if (partnerVal) {
+          if (typeof window.__formatMoodByLang === 'function') {
+            cleanPartner = window.__formatMoodByLang(partnerVal, isZh ? 'zh' : 'ko');
+          } else {
+            const parts = partnerVal.split('·').map(p => p.trim());
+            const koP = parts[0] || '';
+            const zhP = parts.slice(1).join(' · ') || koP;
+            const emM = koP.match(/^([^a-zA-Z0-9가-힣\u4e00-\u9fff\s]+)\s*/);
+            const leadEm = emM ? (emM[1] + ' ') : '';
+            cleanPartner = isZh ? ((leadEm && !zhP.startsWith(emM[1])) ? `${leadEm}${zhP}` : zhP) : koP;
+          }
+        }
+        const curStyle = localStorage.getItem('chanwan_icon_style_v1') || (st.settings && st.settings.iconStyle) || 'pastel';
+        const cacheSig = `${cleanPartner}|${curStyle}`;
+        if (pill.dataset.cwLastMood === cacheSig) return;
+        pill.dataset.cwLastMood = cacheSig;
         if (cleanPartner) {
           pill.textContent = cleanPartner;
           pill.classList.remove('hidden');
-          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, pill);
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(curStyle, pill);
         } else {
           pill.classList.add('hidden');
         }
@@ -30027,9 +31173,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 </script>
 <script>
 (function(){
-  var urls = [
+  var isCnTz = false;
+  try {
+    isCnTz = (typeof window.__isMainlandChinaClient === 'function' && window.__isMainlandChinaClient())
+      || (new Date().getTimezoneOffset() === -480)
+      || /^(Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Beijing)|PRC)$/i.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+  } catch (_) {}
+  var urls = isCnTz ? [
+    'https://registry.npmmirror.com/@supabase/supabase-js/2.49.4/files/dist/umd/supabase.min.js',
     'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js'
+  ] : [
+    'https://unpkg.com/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js',
+    'https://registry.npmmirror.com/@supabase/supabase-js/2.49.4/files/dist/umd/supabase.min.js'
   ];
   var idx = 0;
   function tryLoad() {

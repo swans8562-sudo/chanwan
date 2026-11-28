@@ -49,7 +49,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 49;
+    private static final int APK_BUILD_VER = 55;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;
@@ -564,6 +564,8 @@ public class MainActivity extends Activity {
         } catch (Exception ignored) {}
         if (inFg) {
             ChanwanPushService.cancelAllMessageNotifs(this);
+        } else {
+            ChanwanPushService.wakeBackgroundPollNow();
         }
     }
 
@@ -749,6 +751,11 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public void showOsNotification(String title, String body) {
+            ChanwanPushService.postDirectFromWebView(MainActivity.this, title, body);
+        }
+
+        @JavascriptInterface
         public boolean isForeground() {
             return isAppInForeground;
         }
@@ -789,8 +796,8 @@ public class MainActivity extends Activity {
                 mr.setAudioSource(MediaRecorder.AudioSource.MIC);
                 mr.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
                 mr.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                mr.setAudioSamplingRate(22050);
-                mr.setAudioEncodingBitRate(64000);
+                mr.setAudioSamplingRate(16000);
+                mr.setAudioEncodingBitRate(32000);
                 mr.setOutputFile(nativeRecFile.getAbsolutePath());
                 mr.prepare();
                 mr.start();

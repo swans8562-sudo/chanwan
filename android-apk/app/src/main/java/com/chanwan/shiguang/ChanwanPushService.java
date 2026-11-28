@@ -29,7 +29,9 @@ import java.util.LinkedHashSet;
 public class ChanwanPushService extends Service {
     public static final int FG_NOTIF_ID = 1;
     private static final String CH_FG = "chanwan_fg_channel";
-    private static final String CH_MSG = "chanwan_msg_channel";
+    private static final String CH_MSG = "chanwan_msg_high_v2";
+    private static volatile ChanwanPushService activeServiceInstance = null;
+    private final Object sbSleepLock = new Object();
     private static final String DEFAULT_ROOM = "chanwan-suwan-jingchan-live2026";
     private static final String SUPABASE_URL = "https://zdqkyftqogfgbfcxdmfh.supabase.co";
     private static final String SUPABASE_KEY = "sb_publishable_iwXcMp6Fee8bJofcYC19bg_AvOMJewt";
@@ -51,6 +53,7 @@ public class ChanwanPushService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        activeServiceInstance = this;
         createChannels();
         promoteToForegroundSafely();
         registerNetworkSwitchWatcher();
@@ -117,6 +120,24 @@ public class ChanwanPushService extends Service {
             sbFallbackWorker.start();
         }
         return START_STICKY;
+    }
+
+    public static void wakeBackgroundPollNow() {
+        ChanwanPushService inst = activeServiceInstance;
+        if (inst != null) {
+            synchronized (inst.sbSleepLock) {
+                inst.sbSleepLock.notifyAll();
+            }
+        }
+    }
+
+    public static void postDirectFromWebView(Context ctx, String title, String body) {
+        ChanwanPushService inst = activeServiceInstance;
+        if (inst != null && ctx != null) {
+            SharedPreferences prefs = ctx.getSharedPreferences("cw_prefs", MODE_PRIVATE);
+            String role = prefs.getString("role", "suwan");
+            inst.dispatchIncomingPush(prefs, role, title != null ? title : "💜 灿完时光", body != null ? body : "", System.currentTimeMillis());
+        }
     }
 
     public static void cancelAllMessageNotifs(Context ctx) {
@@ -303,6 +324,13 @@ public class ChanwanPushService extends Service {
                 conn.setReadTimeout(75000);
                 conn.setConnectTimeout(12000);
                 conn.connect();
+                int code = conn.getResponseCode();
+                if (code == 429) {
+                    try { conn.disconnect(); } catch (Exception ignored) {}
+                    activeConn = null;
+                    try { Thread.sleep(28000L); } catch (InterruptedException ie) { break; }
+                    continue;
+                }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                 String line;
@@ -351,17 +379,20 @@ public class ChanwanPushService extends Service {
         }
     }
 
-    // Secondary Mainland-China & Rate-Limit Proof Fallback: checks Supabase couple_sync_state directly!
+    // Primary-Grade Mainland-China & Rate-Limit Proof Poll: checks Supabase Seoul couple_sync_state every 7s in background!
     private void supabaseFallbackLoop() {
         SharedPreferences initPrefs = getSharedPreferences("cw_prefs", MODE_PRIVATE);
         LinkedHashSet<String> seenMsgIds = loadSeenIds(initPrefs, "seen_sb_msg_ids");
         boolean baselineSeeded = initPrefs.getBoolean("sb_baseline_seeded", false);
         long lastCheckedUpdatedAt = initPrefs.getLong("sb_last_updated_at", 0L);
+        int lastHeartCount = initPrefs.getInt("sb_last_heart_cnt", -1);
 
         while (running) {
             HttpURLConnection conn = null;
             try {
-                Thread.sleep(MainActivity.isAppInForeground ? 40000L : 22000L);
+                synchronized (sbSleepLock) {
+                    sbSleepLock.wait(MainActivity.isAppInForeground ? 30000L : 7000L);
+                }
                 if (!running || MainActivity.isAppInForeground) continue;
 
                 SharedPreferences prefs = getSharedPreferences("cw_prefs", MODE_PRIVATE);
@@ -372,8 +403,8 @@ public class ChanwanPushService extends Service {
                 String qUrl = SUPABASE_URL + "/rest/v1/couple_sync_state?room_id=eq."
                         + URLEncoder.encode(room, "UTF-8") + "&select=payload,updated_at";
                 conn = (HttpURLConnection) new URL(qUrl).openConnection();
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(12000);
+                conn.setConnectTimeout(8000);
+                conn.setReadTimeout(10000);
                 conn.setRequestProperty("apikey", SUPABASE_KEY);
                 conn.setRequestProperty("Accept", "application/json");
                 if (conn.getResponseCode() != 200) continue;
@@ -390,10 +421,21 @@ public class ChanwanPushService extends Service {
                 if (updatedAt > 0L && updatedAt == lastCheckedUpdatedAt && baselineSeeded) continue;
 
                 JSONObject payload = row.optJSONObject("payload");
-                if (payload == null || payload.optBoolean("__cw_e2ee", false)) {
+                if (payload == null || payload.optBoolean("__cw_e2ee", false) || payload.optInt("__e2ee", 0) == 1) {
                     lastCheckedUpdatedAt = updatedAt;
                     continue;
                 }
+
+                int curHeart = payload.optInt("heartCount", 0);
+                String writerRole = payload.optString("myRole", "");
+                if (baselineSeeded && lastHeartCount >= 0 && curHeart > lastHeartCount && !writerRole.isEmpty() && !writerRole.equals(role)) {
+                    String hTitle = "suwan".equals(role) ? "💓 징찬 · 하트비트" : "💓 秀完 · 心跳";
+                    String hBody = "suwan".equals(role) ? "지금 보고 싶어요 💜" : "现在好想你 💜";
+                    dispatchIncomingPush(prefs, role, hTitle, hBody, System.currentTimeMillis());
+                }
+                lastHeartCount = curHeart;
+                prefs.edit().putInt("sb_last_heart_cnt", curHeart).apply();
+
                 JSONObject chat = payload.optJSONObject("chat");
                 JSONArray msgs = (chat != null) ? chat.optJSONArray("messages") : null;
                 if (msgs == null || msgs.length() == 0) {
@@ -401,21 +443,24 @@ public class ChanwanPushService extends Service {
                     continue;
                 }
 
+                long nowMs = System.currentTimeMillis();
                 if (!baselineSeeded) {
                     for (int i = Math.max(0, msgs.length() - 30); i < msgs.length(); i++) {
                         JSONObject m = msgs.optJSONObject(i);
-                        if (m != null && !m.optString("id", "").isEmpty()) {
-                            seenMsgIds.add(m.optString("id", ""));
+                        if (m == null) continue;
+                        String mid = m.optString("id", "");
+                        long mts = m.optLong("ts", 0L);
+                        // Seed older messages, but allow brand-new (<15s) partner messages right after minimizing to still notify!
+                        if (!mid.isEmpty() && (mts <= 0L || (nowMs - mts) > 15000L)) {
+                            seenMsgIds.add(mid);
                         }
                     }
                     baselineSeeded = true;
-                    lastCheckedUpdatedAt = updatedAt;
-                    prefs.edit().putBoolean("sb_baseline_seeded", true).putLong("sb_last_updated_at", updatedAt).apply();
+                    prefs.edit().putBoolean("sb_baseline_seeded", true).apply();
                     saveSeenIds(prefs, "seen_sb_msg_ids", seenMsgIds, null, 0L);
-                    continue;
                 }
 
-                long nowMs = System.currentTimeMillis();
+                boolean deferredPending = false;
                 for (int i = Math.max(0, msgs.length() - 6); i < msgs.length(); i++) {
                     JSONObject m = msgs.optJSONObject(i);
                     if (m == null) continue;
@@ -423,7 +468,8 @@ public class ChanwanPushService extends Service {
                     if (mid.isEmpty() || seenMsgIds.contains(mid)) continue;
                     long mtsPeek = m.optLong("ts", 0L);
                     String trPeek = m.optString("translated", "").trim();
-                    if ((trPeek.startsWith("⏳ 번역 중") || trPeek.startsWith("⏳ 正在翻译")) && mtsPeek > 0L && (nowMs - mtsPeek) < 8000L) {
+                    if ((trPeek.startsWith("⏳ 번역 중") || trPeek.startsWith("⏳ 正在翻译")) && mtsPeek > 0L && (nowMs - mtsPeek) < 8500L) {
+                        deferredPending = true;
                         continue;
                     }
                     seenMsgIds.add(mid);
@@ -438,19 +484,16 @@ public class ChanwanPushService extends Service {
 
                     String orig = m.optString("original", "").trim();
                     String tr = m.optString("translated", "").trim();
-                    String dispBody;
-                    if ("suwan".equals(role)) {
-                        dispBody = (!tr.isEmpty() && !tr.startsWith("⏳")) ? tr : orig;
-                    } else {
-                        dispBody = (!tr.isEmpty() && !tr.startsWith("⏳")) ? tr : orig;
-                    }
+                    String dispBody = (!tr.isEmpty() && !tr.startsWith("⏳")) ? tr : orig;
                     if (dispBody.isEmpty()) dispBody = "suwan".equals(role) ? "새 메시지가 도착했어요" : "发来了一条新消息";
                     String dispTitle = "suwan".equals(role) ? "💜 징찬" : "💜 秀完";
 
                     dispatchIncomingPush(prefs, role, dispTitle, dispBody, mts > 0L ? mts : nowMs);
                 }
-                lastCheckedUpdatedAt = updatedAt;
-                prefs.edit().putLong("sb_last_updated_at", updatedAt).apply();
+                if (!deferredPending) {
+                    lastCheckedUpdatedAt = updatedAt;
+                    prefs.edit().putLong("sb_last_updated_at", updatedAt).apply();
+                }
             } catch (InterruptedException ie) {
                 break;
             } catch (Exception ignored) {
@@ -496,6 +539,8 @@ public class ChanwanPushService extends Service {
     @Override
     public void onDestroy() {
         running = false;
+        if (activeServiceInstance == this) activeServiceInstance = null;
+        synchronized (sbSleepLock) { sbSleepLock.notifyAll(); }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && netCallback != null) {
             try {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
