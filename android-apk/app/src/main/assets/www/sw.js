@@ -1,8 +1,8 @@
-const SW_VER = 'chanwan-sw-prime4-v98';
+const SW_VER = 'chanwan-sw-prime4-v104';
 const PRECACHE_URLS = [
   './',
   './index.html',
-  './manifest_clean.json?v=24',
+  './manifest_clean.json?v=30',
   './icon-192.png?v=21',
   './badge-96.png?v=23'
 ];

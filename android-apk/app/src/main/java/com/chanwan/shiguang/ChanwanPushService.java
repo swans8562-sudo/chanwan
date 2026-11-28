@@ -5,7 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ServiceInfo;
@@ -43,6 +45,7 @@ public class ChanwanPushService extends Service {
     private Thread worker;
     private Thread sbFallbackWorker;
     private ConnectivityManager.NetworkCallback netCallback;
+    private BroadcastReceiver screenOffReceiver = null;
 
     private final Object dedupLock = new Object();
     private String lastFp = "";
@@ -57,6 +60,18 @@ public class ChanwanPushService extends Service {
         createChannels();
         promoteToForegroundSafely();
         registerNetworkSwitchWatcher();
+        try {
+            screenOffReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    wakeBackgroundPollNow();
+                }
+            };
+            IntentFilter f = new IntentFilter();
+            f.addAction(Intent.ACTION_SCREEN_OFF);
+            f.addAction(Intent.ACTION_USER_PRESENT);
+            registerReceiver(screenOffReceiver, f);
+        } catch (Throwable ignored) {}
     }
 
     private void registerNetworkSwitchWatcher() {
@@ -101,11 +116,12 @@ public class ChanwanPushService extends Service {
         String desiredRoom = prefs.getString("room", DEFAULT_ROOM);
         if (desiredRoom == null || desiredRoom.trim().isEmpty()) desiredRoom = DEFAULT_ROOM;
 
+        boolean forceReconnect = intent != null && intent.getBooleanExtra("force_reconnect", false);
         if (worker == null || !worker.isAlive()) {
             running = true;
             worker = new Thread(this::streamLoop, "ChanwanNtfyStream");
             worker.start();
-        } else if (!desiredRole.equals(activeRole) || !desiredRoom.equals(activeRoom)) {
+        } else if (forceReconnect || !desiredRole.equals(activeRole) || !desiredRoom.equals(activeRoom)) {
             HttpURLConnection c = activeConn;
             if (c != null) {
                 new Thread(() -> {
@@ -494,14 +510,31 @@ public class ChanwanPushService extends Service {
             HttpURLConnection conn = null;
             try {
                 synchronized (sbSleepLock) {
-                    sbSleepLock.wait(MainActivity.isAppInForeground ? 30000L : 7000L);
+                    sbSleepLock.wait(MainActivity.isActivelyVisibleOnScreen() ? 25000L : 3200L);
                 }
-                if (!running || MainActivity.isAppInForeground) continue;
+                if (!running || MainActivity.isActivelyVisibleOnScreen()) continue;
 
                 SharedPreferences prefs = getSharedPreferences("cw_prefs", MODE_PRIVATE);
                 String role = prefs.getString("role", "suwan");
                 String room = prefs.getString("room", DEFAULT_ROOM);
                 if (room == null || room.trim().isEmpty()) room = DEFAULT_ROOM;
+
+                // 1-Minute Background Stream Self-Heal: if ntfy stream had zero keepalive/open for >65s, break stale socket so streamLoop reconnects immediately!
+                long lastStreamAliveSec = prefs.getLong("last_stream_sec", 0L);
+                long nowSecCheck = System.currentTimeMillis() / 1000L;
+                if (lastStreamAliveSec > 0L && (nowSecCheck - lastStreamAliveSec) >= 65L) {
+                    prefs.edit().putLong("last_stream_sec", nowSecCheck).apply();
+                    HttpURLConnection staleC = activeConn;
+                    if (staleC != null) {
+                        new Thread(() -> {
+                            try { staleC.disconnect(); } catch (Exception ignored) {}
+                        }).start();
+                    }
+                    if (worker == null || !worker.isAlive()) {
+                        worker = new Thread(this::streamLoop, "ChanwanNtfyStream");
+                        worker.start();
+                    }
+                }
 
                 String qUrl = SUPABASE_URL + "/rest/v1/couple_sync_state?room_id=eq."
                         + URLEncoder.encode(room, "UTF-8") + "&select=payload";
@@ -644,6 +677,10 @@ public class ChanwanPushService extends Service {
         running = false;
         if (activeServiceInstance == this) activeServiceInstance = null;
         synchronized (sbSleepLock) { sbSleepLock.notifyAll(); }
+        if (screenOffReceiver != null) {
+            try { unregisterReceiver(screenOffReceiver); } catch (Throwable ignored) {}
+            screenOffReceiver = null;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && netCallback != null) {
             try {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

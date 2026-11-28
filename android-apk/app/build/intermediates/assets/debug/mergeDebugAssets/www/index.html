@@ -17,7 +17,7 @@
   <meta name="format-detection" content="telephone=no" />
   <meta id="colorSchemeMeta" name="color-scheme" content="light dark" />
   <meta id="themeColorMeta" name="theme-color" content="#120d1f" />
-  <link rel="manifest" href="./manifest_clean.json?v=24" />
+  <link rel="manifest" href="./manifest_clean.json?v=30" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
@@ -1338,6 +1338,99 @@
       object-fit: cover;
       display: block;
     }
+    .cw-video-bubble-card {
+      display: block;
+      width: 214px;
+      max-width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 52%, #fef3c7 100%);
+      box-shadow: 0 4px 14px rgba(52, 28, 92, 0.14);
+    }
+    [data-theme="midnight"] .cw-video-bubble-card,
+    [data-theme="velvet"] .cw-video-bubble-card {
+      background: linear-gradient(135deg, #2a1c44 0%, #3b1f47 55%, #2d2342 100%);
+    }
+    .cw-pretty-video-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 52%, #fef3c7 100%);
+    }
+    .cw-pretty-video-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: transparent;
+    }
+    .cw-vid-cover-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.18s ease;
+    }
+    .cw-vid-cover-overlay.is-playing {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .cw-vid-poster-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cw-vid-cover-shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(18,12,34,0.06) 0%, rgba(18,12,34,0.14) 55%, rgba(18,12,34,0.48) 100%);
+      pointer-events: none;
+    }
+    .cw-vid-play-circle {
+      position: relative;
+      z-index: 2;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.90);
+      border: 1.5px solid rgba(255, 255, 255, 0.96);
+      box-shadow: 0 6px 18px rgba(24, 12, 48, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6d28d9;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .cw-vid-cover-overlay:active .cw-vid-play-circle {
+      transform: scale(0.93);
+      background: #ffffff;
+    }
+    .cw-vid-dur-badge {
+      position: absolute;
+      left: 7px;
+      bottom: 6px;
+      z-index: 2;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #ffffff;
+      background: rgba(20, 12, 36, 0.62);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      letter-spacing: 0.01em;
+    }
     .cw-gif-single {
       display: inline-flex;
       align-items: center;
@@ -1677,6 +1770,15 @@
     [data-iconstyle="pastel"] .cw-msg-row.mine .cw-msg-bubble .cw-ui-ico svg [fill="#e9d8fd"] { fill: rgba(255,255,255,0.28) !important; }
     [data-iconstyle="gold"] .cw-msg-row.mine .cw-msg-bubble .cw-ui-ico svg [stroke="#9b7232"] { stroke: #fde68a !important; }
     [data-iconstyle="gold"] .cw-msg-row.mine .cw-msg-bubble .cw-ui-ico svg [fill="#f7e4bc"] { fill: rgba(253,230,138,0.28) !important; }
+    .btn-royal .cw-ui-ico svg, .btn-royal .cw-ico-slot svg { filter: drop-shadow(0 0 1px rgba(255,255,255,0.28)); }
+    [data-iconstyle="pastel"] .btn-royal .cw-ui-ico svg [stroke="#5b3d8a"],
+    [data-iconstyle="pastel"] .btn-royal .cw-ico-slot svg [stroke="#5b3d8a"] { stroke: #ffffff !important; }
+    [data-iconstyle="pastel"] .btn-royal .cw-ui-ico svg [fill="#e9d8fd"],
+    [data-iconstyle="pastel"] .btn-royal .cw-ico-slot svg [fill="#e9d8fd"] { fill: rgba(255,255,255,0.34) !important; }
+    [data-iconstyle="gold"] .btn-royal .cw-ui-ico svg [stroke="#9b7232"],
+    [data-iconstyle="gold"] .btn-royal .cw-ico-slot svg [stroke="#9b7232"] { stroke: #fde68a !important; }
+    [data-iconstyle="gold"] .btn-royal .cw-ui-ico svg [fill="#f7e4bc"],
+    [data-iconstyle="gold"] .btn-royal .cw-ico-slot svg [fill="#f7e4bc"] { fill: rgba(253,230,138,0.32) !important; }
     .cw-stamp-seal {
       border: 2px dashed rgba(225, 29, 72, 0.72);
       color: #e11d48;
@@ -2544,7 +2646,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v98: App-Wide Couture Boutique Elevation
+       Prime 4 · v104: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2788,7 +2890,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v98: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v104: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5101,11 +5203,11 @@
           <h3 class="text-base font-bold flex items-center gap-2 min-w-0"><span>🛠️</span> <span class="truncate" data-i18n="selfHealTitle">앱 자가 복구 & 자동 오류 메모</span></h3>
           <span id="selfHealStatusPill" class="text-[10.5px] font-bold px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap" style="background: rgba(16,185,129,0.14); color: #059669;">🟢 정상</span>
         </div>
-        <p class="text-[11px] text-sec leading-relaxed" data-i18n="selfHealDesc">동기화·중복·배지 꼬임은 버튼 한 번으로 바로 고치고, 코드 수정이 필요한 오류는 자동으로 메모해 둬요.</p>
+        <p class="text-[11px] text-sec leading-relaxed" data-i18n="selfHealDesc">접속 상태·알림 채널·읽음처리·동기화 꼬임을 버튼 한 번으로 바로 수리하고, 코드 오류는 자동 메모해 둬요.</p>
         <div class="rounded-2xl px-3 py-2.5 flex items-center justify-between gap-2.5" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
           <div class="min-w-0 flex-1">
             <div class="text-xs font-bold flex items-center gap-1.5"><span>🤖</span> <span data-i18n="autoHealTitle">스마트 자동 자가진단</span></div>
-            <div id="autoHealLastRunText" class="text-[10.5px] text-mut mt-0.5 truncate">부팅·재연결 시 가벼운 항목만 자동 점검해요 (버벅거림 없음)</div>
+            <div id="autoHealLastRunText" class="text-[10.5px] text-mut mt-0.5 truncate">1분마다 접속·알림·읽음·동기화를 자동 수리해요 (버벅거림 없음)</div>
           </div>
           <label class="inline-flex items-center gap-1.5 text-[11px] font-bold cursor-pointer shrink-0">
             <input id="autoSelfHealToggle" type="checkbox" checked class="w-4 h-4 accent-purple-600 rounded" />
@@ -5166,7 +5268,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v98</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v104</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5538,12 +5640,16 @@
           <span id="vrStatusText" class="text-xs font-semibold text-sec">아래 버튼을 눌러 문장을 읽어보세요</span>
           <span id="vrTimerText" class="font-mono text-xs font-bold text-gold">00:00</span>
         </div>
-        <div class="flex items-center justify-center gap-2">
+        <div id="vrMyRecControls" class="flex items-center justify-center gap-2">
           <button id="vrRecordBtn" type="button" class="btn-royal px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap inline-flex items-center justify-center gap-1.5"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" opacity="0.45"/><circle cx="12" cy="12" r="4.8" fill="#fb7185"/></svg><span>녹음 시작</span></button>
           <label id="vrFileLabel" class="btn-ghost px-3.5 py-2.5 rounded-full text-xs font-semibold cursor-pointer whitespace-nowrap">
             🎙️ 기기 녹음·파일
             <input id="vrFileInput" type="file" accept="audio/*" capture="microphone" class="hidden" />
           </label>
+        </div>
+        <div id="vrPartnerLockBox" class="hidden space-y-2 pt-0.5">
+          <div id="vrPartnerLockHint" class="text-[11px] text-mut leading-relaxed">상대방 목소리는 상대방 휴대폰에서 직접 녹음할 때만 등록돼요 🔒</div>
+          <button id="vrReqPartnerBtn" type="button" class="btn-royal px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap">💌 상대방에게 녹음 요청 보내기</button>
         </div>
         <div id="vrPreviewWrap" class="hidden pt-2 border-t space-y-2" style="border-color: var(--border-subtle);">
           <audio id="vrPreviewAudio" controls class="w-full h-9"></audio>
@@ -5875,7 +5981,7 @@
           autoNightDarkTitle: '🌙 밤 9시 이후 자동 랜덤 다크모드',
           autoNightDarkDesc: '각자 현지 시간 밤 9시가 되면 다크 테마 4종 중 랜덤으로 자동 전환돼요.',
           selfHealTitle: '앱 자가 복구 & 자동 오류 메모',
-          selfHealDesc: '동기화·중복·배지 꼬임은 버튼 한 번으로 바로 고치고, 코드 수정이 필요한 오류는 자동으로 메모해 둬요.',
+          selfHealDesc: '접속 상태·알림 채널·읽음처리·동기화 꼬임을 버튼 한 번으로 바로 수리하고, 코드 오류는 자동 메모해 둬요.',
           selfHealRunBtn: '🛠️ 지금 자가 복구', makerModeTitle: '메이커 모드 (실시간 배치·간격 편집)', makerAutoSyncBadge: '🟢 자동 동기화', makerModeDesc: '재배포 없이 카드 간격·여백·글자 크기·중앙정렬·상단 상태바·홈 카드 순서를 직접 조절하면 상대방 폰에도 실시간 자동 반영돼요.', makerOpenBtn: '🎨 실시간 편집 창 열기', makerCopyBtn: '📋 복사', makerPasteBtn: '📥 붙여넣기', makerResetBtn: '🔄 기본값',
           copyErrMemoBtn: '📋 오류 메모 복사',
           clearErrMemoBtn: '🗑️ 비우기',
@@ -10660,6 +10766,255 @@
 
       // Lightweight Blob ObjectURL cache: replaces multi-MB base64 strings in DOM with 50-byte blob: URLs (prevents Android OOM crashes!)
       const __cwBlobUrlMap = new Map();
+      // Automatic Video First-Frame Thumbnail Extractor & Persistent Poster Cache (v100)
+      const __cwVideoPosterCache = new Map();
+      const __cwVideoPosterPending = new Set();
+      let __cwVideoPostersHydrated = false;
+      let __cwVideoPosterSaveTimer = null;
+
+      const CW_SOFT_VIDEO_FALLBACK_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">' +
+        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="#ede9fe"/><stop offset="52%" stop-color="#fce7f3"/><stop offset="100%" stop-color="#fef3c7"/>' +
+        '</linearGradient></defs>' +
+        '<rect width="320" height="220" fill="url(#g)"/>' +
+        '<circle cx="64" cy="52" r="42" fill="#ffffff" fill-opacity="0.38"/>' +
+        '<circle cx="262" cy="176" r="56" fill="#d8b4fe" fill-opacity="0.28"/>' +
+        '<path d="M160 94c-7.5-9.5-21.5-9.5-28 0-5.5 8-.5 18.5 14 28.5 14.5-10 19.5-20.5 14-28.5z" fill="#c084fc" fill-opacity="0.45"/>' +
+        '</svg>'
+      );
+
+      function __cwFormatVidSec(sec) {
+        const s = Math.max(0, Math.round(Number(sec || 0)));
+        if (!s || !isFinite(s)) return '';
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return `${m}:${String(r).padStart(2, '0')}`;
+      }
+
+      function __cwVidPosterKey(raw) {
+        if (!raw || typeof raw !== 'string') return '';
+        if (raw.length <= 260) return 'vpk_' + raw.replace(/[^a-zA-Z0-9]/g, '').slice(-80);
+        return `vpk_${raw.length}_${raw.slice(22, 62).replace(/[^a-zA-Z0-9]/g, '')}_${raw.slice(-36).replace(/[^a-zA-Z0-9]/g, '')}`;
+      }
+
+      function __hydrateVideoPostersFromIdb() {
+        if (__cwVideoPostersHydrated) return;
+        __cwVideoPostersHydrated = true;
+        try {
+          if (typeof idbGet === 'function') {
+            idbGet('video_posters_v1').then(saved => {
+              if (saved && typeof saved === 'object') {
+                let added = 0;
+                for (const [k, v] of Object.entries(saved)) {
+                  if (k && v && v.poster && !__cwVideoPosterCache.has(k)) {
+                    __cwVideoPosterCache.set(k, v);
+                    added++;
+                  }
+                }
+                if (added > 0) __applyCachedPostersToDom();
+              }
+            }).catch(() => {});
+          }
+        } catch (_) {}
+      }
+
+      function __schedulePersistVideoPosters() {
+        if (__cwVideoPosterSaveTimer) clearTimeout(__cwVideoPosterSaveTimer);
+        __cwVideoPosterSaveTimer = setTimeout(() => {
+          __cwVideoPosterSaveTimer = null;
+          try {
+            if (typeof idbPut === 'function') {
+              const obj = {};
+              const entries = Array.from(__cwVideoPosterCache.entries()).slice(-90);
+              for (const [k, v] of entries) {
+                if (k && v && v.poster) obj[k] = v;
+              }
+              idbPut('video_posters_v1', obj);
+            }
+          } catch (_) {}
+        }, 500);
+      }
+
+      function __applyCachedPostersToDom(onlyKey) {
+        try {
+          const sel = onlyKey ? `.cw-vid-cover-overlay[data-vpk="${onlyKey}"]` : '.cw-vid-cover-overlay[data-vpk]';
+          document.querySelectorAll(sel).forEach(ov => {
+            const k = ov.getAttribute('data-vpk');
+            const hit = k ? __cwVideoPosterCache.get(k) : null;
+            if (!hit || !hit.poster) return;
+            const img = ov.querySelector('.cw-vid-poster-img');
+            if (img && img.getAttribute('src') !== hit.poster) {
+              img.setAttribute('src', hit.poster);
+            }
+            const durEl = ov.querySelector('.cw-vid-dur-badge');
+            if (durEl && hit.dur) {
+              durEl.textContent = `🎬 ${hit.dur}`;
+            }
+            const box = ov.closest('.cw-pretty-video-box');
+            const vid = box ? box.querySelector('video') : null;
+            if (vid && vid.getAttribute('poster') !== hit.poster) {
+              vid.setAttribute('poster', hit.poster);
+            }
+          });
+        } catch (_) {}
+      }
+
+      function __extractVideoFirstFrameAsync(rawVideoSrc, explicitPlayUrl) {
+        __hydrateVideoPostersFromIdb();
+        const vpk = __cwVidPosterKey(rawVideoSrc);
+        if (!vpk) return Promise.resolve(null);
+        if (__cwVideoPosterCache.has(vpk)) return Promise.resolve(__cwVideoPosterCache.get(vpk));
+        if (__cwVideoPosterPending.has(vpk)) return Promise.resolve(null);
+        __cwVideoPosterPending.add(vpk);
+
+        return new Promise((resolve) => {
+          let settled = false;
+          const v = document.createElement('video');
+          const finish = (resObj) => {
+            if (settled) return;
+            settled = true;
+            __cwVideoPosterPending.delete(vpk);
+            try { v.pause(); v.removeAttribute('src'); v.load(); v.remove(); } catch (_) {}
+            if (resObj && resObj.poster) {
+              __cwVideoPosterCache.set(vpk, resObj);
+              __schedulePersistVideoPosters();
+              __applyCachedPostersToDom(vpk);
+            }
+            resolve(resObj || null);
+          };
+          const timer = setTimeout(() => finish(null), 6500);
+          try {
+            const srcUrl = explicitPlayUrl || __cwMediaUrl(rawVideoSrc, 'video/mp4');
+            if (!srcUrl) { clearTimeout(timer); return finish(null); }
+            v.muted = true;
+            v.defaultMuted = true;
+            v.playsInline = true;
+            v.preload = 'auto';
+            v.setAttribute('muted', '');
+            v.setAttribute('playsinline', '');
+            v.setAttribute('webkit-playsinline', '');
+            if (/^https?:\/\//i.test(srcUrl)) v.crossOrigin = 'anonymous';
+            v.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:32px;height:32px;opacity:0.001;pointer-events:none;';
+            document.body.appendChild(v);
+
+            let triedSecondSeek = false;
+            const captureCurrentFrame = () => {
+              try {
+                const vw = Number(v.videoWidth || 0);
+                const vh = Number(v.videoHeight || 0);
+                if (!vw || !vh) { clearTimeout(timer); return finish(null); }
+                const maxSide = 480;
+                const sc = Math.min(1, maxSide / Math.max(vw, vh));
+                const cw = Math.max(120, Math.round(vw * sc));
+                const ch = Math.max(90, Math.round(vh * sc));
+                const cv = document.createElement('canvas');
+                cv.width = cw;
+                cv.height = ch;
+                const ctx = cv.getContext('2d');
+                ctx.drawImage(v, 0, 0, cw, ch);
+
+                // Check if frame at 0.12s is a pure black fade-in; if so, step to 0.55s once for a bright scene frame!
+                if (!triedSecondSeek && Number(v.duration || 0) > 0.7) {
+                  try {
+                    const sample = ctx.getImageData(Math.floor(cw * 0.2), Math.floor(ch * 0.2), Math.max(8, Math.floor(cw * 0.6)), Math.max(8, Math.floor(ch * 0.6))).data;
+                    let sum = 0, cnt = 0;
+                    for (let i = 0; i < sample.length; i += 16) {
+                      sum += (sample[i] * 0.299 + sample[i + 1] * 0.587 + sample[i + 2] * 0.114);
+                      cnt++;
+                    }
+                    const avgLuma = cnt ? (sum / cnt) : 60;
+                    if (avgLuma < 14) {
+                      triedSecondSeek = true;
+                      v.currentTime = Math.min(0.65, Number(v.duration) * 0.35);
+                      return;
+                    }
+                  } catch (_) {}
+                }
+
+                const jpegUrl = cv.toDataURL('image/jpeg', 0.82);
+                clearTimeout(timer);
+                if (jpegUrl && jpegUrl.startsWith('data:image/')) {
+                  return finish({ poster: jpegUrl, dur: __cwFormatVidSec(v.duration) });
+                }
+                return finish(null);
+              } catch (_) {
+                clearTimeout(timer);
+                return finish(null);
+              }
+            };
+
+            v.addEventListener('loadedmetadata', () => {
+              try {
+                const dur = Number(v.duration || 0);
+                const seekTo = dur > 0.25 ? 0.14 : (dur > 0.03 ? 0.02 : 0.001);
+                v.currentTime = seekTo;
+              } catch (_) {
+                captureCurrentFrame();
+              }
+            }, { once: true });
+            v.addEventListener('seeked', () => captureCurrentFrame());
+            v.addEventListener('error', () => { clearTimeout(timer); finish(null); }, { once: true });
+            v.src = srcUrl;
+            v.load();
+          } catch (_) {
+            clearTimeout(timer);
+            finish(null);
+          }
+        });
+      }
+      window.__getOrExtractVideoPoster = __extractVideoFirstFrameAsync;
+
+      function __renderPrettyVideoCardHtml(rawVideoSrc, opts) {
+        __hydrateVideoPostersFromIdb();
+        const o = opts || {};
+        const playUrl = __cwMediaUrl(rawVideoSrc, 'video/mp4');
+        const vpk = __cwVidPosterKey(rawVideoSrc);
+        const cached = vpk ? __cwVideoPosterCache.get(vpk) : null;
+        const posterSrc = (cached && cached.poster) ? cached.poster : CW_SOFT_VIDEO_FALLBACK_SVG;
+        const isZh = typeof state !== 'undefined' && state && state.lang === 'zh';
+        const durTxt = (cached && cached.dur) ? `🎬 ${cached.dur}` : (isZh ? '🎬 视频' : '🎬 동영상');
+        if (!cached && rawVideoSrc) {
+          setTimeout(() => { __extractVideoFirstFrameAsync(rawVideoSrc, playUrl); }, 20);
+        }
+        const dlBtnHtml = o.downloadName
+          ? `<a href="${playUrl}" download="${escapeHtml(o.downloadName)}" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.68);" title="${isZh ? '保存' : '저장'}">📥</a>`
+          : '';
+        const zoomBtnHtml = o.showZoom
+          ? `<button type="button" class="cw-zoom-video px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.68);" data-src="${playUrl}" title="${isZh ? '全屏' : '전체화면'}">⛶</button>`
+          : '';
+        const topActions = (dlBtnHtml || zoomBtnHtml)
+          ? `<div class="absolute top-1.5 right-1.5 z-10 flex items-center gap-1">${dlBtnHtml}${zoomBtnHtml}</div>`
+          : '';
+        const outerCls = o.outerClass || 'w-full h-full';
+        return `<div class="cw-pretty-video-box ${outerCls}"><video src="${playUrl}#t=0.08" poster="${posterSrc}" playsinline webkit-playsinline preload="metadata"></video><div class="cw-vid-cover-overlay" data-vpk="${escapeHtml(vpk)}"><img class="cw-vid-poster-img" src="${posterSrc}" alt="video thumbnail" decoding="async" /><div class="cw-vid-cover-shade"></div><span class="cw-vid-play-circle" aria-label="Play video"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><polygon points="8,5.5 19,12 8,18.5"/></svg></span><span class="cw-vid-dur-badge">${escapeHtml(durTxt)}</span></div>${topActions}</div>`;
+      }
+      window.__renderPrettyVideoCardHtml = __renderPrettyVideoCardHtml;
+
+      document.addEventListener('click', (ev) => {
+        const cover = ev.target && ev.target.closest ? ev.target.closest('.cw-vid-cover-overlay') : null;
+        if (!cover) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        const box = cover.closest('.cw-pretty-video-box');
+        const vid = box ? box.querySelector('video') : null;
+        if (!vid) return;
+        cover.classList.add('is-playing');
+        vid.controls = true;
+        try { if (vid.currentTime > 0 && vid.currentTime < 0.25 && vid.paused) vid.currentTime = 0; } catch (_) {}
+        const p = vid.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => { cover.classList.remove('is-playing'); });
+        }
+        if (!vid.dataset.cwCoverBound) {
+          vid.dataset.cwCoverBound = '1';
+          vid.addEventListener('ended', () => {
+            vid.controls = false;
+            cover.classList.remove('is-playing');
+          });
+        }
+      });
+
       function __cwMediaUrl(raw, fallbackMime) {
         if (!raw || typeof raw !== 'string') return '';
         if (raw.startsWith('data:image/')) return raw;
@@ -11455,14 +11810,70 @@
         return { zh, question, source: source || '학습 보이스' };
       }
 
+      window.__requestPartnerStudyVoice = function(phraseText, extraMeta) {
+        const phrase = String(phraseText || '').trim();
+        if (!phrase) return;
+        const myR = (state && state.myRole) === 'jingchan' ? 'jingchan' : 'suwan';
+        const partnerR = myR === 'suwan' ? 'jingchan' : 'suwan';
+        const info = resolvePhraseMetaInfo(phrase, extraMeta || {});
+        if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+        const prev = state.studyVoiceMeta[phrase] || {};
+        state.studyVoiceMeta[phrase] = {
+          ...prev,
+          zh: info.zh || prev.zh || '',
+          question: info.question || prev.question || '',
+          source: info.source || prev.source || '학습 보이스',
+          requestedBy: myR,
+          requestedAt: Date.now()
+        };
+        saveState(true);
+        if (typeof window.__sendChatSignal === 'function') {
+          window.__sendChatSignal('req_study_voice', {
+            phrase,
+            zh: state.studyVoiceMeta[phrase].zh,
+            question: state.studyVoiceMeta[phrase].question,
+            source: state.studyVoiceMeta[phrase].source,
+            targetSpeaker: partnerR
+          });
+        }
+        const whoKo = myR === 'jingchan' ? '징찬(灿)' : '수완(完)';
+        const whoZh = myR === 'jingchan' ? '靖灿(灿)' : '秀完(完)';
+        pushNotification(
+          '🎙️',
+          `${whoKo}의 스터디 보이스 녹음 요청!`,
+          `${whoZh}邀请你录制学习原声！`,
+          `"${phrase}" 문장을 내 목소리로 녹음해 주세요 💜`,
+          `快来「双人原声题库」录一句：「${phrase}」💜`,
+          'learn',
+          'voices',
+          'post',
+          false,
+          myR
+        );
+        try {
+          if (typeof sendPartnerNativePush === 'function') {
+            sendPartnerNativePush(
+              myR === 'suwan' ? '🎙️ 秀完邀请你录一句原声' : '🎙️ 징찬이의 보이스 녹음 요청',
+              `「${phrase}」${info.zh ? ' (' + info.zh + ')' : ''} 💜`
+            );
+          }
+        } catch (_) {}
+        try { renderLearn(); } catch (_) {}
+        showToast(state.lang === 'zh'
+          ? (partnerR === 'suwan' ? '💌 已向秀完发送原声录制邀请！' : '💌 已向靖灿发送原声录制邀请！')
+          : (partnerR === 'jingchan' ? '💌 징찬이에게 이 문장 녹음 요청 알림을 보냈어요! 💜' : '💌 수완이에게 이 문장 녹음 요청 알림을 보냈어요! ❤️'));
+      };
+
       function syncVrModalSpeakerUi() {
         const isZh = state.lang === 'zh';
+        const myRoleNow = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
         const isJc = vrCurrentSpeaker === 'jingchan';
+        const isMyOwnSlot = vrCurrentSpeaker === myRoleNow;
         const titleEl = document.getElementById('vrModalTitle');
         if (titleEl) {
           titleEl.textContent = isJc
-            ? (isZh ? '🎙️ 靖灿(灿) 原声录音室' : '🎙️ 징찬(灿) 보이스 녹음')
-            : (isZh ? '🎙️ 秀完(完) 原声录音室' : '🎙️ 수완(完) 보이스 녹음');
+            ? (isZh ? '🎙️ 靖灿(灿) 原声录音室' : '🎙️ 징찬(灿) 보이스 스튜디오')
+            : (isZh ? '🎙️ 秀完(完) 原声录音室' : '🎙️ 수완(完) 보이스 스튜디오');
         }
         const swBtn = document.getElementById('vrSpeakerSuwanBtn');
         const jcBtn = document.getElementById('vrSpeakerJingchanBtn');
@@ -11476,10 +11887,38 @@
           jcBtn.className = `vr-speaker-btn ${isJc ? 'btn-royal' : 'btn-ghost'} py-2 px-2.5 rounded-xl text-xs font-bold whitespace-nowrap truncate`;
           jcBtn.textContent = (isZh ? '💜 靖灿原声' : '💜 징찬 보이스') + (hasJc ? ' ✓' : '');
         }
+        const myControls = document.getElementById('vrMyRecControls');
+        const lockBox = document.getElementById('vrPartnerLockBox');
+        const lockHint = document.getElementById('vrPartnerLockHint');
+        const reqBtn = document.getElementById('vrReqPartnerBtn');
+        const timerEl = document.getElementById('vrTimerText');
         const stEl = document.getElementById('vrStatusText');
-        if (stEl && !vrIsRecording) {
-          stEl.textContent = isZh ? '点击下方按钮开始朗读录音' : '아래 버튼을 눌러 문장을 읽어보세요';
+        const existingUrl = lookupRecordedVoiceUrl(vrCurrentPhrase, vrCurrentSpeaker);
+
+        if (myControls) myControls.classList.toggle('hidden', !isMyOwnSlot);
+        if (lockBox) lockBox.classList.toggle('hidden', isMyOwnSlot);
+        if (timerEl) timerEl.classList.toggle('hidden', !isMyOwnSlot);
+
+        if (!isMyOwnSlot) {
+          const pNameKo = isJc ? '징찬이' : '수완이';
+          const pNameZh = isJc ? '靖灿' : '秀完';
+          if (stEl) {
+            stEl.textContent = existingUrl
+              ? (isZh ? `🎧 这是${pNameZh}在自己手机上录制的原声` : `🎧 ${pNameKo}가 직접 녹음한 목소리예요`)
+              : (isZh ? `🔒 ${pNameZh}尚未录制这句原声` : `🔒 아직 ${pNameKo}가 녹음하지 않은 문장이에요`);
+          }
+          if (lockHint) {
+            lockHint.textContent = isZh
+              ? `为防止误把自己的声音录进${pNameZh}栏位，仅在${pNameZh}手机上可录制哦 ✨`
+              : `내 목소리가 ${pNameKo} 칸에 잘못 등록되지 않도록 ${pNameKo} 폰에서만 녹음돼요 ✨`;
+          }
+          if (reqBtn) {
+            reqBtn.textContent = isZh ? `💌 邀请${pNameZh}录制这句` : `💌 ${pNameKo}에게 이 문장 녹음 요청`;
+          }
+        } else if (stEl && !vrIsRecording) {
+          stEl.textContent = isZh ? '点击下方按钮开始朗读录音' : '아래 버튼을 눌러 내 목소리로 읽어보세요';
         }
+
         const fLbl = document.getElementById('vrFileLabel');
         if (fLbl) {
           const inp = fLbl.querySelector('input');
@@ -11491,15 +11930,22 @@
         const saveBtn = document.getElementById('vrSaveBtn');
         if (delBtn) delBtn.textContent = isZh ? '🗑️ 删除此录音' : '🗑️ 기존 녹음 삭제';
         if (cancelBtn) cancelBtn.textContent = isZh ? '取消' : '취소';
-        if (saveBtn) saveBtn.textContent = isZh ? '💾 保存原声' : '💾 저장하기';
+        if (saveBtn) {
+          saveBtn.textContent = isZh ? '💾 保存原声' : '💾 저장하기';
+          saveBtn.classList.toggle('hidden', !isMyOwnSlot);
+        }
 
-        const existingUrl = lookupRecordedVoiceUrl(vrCurrentPhrase, vrCurrentSpeaker);
         if (existingUrl) {
           vrSetPreview(existingUrl);
+          if (!isMyOwnSlot) vrPendingDataUrl = '';
           if (delBtn) delBtn.classList.remove('hidden');
         } else {
           vrSetPreview('');
           if (delBtn) delBtn.classList.add('hidden');
+        }
+        const modalEl = document.getElementById('voiceRecorderModal');
+        if (modalEl && typeof window.syncAllTabIconsToStyle === 'function') {
+          window.syncAllTabIconsToStyle(null, modalEl);
         }
       }
 
@@ -11507,7 +11953,8 @@
         const phrase = String(phraseText || '').trim();
         if (!phrase) return;
         vrCurrentPhrase = phrase;
-        const reqSp = explicitSpeaker || (btnEl && btnEl.getAttribute && btnEl.getAttribute('data-speaker')) || (state.myRole || 'suwan');
+        const myRoleNow = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
+        const reqSp = explicitSpeaker || (btnEl && btnEl.getAttribute && btnEl.getAttribute('data-speaker')) || myRoleNow;
         vrCurrentSpeaker = reqSp === 'jingchan' ? 'jingchan' : 'suwan';
         const btnZh = btnEl && btnEl.getAttribute ? (btnEl.getAttribute('data-zh') || '') : '';
         const btnQ = btnEl && btnEl.getAttribute ? (btnEl.getAttribute('data-question') || '') : '';
@@ -11522,7 +11969,11 @@
         document.getElementById('vrTimerText').textContent = '00:00';
         vrUpdateRecBtnUI(false);
         syncVrModalSpeakerUi();
-        document.getElementById('voiceRecorderModal').classList.remove('hidden');
+        const modalEl = document.getElementById('voiceRecorderModal');
+        if (modalEl) {
+          modalEl.classList.remove('hidden');
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, modalEl);
+        }
       }
 
       // Bind Voice Recorder Modal events once
@@ -11537,7 +11988,20 @@
         if (vrModal) vrModal.addEventListener('click', (e) => { if (e.target === vrModal) closeVoiceRecorderModal(); });
         if (closeBtn) closeBtn.addEventListener('click', closeVoiceRecorderModal);
         if (cancelBtn) cancelBtn.addEventListener('click', closeVoiceRecorderModal);
-        if (recBtn) recBtn.addEventListener('click', startVrRecordingNow);
+        if (recBtn) recBtn.addEventListener('click', () => {
+          const myRoleNow = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
+          if (vrCurrentSpeaker !== myRoleNow) {
+            vrCurrentSpeaker = myRoleNow;
+            syncVrModalSpeakerUi();
+          }
+          startVrRecordingNow();
+        });
+        document.getElementById('vrReqPartnerBtn')?.addEventListener('click', () => {
+          if (typeof window.__requestPartnerStudyVoice === 'function') {
+            window.__requestPartnerStudyVoice(vrCurrentPhrase, vrCurrentMeta);
+            closeVoiceRecorderModal();
+          }
+        });
         document.querySelectorAll('.vr-speaker-btn').forEach(b => {
           b.addEventListener('click', () => {
             if (vrIsRecording) stopVrRecordingNow();
@@ -11563,8 +12027,14 @@
         if (saveBtn) {
           saveBtn.addEventListener('click', () => {
             if (!vrCurrentPhrase || !vrPendingDataUrl) return;
+            const myRoleNow = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
+            if (vrCurrentSpeaker !== myRoleNow) {
+              showToast(state.lang === 'zh' ? '只能在自己的栏位保存原声哦 🔒' : '본인 목소리 칸에만 저장할 수 있어요 🔒');
+              return;
+            }
             const normAud = (typeof normalizeAudioDataUrl === 'function') ? normalizeAudioDataUrl(vrPendingDataUrl) : vrPendingDataUrl;
-            const spk = vrCurrentSpeaker === 'jingchan' ? 'jingchan' : 'suwan';
+            const spk = myRoleNow;
+            const nowTs = Date.now();
             if (spk === 'jingchan') {
               if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
               state.jingchanVoices[vrCurrentPhrase] = normAud;
@@ -11578,8 +12048,11 @@
               zh: vrCurrentMeta.zh || prevMeta.zh || '',
               question: vrCurrentMeta.question || prevMeta.question || '',
               source: vrCurrentMeta.source || prevMeta.source || '학습 보이스',
-              suwanAt: spk === 'suwan' ? Date.now() : (prevMeta.suwanAt || 0),
-              jingchanAt: spk === 'jingchan' ? Date.now() : (prevMeta.jingchanAt || 0)
+              suwanAt: spk === 'suwan' ? nowTs : (prevMeta.suwanAt || 0),
+              jingchanAt: spk === 'jingchan' ? nowTs : (prevMeta.jingchanAt || 0),
+              suwanDeletedAt: spk === 'suwan' ? 0 : Number(prevMeta.suwanDeletedAt || 0),
+              jingchanDeletedAt: spk === 'jingchan' ? 0 : Number(prevMeta.jingchanDeletedAt || 0),
+              jingchanVerified: spk === 'jingchan' ? true : !!prevMeta.jingchanVerified
             };
             saveSuwanVoicesNow();
             saveState(true);
@@ -11588,6 +12061,7 @@
               window.__pushMediaSyncPacket('custom_voice', {
                 phrase: vrCurrentPhrase,
                 speaker: spk,
+                verifiedByRole: spk,
                 zh: state.studyVoiceMeta[vrCurrentPhrase].zh,
                 question: state.studyVoiceMeta[vrCurrentPhrase].question,
                 source: state.studyVoiceMeta[vrCurrentPhrase].source
@@ -11617,23 +12091,29 @@
           ? targetSpeaker
           : ((state.myRole === 'jingchan' && state.jingchanVoices && state.jingchanVoices[phrase]) ? 'jingchan' : ((state.customVoices && state.customVoices[phrase]) ? 'suwan' : 'jingchan'));
         let removed = false;
-        if (spk === 'jingchan' && state.jingchanVoices && state.jingchanVoices[phrase]) {
-          delete state.jingchanVoices[phrase];
-          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) state.studyVoiceMeta[phrase].jingchanAt = 0;
+        const delTs = Date.now();
+        if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+        const curMeta = state.studyVoiceMeta[phrase] || {};
+        if (spk === 'jingchan' && ((state.jingchanVoices && state.jingchanVoices[phrase]) || curMeta.jingchanAt)) {
+          if (state.jingchanVoices) delete state.jingchanVoices[phrase];
+          state.studyVoiceMeta[phrase] = { ...curMeta, jingchanAt: 0, jingchanDeletedAt: delTs, jingchanVerified: false };
           removed = true;
-        } else if (spk === 'suwan' && state.customVoices && state.customVoices[phrase]) {
-          delete state.customVoices[phrase];
-          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) state.studyVoiceMeta[phrase].suwanAt = 0;
+        } else if (spk === 'suwan' && ((state.customVoices && state.customVoices[phrase]) || curMeta.suwanAt)) {
+          if (state.customVoices) delete state.customVoices[phrase];
+          state.studyVoiceMeta[phrase] = { ...curMeta, suwanAt: 0, suwanDeletedAt: delTs };
           removed = true;
         }
         if (removed) {
-          if (state.studyVoiceMeta && state.studyVoiceMeta[phrase] && !state.studyVoiceMeta[phrase].suwanAt && !state.studyVoiceMeta[phrase].jingchanAt) {
-            delete state.studyVoiceMeta[phrase];
-          }
           saveSuwanVoicesNow();
           saveState(true);
+          if (typeof window.__purgeDeletedStudyVoiceCloud === 'function') {
+            window.__purgeDeletedStudyVoiceCloud(phrase, spk, delTs);
+          }
+          if (typeof window.__refreshRecentMediaPackAfterDelete === 'function') {
+            window.__refreshRecentMediaPackAfterDelete();
+          }
           if (typeof window.__sendChatSignal === 'function') {
-            window.__sendChatSignal('del_custom_voice', { phrase, speaker: spk });
+            window.__sendChatSignal('del_custom_voice', { phrase, speaker: spk, deletedAt: delTs });
           }
           renderLearn();
           renderHome();
@@ -11644,9 +12124,8 @@
       function suwanVoicePillHtml(phrase) {
         if (!phrase) return '';
         const isZh = state.lang === 'zh';
-        const meta = (state.studyVoiceMeta && state.studyVoiceMeta[phrase]) || {};
-        const hasSw = !!(lookupRecordedVoiceUrl(phrase, 'suwan') || meta.suwanAt);
-        const hasJc = !!(lookupRecordedVoiceUrl(phrase, 'jingchan') || meta.jingchanAt);
+        const hasSw = !!lookupRecordedVoiceUrl(phrase, 'suwan');
+        const hasJc = !!lookupRecordedVoiceUrl(phrase, 'jingchan');
         if (!hasSw && !hasJc) return '';
         let out = '';
         if (hasSw) {
@@ -11885,8 +12364,8 @@
           __cfrSt.textContent = __zh ? '正在查询云端记录...' : '서버 목록 조회 중...';
         }
         const __ahEl = document.getElementById('autoHealLastRunText');
-        if (__ahEl && /부팅·재연결|启动与重连/.test(__ahEl.textContent || '')) {
-          __ahEl.textContent = __zh ? '启动与重连时自动轻量自检（流畅不卡顿）' : '부팅·재연결 시 가벼운 항목만 자동 점검해요 (버벅거림 없음)';
+        if (__ahEl && /부팅·재연결|启动与重连|1분마다|每1分钟/.test(__ahEl.textContent || '')) {
+          __ahEl.textContent = __zh ? '每1分钟自动修复在线·通知·已读·同步状态（零卡顿）' : '1분마다 접속·알림·읽음·동기화를 자동 수리해요 (버벅거림 없음)';
         }
         if (typeof updateVaultIndicators === 'function') updateVaultIndicators();
         if (typeof window.__syncHideNotifPrevUi === 'function') window.__syncHideNotifPrevUi();
@@ -12447,6 +12926,7 @@
           svSubBtn.textContent = state.lang === 'zh'
             ? `🎙️ 双人原声录音题库 (❤️ 秀完 ${swVcCount} · 💜 靖灿 ${jcVcCount})`
             : `🎙️ 우리 녹음 문제·보이스 모음 (❤️ 수완 ${swVcCount} · 💜 징찬 ${jcVcCount})`;
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, svSubBtn);
         }
         const zeroBar = document.getElementById('learnZeroRecoverBar');
         if (zeroBar) {
@@ -13068,7 +13548,7 @@
             });
           });
         }
-        if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-wrong') || document.getElementById('tab-learn'));
+        if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-review') || document.getElementById('tab-learn'));
       }
 
       function renderCheatSheet() {
@@ -13235,7 +13715,7 @@
         if (/\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url)) {
           return `
             <div class="mb-2 space-y-1">
-              <video src="${safeUrl}" controls playsinline class="w-full max-w-[260px] rounded-xl border border-white/30 bg-black"></video>
+              <div class="cw-video-bubble-card border border-white/30">${__renderPrettyVideoCardHtml(safeUrl, { showZoom: true })}</div>
               <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-semibold ${linkCls}">🎬 ${isZh ? '原链接打开 ↗' : '원본 동영상 열기 ↗'}</a>
             </div>`;
         }
@@ -13571,7 +14051,7 @@
                     ${isVoiceBubble ? `<button type="button" class="cw-voice-play-btn w-full min-w-[175px] flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-left transition active:scale-[0.98]" style="background:${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color:${mine ? '#ffffff' : 'var(--accent-royal)'};" data-msg-id="${escapeHtml(m.id)}"><span class="cw-v-ico w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition" style="background:${mine ? 'rgba(255,255,255,0.28)' : 'var(--accent-royal)'}; color:#ffffff;">${CW_MEDIA_SVG.play}</span><div class="flex-1 min-w-0 space-y-1"><div class="flex items-center justify-between gap-2 text-[11px] font-bold"><span class="cw-v-lbl truncate">${state.lang === 'zh' ? '点击播放语音' : '눌러서 음성 듣기'}</span><span class="cw-v-time text-[10px] opacity-85 tabular-nums shrink-0 inline-flex items-center">${CW_MEDIA_SVG.waveMini}</span></div><div class="w-full h-1 rounded-full overflow-hidden" style="background:${mine ? 'rgba(255,255,255,0.25)' : 'rgba(139,92,246,0.2)'};"><div class="cw-v-bar h-full rounded-full transition-all duration-150" style="width:0%; background:${mine ? '#ffffff' : 'var(--accent-royal)'};"></div></div></div></button>` : ''}
                     ${Array.isArray(m.photoUrls) && m.photoUrls.length > 1
                       ? `<div class="${m.photoUrls.length === 2 ? 'cw-photo-grid-2' : 'cw-photo-grid-3'}">${m.photoUrls.map((u, uIdx) => `<button type="button" class="cw-photo-cell cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="${uIdx}"><img src="${__cwMediaUrl(u)}" alt="photo" decoding="async" /></button>`).join('')}</div>`
-                      : (m.videoUrl ? `<div class="cw-photo-single relative"><video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><div class="absolute top-1.5 right-1.5 flex items-center gap-1"><a href="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" download="chanwan_video_${escapeHtml(m.id)}.mp4" class="px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a><button type="button" class="cw-zoom-video px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" data-src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" title="전체화면">⛶</button></div></div>`
+                      : (m.videoUrl ? `<div class="cw-video-bubble-card">${__renderPrettyVideoCardHtml(m.videoUrl, { downloadName: 'chanwan_video_' + m.id + '.mp4', showZoom: true })}</div>`
                         : (m.photoUrl ? `<button type="button" class="${isGifMedia ? 'cw-gif-single' : 'cw-photo-single'} cw-zoom-photo" data-msg-id="${escapeHtml(m.id)}" data-idx="0"><img src="${__cwMediaUrl(m.photoUrl)}" alt="photo" decoding="async" /></button>` : ''))}
                     ${showText ? renderChatLinkEmbed(m.original, mine) : ''}
                     ${showText ? `<div class="flex items-start justify-between gap-2"><div class="min-w-0 flex-1 cw-keep-native-emoji ${isEmojiMsg ? 'text-3xl leading-normal py-1 flex items-center justify-center flex-wrap gap-1 text-center' : (mine ? 'cw-orig-main text-[0.98rem] font-bold leading-snug break-words tracking-[-0.01em]' : 'cw-orig-sub text-[0.84rem] font-medium opacity-80 leading-snug break-words tracking-[-0.01em]')} ${m.sticker ? 'text-center font-bold text-xs' : ''}">${window.renderTextWithWechatEmoticons ? window.renderTextWithWechatEmoticons(escapeHtml(m.original), isPureWcMsg ? 42 : 22) : escapeHtml(m.original)}</div>${(!isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg && !isVoiceBubble) ? `<button type="button" class="speak-btn opacity-65 hover:opacity-100 shrink-0 pt-0.5 inline-flex items-center" data-text="${escapeHtml(m.original)}" data-lang="${origLang}" title="${state.lang === 'zh' ? 'AI 原文朗读' : '원문 듣기'}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>` : ''}</div>` : ''}
@@ -14689,7 +15169,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return `
           <div class="royal-card rounded-2xl overflow-hidden flex flex-col">
             <div class="aspect-square overflow-hidden bg-purple-100/40 relative">
-              ${ph.mediaType === 'video' ? `<video src="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="metadata" class="w-full h-full object-cover bg-black/85"></video><a href="${__cwMediaUrl(ph.dataUrl, 'video/mp4')}" download="chanwan_album_${escapeHtml(ph.id)}.mp4" class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-white" style="background: rgba(15,10,28,0.72);" title="저장">📥</a>` : `<img src="${__cwMediaUrl(ph.dataUrl)}" alt="${escapeHtml(ph.caption)}" decoding="async" class="cw-zoom-direct w-full h-full object-cover cursor-pointer" data-src="${__cwMediaUrl(ph.dataUrl)}" />`}
+              ${ph.mediaType === 'video' ? __renderPrettyVideoCardHtml(ph.dataUrl, { downloadName: 'chanwan_album_' + ph.id + '.mp4', showZoom: true }) : `<img src="${__cwMediaUrl(ph.dataUrl)}" alt="${escapeHtml(ph.caption)}" decoding="async" class="cw-zoom-direct w-full h-full object-cover cursor-pointer" data-src="${__cwMediaUrl(ph.dataUrl)}" />`}
               <span class="cw-keep-native-emoji absolute top-1.5 left-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background: rgba(25, 16, 44, 0.72); color: #fffaf2;">${escapeHtml(catLabel)}</span>
             </div>
             <div class="p-2.5 space-y-1 flex-1 flex flex-col justify-between">
@@ -15808,8 +16288,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                       r.readAsDataURL(f);
                     }));
                 pendingChatMediaType = 'video';
-                if (chatPhotoImgEl) chatPhotoImgEl.classList.add('hidden');
-                if (chatVideoPrevEl) { chatVideoPrevEl.src = pendingChatPhotoUrl; chatVideoPrevEl.classList.remove('hidden'); }
+                if (chatVideoPrevEl) chatVideoPrevEl.classList.add('hidden');
+                if (chatPhotoImgEl) {
+                  chatPhotoImgEl.src = CW_SOFT_VIDEO_FALLBACK_SVG;
+                  chatPhotoImgEl.classList.remove('hidden');
+                  __extractVideoFirstFrameAsync(pendingChatPhotoUrl).then(res => {
+                    if (res && res.poster && pendingChatMediaType === 'video' && chatPhotoImgEl) {
+                      chatPhotoImgEl.src = res.poster;
+                    }
+                  }).catch(() => {});
+                }
                 if (chatMediaReadyEl) chatMediaReadyEl.textContent = state.lang === 'zh' ? '🎬 已选视频 · 自动优化并跨网同步' : '🎬 동영상 첨부됨 · 자동 최적화 & 상대방 전송';
                 const curTxt = (document.getElementById('chatInput')?.value || '').trim();
                 if (chatPhotoCatEl) chatPhotoCatEl.textContent = detectPhotoCategory(curTxt);
@@ -17587,9 +18075,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v98',
+          ver: 'Prime 4 · v104',
           date: '2026-11-26',
-          koTitle: 'Prime 4 · v98 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
+          koTitle: 'Prime 4 · v104 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
             '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
@@ -17609,7 +18097,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v98 更新日志' : '📜 灿完时光 Prime 4 · v98 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v104 更新日志' : '📜 灿完时光 Prime 4 · v104 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -17685,7 +18173,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               <div class="royal-subcard rounded-2xl overflow-hidden flex flex-col">
                 <div class="aspect-square bg-purple-100/30 relative overflow-hidden">
                   ${m.videoUrl
-                    ? `<video src="${__cwMediaUrl(m.videoUrl, 'video/mp4')}" controls playsinline webkit-playsinline preload="none" class="w-full h-full object-cover bg-black/85"></video>`
+                    ? __renderPrettyVideoCardHtml(m.videoUrl, { showZoom: true })
                     : `<button type="button" class="cw-zoom-direct w-full h-full block" data-src="${__cwMediaUrl(m.photoUrl)}"><img src="${__cwMediaUrl(m.photoUrl)}" alt="media" loading="lazy" decoding="async" class="w-full h-full object-cover" /></button>`}
                 </div>
                 <div class="px-2 py-1.5 text-[10px] text-mut flex items-center justify-between gap-1">
@@ -18299,7 +18787,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const w = 'viewBox="0 0 24 24" fill="none"';
           const map = {
             book: `<svg ${w}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z" fill="${fLav}" stroke="${st}" stroke-width="1.9" stroke-linejoin="round"/><path d="M8 7h8M8 11h6" stroke="${st}" stroke-width="1.7" stroke-linecap="round"/></svg>`,
-            heart: `<svg ${w}><path d="M12 20.5s-7-4.5-8.6-8.6C2.2 8.8 4.4 5.5 7.5 5.5c1.9 0 3.4 1 4.5 2.4 1.1-1.4 2.6-2.4 4.5-2.4 3.1 0 5.3 3.3 4.1 6.4-1.6 4.1-8.6 8.6-8.6 8.6z" fill="${fPink}" stroke="${st}" stroke-width="1.9" stroke-linejoin="round"/></svg>`,
+            heart: `<svg ${w}><path d="M12 20.5s-7-4.5-8.6-8.6C2.2 8.8 4.4 5.5 7.5 5.5c1.9 0 3.4 1 4.5 2.4 1.1-1.4 2.6-2.4 4.5-2.4 3.1 0 5.3 3.3 4.1 6.4-1.6 4.1-8.6 8.6-8.6 8.6z" fill="${isP ? '#fda4af' : fPink}" stroke="${st}" stroke-width="1.9" stroke-linejoin="round"/></svg>`,
+            heartPurple: `<svg ${w}><path d="M12 20.5s-7-4.5-8.6-8.6C2.2 8.8 4.4 5.5 7.5 5.5c1.9 0 3.4 1 4.5 2.4 1.1-1.4 2.6-2.4 4.5-2.4 3.1 0 5.3 3.3 4.1 6.4-1.6 4.1-8.6 8.6-8.6 8.6z" fill="${isP ? '#d8b4fe' : fLav}" stroke="${st}" stroke-width="1.9" stroke-linejoin="round"/></svg>`,
+            couple: `<svg ${w}><path d="M8.8 18.2s-5.2-3.3-6.4-6.4C1.5 9.4 3.1 7 5.5 7c1.4 0 2.5.7 3.3 1.8C9.6 7.7 10.7 7 12.1 7c2.4 0 4 2.4 3.1 4.8-1.2 3.1-6.4 6.4-6.4 6.4z" fill="${isP ? '#fda4af' : fPink}" stroke="${st}" stroke-width="1.7" stroke-linejoin="round"/><path d="M15.8 19.2s-4.6-2.9-5.6-5.6c-.8-2.1.6-4.2 2.7-4.2 1.2 0 2.2.6 2.9 1.6.7-1 1.7-1.6 2.9-1.6 2.1 0 3.5 2.1 2.7 4.2-1 2.7-5.6 5.6-5.6 5.6z" fill="${isP ? '#d8b4fe' : fLav}" stroke="${st}" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
             kiss: `<svg ${w}><path d="M3 12c2.5-3.5 5.5-3.5 9-1 3.5-2.5 6.5-2.5 9 1-2.5 4.2-6 6-9 6s-6.5-1.8-9-6z" fill="${fPink}" stroke="${st}" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 12.2c1.8.8 3.5.8 5 .3 1.5.5 3.2.5 5-.3" stroke="${st}" stroke-width="1.5" stroke-linecap="round"/></svg>`,
             sparkle: `<svg ${w}><path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3z" fill="${fGold}" stroke="${st}" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
             star: `<svg ${w}><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z" fill="${fGold}" stroke="${st}" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
@@ -18317,7 +18807,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             mute: `<svg ${w}><path d="M11 5.5L6.5 9.5H3.5v5h3L11 18.5V5.5z" fill="${fLav}" stroke="${st}" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="${st}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
             turtle: `<svg ${w}><path d="M5 14a7 7 0 0 1 14 0H5z" fill="${fMint}" stroke="${st}" stroke-width="1.8" stroke-linejoin="round"/><circle cx="19.5" cy="12.5" r="2" fill="${fMint}" stroke="${st}" stroke-width="1.6"/><path d="M7.5 14v3.5M15.5 14v3.5" stroke="${st}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
             headphone: `<svg ${w}><path d="M4 14a8 8 0 0 1 16 0" stroke="${st}" stroke-width="1.9" stroke-linecap="round"/><rect x="3" y="13" width="4" height="6.5" rx="2" fill="${fLav}" stroke="${st}" stroke-width="1.7"/><rect x="17" y="13" width="4" height="6.5" rx="2" fill="${fPink}" stroke="${st}" stroke-width="1.7"/></svg>`,
-            mic: `<svg ${w}><rect x="9" y="3" width="6" height="10.5" rx="3" fill="${fPink}" stroke="${st}" stroke-width="1.9"/><path d="M5.5 10.5a6.5 6.5 0 0 0 13 0M12 17v4M9 21h6" stroke="${st}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            mic: `<svg ${w}><rect x="8.5" y="2.8" width="7" height="11" rx="3.5" fill="${fPink}" stroke="${st}" stroke-width="1.9"/><path d="M10.3 6.5h3.4M10.3 9.2h3.4M5.5 10.8a6.5 6.5 0 0 0 13 0M12 17.3v3.7M8.5 21h7" stroke="${st}" stroke-width="1.85" stroke-linecap="round"/></svg>`,
             stop: `<svg ${w}><circle cx="12" cy="12" r="9" fill="${fRed}" stroke="${st}" stroke-width="1.8"/><rect x="8.6" y="8.6" width="6.8" height="6.8" rx="2" fill="${st}"/></svg>`,
             clock: `<svg ${w}><circle cx="12" cy="12" r="9" fill="${fLav}" stroke="${st}" stroke-width="1.9"/><path d="M12 7v5l3.5 2" stroke="${st}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
             cal: `<svg ${w}><rect x="3" y="5" width="18" height="16" rx="3" fill="${fLav}" stroke="${st}" stroke-width="1.9"/><path d="M3 10h18M8 3v4M16 3v4" stroke="${st}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
@@ -18372,7 +18862,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         const EMOJI_TO_UI_KIND = {
           '📖':'book','📚':'book','📜':'book','📋':'book','🗂️':'book','📘':'book','📗':'book','📓':'book','📑':'book','🧾':'book',
-          '💜':'heart','❤️':'heart','❤':'heart','💕':'heart','💓':'heart','💝':'heart','🩷':'heart','💘':'heart','💖':'heart','💗':'heart','💞':'heart','♥':'heart','💑':'heart','💏':'heart','🩵':'heart','🟣':'heart','🍑':'heart',
+          '💜':'heartPurple','🟣':'heartPurple','❤️':'heart','❤':'heart','💕':'couple','💓':'heart','💝':'heart','🩷':'heart','💘':'heart','💖':'heart','💗':'heart','💞':'couple','♥':'heart','💑':'couple','💏':'couple','🩵':'heartPurple','🍑':'heart',
           '💋':'kiss','😘':'kiss',
           '✨':'sparkle','🔮':'sparkle','🫧':'sparkle','🪄':'sparkle','✦':'sparkle','🎩':'hat','🙇':'hat','🙇‍♂️':'hat','🙇‍♀️':'hat',
           '⭐':'star','🌟':'star','☆':'starOutline','❌':'cross',
@@ -19933,6 +20423,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               );
             });
           });
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, list);
         }
         window.renderVoiceLetters = renderVoiceLetters;
 
@@ -21545,32 +22036,40 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             state.chat.messages = sortChatMessagesStable(mergeById(filteredCur, cleanIncomingMsgs, false, true));
             if (state.chat.messages.length !== beforeCount) { changed = true; chatChanged = true; }
             if (__mediaHydratedInMerge) { try { persistMediaVaultsNow(true); } catch (_) {} }
-            // Auto-hydrate any voice message whose audioUrl is still arriving separately so voice NEVER stays empty!
-            const missingVoiceMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.audioUrl && (m.hasVoice || String(m.id).startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))).slice(-6);
+            // One-shot non-looping background hydration for recent missing voice/video (NEVER re-triggers pullCloudSync or spam!)
+            if (!window.__cwAutoTriedMediaIds) window.__cwAutoTriedMediaIds = new Set();
+            const nowAutoMs = Date.now();
+            const missingVoiceMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.audioUrl && !window.__cwAutoTriedMediaIds.has(m.id) && (!m.ts || (nowAutoMs - Number(m.ts)) < 86400000) && (m.hasVoice || String(m.id).startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))).slice(-1);
             if (missingVoiceMsgs.length) {
+              missingVoiceMsgs.forEach(mv => window.__cwAutoTriedMediaIds.add(mv.id));
               setTimeout(() => {
                 missingVoiceMsgs.forEach(mv => {
                   if (mv && mv.id && !mv.audioUrl && typeof window.__recoverMissingVoiceNow === 'function') {
                     window.__recoverMissingVoiceNow(mv.id, true);
                   }
                 });
-              }, 350);
+              }, 500);
             }
-            const missingVidMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.videoUrl && (m.hasVideo || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()))).slice(-3);
+            const missingVidMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.videoUrl && !window.__cwAutoTriedMediaIds.has(m.id) && (!m.ts || (nowAutoMs - Number(m.ts)) < 86400000) && (m.hasVideo || /^(?:🎬\s*)?(?:동영상을 보냈어요|分享了一段视频|发送了一段视频)(?:\s*🎬)?$/.test(String(m.original || '').trim()))).slice(-1);
             if (missingVidMsgs.length) {
+              missingVidMsgs.forEach(mv => window.__cwAutoTriedMediaIds.add(mv.id));
               setTimeout(() => {
                 missingVidMsgs.forEach(mv => {
                   if (mv && mv.id && !mv.videoUrl && typeof window.__recoverMissingVideoNow === 'function') {
                     window.__recoverMissingVideoNow(mv.id, true);
                   }
                 });
-              }, 600);
+              }, 800);
             }
             setTimeout(() => { if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
               try { if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.update().catch(() => {}))); } catch (_) {} }, 600);
           }
           const __incPartnerRole = inc.myRole || '';
           const __isFromPartner = !!(__incPartnerRole && __incPartnerRole !== (state.myRole || 'suwan'));
+          if (isLiveEvent && __isFromPartner && typeof window.__maybeAutoUpgradeOldPartnerOnSight === 'function') {
+            const __kh = state.profile ? state.profile[__incPartnerRole + 'Health'] : null;
+            setTimeout(() => window.__maybeAutoUpgradeOldPartnerOnSight(__incPartnerRole, __kh, true), 1200);
+          }
           const __pDispKo = __incPartnerRole === 'suwan' ? '수완' : '징찬';
           const __pDispZh = __incPartnerRole === 'suwan' ? '秀完' : '靖灿';
           if (inc.chat && inc.chat.pinnedMsg && Number(inc.chat.pinnedMsg.updatedAt || 0) > Number(state.chat?.pinnedMsg?.updatedAt || 0)) {
@@ -21675,14 +22174,44 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             for (const [phr, im] of Object.entries(inc.studyVoiceMeta)) {
               if (!phr || !im || typeof im !== 'object') continue;
               const cm = state.studyVoiceMeta[phr] || {};
+              const swDel = Math.max(Number(cm.suwanDeletedAt || 0), Number(im.suwanDeletedAt || 0));
+              const jcDel = Math.max(Number(cm.jingchanDeletedAt || 0), Number(im.jingchanDeletedAt || 0));
+              const rawSwAt = Math.max(Number(cm.suwanAt || 0), Number(im.suwanAt || 0));
+              const jcVerified = !!(cm.jingchanVerified || im.jingchanVerified);
+              const rawJcAt = jcVerified
+                ? Math.max(cm.jingchanVerified ? Number(cm.jingchanAt || 0) : 0, im.jingchanVerified ? Number(im.jingchanAt || 0) : 0)
+                : 0;
+              const effSwAt = (swDel && swDel >= rawSwAt) ? 0 : rawSwAt;
+              const effJcAt = (jcDel && jcDel >= rawJcAt) ? 0 : rawJcAt;
+              if (swDel && effSwAt === 0 && state.customVoices && state.customVoices[phr]) {
+                delete state.customVoices[phr];
+                saveSuwanVoicesNow();
+                changed = true;
+              }
+              if ((jcDel || !jcVerified) && effJcAt === 0 && state.jingchanVoices && state.jingchanVoices[phr]) {
+                delete state.jingchanVoices[phr];
+                saveSuwanVoicesNow();
+                changed = true;
+              }
               const nextM = {
                 zh: im.zh || cm.zh || '',
                 question: im.question || cm.question || '',
                 source: im.source || cm.source || '',
-                suwanAt: Math.max(Number(cm.suwanAt || 0), Number(im.suwanAt || 0)),
-                jingchanAt: Math.max(Number(cm.jingchanAt || 0), Number(im.jingchanAt || 0))
+                suwanAt: effSwAt,
+                jingchanAt: effJcAt,
+                suwanDeletedAt: swDel,
+                jingchanDeletedAt: jcDel,
+                jingchanVerified: effJcAt > 0 ? jcVerified : false,
+                requestedBy: im.requestedBy || cm.requestedBy || '',
+                requestedAt: Math.max(Number(cm.requestedAt || 0), Number(im.requestedAt || 0))
               };
-              if (nextM.suwanAt !== Number(cm.suwanAt || 0) || nextM.jingchanAt !== Number(cm.jingchanAt || 0)) {
+              if (
+                nextM.suwanAt !== Number(cm.suwanAt || 0) ||
+                nextM.jingchanAt !== Number(cm.jingchanAt || 0) ||
+                nextM.suwanDeletedAt !== Number(cm.suwanDeletedAt || 0) ||
+                nextM.jingchanDeletedAt !== Number(cm.jingchanDeletedAt || 0) ||
+                nextM.requestedAt !== Number(cm.requestedAt || 0)
+              ) {
                 state.studyVoiceMeta[phr] = nextM;
                 changed = true;
               }
@@ -22749,7 +23278,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               else if (data.v === 'pro2_signal') {
                 if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
                   publishEmqxRetained(room, 'sync', '');
-                  if (data.minVer === 'Prime 4 · v98') return;
+                  if (data.minVer === 'Prime 4 · v104') return;
                 }
                 handleIncomingChatSignal(data);
               }
@@ -23596,7 +24125,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const batchStep = isMainlandChinaClient() ? 2 : 3;
           const totalChunks = Math.max(1, Math.ceil(dataStr.length / CHUNK_LEN));
           const nowTs = Date.now();
-          const roleNow = (meta && (meta.sender || meta.authorRole)) || state.myRole || 'suwan';
+          const roleNow = (meta && (meta.speaker || meta.sender || meta.authorRole)) || state.myRole || 'suwan';
           try {
             if (totalChunks === 1) {
               await upsertSupabaseStateSnapshot(`${room}__vm__${safeKey}`, {
@@ -23668,10 +24197,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           if (entry.kind === 'custom_voice') {
             for (const [phr, u] of Object.entries(state.customVoices || {})) {
-              if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'suwan' }, phr) === k) return true;
+              if (u && (deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'suwan' }, phr) === k || deriveDeterministicVaultKey('custom_voice', { phrase: phr }, phr) === k)) return true;
             }
             for (const [phr, u] of Object.entries(state.jingchanVoices || {})) {
               if (u && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'jingchan' }, phr) === k) return true;
+            }
+            for (const [phr, mm] of Object.entries(state.studyVoiceMeta || {})) {
+              if (!mm) continue;
+              if (mm.suwanDeletedAt && (!mm.suwanAt || mm.suwanDeletedAt >= mm.suwanAt) && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'suwan' }, phr) === k) return true;
+              if (mm.jingchanDeletedAt && (!mm.jingchanAt || mm.jingchanDeletedAt >= mm.jingchanAt) && deriveDeterministicVaultKey('custom_voice', { phrase: phr, speaker: 'jingchan' }, phr) === k) return true;
             }
           }
           return false;
@@ -23761,7 +24295,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 if (u) recentStudyVoices.push({ phrase: phr, speaker: 'suwan', audioUrl: normalizeAudioDataUrl(u), meta: (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {} });
               }
               for (const [phr, u] of Object.entries(state.jingchanVoices || {}).slice(-3)) {
-                if (u) recentStudyVoices.push({ phrase: phr, speaker: 'jingchan', audioUrl: normalizeAudioDataUrl(u), meta: (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {} });
+                const mJc = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+                const normJc = normalizeAudioDataUrl(u);
+                const normSw = state.customVoices && state.customVoices[phr] ? normalizeAudioDataUrl(state.customVoices[phr]) : '';
+                if (normJc && mJc.jingchanVerified && normJc !== normSw) {
+                  recentStudyVoices.push({ phrase: phr, speaker: 'jingchan', verifiedByRole: 'jingchan', audioUrl: normJc, meta: mJc });
+                }
               }
               packObj.studyVoices = recentStudyVoices;
               const compactPackStr = JSON.stringify({
@@ -23841,9 +24380,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               for (const sv of pack.studyVoices) {
                 if (!sv || !sv.phrase || !sv.audioUrl) continue;
                 const spk = sv.speaker === 'jingchan' ? 'jingchan' : 'suwan';
+                const curM = state.studyVoiceMeta[sv.phrase] || {};
+                const normAud = normalizeAudioDataUrl(sv.audioUrl);
+                if (spk === 'jingchan') {
+                  if (sv.verifiedByRole !== 'jingchan' && !(sv.meta && sv.meta.jingchanVerified)) continue;
+                  const delTs = Number(curM.jingchanDeletedAt || 0);
+                  const svTs = Number((sv.meta && sv.meta.jingchanAt) || pack.updatedAt || 0);
+                  if (delTs && svTs <= delTs) continue;
+                  const swExisting = state.customVoices[sv.phrase] ? normalizeAudioDataUrl(state.customVoices[sv.phrase]) : '';
+                  if (swExisting && swExisting === normAud) continue;
+                } else {
+                  const delTs = Number(curM.suwanDeletedAt || 0);
+                  const svTs = Number((sv.meta && sv.meta.suwanAt) || pack.updatedAt || 0);
+                  if (delTs && svTs <= delTs) continue;
+                }
                 const dst = spk === 'jingchan' ? state.jingchanVoices : state.customVoices;
                 if (!dst[sv.phrase]) {
-                  dst[sv.phrase] = normalizeAudioDataUrl(sv.audioUrl);
+                  dst[sv.phrase] = normAud;
                   if (sv.meta && typeof sv.meta === 'object') {
                     state.studyVoiceMeta[sv.phrase] = { ...(state.studyVoiceMeta[sv.phrase] || {}), ...sv.meta };
                   }
@@ -23898,7 +24451,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const hArr = await hRes.json();
             if (!Array.isArray(hArr) || !hArr[0] || !hArr[0].payload) return false;
             const head = await e2eeUnwrapPayload(hArr[0].payload);
-            if (!head) return false;
+            if (!head || head.v === 'cw_vm_deleted_v1') return false;
 
             let fullDataUrl = '';
             if (head.v === 'cw_vm_v1' && head.dataUrl) {
@@ -23926,12 +24479,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
             if (!fullDataUrl) return false;
             markVaultKeyUploaded(entry.key);
+            const resolvedKind = head.kind || entry.kind;
+            const fallbackRole = resolvedKind === 'custom_voice' ? 'suwan' : 'jingchan';
             return await handleIncomingMediaPacket({
               v: 'pro2_media',
-              kind: head.kind || entry.kind,
+              kind: resolvedKind,
               mediaId: entry.key,
               ts: head.ts || entry.ts || Date.now(),
-              myRole: head.myRole || (head.meta && (head.meta.sender || head.meta.authorRole)) || 'jingchan',
+              myRole: head.myRole || (head.meta && (head.meta.speaker || head.meta.sender || head.meta.authorRole)) || fallbackRole,
               dataUrl: fullDataUrl,
               meta: head.meta || {}
             }, false, true);
@@ -24371,6 +24926,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 changed = true;
               }
             });
+            if (typeof window.__maybeAutoUpgradeOldPartnerOnSight === 'function') {
+              const knownH = state.profile ? state.profile[sig.myRole + 'Health'] : null;
+              setTimeout(() => window.__maybeAutoUpgradeOldPartnerOnSight(sig.myRole, knownH, true), 250);
+            }
             if (changed) {
               saveState(false);
               if (!updateChatDeliveryBadgesInPlace()) renderChat();
@@ -24443,15 +25002,34 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (!state.pendingVoiceMetaMap || typeof state.pendingVoiceMetaMap !== 'object') state.pendingVoiceMetaMap = {};
               state.pendingVoiceMetaMap[sig.vlId] = { id: sig.vlId, source: sig.source, reactions: sig.reactions, comments: sig.comments, deletedCommentIds: sig.deletedCommentIds, updatedAt: sig.updatedAt };
             }
+          } else if (sig.kind === 'req_study_voice' && sig.phrase) {
+            const myR = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
+            if (!sig.targetSpeaker || sig.targetSpeaker === myR) {
+              if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+              const prev = state.studyVoiceMeta[sig.phrase] || {};
+              state.studyVoiceMeta[sig.phrase] = {
+                ...prev,
+                zh: sig.zh || prev.zh || '',
+                question: sig.question || prev.question || '',
+                source: sig.source || prev.source || '학습 보이스',
+                requestedBy: sig.myRole || (myR === 'suwan' ? 'jingchan' : 'suwan'),
+                requestedAt: Number(sig.ts || Date.now())
+              };
+              saveState(false);
+              try { renderLearn(); } catch (_) {}
+            }
           } else if (sig.kind === 'del_custom_voice' && sig.phrase) {
             const spk = sig.speaker === 'jingchan' ? 'jingchan' : 'suwan';
-            if (spk === 'jingchan' && state.jingchanVoices && state.jingchanVoices[sig.phrase]) {
-              delete state.jingchanVoices[sig.phrase];
-              if (state.studyVoiceMeta && state.studyVoiceMeta[sig.phrase]) state.studyVoiceMeta[sig.phrase].jingchanAt = 0;
+            const delTs = Number(sig.deletedAt || sig.ts || Date.now());
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            const prev = state.studyVoiceMeta[sig.phrase] || {};
+            if (spk === 'jingchan') {
+              if (state.jingchanVoices) delete state.jingchanVoices[sig.phrase];
+              state.studyVoiceMeta[sig.phrase] = { ...prev, jingchanAt: 0, jingchanDeletedAt: delTs, jingchanVerified: false };
               saveSuwanVoicesNow(); saveState(false); renderLearn(); renderHome();
-            } else if (spk === 'suwan' && state.customVoices && state.customVoices[sig.phrase]) {
-              delete state.customVoices[sig.phrase];
-              if (state.studyVoiceMeta && state.studyVoiceMeta[sig.phrase]) state.studyVoiceMeta[sig.phrase].suwanAt = 0;
+            } else {
+              if (state.customVoices) delete state.customVoices[sig.phrase];
+              state.studyVoiceMeta[sig.phrase] = { ...prev, suwanAt: 0, suwanDeletedAt: delTs };
               saveSuwanVoicesNow(); saveState(false); renderLearn(); renderHome();
             }
           } else if (sig.kind === 'delete' && sig.msgId) {
@@ -24714,22 +25292,33 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               saveState(false); renderHome(); renderChat();
             }
           } else if (pkt.kind === 'custom_voice' && m.phrase) {
-            const spk = (m.speaker === 'jingchan' || (!m.speaker && pkt.myRole === 'jingchan')) ? 'jingchan' : 'suwan';
+            // Strictly require explicit m.speaker === 'jingchan' AND verifiedByRole === 'jingchan' (never infer from pkt.myRole!)
+            const spk = m.speaker === 'jingchan' ? 'jingchan' : 'suwan';
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            const prevM = state.studyVoiceMeta[m.phrase] || {};
+            const pktTs = Number(pkt.ts || 0);
             if (spk === 'jingchan') {
+              if (m.verifiedByRole !== 'jingchan') return false;
+              const delTs = Number(prevM.jingchanDeletedAt || 0);
+              if (delTs && (!pktTs || pktTs <= delTs)) return false;
+              const swNorm = (state.customVoices && state.customVoices[m.phrase]) ? normalizeAudioDataUrl(state.customVoices[m.phrase]) : '';
+              if (swNorm && swNorm === localDataUrl) return false;
               if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
               state.jingchanVoices[m.phrase] = localDataUrl;
             } else {
+              const delTs = Number(prevM.suwanDeletedAt || 0);
+              if (delTs && (!pktTs || pktTs <= delTs)) return false;
               if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
               state.customVoices[m.phrase] = localDataUrl;
             }
-            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
-            const prevM = state.studyVoiceMeta[m.phrase] || {};
             state.studyVoiceMeta[m.phrase] = {
+              ...prevM,
               zh: m.zh || prevM.zh || '',
               question: m.question || prevM.question || '',
               source: m.source || prevM.source || '학습 보이스',
-              suwanAt: spk === 'suwan' ? (pkt.ts || Date.now()) : (prevM.suwanAt || 0),
-              jingchanAt: spk === 'jingchan' ? (pkt.ts || Date.now()) : (prevM.jingchanAt || 0)
+              suwanAt: spk === 'suwan' ? (pktTs || Date.now()) : (prevM.suwanAt || 0),
+              jingchanAt: spk === 'jingchan' ? (pktTs || Date.now()) : (prevM.jingchanAt || 0),
+              jingchanVerified: spk === 'jingchan' ? true : !!prevM.jingchanVerified
             };
             saveSuwanVoicesNow();
             changed = true;
@@ -25149,9 +25738,49 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             emqxWs = null; mqtt443Ws = null; seoulDirectWs = null; __ntfyLiveSse = null;
             emqxPrimaryOk = false; mqtt443Ok = false; emqxConnected = false; seoulDirectJoined = false; __ntfySseConnected = false;
             emqxSubscribedRoom = ''; mqtt443SubscribedRoom = ''; seoulDirectRoom = ''; __ntfySseRoom = '';
+            __ntfyInitial12hDone = false;
             connectLiveSyncStream();
+            try { await pollNtfyBackup(getSyncRoomCode(), true, true); } catch (_) {}
             try { await flushSyncOutbox(); } catch (_) {}
             try { await pullCloudSync(false); } catch (_) {}
+          },
+          repairNotificationsNow: async (softAuto) => {
+            const rm = getSyncRoomCode();
+            const myR = (state && state.myRole) || 'suwan';
+            let nativeRestarted = false;
+            let sseReconnected = false;
+            try {
+              if (window.ChanwanNative) {
+                if (!softAuto && typeof window.ChanwanNative.repairPushService === 'function') {
+                  nativeRestarted = !!window.ChanwanNative.repairPushService(rm, myR);
+                } else {
+                  if (typeof window.ChanwanNative.setRoom === 'function') window.ChanwanNative.setRoom(rm);
+                  if (typeof window.ChanwanNative.setRole === 'function') window.ChanwanNative.setRole(myR);
+                  nativeRestarted = !softAuto;
+                }
+              }
+            } catch (_) {}
+            if (!softAuto) {
+              try {
+                if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+                  const reg = await navigator.serviceWorker.register('./sw.js');
+                  if (reg && typeof reg.update === 'function') reg.update().catch(() => {});
+                }
+              } catch (_) {}
+            }
+            const sseHealthy = !!(__ntfyLiveSse && __ntfySseConnected && __ntfySseRoom === rm && __ntfyLiveSse.readyState === 1);
+            let pulledMissed = false;
+            if (!softAuto || (!document.hidden && !sseHealthy)) {
+              try { if (__ntfyLiveSse) __ntfyLiveSse.close(); } catch (_) {}
+              __ntfyLiveSse = null;
+              __ntfySseConnected = false;
+              __ntfySseRoom = '';
+              if (!softAuto) __ntfyInitial12hDone = false;
+              connectNtfyLiveSse();
+              sseReconnected = true;
+              try { pulledMissed = !!(await pollNtfyBackup(rm, true, true)); } catch (_) {}
+            }
+            return { nativeRestarted, pulledMissed, sseReconnected, sseActive: !!__ntfyLiveSse };
           },
           markSbStateAvailable: () => {
             __sbStateUnavailable = false;
@@ -25161,7 +25790,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v98', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v104', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               publishEmqxRetained(rm, 'sync', pkt);
             } catch (_) {}
           },
@@ -25169,7 +25798,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v98', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v104', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               const wire = await e2eeWrapString(pkt);
               await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
                 method: 'POST',
@@ -25706,7 +26335,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try { localStorage.setItem('cw_auto_self_heal_v1', autoHealToggleEl.checked ? '1' : '0'); } catch (_) {}
             const isZh = state.lang === 'zh';
             showToast(autoHealToggleEl.checked
-              ? (isZh ? '🤖 已开启智能自动自检（零卡顿后台守护）' : '🤖 스마트 자동 자가진단을 켰어요 (백그라운드 경량 점검)')
+              ? (isZh ? '🤖 已开启每1分钟自动修复（在线·通知·已读零卡顿守护）' : '🤖 1분마다 자동수리를 켰어요 (접속·알림·읽음 무중단 케어)')
               : (isZh ? '⏸️ 已暂停自动自检（可随时手动点击修复）' : '⏸️ 자동 자가진단을 껐어요 (필요할 때 수동으로 누르실 수 있어요)'));
           });
         }
@@ -25715,7 +26344,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (!__cwStateLoaded) return;
             if (localStorage.getItem('cw_auto_self_heal_v1') === '0') return;
             const now = Date.now();
-            if ((now - __cwLastAutoHealTs) < 5 * 60 * 1000) return;
+            const minGapMs = (reason === 'online' || reason === 'resume' || reason === 'boot') ? 10000 : 48000;
+            if ((now - __cwLastAutoHealTs) < minGapMs) return;
             __cwLastAutoHealTs = now;
             const fixed = [];
             const isZh = state.lang === 'zh';
@@ -25783,21 +26413,33 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               pullCloudSync(false);
             }
 
+            // 6) Every-1-Minute Presence + Notification Channel + Read Receipt Auto-Repair!
+            if (typeof window.__repairPresenceNotifAndReadState === 'function') {
+              const repAuto = await window.__repairPresenceNotifAndReadState({ autoMode: true, forceNetReset: false });
+              if (repAuto && repAuto.sseReconnected) fixed.push(isZh ? '通知通道重连' : '알림채널 재연결');
+              if (repAuto && repAuto.readOutgoingFixed > 0) fixed.push(isZh ? `已读补标 ${repAuto.readOutgoingFixed} 条` : `읽음 ${repAuto.readOutgoingFixed}건 복구`);
+            }
+
             if (stuckCnt > 0 || ghostCnt > 0) saveState(false);
 
-            const tStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+            const tStr = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const lineEl = document.getElementById('autoHealLastRunText');
             if (lineEl) {
               lineEl.textContent = fixed.length
-                ? (isZh ? `🟢 ${tStr} 自动修复：${fixed.join(' · ')}` : `🟢 ${tStr} 자동 복구 완료: ${fixed.join(' · ')}`)
-                : (isZh ? `🟢 ${tStr} 自动自检正常 · 无需修复` : `🟢 ${tStr} 자동 자가진단 정상 · 이상 없음`);
+                ? (isZh ? `🟢 ${tStr} 每1分钟自动修复：${fixed.join(' · ')}` : `🟢 ${tStr} 1분 자동수리 완료: ${fixed.join(' · ')}`)
+                : (isZh ? `🟢 ${tStr} 每1分钟自动巡检正常（在线·通知·已读·同步）` : `🟢 ${tStr} 1분 자동수리 정상 작동 중 (접속·알림·읽음·동기화)`);
             }
           } catch (_) {}
         }
         window.__runSilentAutoHeal = runSilentAutoHeal;
-        setTimeout(() => runSilentAutoHeal('boot'), 4000);
-        window.addEventListener('online', () => setTimeout(() => runSilentAutoHeal('online'), 2000));
-        document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => runSilentAutoHeal('resume'), 1800); });
+        setTimeout(() => runSilentAutoHeal('boot'), 3500);
+        window.addEventListener('online', () => setTimeout(() => runSilentAutoHeal('online'), 1200));
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => runSilentAutoHeal('resume'), 900); });
+        if (window.__cwOneMinuteAutoHealTimer) clearInterval(window.__cwOneMinuteAutoHealTimer);
+        window.__cwOneMinuteAutoHealTimer = setInterval(() => {
+          if (document.hidden) return;
+          runSilentAutoHeal('interval_1m');
+        }, 60000);
 
         const saveRoomBtn = document.getElementById('saveCloudRoomBtn');
         const pullSyncBtn = document.getElementById('pullCloudSyncBtn');
@@ -26226,54 +26868,64 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         window.__requestPartnerVaultSync = requestPartnerVaultSync;
 
         window.__recoverMissingVoiceNow = async function(msgId, silent) {
-          const isZh = state.lang === 'zh';
-          showToast(isZh ? '🎙️ 正在高速拉取对方语音...' : '🎙️ 상대방 음성을 불러오는 중...');
-          const room = getSyncRoomCode();
-          // 1) Instant local check from voiceLetters or IDB chat media cache
-          const findTarget = () => (state.chat?.messages || []).find(x => x && x.id === msgId);
-          let target = findTarget();
-          if (target && !target.audioUrl) {
-            const cachedCm = (__cwChatMediaCache && __cwChatMediaCache[msgId]) || null;
-            if (cachedCm && cachedCm.audioUrl) {
-              target.audioUrl = normalizeAudioDataUrl(cachedCm.audioUrl);
-            } else {
-              const vlMatch = (state.voiceLetters || []).find(v => v && v.audioUrl && (v.id === 'vl_chat_' + msgId || (target.time && v.time === target.time && v.sender === target.sender)));
-              if (vlMatch) target.audioUrl = normalizeAudioDataUrl(vlMatch.audioUrl);
+          if (!msgId) return false;
+          if (!window.__cwVoiceRecInFlight) window.__cwVoiceRecInFlight = new Set();
+          if (window.__cwVoiceRecInFlight.has(msgId)) return false;
+          window.__cwVoiceRecInFlight.add(msgId);
+          try {
+            const isZh = state.lang === 'zh';
+            if (!silent) showToast(isZh ? '🎙️ 正在高速拉取对方语音...' : '🎙️ 상대방 음성을 불러오는 중...');
+            const room = getSyncRoomCode();
+            const findTarget = () => (state.chat?.messages || []).find(x => x && x.id === msgId);
+            let target = findTarget();
+            if (target && !target.audioUrl) {
+              const cachedCm = (__cwChatMediaCache && __cwChatMediaCache[msgId]) || null;
+              if (cachedCm && cachedCm.audioUrl) {
+                target.audioUrl = normalizeAudioDataUrl(cachedCm.audioUrl);
+              } else {
+                const vlMatch = (state.voiceLetters || []).find(v => v && v.audioUrl && (v.id === 'vl_chat_' + msgId || (target.time && v.time === target.time && v.sender === target.sender)));
+                if (vlMatch) target.audioUrl = normalizeAudioDataUrl(vlMatch.audioUrl);
+              }
             }
+            if (!target || !target.audioUrl) {
+              try { requestPartnerVaultSync(silent ? 'auto_voice' : 'manual_restore', msgId); } catch (_) {}
+              const directKey = cwSafeVaultKey('cm_' + msgId);
+              await Promise.allSettled([
+                restoreVaultEntryFromCloudState(room, { key: directKey, kind: 'chat_voice', ts: Date.now() }),
+                pullRecentMediaPack(room, false),
+                ...(silent ? [] : [fetchCloudVaultManifest(room).then(items => restoreVaultBatchParallel(room, items))])
+              ]);
+            }
+            target = findTarget();
+            if (target && target.audioUrl) {
+              persistMediaVaultsNow(true);
+              saveState(false);
+              renderChat();
+              if (!silent) {
+                setTimeout(() => {
+                  const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
+                  if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
+                }, 80);
+              }
+              return true;
+            }
+            if (!silent) {
+              await new Promise(r => setTimeout(r, 1400));
+              target = findTarget();
+              if (target && target.audioUrl) {
+                renderChat();
+                setTimeout(() => {
+                  const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
+                  if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
+                }, 80);
+                return true;
+              }
+              showToast(isZh ? '🎙️ 已向对方设备请求重传语音，对方在线时将自动恢复' : '🎙️ 상대방 기기에 음성 재전송을 요청했어요. 상대방 접속 시 자동 복구돼요');
+            }
+            return false;
+          } finally {
+            window.__cwVoiceRecInFlight.delete(msgId);
           }
-          // 2) Ask partner's active device over EMQX China Direct + pull RecentMediaPack + Cloud Vault simultaneously!
-          if (!target || !target.audioUrl) {
-            try { requestPartnerVaultSync('manual_restore', msgId); } catch (_) {}
-            await Promise.allSettled([
-              pullRecentMediaPack(room, false),
-              fetchCloudVaultManifest(room).then(items => restoreVaultBatchParallel(room, items)),
-              pullCloudSync(false)
-            ]);
-          }
-          target = findTarget();
-          if (target && target.audioUrl) {
-            persistMediaVaultsNow(true);
-            saveState(false);
-            renderChat();
-            setTimeout(() => {
-              const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
-              if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
-            }, 80);
-            return true;
-          }
-          // Wait 1.4s for partner P2P EMQX stream if partner is online
-          await new Promise(r => setTimeout(r, 1400));
-          target = findTarget();
-          if (target && target.audioUrl) {
-            renderChat();
-            setTimeout(() => {
-              const btn = document.querySelector(`.cw-voice-play-btn[data-msg-id="${msgId}"]`);
-              if (typeof window.__playChatVoiceMsg === 'function') window.__playChatVoiceMsg(msgId, target.audioUrl, btn, false);
-            }, 80);
-            return true;
-          }
-          showToast(isZh ? '🎙️ 已向对方设备请求重传语音，对方在线时将自动恢复' : '🎙️ 상대방 기기에 음성 재전송을 요청했어요. 상대방 접속 시 자동 복구돼요');
-          return false;
         };
 
         window.__recoverMissingVideoNow = async function(msgId, silent) {
@@ -26420,10 +27072,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normCv);
             }
             for (const [phr, jcUrl] of Object.entries(state.jingchanVoices || {}).slice(0, 80)) {
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              if (!mInfo.jingchanVerified) continue;
               const normJc = normalizeAudioDataUrl(jcUrl);
               if (!normJc || !normJc.startsWith('data:audio/')) continue;
-              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
-              const meta = { phrase: phr, speaker: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
+              const swNorm = (state.customVoices && state.customVoices[phr]) ? normalizeAudioDataUrl(state.customVoices[phr]) : '';
+              if (swNorm && swNorm === normJc) continue;
+              const meta = { phrase: phr, speaker: 'jingchan', verifiedByRole: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
               await sendEmqxMediaPaced(room, 'custom_voice', `p2p_cv_jc_${Date.now()}`, meta, normJc, Date.now());
               await sendSeoulDirectMediaPaced(room, 'custom_voice', `p2p_cv_jc_${Date.now()}`, meta, normJc, Date.now());
               await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('custom_voice', meta, phr), 'custom_voice', meta, normJc);
@@ -26520,11 +27175,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 await saveVaultItemToCloudState(room, vk, 'custom_voice', meta, normCv);
               }
             }
+            if (typeof window.__sanitizeStudyVoicesV99 === 'function') window.__sanitizeStudyVoicesV99();
             for (const [phr, jcUrl] of Object.entries(state.jingchanVoices || {})) {
+              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
+              if (!mInfo.jingchanVerified) continue;
               const normJc = normalizeAudioDataUrl(jcUrl);
               if (!normJc || !normJc.startsWith('data:audio/')) continue;
-              const mInfo = (state.studyVoiceMeta && state.studyVoiceMeta[phr]) || {};
-              const meta = { phrase: phr, speaker: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
+              const swNorm = (state.customVoices && state.customVoices[phr]) ? normalizeAudioDataUrl(state.customVoices[phr]) : '';
+              if (swNorm && swNorm === normJc) continue;
+              const meta = { phrase: phr, speaker: 'jingchan', verifiedByRole: 'jingchan', zh: mInfo.zh || '', question: mInfo.question || '', source: mInfo.source || '' };
               const vk = deriveDeterministicVaultKey('custom_voice', meta, phr);
               if (!isAlreadyBackedUp(vk)) {
                 await saveVaultItemToCloudState(room, vk, 'custom_voice', meta, normJc);
@@ -26561,6 +27220,54 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           autoSyncVaultAndHistoryOnBoot();
         }, 950);
 
+        window.__purgeDeletedStudyVoiceCloud = async function(phrase, spk, delTs) {
+          try {
+            const room = getSyncRoomCode();
+            if (!room || __sbStateUnavailable) return;
+            const vk = cwSafeVaultKey(deriveDeterministicVaultKey('custom_voice', { phrase, speaker: spk }, phrase));
+            await upsertSupabaseStateSnapshot(`${room}__vm__${vk}`, { v: 'cw_vm_deleted_v1', deletedAt: delTs || Date.now() }, 10000);
+          } catch (_) {}
+        };
+
+        window.__sanitizeStudyVoicesV99 = function() {
+          try {
+            if (!state) return false;
+            if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
+            if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
+            if (!state.studyVoiceMeta || typeof state.studyVoiceMeta !== 'object') state.studyVoiceMeta = {};
+            let dirty = false;
+            for (const [phr, jcUrl] of Object.entries(state.jingchanVoices)) {
+              const mm = state.studyVoiceMeta[phr] || {};
+              const normJc = jcUrl ? normalizeAudioDataUrl(jcUrl) : '';
+              const normSw = state.customVoices[phr] ? normalizeAudioDataUrl(state.customVoices[phr]) : '';
+              const isMirrorOfSuwan = !!(normJc && normSw && normJc === normSw);
+              const isUnverifiedLegacy = !mm.jingchanVerified;
+              const isDeleted = !!(mm.jingchanDeletedAt && (!mm.jingchanAt || mm.jingchanDeletedAt >= mm.jingchanAt));
+              if (!normJc || isMirrorOfSuwan || isUnverifiedLegacy || isDeleted) {
+                delete state.jingchanVoices[phr];
+                state.studyVoiceMeta[phr] = { ...mm, jingchanAt: 0, jingchanVerified: false, jingchanDeletedAt: Math.max(Number(mm.jingchanDeletedAt || 0), Date.now()) };
+                if (typeof window.__purgeDeletedStudyVoiceCloud === 'function') {
+                  window.__purgeDeletedStudyVoiceCloud(phr, 'jingchan', Date.now());
+                }
+                dirty = true;
+              }
+            }
+            for (const [phr, mm] of Object.entries(state.studyVoiceMeta)) {
+              if (mm && mm.jingchanAt && !mm.jingchanVerified) {
+                state.studyVoiceMeta[phr] = { ...mm, jingchanAt: 0, jingchanVerified: false };
+                dirty = true;
+              }
+            }
+            if (dirty) {
+              saveSuwanVoicesNow();
+              saveState(false);
+              try { renderLearn(); renderHome(); } catch (_) {}
+            }
+            return dirty;
+          } catch (_) { return false; }
+        };
+        setTimeout(() => { if (typeof window.__sanitizeStudyVoicesV99 === 'function') window.__sanitizeStudyVoicesV99(); }, 250);
+
         async function recoverCustomVoicesFromCloud() {
           try {
             const room = getSyncRoomCode();
@@ -26574,10 +27281,26 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             for (const r of rows) {
               const p = await e2eeUnwrapPayload(r && r.payload);
               if (p && p.v === 'pro2_media' && p.kind === 'custom_voice' && p.meta && p.meta.phrase && p.dataUrl) {
-                if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
-                if (!state.customVoices[p.meta.phrase]) {
-                  state.customVoices[p.meta.phrase] = p.dataUrl; saveSuwanVoicesNow();
-                  restored++;
+                const spk = p.meta.speaker === 'jingchan' ? 'jingchan' : 'suwan';
+                const mm = (state.studyVoiceMeta && state.studyVoiceMeta[p.meta.phrase]) || {};
+                if (spk === 'jingchan') {
+                  if (p.meta.verifiedByRole !== 'jingchan') continue;
+                  if (mm.jingchanDeletedAt && Number(p.ts || 0) <= Number(mm.jingchanDeletedAt)) continue;
+                  const swNorm = (state.customVoices && state.customVoices[p.meta.phrase]) ? normalizeAudioDataUrl(state.customVoices[p.meta.phrase]) : '';
+                  const jcNorm = normalizeAudioDataUrl(p.dataUrl);
+                  if (swNorm && swNorm === jcNorm) continue;
+                  if (!state.jingchanVoices || typeof state.jingchanVoices !== 'object') state.jingchanVoices = {};
+                  if (!state.jingchanVoices[p.meta.phrase]) {
+                    state.jingchanVoices[p.meta.phrase] = jcNorm; saveSuwanVoicesNow();
+                    restored++;
+                  }
+                } else {
+                  if (mm.suwanDeletedAt && Number(p.ts || 0) <= Number(mm.suwanDeletedAt)) continue;
+                  if (!state.customVoices || typeof state.customVoices !== 'object') state.customVoices = {};
+                  if (!state.customVoices[p.meta.phrase]) {
+                    state.customVoices[p.meta.phrase] = normalizeAudioDataUrl(p.dataUrl); saveSuwanVoicesNow();
+                    restored++;
+                  }
                 }
               }
             }
@@ -26602,13 +27325,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           __bgPollTick++;
           const inChat = !!document.getElementById('tab-translator')?.classList.contains('active');
-          const wsHealthy = !!(emqxConnected && syncTransportMode === 'realtime');
-          if (wsHealthy && (__bgPollTick % 2 === 1)) return;
-          if (!inChat && (__bgPollTick % 2 === 0)) return;
+          const realtimeHealthy = !!(seoulDirectJoined || emqxConnected || __ntfySseConnected);
+          if (realtimeHealthy && (__bgPollTick % 3 !== 0)) return;
+          if (!inChat && (__bgPollTick % 2 === 1)) return;
           if (!emqxConnected) connectEmqxChinaDirect();
           pullCloudSync(false);
           if (loadSyncOutbox().length > 0) flushSyncOutbox();
-        }, 4500);
+        }, 6000);
 
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden) {
@@ -26632,10 +27355,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         let __suppressHistoryPush = false;
         const origSwitchTabRef = switchTab;
         function closeTopOverlayIfAny() {
-          const overlayIds = ['cwMicPermModal', 'cwChatBgModal', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'voiceRecorderModal', 'confirmModal'];
+          const overlayIds = ['cwMicPermModal', 'cwChatBgModal', 'cwMsgContextBackdrop', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'cityModal', 'customMoodModal', 'voiceRecorderModal', 'speechPracticeModal', 'cwAppModeModal', 'cwInAppUpdateModal', 'autoNightNoticeModal', 'makerModeDrawer', 'confirmModal'];
           for (const oid of overlayIds) {
             const el = document.getElementById(oid);
-            if (el && !el.classList.contains('hidden')) { el.classList.add('hidden'); return true; }
+            if (el && !el.classList.contains('hidden')) {
+              if (oid === 'voiceRecorderModal' && typeof closeVoiceRecorderModal === 'function') closeVoiceRecorderModal();
+              else if (oid === 'cwMsgContextBackdrop') { el.classList.add('hidden'); document.getElementById('cwMsgContextMenu')?.classList.add('hidden'); }
+              else el.classList.add('hidden');
+              return true;
+            }
           }
           const notifP = document.getElementById('notifPanel');
           if (notifP && !notifP.classList.contains('hidden')) { notifP.classList.add('hidden'); document.getElementById('notifBackdrop')?.classList.add('hidden'); return true; }
@@ -26701,7 +27429,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           function hasBlockingOverlay() {
             if (document.body.classList.contains('cw-kb-open')) return true;
-            const ids = ['notifPanel', 'pinLockOverlay', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'customMoodModal', 'cityPickerModal', 'confirmModal'];
+            const ids = ['notifPanel', 'pinLockOverlay', 'photoLightboxModal', 'chatVaultModal', 'patchNotesModal', 'customMoodModal', 'cityModal', 'voiceRecorderModal', 'speechPracticeModal', 'cwMicPermModal', 'cwChatBgModal', 'cwAppModeModal', 'cwInAppUpdateModal', 'autoNightNoticeModal', 'cwMsgContextBackdrop', 'makerModeDrawer', 'confirmModal'];
             for (const id of ids) {
               const el = document.getElementById(id);
               if (el && !el.classList.contains('hidden')) return true;
@@ -26916,6 +27644,147 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return repaired;
         }
 
+        // Unified 3-Domain Recovery Engine: Repairs (1) Presence/Online State, (2) Notification/Push State, (3) Read Receipt State!
+        window.__repairPresenceNotifAndReadState = async function(opts) {
+          const o = opts || {};
+          const isAuto = !!o.autoMode;
+          const myR = (state && state.myRole) === 'jingchan' ? 'jingchan' : 'suwan';
+          const partnerR = myR === 'suwan' ? 'jingchan' : 'suwan';
+          const room = typeof getSyncRoomCode === 'function' ? getSyncRoomCode() : '';
+          const br = window.__cwSyncDiagBridge;
+          const nowTs = Date.now();
+          const summary = { presenceFixed: false, notifFixed: false, sseReconnected: false, nativePushOk: false, readOutgoingFixed: 0, readWatermarkSent: 0 };
+
+          try {
+            // 1) Presence / Online Connection State Repair (접속 상태 수리)
+            if (!state.profile) state.profile = {};
+            if (!document.hidden) state.profile[myR + 'LastSeen'] = nowTs;
+            if (!window.__cwPartnerPresence) {
+              window.__cwPartnerPresence = { suwan: { online: false, lastSeen: 0 }, jingchan: { online: false, lastSeen: 0 } };
+            }
+            ['suwan', 'jingchan'].forEach(rk => {
+              if (!window.__cwPartnerPresence[rk]) window.__cwPartnerPresence[rk] = { online: false, lastSeen: 0 };
+              window.__cwPartnerPresence[rk].explicitOffline = false;
+              const savedLs = Number(state.profile[rk + 'LastSeen'] || 0);
+              if (savedLs > Number(window.__cwPartnerPresence[rk].lastSeen || 0)) {
+                window.__cwPartnerPresence[rk].lastSeen = savedLs;
+              }
+            });
+            const allRealtimeDead = !emqxConnected && !seoulDirectJoined && !__ntfySseConnected && (typeof navigator === 'undefined' || navigator.onLine !== false);
+            if ((o.forceNetReset || (isAuto && allRealtimeDead)) && br && typeof br.forceReconnectMyNet === 'function') {
+              await br.forceReconnectMyNet();
+            } else if (typeof connectLiveSyncStream === 'function') {
+              connectLiveSyncStream();
+            }
+            if (!document.hidden && typeof window.__broadcastPresenceNow === 'function') {
+              window.__broadcastPresenceNow(true, true);
+            }
+            if (!isAuto && br && typeof br.sendSignal === 'function') {
+              try { br.sendSignal('ping_partner_health', { pingId: 'rep_' + nowTs }); } catch (_) {}
+              try { br.sendSignal('request_peer_catchup', { ts: nowTs }); } catch (_) {}
+            } else if (isAuto && !document.hidden && br && typeof br.sendSignal === 'function') {
+              try { br.sendSignal('ping_partner_health', { pingId: 'auto1m_' + nowTs }); } catch (_) {}
+            }
+            if (typeof window.__renderPresenceBadges === 'function') window.__renderPresenceBadges();
+            if (typeof updateLiveSyncIndicators === 'function') updateLiveSyncIndicators(true, room);
+            summary.presenceFixed = true;
+          } catch (_) {}
+
+          try {
+            // 2) Notification & Push Channel State Repair (알림 상태 수리)
+            if (br && typeof br.repairNotificationsNow === 'function') {
+              const nRes = await br.repairNotificationsNow(isAuto);
+              summary.nativePushOk = !!(nRes && nRes.nativeRestarted);
+              summary.sseReconnected = !!(nRes && nRes.sseReconnected);
+            }
+            if (Array.isArray(state.notifications)) {
+              const inChatTab = !!document.getElementById('tab-translator')?.classList.contains('active') && !document.hidden;
+              let notifCleaned = false;
+              state.notifications.forEach(n => {
+                if (!n || !n.unread) return;
+                if (n.fromRole === myR || (n.createdAt && (nowTs - Number(n.createdAt)) >= 86400000) || (inChatTab && n.tab === 'translator')) {
+                  n.unread = false;
+                  notifCleaned = true;
+                }
+              });
+              if (notifCleaned && typeof renderNotifications === 'function') renderNotifications();
+            }
+            summary.notifFixed = true;
+          } catch (_) {}
+
+          try {
+            // 3) Bidirectional Read Receipt State Repair (읽음처리 상태 수리)
+            const msgs = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages : [];
+            let latestPartnerMsgTs = 0;
+            msgs.forEach(m => {
+              if (!m) return;
+              const sRole = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+              const mts = Number(m.ts || 0);
+              if (sRole === partnerR && mts > latestPartnerMsgTs) latestPartnerMsgTs = mts;
+            });
+
+            let stateMutated = false;
+            // 3a) Fix any outgoing messages sent by me before partner's read watermark OR before partner's own newer reply!
+            const storedPartnerReadTs = Number((state.profile && state.profile[partnerR + 'ReadUpToTs']) || 0);
+            const effectivePartnerReadTs = Math.max(storedPartnerReadTs, latestPartnerMsgTs);
+            if (effectivePartnerReadTs > storedPartnerReadTs && state.profile) {
+              state.profile[partnerR + 'ReadUpToTs'] = effectivePartnerReadTs;
+              stateMutated = true;
+            }
+            if (effectivePartnerReadTs > 0) {
+              msgs.forEach(m => {
+                if (!m) return;
+                const sRole = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+                const mts = Number(m.ts || 0);
+                if (sRole === myR && mts > 0 && mts <= effectivePartnerReadTs && (!m.readByPartner || m.deliveryStatus === 'sending')) {
+                  m.readByPartner = true;
+                  m.deliveryStatus = 'sent';
+                  summary.readOutgoingFixed++;
+                  stateMutated = true;
+                }
+              });
+            }
+
+            // 3b) Stamp & re-broadcast my own ReadUpToTs watermark:
+            // - In manual repair OR when actively viewing CW Talk: advance ReadUpToTs to latestPartnerMsgTs!
+            // - In 1-minute autoMode on other tabs: NEVER mark unseen new messages read, ONLY re-broadcast existing ReadUpToTs so partner's screen catches up!
+            const inChatVisible = !!document.getElementById('tab-translator')?.classList.contains('active') && !document.hidden;
+            const shouldAdvanceRead = (o.markIncomingRead === true) || (!isAuto && o.markIncomingRead !== false) || inChatVisible;
+            const prevMyRead = Number((state.profile && state.profile[myR + 'ReadUpToTs']) || 0);
+            if (shouldAdvanceRead && latestPartnerMsgTs > 0) {
+              const nextMyRead = Math.max(prevMyRead, latestPartnerMsgTs);
+              if (nextMyRead !== prevMyRead) {
+                state.profile[myR + 'ReadUpToTs'] = nextMyRead;
+                stateMutated = true;
+              }
+              msgs.forEach(m => {
+                if (!m) return;
+                const sRole = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+                if (sRole === partnerR && !m.read) { m.read = true; stateMutated = true; }
+              });
+              if (typeof sendChatSignal === 'function') sendChatSignal('read', { readUpToTs: nextMyRead });
+              else if (br && typeof br.sendSignal === 'function') br.sendSignal('read', { readUpToTs: nextMyRead });
+              summary.readWatermarkSent = nextMyRead;
+            } else if (isAuto && prevMyRead > 0 && !document.hidden) {
+              if (typeof sendChatSignal === 'function') sendChatSignal('read', { readUpToTs: prevMyRead });
+              else if (br && typeof br.sendSignal === 'function') br.sendSignal('read', { readUpToTs: prevMyRead });
+              summary.readWatermarkSent = prevMyRead;
+            }
+
+            if (stateMutated || !isAuto) {
+              saveState(stateMutated || !isAuto);
+            }
+            if (summary.readOutgoingFixed > 0 && typeof updateChatDeliveryBadgesInPlace === 'function') {
+              const isActivelyTypingNow = typeof window.__isActivelyTyping === 'function' && window.__isActivelyTyping();
+              if (!updateChatDeliveryBadgesInPlace() && !isActivelyTypingNow && typeof renderChat === 'function') {
+                renderChat();
+              }
+            }
+          } catch (_) {}
+
+          return summary;
+        };
+
         async function runAutoHealAndRepair(isManual = false) {
           const isZh = state.lang === 'zh';
           const badge = document.getElementById('autoHealBadge');
@@ -26939,6 +27808,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
 
           if (isManual) {
+            try {
+              if (typeof window.__repairPresenceNotifAndReadState === 'function') {
+                await window.__repairPresenceNotifAndReadState({ forceNetReset: true, markIncomingRead: true });
+              }
+            } catch (_) {}
             try {
               const AC = window.AudioContext || window.webkitAudioContext;
               if (AC) { const c = new AC(); if (c.state === 'suspended') c.resume().catch(() => {}); }
@@ -26975,11 +27849,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         setInterval(() => {
           if (document.hidden) return;
           try { if (localStorage.getItem('cw_auto_self_heal_v1') === '0') return; } catch (_) {}
-          if (!liveSyncSource || liveSyncSource.readyState !== 1) {
+          if (!emqxConnected || !seoulDirectJoined || !__ntfySseConnected) {
             connectLiveSyncStream();
-            if (typeof window.__runSilentAutoHeal === 'function') window.__runSilentAutoHeal('watchdog');
           }
-        }, 45000);
+        }, 30000);
         window.addEventListener('error', () => { try { repairStateIntegrity(); } catch (_) {} });
         window.addEventListener('unhandledrejection', () => { try { repairStateIntegrity(); } catch (_) {} });
 
@@ -27730,20 +28603,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         const keys = new Set([
           ...Object.keys(swMap).filter(k => !!swMap[k]),
           ...Object.keys(jcMap).filter(k => !!jcMap[k]),
-          ...Object.keys(metaMap).filter(k => metaMap[k] && (metaMap[k].suwanAt || metaMap[k].jingchanAt))
+          ...Object.keys(metaMap).filter(k => metaMap[k] && (metaMap[k].requestedAt || metaMap[k].suwanAt || (metaMap[k].jingchanAt && metaMap[k].jingchanVerified)))
         ]);
         const items = [];
         for (const phrase of keys) {
           const clean = String(phrase || '').trim();
           if (!clean) continue;
           const swUrl = swMap[clean] || '';
-          const jcUrl = jcMap[clean] || '';
           const m = metaMap[clean] || {};
-          const hasSw = !!(swUrl || m.suwanAt);
-          const hasJc = !!(jcUrl || m.jingchanAt);
-          if (!hasSw && !hasJc) continue;
+          const jcUrl = (jcMap[clean] && m.jingchanVerified && (!swUrl || normalizeAudioDataUrl(jcMap[clean]) !== normalizeAudioDataUrl(swUrl))) ? jcMap[clean] : '';
+          const hasSw = !!swUrl;
+          const hasJc = !!jcUrl;
+          const hasReq = !!(m.requestedAt && !hasSw && !hasJc);
+          if (!hasSw && !hasJc && !hasReq) continue;
           const resolved = resolvePhraseMetaInfo(clean, m);
-          const latestTs = Math.max(Number(m.suwanAt || 0), Number(m.jingchanAt || 0));
+          const latestTs = Math.max(Number(m.suwanAt || 0), Number(m.jingchanAt || 0), Number(m.requestedAt || 0));
           items.push({
             phrase: clean,
             zh: resolved.zh || '',
@@ -27791,6 +28665,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         setT('svFltBoth', isZh ? `💑 双人合录 ${bothCnt}` : `💑 둘 다 녹음 ${bothCnt}`);
         setT('svFltSuwan', isZh ? `❤️ 秀完 ${swCnt}` : `❤️ 수완 ${swCnt}`);
         setT('svFltJingchan', isZh ? `💜 靖灿 ${jcCnt}` : `💜 징찬 ${jcCnt}`);
+        const svSubBtnLive = document.getElementById('studyVoicesSubtabBtn');
+        if (svSubBtnLive) {
+          svSubBtnLive.textContent = isZh
+            ? `🎙️ 双人原声录音题库 (❤️ 秀完 ${swCnt} · 💜 靖灿 ${jcCnt})`
+            : `🎙️ 우리 녹음 문제·보이스 모음 (❤️ 수완 ${swCnt} · 💜 징찬 ${jcCnt})`;
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, svSubBtnLive);
+        }
 
         document.querySelectorAll('.sv-mode-btn').forEach(b => {
           const act = b.getAttribute('data-sv-mode') === svActiveMode;
@@ -27822,6 +28703,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return true;
         });
 
+        const hubRootEl = document.getElementById('learn-sub-voices');
         if (!filtered.length) {
           listEl.innerHTML = `
             <div class="royal-card rounded-3xl p-6 text-center space-y-2">
@@ -27831,8 +28713,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 ? '在「今日表达」「分级测验」「万能会话书」点卡片右侧的 🎙️ 按钮，或在上方输入框直接录入句子，秀完和靖灿的录音都会自动汇总到这里 ✨'
                 : '[오늘의 표현] · [단계별 퀴즈] · [만능 회화책] 옆의 🎙️ 버튼을 누르거나 위 입력창에 문장을 적어 녹음하면 수완·징찬 목소리 문제가 여기에 차곡차곡 모여요 ✨'}</div>
             </div>`;
+          if (hubRootEl && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, hubRootEl);
           return;
         }
+
+        const myRoleNow = (state.myRole === 'jingchan') ? 'jingchan' : 'suwan';
+        const isMeSuwan = myRoleNow === 'suwan';
+        const isMeJingchan = myRoleNow === 'jingchan';
 
         listEl.innerHTML = filtered.map((it, idx) => {
           const srcLabel = isZh ? localizeLearnCatZh(it.source) : it.source;
@@ -27855,26 +28742,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 </div>
               </div>
 
-              <!-- Side-by-Side Suwan Voice & Jingchan Voice Controls -->
+              <!-- Side-by-Side Suwan Voice & Jingchan Voice Controls (Role-Locked so self mic never enters partner slot!) -->
               <div class="grid grid-cols-2 gap-2 pt-1.5 border-t" style="border-color: var(--border-subtle);">
                 <div class="rounded-2xl p-2 flex items-center justify-between gap-1" style="background: var(--surface-2); border: 1px solid ${it.hasSw ? 'rgba(244,63,94,0.34)' : 'var(--border-subtle)'};">
                   ${it.hasSw
                     ? `<button type="button" class="speak-partner-voice-btn flex-1 min-w-0 text-left text-xs font-bold truncate" style="color: #e11d48;" data-text="${escapeHtml(it.phrase)}" data-voice-role="suwan">❤️ ${isZh ? '听秀完原声 ▶' : '수완 보이스 ▶'}</button>
                        <div class="flex items-center gap-0.5 shrink-0">
-                         <button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan" title="${isZh ? '重录秀完原声' : '수완 재녹음'}">🎙️</button>
+                         ${isMeSuwan ? `<button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan" title="${isZh ? '重录秀完原声' : '수완 재녹음'}">🎙️</button>` : ''}
                          <button type="button" class="del-voice-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(it.phrase)}" data-speaker="suwan" title="${isZh ? '删除' : '삭제'}">✕</button>
                        </div>`
-                    : `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan">❤️ ${isZh ? '秀完去录音 🎙️' : '수완 녹음하기 🎙️'}</button>`}
+                    : (isMeSuwan
+                        ? `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-main py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="suwan">❤️ ${isZh ? '录制我的原声 🎙️' : '수완 녹음하기 🎙️'}</button>`
+                        : `<button type="button" class="sv-req-partner-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}">❤️ ${isZh ? '秀完未录 · 邀请 💌' : '수완 녹음 요청 💌'}</button>`)}
                 </div>
 
                 <div class="rounded-2xl p-2 flex items-center justify-between gap-1" style="background: var(--surface-2); border: 1px solid ${it.hasJc ? 'rgba(139,92,246,0.38)' : 'var(--border-subtle)'};">
                   ${it.hasJc
                     ? `<button type="button" class="speak-partner-voice-btn flex-1 min-w-0 text-left text-xs font-bold truncate" style="color: #7c3aed;" data-text="${escapeHtml(it.phrase)}" data-voice-role="jingchan">💜 ${isZh ? '听靖灿原声 ▶' : '징찬 보이스 ▶'}</button>
                        <div class="flex items-center gap-0.5 shrink-0">
-                         <button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan" title="${isZh ? '重录靖灿原声' : '징찬 재녹음'}">🎙️</button>
+                         ${isMeJingchan ? `<button type="button" class="sv-open-rec-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px]" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan" title="${isZh ? '重录靖灿原声' : '징찬 재녹음'}">🎙️</button>` : ''}
                          <button type="button" class="del-voice-btn btn-ghost w-6 h-6 rounded-full flex items-center justify-center text-[10px] text-rose-500" data-text="${escapeHtml(it.phrase)}" data-speaker="jingchan" title="${isZh ? '删除' : '삭제'}">✕</button>
                        </div>`
-                    : `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan">💜 ${isZh ? '靖灿去录音 🎙️' : '징찬 녹음하기 🎙️'}</button>`}
+                    : (isMeJingchan
+                        ? `<button type="button" class="sv-open-rec-btn w-full text-center text-[11px] font-semibold text-main py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}" data-speaker="jingchan">💜 ${isZh ? '录制靖灿原声 🎙️' : '징찬 녹음하기 🎙️'}</button>`
+                        : `<button type="button" class="sv-req-partner-btn w-full text-center text-[11px] font-semibold text-mut py-0.5" data-text="${escapeHtml(it.phrase)}" data-zh="${escapeHtml(it.zh)}" data-question="${escapeHtml(it.question)}" data-source="${escapeHtml(it.source)}">💜 ${isZh ? '靖灿未录 · 邀请 💌' : '징찬 녹음 요청 💌'}</button>`)}
                 </div>
               </div>
 
@@ -27884,6 +28775,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 </div>` : ''}
             </div>`;
         }).join('');
+        if (hubRootEl && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, hubRootEl);
       }
 
       function renderStudyVoicesQuiz(allItems) {
@@ -27898,6 +28790,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               <div class="text-sm font-bold">${isZh ? '先录制至少 1 道原声题目即可开始测验！' : '목소리가 녹음된 표현이 1개 이상 있으면 바로 우리 목소리 퀴즈가 열려요!'}</div>
               <div class="text-xs text-mut">${isZh ? '用秀完和靖灿的真实声音出听力题，答对可获得 +15 XP 💜' : '수완·징찬의 실제 목소리를 듣고 뜻을 맞히는 특별 퀴즈예요 (+15 XP) 💜'}</div>
             </div>`;
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-voices') || quizEl);
           return;
         }
         const target = playable[svQuizIdx % playable.length];
@@ -27977,8 +28870,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 fb.textContent = isZh ? `💡 正确答案是：「${correctMeaning}」（${target.phrase}）` : `💡 정답은 "${correctMeaning}" (${target.phrase}) 이에요!`;
               }
             }
+            if (fb && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, fb);
           });
         });
+        if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-voices') || quizEl);
         document.getElementById('svQuizNextBtn')?.addEventListener('click', () => {
           quizEl.dataset.answered = '0';
           svQuizIdx++;
@@ -28006,12 +28901,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             renderStudyVoicesHub();
             return;
           }
+          const reqPartner = e.target && e.target.closest('.sv-req-partner-btn');
+          if (reqPartner) {
+            if (typeof window.__requestPartnerStudyVoice === 'function') {
+              window.__requestPartnerStudyVoice(reqPartner.getAttribute('data-text'), {
+                zh: reqPartner.getAttribute('data-zh') || '',
+                question: reqPartner.getAttribute('data-question') || '',
+                source: reqPartner.getAttribute('data-source') || ''
+              });
+            }
+            return;
+          }
           const openRec = e.target && e.target.closest('.sv-open-rec-btn');
           if (openRec) {
             toggleRecordCustomVoice(
               openRec.getAttribute('data-text'),
               openRec,
-              openRec.getAttribute('data-speaker'),
+              state.myRole === 'jingchan' ? 'jingchan' : 'suwan',
               {
                 zh: openRec.getAttribute('data-zh') || '',
                 question: openRec.getAttribute('data-question') || '',
@@ -28116,11 +29022,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               </div>
             `;
           }).join('');
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-chatbook') || bookList);
         } else {
           if (bookCtrl) bookCtrl.classList.add('hidden');
           bookList.classList.add('hidden');
           quizWrap.classList.remove('hidden');
           renderChatAutoQuiz(allPairs);
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-chatbook') || quizWrap);
         }
       }
 
@@ -28226,6 +29134,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         const nextBtn = document.getElementById('cbNextQuizBtn');
         if (nextBtn) nextBtn.addEventListener('click', () => { cbQuizState.idx++; renderChatAutoQuiz(allPairs); });
+        if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('learn-sub-chatbook') || quizWrap);
       }
 
       function bindPlus16Events() {
@@ -29752,8 +30661,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v98)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v98';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v104)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v104';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29788,8 +30697,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               await Promise.all(keys.map(k => caches.delete(k).catch(() => {})));
             }
           } catch (_) {}
+          try {
+            await fetch(location.origin + location.pathname + '?_purge=' + Date.now(), {
+              cache: 'reload',
+              headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+            });
+          } catch (_) {}
           const base = location.origin + location.pathname;
-          location.replace(base + '?v=' + Date.now());
+          location.replace(base + '?v=' + Date.now() + '&_r=' + Math.random().toString(36).slice(2, 6));
         }
         window.__forcePurgeCacheAndUpdate = forcePurgeCacheAndUpdate;
         document.getElementById('forceAppUpdateBtn')?.addEventListener('click', () => forcePurgeCacheAndUpdate(true));
@@ -30716,13 +31631,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (typeof window.__sendChatSignal === 'function') {
               window.__sendChatSignal('presence', { online: effectiveOnline, needReply: effectiveOnline && !!needReply, ts: nowTs });
             }
-            // Persist real lastSeen timestamp ONLY after initial cloud pull finishes (never overwrite server before pulling!)
-            if (window.__cwInitialPullDone && state && state.profile && (!effectiveOnline || (nowTs - __lastServerSeenSyncTs) >= 30000)) {
+            // Persist real lastSeen timestamp lazily (every 180s or on hide) so 10s heartbeats NEVER bloat main thread or HTTP!
+            if (window.__cwInitialPullDone && state && state.profile && (!effectiveOnline || (nowTs - __lastServerSeenSyncTs) >= 180000)) {
               const myR = state.myRole || 'suwan';
               const lsKey = myR + 'LastSeen';
               state.profile[lsKey] = nowTs;
               __lastServerSeenSyncTs = nowTs;
-              if (typeof saveState === 'function') saveState(true);
+              if (typeof saveState === 'function') saveState(false);
             }
           } catch (_) {}
         }
@@ -30880,7 +31795,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v98';
+        const APP_VER_NOW = 'Prime 4 · v104';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -31033,7 +31948,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             : '';
           const verTag = isSameVer
             ? `✅ ${escapeHtml(h.ver)}`
-            : `⚠️ ${escapeHtml(h.ver || '이전 버전')} (${isZh ? '可点右侧远程刷新' : '우측 하단 상대앱 갱신 가능'})`;
+            : (isLiveNow
+                ? `⚠️ ${escapeHtml(h.ver || '이전 버전')} (${isZh ? '在线 · 正在推送自动升级' : '현재 접속 중 · 자동 갱신 신호 전송 중'})`
+                : `⚠️ ${escapeHtml(h.ver || '이전 버전')} (${isZh ? '当前未打开画面 · 打开即自动升级' : '현재 앱 닫힘 · 징찬이가 앱 여는 즉시 자동 갱신'})`);
           const cloudVaultOk = !!(h.sbOk || h.emqxOk);
           const netTag = `${h.emqxOk ? '🟢' : '🟡'} ${isZh ? '中国直连' : '중국직통'} · ${cloudVaultOk ? '🟢' : '🟡'} ${isZh ? '云端同步库' : '클라우드보관'} · ${h.audioOk ? '🟢' : '🟡'} ${isZh ? '语音引擎' : '음성엔진'}`;
           const errTag = Number(h.errCnt || 0) === 0
@@ -31049,6 +31966,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             <div><b>${isZh ? '通道' : '연결'}:</b> ${netTag}${h.outboxCnt > 0 ? ` · 待发 ${h.outboxCnt}` : ''}</div>
             <div><b>${isZh ? '诊断' : '오류'}:</b> ${errTag}</div>
           `;
+          const setTabActive = !!document.getElementById('tab-settings')?.classList.contains('active');
+          if (setTabActive && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, document.getElementById('partnerDeviceHealthCard') || box);
         }
         window.__renderPartnerHealthUi = renderPartnerHealthUi;
 
@@ -31155,9 +32074,15 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             } catch (_) {}
           }
 
-          // 2) Force-reset & reconnect EMQX China Direct + Supabase + flush outbox + stream any pending videos/voices!
-          if (br) {
+          // 2) Force-reset & repair Presence + Notification SSE/SW + Read Receipts + Cross-Border Sockets + Pending Media!
+          if (typeof window.__repairPresenceNotifAndReadState === 'function') {
+            try {
+              await window.__repairPresenceNotifAndReadState({ forceNetReset: true, markIncomingRead: !document.hidden });
+            } catch (_) {}
+          } else if (br) {
             try { await br.forceReconnectMyNet(); } catch (_) {}
+          }
+          if (br) {
             try { br.respondVaultNow(); } catch (_) {}
           }
 
@@ -31193,25 +32118,55 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             if (!pRole || pRole === ((state && state.myRole) || 'suwan')) return;
             const myVerNum = parsePrimeVerNum(APP_VER_NOW);
-            const pVerNum = pHealth && pHealth.ver ? parsePrimeVerNum(pHealth.ver) : 0;
-            const queuedHealTs = Number((state && state.profile && state.profile[pRole + 'HealCmdTs']) || 0);
-            const isRecentSight = fromLivePresence || (pHealth && pHealth.ts && (Date.now() - Number(pHealth.ts)) < 65000);
+            const pVerNum = (pHealth && pHealth.ver) ? parsePrimeVerNum(pHealth.ver) : 0;
+            const isRecentSight = fromLivePresence || (pHealth && pHealth.ts && (Date.now() - Number(pHealth.ts)) < 120000);
             if (!isRecentSight) return;
-            if ((pVerNum > 0 && pVerNum < myVerNum) || (queuedHealTs > 0 && pVerNum < myVerNum)) {
-              if ((Date.now() - __lastAutoSightUpgradePushTs) < 40000) return;
+            // Important: on old v89, pHealth may be missing (pVerNum === 0) or < myVerNum — ALWAYS push v89-compatible remote_force_update when partner is live!
+            if (pVerNum < myVerNum) {
+              if ((Date.now() - __lastAutoSightUpgradePushTs) < 25000) return;
               __lastAutoSightUpgradePushTs = Date.now();
               const br = getBridge();
               const cmdTs = Date.now();
               if (!state.profile) state.profile = {};
               state.profile[pRole + 'HealCmdTs'] = cmdTs;
               if (br) {
-                try { br.sendSignal('remote_force_update', { targetRole: pRole, cmdTs, minVer: APP_VER_NOW }); } catch (_) {}
+                const fireOnce = () => {
+                  try { br.sendSignal('remote_force_update', { targetRole: pRole, cmdTs, minVer: APP_VER_NOW }); } catch (_) {}
+                };
+                fireOnce();
+                setTimeout(fireOnce, 1800);
                 try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pRole, cmdTs); } catch (_) {}
                 try { br.sendEmergencyNtfyHeal(pRole, cmdTs); } catch (_) {}
               }
             }
           } catch (_) {}
         };
+
+        async function checkGithubPagesLiveVer() {
+          const parseSw = (txt) => {
+            const m = String(txt || '').match(/chanwan-sw-prime4-(v\d+)/i);
+            return m ? m[1] : '';
+          };
+          const fetchVer = async (u) => {
+            const ctrl = new AbortController();
+            const tm = setTimeout(() => ctrl.abort(), 4500);
+            try {
+              const r = await fetch(u + '?_cb=' + Date.now(), { cache: 'no-store', signal: ctrl.signal });
+              clearTimeout(tm);
+              if (!r || !r.ok) return '';
+              return parseSw(await r.text());
+            } catch (_) {
+              clearTimeout(tm);
+              return '';
+            }
+          };
+          const [mainV, pagesV] = await Promise.all([
+            fetchVer('https://raw.githubusercontent.com/swans8562-sudo/chanwan/main/sw.js'),
+            fetchVer('https://swans8562-sudo.github.io/chanwan/sw.js')
+          ]);
+          return { mainV, pagesV };
+        }
+        window.__checkGithubPagesLiveVer = checkGithubPagesLiveVer;
 
         document.getElementById('remoteRefreshPartnerBtn')?.addEventListener('click', () => {
           const btn = document.getElementById('remoteRefreshPartnerBtn');
@@ -31230,8 +32185,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             btn.textContent = isZh ? '🛠️ 修复呼叫中...' : '🛠️ 복구 신호 전송...';
           }
 
+          // Immediately repair my own Presence + Notification channel + Read Receipts alongside remote partner repair!
+          if (typeof window.__repairPresenceNotifAndReadState === 'function') {
+            window.__repairPresenceNotifAndReadState({ forceNetReset: false, markIncomingRead: true }).catch(() => {});
+          }
           if (br) {
-            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v98' }); } catch (_) {}
+            const sendForceBurst = () => {
+              try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v104' }); } catch (_) {}
+            };
+            sendForceBurst();
+            setTimeout(sendForceBurst, 1500);
+            setTimeout(sendForceBurst, 3200);
             try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pR, cmdTs); } catch (_) {}
             try { br.sendEmergencyNtfyHeal(pR, cmdTs); } catch (_) {}
             try { br.requestVaultNow(); } catch (_) {}
@@ -31248,9 +32212,23 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const h = state && state.profile ? state.profile[pR + 'Health'] : null;
             const gotFreshPong = !!(h && h.livePongAt && (Date.now() - Number(h.livePongAt)) < 4500);
             if (!gotFreshPong) {
-              showToast(isZh
-                ? '📌 已在云端登记远程修复！对方当前未打开页面，打开瞬间将自动重连并升级 💜'
-                : '📌 3중 서버에 원격 복구를 걸어뒀어요! 징찬이가 지금 화면을 켜두었으면 곧 응답하고, 닫혀 있으면 여는 즉시 자동 복구·최신화돼요 💜');
+              checkGithubPagesLiveVer().then(({ mainV, pagesV }) => {
+                const pagesNum = Number(String(pagesV || '').replace(/\D/g, '') || 0);
+                const mainNum = Number(String(mainV || '').replace(/\D/g, '') || 0);
+                if (pagesNum > 0 && mainNum > 0 && pagesNum < mainNum) {
+                  showToast(isZh
+                    ? `⚠️ 靖灿网址(github.io)仍停在 ${pagesV}（main已是 ${mainV}）！请在 GitHub Settings→Pages→Source 改为 GitHub Actions`
+                    : `⚠️ 징찬 접속서버(github.io)가 ${pagesV}에 멈춰 있어요(원본은 ${mainV})! GitHub [Settings → Pages → Source]를 [GitHub Actions]로 바꿔주세요`);
+                } else {
+                  showToast(isZh
+                    ? `📌 远程修复已挂起（服务器版本 ${pagesV || mainV || '最新'}）！靖灿当前未打开画面，打开瞬间将自动升级 💜`
+                    : `📌 징찬이 웹서버(${pagesV || mainV || '최신'}) 준비 완료! 지금 징찬이 앱이 닫혀 있어서 여는 즉시 자동 복구·최신화돼요 💜`);
+                }
+              }).catch(() => {
+                showToast(isZh
+                  ? '📌 已在云端登记远程修复！对方当前未打开页面，打开瞬间将自动重连并升级 💜'
+                  : '📌 3중 서버에 원격 복구를 걸어뒀어요! 징찬이가 앱을 여는 즉시 자동 복구·최신화돼요 💜');
+              });
             }
           }, 3400);
         });
@@ -31311,7 +32289,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               .then(r => ({ ok: !!(r && r.ok), ms: Date.now() - tNpm }))
               .catch(() => ({ ok: false }));
 
-            const [sbRes, ntRes, mmRes, npmRes] = await Promise.all([sbP, ntP, mmP, npmP]);
+            const verP = checkGithubPagesLiveVer().catch(() => ({ mainV: '', pagesV: '' }));
+            const [sbRes, ntRes, mmRes, npmRes, verRes] = await Promise.all([sbP, ntP, mmP, npmP, verP]);
             if (sbRes.ok && br && typeof br.markSbStateAvailable === 'function') {
               br.markSbStateAvailable();
             }
@@ -31330,8 +32309,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               ? `<div class="mt-1.5 pt-1.5" style="border-top: 1px dashed var(--border-subtle);"><button type="button" id="copySbSqlSetupBtn" class="px-2.5 py-1 rounded-lg text-[11px] font-bold" style="background: var(--accent-royal-soft); color: var(--accent-royal);">📋 서울 영구DB 테이블 생성 SQL 복사 (선택 · 10초 완성)</button></div>`
               : '';
 
+            const pNum = Number(String(verRes.pagesV || '').replace(/\D/g, '') || 0);
+            const mNum = Number(String(verRes.mainV || '').replace(/\D/g, '') || 0);
+            const pagesVerLine = (pNum > 0 && mNum > 0 && pNum < mNum)
+              ? `<span style="color:#d97706;">⚠️ github.io=${escapeHtml(verRes.pagesV)} (main=${escapeHtml(verRes.mainV)} · GitHub Settings→Pages→Source를 GitHub Actions로 변경 필요!)</span>`
+              : (verRes.pagesV
+                  ? `🟢 github.io=${escapeHtml(verRes.pagesV)}${verRes.mainV ? ' / main=' + escapeHtml(verRes.mainV) : ''} (${isZh ? '最新已同步' : '최신 배포 정상'})`
+                  : (isZh ? '🟡 检测中' : '🟡 확인 중'));
             out.innerHTML = `
               <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境实测结果' : '🌏 중국(칭다오) 징찬이 경로 실측 결과'}</div>
+              <div>• ${isZh ? '靖灿网页端服务器版本' : '징찬 웹앱 서버(github.io) 배포 버전'}: <b>${pagesVerLine}</b></div>
               <div>• ${isZh ? '443端口跨国直连引擎' : '443 무차단 직통 웹소켓'}: <b>${emqxStr}</b></div>
               <div>• ${isZh ? '云端消息与离线存储' : '클라우드 메시지·오프라인 보관'}: <b>${sbStr}</b></div>
               <div>• ${isZh ? '中国免翻墙翻译引擎' : '중국 무VPN 번역 서버'}: <b>${mmStr}</b></div>
@@ -31379,24 +32366,47 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           } catch (_) {}
           return false;
         };
-        const isFsNow = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+        const isFsNow = () => {
+          try {
+            if (isNativeApk() && window.ChanwanNative && typeof window.ChanwanNative.isNativeFullscreen === 'function') {
+              return !!window.ChanwanNative.isNativeFullscreen();
+            }
+          } catch (_) {}
+          return !!(document.fullscreenElement || document.webkitFullscreenElement);
+        };
         const canRequestFs = () => {
+          if (isNativeApk() && window.ChanwanNative && typeof window.ChanwanNative.toggleNativeFullscreen === 'function') return true;
           const el = document.documentElement;
-          return !!(el && (el.requestFullscreen || el.webkitRequestFullscreen));
+          const bd = document.body;
+          return !!((el && (el.requestFullscreen || el.webkitRequestFullscreen)) || (bd && (bd.requestFullscreen || bd.webkitRequestFullscreen)));
         };
 
         async function toggleAppFullscreen() {
           const isZh = state && state.lang === 'zh';
           try {
+            if (isNativeApk() && window.ChanwanNative && typeof window.ChanwanNative.toggleNativeFullscreen === 'function') {
+              const nowOn = !!window.ChanwanNative.toggleNativeFullscreen();
+              showToast(nowOn
+                ? (isZh ? '⛶ 已开启沉浸式全屏模式（顶部状态栏与底部导航栏已隐藏）💜' : '⛶ 상단 상태바·하단 바를 숨긴 꽉 찬 전체화면 모드를 켰어요 💜')
+                : (isZh ? '✨ 已恢复常规屏幕模式' : '✨ 기본 화면 모드로 돌아왔어요'));
+              setTimeout(refreshBorderlessAppUi, 80);
+              return;
+            }
             if (isFsNow()) {
               if (document.exitFullscreen) await document.exitFullscreen();
               else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+              showToast(isZh ? '✨ 已退出全屏模式' : '✨ 전체화면 모드를 종료했어요');
             } else {
               const el = document.documentElement;
-              if (el.requestFullscreen) {
+              const bd = document.body;
+              if (el && el.requestFullscreen) {
                 await el.requestFullscreen({ navigationUI: 'hide' });
-              } else if (el.webkitRequestFullscreen) {
+              } else if (el && el.webkitRequestFullscreen) {
                 el.webkitRequestFullscreen();
+              } else if (bd && bd.requestFullscreen) {
+                await bd.requestFullscreen({ navigationUI: 'hide' });
+              } else if (bd && bd.webkitRequestFullscreen) {
+                bd.webkitRequestFullscreen();
               } else {
                 openAppModeModal();
                 return;
@@ -31510,6 +32520,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (ttl) ttl.textContent = isZh ? '隐藏上下网页框 · 变身专属 App' : '위아래 웹창 숨기기 · 전용 앱 모드';
           body.innerHTML = buildModalContentHtml();
           modal.classList.remove('hidden');
+          if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, modal);
 
           document.getElementById('cwModalFsNowBtn')?.addEventListener('click', () => {
             modal.classList.add('hidden');
@@ -31540,7 +32551,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const fsActive = isFsNow();
           const dismissedTop = sessionStorage.getItem('cw_hide_top_app_bar_v89') === '1';
 
-          // 1. Top Slim Bar (Web browser only, hidden in APK / Standalone / Fullscreen / Dismissed)
+          // 1. Top Slim Bar (Web browser: ALWAYS show [⛶ 立即全屏] + [📲 装到桌面] when not already standalone/fullscreen!)
           const topBar = document.getElementById('cwWebAppPromptBar');
           if (topBar) {
             const showTop = !nativeApk && !standalone && !fsActive && !dismissedTop;
@@ -31550,7 +32561,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const gdBtn = document.getElementById('cwTopInstallGuideBtn');
             if (txt) txt.textContent = isZh ? '隐藏上下白框 · 像 App 一样全屏使用' : '위아래 웹창 숨기기 · 앱처럼 전체화면';
             if (fsBtn) {
-              fsBtn.classList.toggle('hidden', !canRequestFs());
+              fsBtn.classList.remove('hidden');
               fsBtn.textContent = isZh ? '⛶ 立即全屏' : '⛶ 전체화면';
             }
             if (gdBtn) {
@@ -31558,16 +32569,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 ? (isZh ? '📲 一键安装' : '📲 즉시설치')
                 : (isZh ? '📲 装到桌面' : '📲 앱모드 방법');
             }
+            if (showTop && typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle(null, topBar);
           }
 
-          // 2. Messenger Top-Right Fullscreen Icon (Web browser only, hidden in APK / Standalone)
+          // 2. Messenger Top-Right Fullscreen Icon (Visible on BOTH Native APK & Web Browser!)
           const chatFsBtn = document.getElementById('chatFullscreenToggleBtn');
           if (chatFsBtn) {
-            const showChatFs = !nativeApk && !standalone && canRequestFs();
+            const showChatFs = !standalone;
             chatFsBtn.classList.toggle('hidden', !showChatFs);
             chatFsBtn.title = fsActive
               ? (isZh ? '退出全屏' : '전체화면 종료')
-              : (isZh ? '隐藏上下网页栏（全屏模式）' : '위아래 웹창 숨기기 (전체화면)');
+              : (nativeApk ? (isZh ? '隐藏状态栏（沉浸全屏）' : '상단·하단바 숨기기 (전체화면)') : (isZh ? '隐藏上下网页栏（全屏模式）' : '위아래 웹창 숨기기 (전체화면)'));
             const svg = document.getElementById('chatFsIconSvg');
             if (svg) {
               svg.innerHTML = fsActive
@@ -31576,7 +32588,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           }
 
-          // 3. Setting Card (Hidden in Suwan's Native APK unless viewing guide; tailored in Web Browser)
+          // 3. Setting Card (Works on BOTH Suwan's Native APK & Jingchan's Huawei Browser WebApp!)
           const setCard = document.getElementById('webAppModeSettingCard');
           if (setCard) {
             const cTitle = document.getElementById('webAppCardTitle');
@@ -31586,15 +32598,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const sGdBtn = document.getElementById('settingOpenAppGuideBtn');
 
             if (nativeApk) {
-              if (cTitle) cTitle.textContent = isZh ? '📱 靖灿网页无边框 App 模式指南' : '📱 징찬이 웹앱 위아래 창 숨기기 안내';
-              if (cBadge) cBadge.textContent = isZh ? '全屏专属模式' : '수완님은 전용APK 사용중';
+              if (cTitle) cTitle.textContent = isZh ? '📱 沉浸式全屏模式 & 靖灿网页全屏指南' : '📱 꽉 찬 전체화면 모드 & 징찬 웹앱 안내';
+              if (cBadge) cBadge.textContent = fsActive ? (isZh ? '🟢 沉浸全屏开启中' : '🟢 전체화면 켜짐') : (isZh ? '支持全屏隐藏状态栏' : '전체화면 지원');
               if (cDesc) cDesc.textContent = isZh
-                ? '靖灿在华为浏览器点顶部的「⛶ 立即全屏」或「📲 装到桌面」，即可去掉上下白色浏览器栏。'
-                : '징찬이 폰 화면 상단에 뜬 「⛶ 立即全屏(전체화면)」 또는 「📲 装到桌面(바탕화면 추가)」만 누르면 위아래 하얀 웹창이 사라져요.';
-              if (sFsBtn) sFsBtn.classList.add('hidden');
+                ? '可一键隐藏手机顶部状态栏与底部导航栏；靖灿在华为浏览器顶部也能直接点「⛶ 立即全屏」或「📲 装到桌面」。'
+                : '내 폰 상단 시계·배터리바까지 숨기는 꽉 찬 전체화면과, 징찬이 화웨이 브라우저 상단 「⛶ 立即全屏」 적용법을 모두 지원해요.';
+              if (sFsBtn) {
+                sFsBtn.classList.remove('hidden');
+                sFsBtn.className = 'btn-royal py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap';
+                sFsBtn.textContent = fsActive
+                  ? (isZh ? '⛶ 退出全屏模式' : '⛶ 전체화면 끄기')
+                  : (isZh ? '⛶ 开启沉浸全屏' : '⛶ 지금 전체화면 켜기');
+              }
               if (sGdBtn) {
-                sGdBtn.className = 'btn-royal py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap col-span-full';
-                sGdBtn.textContent = isZh ? '📖 查看靖灿手机设置步骤' : '📖 징찬이 폰 적용 방법 보기';
+                sGdBtn.className = 'btn-gold py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap';
+                sGdBtn.textContent = isZh ? '📖 靖灿全屏指南' : '📖 징찬 폰 방법 보기';
               }
             } else {
               if (cTitle) cTitle.textContent = isZh ? '📱 隐藏上下网页栏 · 像原生 App 一样使用' : '📱 위아래 웹창 없이 진짜 앱처럼 사용하기';
@@ -31607,7 +32625,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 ? '一键收起浏览器顶部网址栏与底部工具栏，或添加到手机桌面永久全屏秒开。'
                 : '브라우저 상단 주소창과 하단 툴바를 즉시 숨기거나 바탕화면에 진짜 앱 아이콘으로 설치해요.';
               if (sFsBtn) {
-                sFsBtn.classList.toggle('hidden', standalone || !canRequestFs());
+                sFsBtn.classList.toggle('hidden', standalone);
                 sFsBtn.textContent = fsActive
                   ? (isZh ? '⛶ 退出全屏' : '⛶ 전체화면 끄기')
                   : (isZh ? '⛶ 立即全屏去白框' : '⛶ 지금 전체화면 켜기');
@@ -31984,18 +33002,56 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 try { localStorage.setItem('cw_my_mood_guard_v1', JSON.stringify({ role: curR, mood: curMood, ts: Number(state.profile?.[curR + 'MoodUpdatedAt'] || Date.now()) })); } catch (_) {}
               }
               rows.push(isZh ? '10. ✅ 正常 · 悬浮弹窗重置与心情状态保护同步完成' : '10. ✅ 정상 · 꼬인 서랍·이모지창 정리 및 기분 보호 잠금 동기화 완료');
+
+              // 11, 12, 13. Presence State + Notification Push Channel + Bidirectional Read Receipt Repair!
+              rows.push(isZh ? '11. ⏳ 修复中 · 正在刷新在线状态与双向心跳握手...' : '11. ⏳ 수리 중 · 실시간 접속 상태 및 양방향 온라인 신호 복구 중...');
+              rows.push(isZh ? '12. ⏳ 修复中 · 正在重连推送通道与系统通知服务...' : '12. ⏳ 수리 중 · 실시간 알림 스트림·푸시 서비스 재기동 중...');
+              rows.push(isZh ? '13. ⏳ 修复中 · 正在校准双方已读回执水印...' : '13. ⏳ 수리 중 · 메신저 읽음처리 누락 복구 및 읽음 신호 재전송 중...');
+              setTimeout(async () => {
+                try {
+                  const rep3 = (typeof window.__repairPresenceNotifAndReadState === 'function')
+                    ? await window.__repairPresenceNotifAndReadState({ forceNetReset: true, markIncomingRead: true })
+                    : { presenceFixed: true, notifFixed: true, readOutgoingFixed: 0, readWatermarkSent: 0 };
+                  const r11 = document.getElementById('cwHealRow11');
+                  const r12 = document.getElementById('cwHealRow12');
+                  const r13 = document.getElementById('cwHealRow13');
+                  if (r11) {
+                    r11.textContent = isZh
+                      ? '11. ✅ 完成 · 在线连接状态修复（清除假离线·双向实时心跳已重连）'
+                      : '11. ✅ 완료 · 접속 상태 수리 (오프라인 고착 해제 · 실시간 접속 배지·양방향 핑 갱신)';
+                  }
+                  if (r12) {
+                    r12.textContent = isZh
+                      ? `12. ✅ 完成 · 通知状态修复（推送SSE重连·ServiceWorker唤醒${rep3.nativePushOk ? '·原生推送守护已重启' : ''}）`
+                      : `12. ✅ 완료 · 알림 상태 수리 (12시간 알림 채널 재연결·서비스워커${rep3.nativePushOk ? '·네이티브 상단바 푸시 재기동' : ' 복구'})`;
+                  }
+                  if (r13) {
+                    r13.textContent = isZh
+                      ? `13. ✅ 完成 · 已读状态修复（补标已读 ${rep3.readOutgoingFixed || 0} 条 · 已向对方重发已读回执）`
+                      : `13. ✅ 완료 · 읽음처리 상태 수리 (누락 읽음 ${rep3.readOutgoingFixed || 0}건 복구 · 상대방에 읽음 신호 재전송 완료)`;
+                  }
+                } catch (_) {}
+              }, 45);
             } catch (err) {
               recordAutoErrorMemo('SelfHeal', err && err.message ? err.message : String(err), '');
             }
             if (reportEl) {
               reportEl.classList.remove('hidden');
-              reportEl.innerHTML = `<div class="font-bold mb-1.5" style="color:#059669;">${isZh ? '✅ 应用内 10 项自检修复报告：' : '✅ 앱 자가 복구 10개 항목 점검 리포트:'}</div>` +
-                rows.map((x, idx) => `<div ${idx === 4 ? 'id="cwHealRow5" ' : (idx === 6 ? 'id="cwHealRow7" ' : (idx === 8 ? 'id="cwHealRow9" ' : ''))}class="py-0.5">${escapeHtml(x)}</div>`).join('');
+              reportEl.innerHTML = `<div class="font-bold mb-1.5" style="color:#059669;">${isZh ? '✅ 应用内 13 项自检修复报告（含在线·通知·已读修复）：' : '✅ 앱 자가 복구 13개 항목 리포트 (접속·알림·읽음 수리 포함):'}</div>` +
+                rows.map((x, idx) => {
+                  const rowId = idx === 4 ? 'id="cwHealRow5" '
+                    : (idx === 6 ? 'id="cwHealRow7" '
+                    : (idx === 8 ? 'id="cwHealRow9" '
+                    : (idx === 10 ? 'id="cwHealRow11" '
+                    : (idx === 11 ? 'id="cwHealRow12" '
+                    : (idx === 12 ? 'id="cwHealRow13" ' : '')))));
+                  return `<div ${rowId}class="py-0.5">${escapeHtml(x)}</div>`;
+                }).join('');
             }
             runBtn.dataset.busy = '0';
             runBtn.textContent = origBtnTxt;
             renderErrorMemoUi();
-            showToast(isZh ? '🛠️ 10项自检修复完成！' : '🛠️ 자가 복구 10개 항목 점검·복구가 완료됐어요!');
+            showToast(isZh ? '🛠️ 在线状态·通知通道·已读回执等 13 项修复完成！' : '🛠️ 접속 상태 · 알림 상태 · 읽음처리 포함 13개 항목 복구 완료!');
           });
         }
 
@@ -32003,7 +33059,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v98 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v104 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';

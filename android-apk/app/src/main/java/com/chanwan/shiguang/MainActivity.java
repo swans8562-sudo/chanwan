@@ -20,6 +20,8 @@ import android.provider.Settings;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
@@ -50,7 +52,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 71;
+    private static final int APK_BUILD_VER = 77;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;
@@ -58,8 +60,12 @@ public class MainActivity extends Activity {
     public static volatile boolean isAppInForeground = false;
     private static volatile MainActivity activeInstance = null;
 
+    private FrameLayout rootLayout;
     private WebView webView;
     private FrameLayout splashOverlay;
+    private View customVideoFsView = null;
+    private WebChromeClient.CustomViewCallback customVideoFsCallback = null;
+    private volatile boolean nativeFullscreenEnabled = false;
     private ValueCallback<Uri[]> filePathCallback;
     private PermissionRequest pendingWebPermReq;
     private boolean waitingSettingsMicReturn = false;
@@ -78,7 +84,9 @@ public class MainActivity extends Activity {
         activeInstance = this;
         updateForegroundState(true);
 
-        FrameLayout root = new FrameLayout(this);
+        rootLayout = new FrameLayout(this);
+        FrameLayout root = rootLayout;
+        nativeFullscreenEnabled = getSharedPreferences("cw_prefs", MODE_PRIVATE).getBoolean("native_fullscreen", false);
         webView = new WebView(this);
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -279,34 +287,69 @@ public class MainActivity extends Activity {
                 }
 
                 if (isIndex) {
-                    byte[] bestBytes = readAssetBytes("index.html");
-                    int bestVer = extractPrimeVer(bestBytes);
-                    boolean usedNet = false;
-
-                    // 1) Try instant GitHub main branch raw first (0s delay after Actions build; bypasses 10-min CDN cache!)
-                    String rawUrl = "https://raw.githubusercontent.com/swans8562-sudo/chanwan/main/index.html?_t=" + System.currentTimeMillis();
-                    byte[] rawBytes = fetchHtmlBytes(rawUrl, 2400, 3000);
-                    int rawVer = extractPrimeVer(rawBytes);
-                    if (rawBytes != null && rawVer >= bestVer) {
-                        bestBytes = rawBytes;
-                        bestVer = rawVer;
-                        usedNet = true;
-                    } else {
-                        // 2) Fallback to GitHub Pages (works in Mainland China too!)
-                        byte[] pagesBytes = fetchHtmlBytes(u.toString(), 2600, 3200);
-                        int pagesVer = extractPrimeVer(pagesBytes);
-                        if (pagesBytes != null && pagesVer >= bestVer) {
-                            bestBytes = pagesBytes;
-                            bestVer = pagesVer;
-                            usedNet = true;
+                    // 0.02s Instant Launch: NEVER block WebView startup on slow 2.3MB network fetches!
+                    byte[] bundledBytes = readAssetBytes("index.html");
+                    int bestVer = extractPrimeVer(bundledBytes);
+                    byte[] bestBytes = bundledBytes;
+                    File otaFile = new File(getFilesDir(), "ota_latest_index.html");
+                    if (otaFile.exists() && otaFile.length() > 100000) {
+                        InputStream fis = null;
+                        try {
+                            fis = new FileInputStream(otaFile);
+                            ByteArrayOutputStream fbos = new ByteArrayOutputStream();
+                            byte[] fbuf = new byte[8192];
+                            int fn;
+                            while ((fn = fis.read(fbuf)) != -1) fbos.write(fbuf, 0, fn);
+                            byte[] otaBytes = fbos.toByteArray();
+                            int otaVer = extractPrimeVer(otaBytes);
+                            if (otaBytes != null && otaVer > bestVer) {
+                                bestBytes = otaBytes;
+                                bestVer = otaVer;
+                            }
+                        } catch (Exception ignored) {
+                        } finally {
+                            if (fis != null) { try { fis.close(); } catch (Exception ignored) {} }
                         }
                     }
 
+                    final int loadedVerNow = bestVer;
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1800L);
+                            String rawUrl = "https://raw.githubusercontent.com/swans8562-sudo/chanwan/main/index.html?_t=" + System.currentTimeMillis();
+                            byte[] netBytes = fetchHtmlBytes(rawUrl, 3500, 5000);
+                            int netVer = extractPrimeVer(netBytes);
+                            if (netBytes == null || netVer <= loadedVerNow) {
+                                byte[] pBytes = fetchHtmlBytes(APP_URL + "index.html?_t=" + System.currentTimeMillis(), 3500, 5000);
+                                int pVer = extractPrimeVer(pBytes);
+                                if (pBytes != null && pVer > loadedVerNow) {
+                                    netBytes = pBytes;
+                                    netVer = pVer;
+                                }
+                            }
+                            if (netBytes != null && netVer > loadedVerNow) {
+                                File tmp = new File(getFilesDir(), "ota_latest_index.tmp");
+                                File dst = new File(getFilesDir(), "ota_latest_index.html");
+                                FileOutputStream fos = new FileOutputStream(tmp);
+                                fos.write(netBytes);
+                                fos.flush();
+                                fos.close();
+                                tmp.renameTo(dst);
+                                uiHandler.post(() -> {
+                                    if (webView != null && isAppInForeground) {
+                                        webView.evaluateJavascript(
+                                                "(function(){var a=document.activeElement;var t=a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA')&&a.value;if(!t)location.reload();})();",
+                                                null);
+                                    }
+                                });
+                            }
+                        } catch (Exception ignored) {}
+                    }, "ChanwanBgOta").start();
+
+                    useBundledAssets = true;
                     if (bestBytes != null) {
-                        useBundledAssets = !usedNet;
                         return new WebResourceResponse("text/html", "UTF-8", new ByteArrayInputStream(bestBytes));
                     }
-                    useBundledAssets = true;
                     WebResourceResponse fallback = openAssetResp("index.html");
                     if (fallback != null) return fallback;
                 }
@@ -386,7 +429,33 @@ public class MainActivity extends Activity {
                     }
                 });
             }
+
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+                if (customVideoFsView != null) {
+                    if (callback != null) callback.onCustomViewHidden();
+                    return;
+                }
+                customVideoFsView = view;
+                customVideoFsCallback = callback;
+                if (rootLayout != null && view != null) {
+                    view.setBackgroundColor(Color.BLACK);
+                    rootLayout.addView(view, new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.MATCH_PARENT));
+                    if (webView != null) webView.setVisibility(View.INVISIBLE);
+                }
+                applyImmersiveSystemUi(true);
+            }
+
+            @Override
+            public void onHideCustomView() {
+                exitCustomVideoFullscreen();
+            }
         });
+        if (nativeFullscreenEnabled) {
+            uiHandler.postDelayed(() -> applyImmersiveSystemUi(true), 200);
+        }
 
         requestRuntimePermissions();
         startPushService();
@@ -401,6 +470,11 @@ public class MainActivity extends Activity {
         noCacheHeaders.put("Cache-Control", "no-cache, no-store, must-revalidate");
         noCacheHeaders.put("Pragma", "no-cache");
         webView.loadUrl(startUrl, noCacheHeaders);
+        uiHandler.postDelayed(() -> {
+            if (splashOverlay != null && splashOverlay.getVisibility() == View.VISIBLE) {
+                splashOverlay.animate().alpha(0f).setDuration(140).withEndAction(() -> splashOverlay.setVisibility(View.GONE)).start();
+            }
+        }, 850L);
     }
 
     private void downloadAndInstallApkInApp(final String apkUrl) {
@@ -810,8 +884,63 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void applyImmersiveSystemUi(boolean enable) {
+        try {
+            View decor = getWindow().getDecorView();
+            if (Build.VERSION.SDK_INT >= 30) {
+                WindowInsetsController ctrl = decor.getWindowInsetsController();
+                if (ctrl != null) {
+                    if (enable) {
+                        ctrl.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                        ctrl.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                    } else {
+                        ctrl.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                    }
+                    return;
+                }
+            }
+            if (enable) {
+                decor.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            } else {
+                decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            }
+        } catch (Throwable ignored) {}
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && (nativeFullscreenEnabled || customVideoFsView != null)) {
+            applyImmersiveSystemUi(true);
+        }
+    }
+
+    private void exitCustomVideoFullscreen() {
+        if (customVideoFsView == null) return;
+        if (rootLayout != null) {
+            try { rootLayout.removeView(customVideoFsView); } catch (Exception ignored) {}
+        }
+        customVideoFsView = null;
+        if (customVideoFsCallback != null) {
+            try { customVideoFsCallback.onCustomViewHidden(); } catch (Exception ignored) {}
+            customVideoFsCallback = null;
+        }
+        if (webView != null) webView.setVisibility(View.VISIBLE);
+        applyImmersiveSystemUi(nativeFullscreenEnabled);
+    }
+
     @Override
     public void onBackPressed() {
+        if (customVideoFsView != null) {
+            exitCustomVideoFullscreen();
+            return;
+        }
         if (webView != null && webView.canGoBack()) {
             webView.goBack();
         } else {
@@ -842,6 +971,39 @@ public class MainActivity extends Activity {
             if (!clean.equals(prev)) {
                 prefs.edit().putString("room", clean).apply();
                 startPushService();
+            }
+        }
+
+        @JavascriptInterface
+        public boolean repairPushService(String room, String role) {
+            try {
+                SharedPreferences prefs = getSharedPreferences("cw_prefs", MODE_PRIVATE);
+                SharedPreferences.Editor ed = prefs.edit();
+                if (role != null && !role.trim().isEmpty()) {
+                    ed.putString("role", role.trim().equals("jingchan") ? "jingchan" : "suwan");
+                }
+                if (room != null) {
+                    String cleanRoom = room.trim().replaceAll("[^a-zA-Z0-9_-]", "");
+                    if (!cleanRoom.isEmpty()) ed.putString("room", cleanRoom);
+                }
+                ed.apply();
+                runOnUiThread(() -> {
+                    if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERM_REQ);
+                    }
+                    try {
+                        Intent svc = new Intent(MainActivity.this, ChanwanPushService.class);
+                        svc.putExtra("force_reconnect", true);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(svc);
+                        } else {
+                            startService(svc);
+                        }
+                    } catch (Throwable ignored) {}
+                });
+                return true;
+            } catch (Throwable t) {
+                return false;
             }
         }
 
@@ -936,6 +1098,20 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 return "";
             }
+        }
+
+        @JavascriptInterface
+        public boolean toggleNativeFullscreen() {
+            nativeFullscreenEnabled = !nativeFullscreenEnabled;
+            getSharedPreferences("cw_prefs", MODE_PRIVATE).edit().putBoolean("native_fullscreen", nativeFullscreenEnabled).apply();
+            final boolean target = nativeFullscreenEnabled;
+            runOnUiThread(() -> applyImmersiveSystemUi(target));
+            return target;
+        }
+
+        @JavascriptInterface
+        public boolean isNativeFullscreen() {
+            return nativeFullscreenEnabled;
         }
 
         @JavascriptInterface
