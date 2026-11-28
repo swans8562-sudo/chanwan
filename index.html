@@ -230,19 +230,46 @@
       .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
     }
 
-    /* 4 Unmistakably Distinct China & Korea Fonts (Zero Lookalikes, China-Accessible!) */
-    [data-font="sans"] { --app-font: 'Pretendard Variable', 'PingFang SC', 'HarmonyOS Sans SC', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; letter-spacing: -0.01em; }
-    [data-font="serif"] { --app-font: 'Gowun Batang', 'Songti SC', 'STSong', 'NanumMyeongjo', 'Batang', Georgia, serif; letter-spacing: 0.01em; }
-    [data-font="cute"] { --app-font: 'Jua', 'Yuanti SC', 'STYuanti', 'Hiragino Maru Gothic ProN', ui-rounded, sans-serif; letter-spacing: 0.01em; }
-    [data-font="hand"] { --app-font: 'Gaegu', 'Kaiti SC', 'STKaiti', 'KaiTi', 'BiauKai', cursive; letter-spacing: 0.02em; }
+    /* 6 Unmistakably Distinct China & Korea Fonts + Native Phone System Font (Zero Lookalikes, China-Accessible!) */
+    [data-font="sans"] { --app-font: 'Pretendard Variable', 'Pretendard', 'PingFang SC', 'HarmonyOS Sans SC', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; letter-spacing: -0.01em; }
+    [data-font="serif"] { --app-font: 'Gowun Batang', 'Noto Serif SC', 'Songti SC', 'STSong', 'NanumMyeongjo', 'Batang', Georgia, serif; letter-spacing: 0.01em; }
+    [data-font="cute"] { --app-font: 'Jua', 'ZCOOL KuaiLe', 'Yuanti SC', 'STYuanti', 'Hiragino Maru Gothic ProN', ui-rounded, sans-serif; letter-spacing: 0.015em; }
+    [data-font="hand"] { --app-font: 'Gaegu', 'Ma Shan Zheng', 'Kaiti SC', 'STKaiti', 'KaiTi', 'BiauKai', cursive; letter-spacing: 0.02em; }
     [data-font="modern"] { --app-font: 'IBM Plex Sans KR', 'MiSans', 'Microsoft YaHei UI', 'Noto Sans KR', 'Segoe UI', sans-serif; letter-spacing: -0.02em; }
+    [data-font="system"] { --app-font: system-ui, -apple-system, 'SecRoboto', 'SamsungOne', 'HarmonyOS Sans SC', sans-serif; letter-spacing: -0.005em; }
+
+    /* Messenger Full App-Font & Font-Size Inheritance (Applies selected font & size across ALL chat bubbles & input!) */
+    #trans-sub-messenger,
+    #chatMessagesList,
+    .cw-msg-bubble,
+    .cw-msg-bubble .cw-orig-main,
+    .cw-msg-bubble .cw-orig-sub,
+    .cw-msg-bubble .cw-trans-main,
+    .cw-msg-bubble .cw-trans-sub,
+    .cw-msg-bubble .cw-alt-trans,
+    .cw-msg-bubble .cw-nuance-detail,
+    .cw-msg-bubble .cw-msg-polish-box,
+    #cwInChatTypingRow .cw-msg-bubble,
+    #chatInput,
+    #cwQuickPhraseBar button {
+      font-family: var(--app-font) !important;
+    }
+    [data-font="serif"] .cw-msg-bubble .cw-orig-main,
+    [data-font="serif"] .cw-msg-bubble .cw-trans-main { letter-spacing: 0.01em !important; }
+    [data-font="cute"] .cw-msg-bubble .cw-orig-main,
+    [data-font="cute"] .cw-msg-bubble .cw-trans-main { font-weight: 400 !important; letter-spacing: 0.015em !important; }
+    [data-font="hand"] .cw-msg-bubble .cw-orig-main,
+    [data-font="hand"] .cw-msg-bubble .cw-trans-main { font-weight: 700 !important; font-size: 1.08rem !important; letter-spacing: 0.02em !important; }
+    [data-font="hand"] .cw-msg-bubble .cw-orig-sub,
+    [data-font="hand"] .cw-msg-bubble .cw-trans-sub { font-size: 0.94rem !important; letter-spacing: 0.015em !important; }
 
     /* Bottom Dock Independent 4 Distinct China & Korea Fonts */
     [data-dockfont="sans"] { --dock-font: 'PingFang SC', 'HarmonyOS Sans SC', 'MiSans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
     [data-dockfont="serif"] { --dock-font: 'Gowun Batang', 'Noto Serif SC', 'Songti SC', 'Batang', Georgia, serif; }
     [data-dockfont="cute"] { --dock-font: 'Dongle', 'ZCOOL KuaiLe', 'Yuanti SC', ui-rounded, sans-serif; }
     [data-dockfont="modern"] { --dock-font: 'IBM Plex Sans KR', 'MiSans', 'Microsoft YaHei UI', sans-serif; }
-    [data-dockfont="hand"] { --dock-font: 'Nanum Pen Script', 'Ma Shan Zheng', 'Kaiti SC', cursive; }
+    [data-dockfont="hand"] { --dock-font: 'Gaegu', 'Ma Shan Zheng', 'Kaiti SC', cursive; }
+    [data-dockfont="system"] { --dock-font: system-ui, -apple-system, 'SecRoboto', 'SamsungOne', sans-serif; }
 
     /* Real Root Typography Scaling (affects all Tailwind rem sizes cleanly while keeping header/dock fixed) */
     html[data-fontsize="sm"] { font-size: 13.5px; }
@@ -2487,15 +2514,15 @@
     html[data-bubblesize="sm"] .cw-msg-col { max-width: 74% !important; }
     html[data-bubblesize="sm"] .cw-msg-bubble { padding: 6px 10px !important; }
     html[data-bubblesize="sm"] .cw-msg-bubble .cw-orig-sub,
-    html[data-bubblesize="sm"] .cw-msg-bubble .cw-trans-sub { font-size: 12.2px !important; line-height: 1.35 !important; }
+    html[data-bubblesize="sm"] .cw-msg-bubble .cw-trans-sub { font-size: 0.78rem !important; line-height: 1.35 !important; }
     html[data-bubblesize="sm"] .cw-msg-bubble .cw-orig-main,
-    html[data-bubblesize="sm"] .cw-msg-bubble .cw-trans-main { font-size: 14.2px !important; line-height: 1.38 !important; }
+    html[data-bubblesize="sm"] .cw-msg-bubble .cw-trans-main { font-size: 0.90rem !important; line-height: 1.38 !important; }
     html[data-bubblesize="lg"] .cw-msg-col { max-width: 88% !important; }
     html[data-bubblesize="lg"] .cw-msg-bubble { padding: 11px 15px !important; }
     html[data-bubblesize="lg"] .cw-msg-bubble .cw-orig-sub,
-    html[data-bubblesize="lg"] .cw-msg-bubble .cw-trans-sub { font-size: 14.5px !important; line-height: 1.42 !important; }
+    html[data-bubblesize="lg"] .cw-msg-bubble .cw-trans-sub { font-size: 0.93rem !important; line-height: 1.42 !important; }
     html[data-bubblesize="lg"] .cw-msg-bubble .cw-orig-main,
-    html[data-bubblesize="lg"] .cw-msg-bubble .cw-trans-main { font-size: 17.5px !important; line-height: 1.48 !important; }
+    html[data-bubblesize="lg"] .cw-msg-bubble .cw-trans-main { font-size: 1.10rem !important; line-height: 1.48 !important; }
 
     /* Prime 4 v40: Crisp contrast on mine bubble polish box */
     .cw-msg-row.mine .cw-msg-polish-box {
@@ -2508,7 +2535,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v84: App-Wide Couture Boutique Elevation
+       Prime 4 · v87: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2752,7 +2779,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v84: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v87: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -4619,9 +4646,13 @@
             <div class="text-xs font-bold text-gold" data-i18n="fontHand">감성 손글씨체</div>
             <div class="text-base font-semibold mt-1 leading-snug" data-i18n="fontHandSample">灿完时光 · 개구 손글씨</div>
           </button>
-          <button type="button" class="font-choice-btn royal-subcard rounded-2xl p-3 text-left border-2 transition col-span-2" data-font-choice="modern" style="font-family: 'IBM Plex Sans KR', 'MiSans', 'Microsoft YaHei UI', sans-serif;">
+          <button type="button" class="font-choice-btn royal-subcard rounded-2xl p-3 text-left border-2 transition" data-font-choice="modern" style="font-family: 'IBM Plex Sans KR', 'MiSans', 'Microsoft YaHei UI', sans-serif;">
             <div class="text-xs font-bold text-gold" data-i18n="fontModern">모던 미니멀체</div>
-            <div class="text-sm font-semibold mt-1 leading-snug" data-i18n="fontModernSample">灿完时光 · IBM Plex 세련된 미니멀체</div>
+            <div class="text-sm font-semibold mt-1 leading-snug" data-i18n="fontModernSample">灿完时光 · 세련 미니멀</div>
+          </button>
+          <button type="button" class="font-choice-btn royal-subcard rounded-2xl p-3 text-left border-2 transition" data-font-choice="system" style="font-family: system-ui, -apple-system, 'SecRoboto', 'SamsungOne', sans-serif;">
+            <div class="text-xs font-bold text-gold" data-i18n="fontSystem">📱 내 기기 기본체</div>
+            <div class="text-sm font-semibold mt-1 leading-snug" data-i18n="fontSystemSample">灿完时光 · 휴대폰 서체</div>
           </button>
         </div>
 
@@ -4856,6 +4887,23 @@
               <span id="ntfyServerPill" class="font-bold whitespace-nowrap" style="color: var(--accent-royal);">🟡 대기</span>
             </div>
           </div>
+
+          <!-- Partner Phone Live Health Monitor & 1-Tap Remote Diagnostics (Korea <-> Qingdao China) -->
+          <div id="partnerDeviceHealthCard" class="pt-2.5 mt-1 border-t space-y-2" style="border-color: var(--border-subtle);">
+            <div class="flex items-center justify-between gap-2">
+              <span id="partnerHealthTitle" class="text-[11.5px] font-bold" style="color: var(--text-primary);">📡 징찬(灿) 폰 작동 상태 원격 모니터</span>
+              <span id="partnerHealthBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap" style="background: var(--surface-2); color: var(--text-muted);">수신 대기 중</span>
+            </div>
+            <div id="partnerHealthSummaryBox" class="rounded-xl px-2.5 py-2 text-[10.5px] leading-relaxed space-y-1" style="background: var(--surface-2); border: 1px solid var(--border-subtle);">
+              <div class="text-mut">징찬이가 웹앱을 열면 기기·버전·중국 직통망·오류 유무가 여기에 자동 표시돼요.</div>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button id="pingPartnerHealthBtn" type="button" class="btn-royal h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">📡 실시간 핑 점검</button>
+              <button id="testChinaEnvSimBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">🌏 중국망 진단</button>
+              <button id="remoteRefreshPartnerBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center whitespace-nowrap truncate">🔄 상대앱 갱신</button>
+            </div>
+            <div id="chinaSimResultBox" class="hidden rounded-xl px-2.5 py-2 text-[10.5px] leading-relaxed" style="background: var(--surface-1); border: 1px solid var(--border-accent);"></div>
+          </div>
         </div>
 
 
@@ -5005,7 +5053,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v84</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v87</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5728,6 +5776,8 @@
           fontCute: '동글 귀여운체',
           fontHand: '감성 손글씨체',
           fontModern: '모던 미니멀체',
+          fontSystem: '📱 내 기기 기본체',
+          fontSystemSample: '灿完时光 · 휴대폰 서체',
           fontSansSample: '灿完时光 · 프리텐다드',
           fontSerifSample: '灿完时光 · 고운바탕',
           fontCuteSample: '灿完时光 · 주아체',
@@ -6097,6 +6147,8 @@
           fontCute: '圆润可爱体',
           fontHand: '温柔手写体',
           fontModern: '现代简约体',
+          fontSystem: '📱 手机系统字体',
+          fontSystemSample: '灿完时光 · 手机系统默认',
           fontSansSample: '灿完时光 · 现代黑体',
           fontSerifSample: '灿完时光 · 优雅宋体',
           fontCuteSample: '灿完时光 · 圆润可爱体',
@@ -6315,7 +6367,8 @@
         { id: 'serif', label: '우아한 명조·송체', zhLabel: '经典宋体' },
         { id: 'cute', label: '동글 귀여운체', zhLabel: '圆润可爱体' },
         { id: 'hand', label: '감성 손글씨체', zhLabel: '温柔手写体' },
-        { id: 'modern', label: '모던 미니멀체', zhLabel: '现代简约体' }
+        { id: 'modern', label: '모던 미니멀체', zhLabel: '现代简约体' },
+        { id: 'system', label: '내 기기 기본체', zhLabel: '手机系统字体' }
       ];
 
       const MOOD_PRESETS = [
@@ -8427,8 +8480,8 @@
             translated: __cleanTr,
             altTranslated: (__cleanAlt && __cleanAlt !== __cleanTr) ? __cleanAlt : '',
             pronunciation: String(p.pronunciation || '').trim(),
-            tone: String(p.toneKo || p.tone || '').trim(),
-            toneZh: String(p.toneZh || '').trim(),
+            tone: ensureToneLeadingEmoji(String(p.toneKo || p.tone || '').trim()),
+            toneZh: ensureToneLeadingEmoji(String(p.toneZh || '').trim()),
             nuance: String(p.nuanceKo || p.nuance || '').trim(),
             nuanceZh: String(p.nuanceZh || '').trim(),
             engine: `Gemini (${usedModel})`,
@@ -13146,7 +13199,8 @@
                                   toneDisp = (locT && locT !== '💜 다정한 연인체') ? locT : (sTone ? sTone.toneKo : locT);
                                 } else if (sTone) toneDisp = sTone.toneKo;
                               }
-                              return toneDisp ? `<span class="${mine ? 'cw-mine-pill ' : ''}inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};">${escapeHtml(toneDisp)}</span>` : '';
+                              if (toneDisp) toneDisp = ensureToneLeadingEmoji(toneDisp);
+                              return toneDisp ? `<span class="${mine ? 'cw-mine-pill ' : ''}cw-keep-native-emoji inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full" style="background: ${mine ? 'rgba(255,255,255,0.16)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};">${escapeHtml(toneDisp)}</span>` : '';
                             })()}
                             ${(showText && !isEmojiMsg && !isPurePunctMsg && !isPureLinkMsg) ? `<button type="button" class="cw-msg-polish-btn inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full transition" style="background: ${mine ? 'rgba(255,255,255,0.18)' : 'var(--accent-royal-soft)'}; color: ${mine ? '#ffffff' : 'var(--accent-royal)'};" data-id="${escapeHtml(m.id)}" data-orig="${escapeHtml(m.original || '')}" data-lang="${origLang === 'ko-KR' ? 'ko' : 'zh'}">✨ ${state.lang === 'zh' ? '意思解析' : '뜻풀이'}</button>` : ''}
                             ${m.editedAt ? `<span class="opacity-75 px-0.5">${state.lang === 'zh' ? '已编辑' : '수정됨'}</span>` : ''}
@@ -13702,6 +13756,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           });
         }
       }
+
+      function ensureToneLeadingEmoji(toneStr) {
+        const s = String(toneStr || '').trim();
+        if (!s) return '';
+        // Already starts with an emoji / symbol outside ASCII/Hangul/CJK/Latin
+        if (/^(?:[\uD83C-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF\u2B50✨💜💗💖💕🥰🌸😄😊🫧☀️🌙🙏🌷💬🎀🎙️🎬📷👑])/.test(s)) {
+          return s;
+        }
+        if (/깊은\s*애정|설렘|사랑|그리움|애틋|深情|心动|爱意|思念|浪漫/.test(s)) return '💗 ' + s;
+        if (/챙김|배려.*건강|안심|식사|照顾|叮嘱|关心健康|安心/.test(s)) return '🥰 ' + s;
+        if (/애교|귀염|달콤|칭찬|撒娇|可爱|夸奖/.test(s)) return '🥰 ' + s;
+        if (/유쾌|장난|재치|웃음|감탄|打趣|俏皮|调皮|幽默|赞叹/.test(s)) return '😄 ' + s;
+        if (/위로|걱정|토닥|공감|安慰|心疼|体贴/.test(s)) return '🫧 ' + s;
+        if (/밤\s*인사|굿나잇|취침|잘\s*자|晚安|好梦/.test(s)) return '🌙 ' + s;
+        if (/아침|굿모닝|早安/.test(s)) return '☀️ ' + s;
+        if (/고마|감사|感谢|谢意/.test(s)) return '🌷 ' + s;
+        if (/사과|미안|致歉|抱歉/.test(s)) return '🙏 ' + s;
+        if (/존댓말|정중|예의|부드러운|敬语|礼貌/.test(s)) return '🌸 ' + s;
+        if (/일상|편한|친근|질문|안부|근황|공유|평어|반말|日常|提问|近况|分享|平语|口语/.test(s) && !/연인|恋人|다정|甜蜜/.test(s)) return '💬 ' + s;
+        // Default for '다정한 연인체' / '甜蜜恋人语气' and all affectionate couple tones:
+        return '💜 ' + s;
+      }
+      window.__ensureToneLeadingEmoji = ensureToneLeadingEmoji;
 
       function localizeSavedToneOrNuance(text, fallbackType) {
         const raw = String(text || '').trim();
@@ -17073,7 +17150,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v84',
+          ver: 'Prime 4 · v87',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17095,7 +17172,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v84 更新日志' : '📜 灿完时光 Prime 4 · v84 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v87 更新日志' : '📜 灿完时光 Prime 4 · v87 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -21203,6 +21280,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }
             }
             // Wake/Sleep check-in sync
+            if (inc.profile.suwanHealth && Number(inc.profile.suwanHealth.ts || 0) > Number(state.profile.suwanHealth?.ts || 0)) {
+              state.profile.suwanHealth = { ...inc.profile.suwanHealth };
+              if (typeof window.__renderPartnerHealthUi === 'function') setTimeout(window.__renderPartnerHealthUi, 0);
+            }
+            if (inc.profile.jingchanHealth && Number(inc.profile.jingchanHealth.ts || 0) > Number(state.profile.jingchanHealth?.ts || 0)) {
+              state.profile.jingchanHealth = { ...inc.profile.jingchanHealth };
+              if (typeof window.__renderPartnerHealthUi === 'function') setTimeout(window.__renderPartnerHealthUi, 0);
+            }
             if (inc.profile.suwanSleep && Number(inc.profile.suwanSleep.updatedAt || 0) > Number(state.profile.suwanSleep?.updatedAt || 0)) {
               state.profile.suwanSleep = { ...inc.profile.suwanSleep };
               changed = true;
@@ -21944,7 +22029,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
-              jingchanEnergy: coreObj.profile?.jingchanEnergy
+              jingchanEnergy: coreObj.profile?.jingchanEnergy,
+              suwanHealth: coreObj.profile?.suwanHealth || undefined,
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
             },
             hugs: coreObj.hugs || null,
             lavender: coreObj.lavender || null,
@@ -22028,7 +22115,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
-              jingchanEnergy: coreObj.profile?.jingchanEnergy
+              jingchanEnergy: coreObj.profile?.jingchanEnergy,
+              suwanHealth: coreObj.profile?.suwanHealth || undefined,
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -22955,7 +23044,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (!room) return;
           const pkt = { v: 'pro2_signal', kind, ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan', ...(payload || {}) };
           // Ephemeral signals go over real-time EMQX + Supabase Broadcast + ntfy (never stored in couple_sync_events)
-          const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync');
+          const isEphemeral = (kind === 'typing' || kind === 'presence' || kind === 'request_vault_sync' || kind === 'ping_partner_health' || kind === 'pong_partner_health');
           if (!isEphemeral) {
             if (!__sbEventsUnavailable) {
               insertSupabaseEvent(room, 'signal', pkt).then((ok) => { if (ok) lastSyncOkTs = Date.now(); }).catch(() => {});
@@ -23089,6 +23178,35 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               pairedVl.reactions = sig.reactions.map(em => ({ emoji: em, by: sig.myRole }));
               try { idbPut('voice_letters_vault_v1', state.voiceLetters); } catch (_) {}
               if (typeof renderVoiceLetters === 'function') renderVoiceLetters();
+            }
+          } else if (sig.kind === 'ping_partner_health') {
+            const myR = state.myRole || 'suwan';
+            if (sig.myRole && sig.myRole !== myR && typeof window.__collectMyDeviceHealth === 'function') {
+              const rep = window.__collectMyDeviceHealth();
+              if (!state.profile) state.profile = {};
+              state.profile[myR + 'Health'] = rep;
+              sendChatSignal('pong_partner_health', { pingId: sig.pingId || '', reqTs: sig.ts || Date.now(), health: rep });
+              saveState(true);
+            }
+          } else if (sig.kind === 'pong_partner_health' && sig.health) {
+            const pR = sig.myRole || (state.myRole === 'suwan' ? 'jingchan' : 'suwan');
+            if (pR !== (state.myRole || 'suwan')) {
+              if (!state.profile) state.profile = {};
+              const rttMs = sig.reqTs ? Math.max(12, Date.now() - Number(sig.reqTs)) : 0;
+              state.profile[pR + 'Health'] = { ...sig.health, lastRttMs: rttMs, livePongAt: Date.now() };
+              saveState(false);
+              if (typeof window.__onPartnerHealthPong === 'function') window.__onPartnerHealthPong(state.profile[pR + 'Health'], rttMs);
+              else if (typeof window.__renderPartnerHealthUi === 'function') window.__renderPartnerHealthUi();
+            }
+          } else if (sig.kind === 'remote_force_update') {
+            const myR = state.myRole || 'suwan';
+            if (sig.targetRole === myR && !document.hidden) {
+              const lastR = Number(sessionStorage.getItem('cw_remote_upd_ts') || 0);
+              if (Date.now() - lastR > 30000 && typeof window.__forcePurgeCacheAndUpdate === 'function') {
+                sessionStorage.setItem('cw_remote_upd_ts', String(Date.now()));
+                showToast(state.lang === 'zh' ? '🔄 收到对方发送的最新版本刷新信号，正在更新...' : '🔄 상대방이 보낸 최신버전 갱신 신호로 자동 업데이트해요...');
+                setTimeout(() => window.__forcePurgeCacheAndUpdate(false), 700);
+              }
             }
           } else if (sig.kind === 'vl_meta' && sig.vlId) {
             if (!Array.isArray(state.voiceLetters)) state.voiceLetters = [];
@@ -23467,7 +23585,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanSleep: coreObj.profile?.suwanSleep,
               jingchanSleep: coreObj.profile?.jingchanSleep,
               suwanEnergy: coreObj.profile?.suwanEnergy,
-              jingchanEnergy: coreObj.profile?.jingchanEnergy
+              jingchanEnergy: coreObj.profile?.jingchanEnergy,
+              suwanHealth: coreObj.profile?.suwanHealth || undefined,
+              jingchanHealth: coreObj.profile?.jingchanHealth || undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -27884,8 +28004,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v84)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v84';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v87)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v87';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29000,6 +29120,252 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         document.addEventListener('visibilitychange', () => { if (!document.hidden) checkAndApplyNightDark(true); });
       })();
 
+      
+      /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v86) ==================== */
+      (function initPartnerHealthMonitor() {
+        const APP_VER_NOW = 'Prime 4 · v87';
+
+        function detectBrowserShort() {
+          const ua = navigator.userAgent || '';
+          if (typeof window.ChanwanNative !== 'undefined') return 'Android 전용 앱(APK)';
+          if (/MicroMessenger/i.test(ua)) return 'WeChat 내장브라우저';
+          if (/HuaweiBrowser|ArkWeb|HBPC/i.test(ua)) return 'Huawei 브라우저';
+          if (/HONOR/i.test(ua)) return 'Honor 브라우저';
+          if (/HarmonyOS/i.test(ua)) return 'HarmonyOS 브라우저';
+          if (/MiuiBrowser|Xiaomi/i.test(ua)) return 'Xiaomi 브라우저';
+          if (/VivoBrowser/i.test(ua)) return 'Vivo 브라우저';
+          if (/OppoBrowser|HeyTapBrowser/i.test(ua)) return 'OPPO 브라우저';
+          if (/Quark/i.test(ua)) return 'Quark 브라우저';
+          if (/baiduboxapp|Baidu/i.test(ua)) return 'Baidu 브라우저';
+          if (/CriOS|Chrome/i.test(ua) && !/Edg/i.test(ua)) return /Android/i.test(ua) ? 'Android Chrome' : 'Chrome';
+          if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) return 'iPhone/iPad Safari';
+          return '모바일 웹앱';
+        }
+
+        function collectMyDeviceHealth() {
+          let errLogs = [];
+          try { errLogs = JSON.parse(localStorage.getItem('cw_auto_error_memo_v1') || '[]') || []; } catch (_) {}
+          const activeTabEl = document.querySelector('.tab-panel.active');
+          const tabId = activeTabEl ? activeTabEl.id.replace('tab-', '') : 'home';
+          const canRec = !!(window.ChanwanNative || (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function'));
+          const AC = window.AudioContext || window.webkitAudioContext;
+          return {
+            ver: APP_VER_NOW,
+            browser: detectBrowserShort(),
+            chinaMode: !!(state.settings && state.settings.chinaMode) || isMainlandChinaClient(),
+            lang: state.lang || 'ko',
+            emqxOk: !!emqxConnected,
+            sbOk: !!(sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime',
+            audioOk: !!(AC && canRec),
+            outboxCnt: loadSyncOutbox().length,
+            errCnt: Array.isArray(errLogs) ? errLogs.length : 0,
+            lastErr: (Array.isArray(errLogs) && errLogs[0] && errLogs[0].msg) ? String(errLogs[0].msg).slice(0, 70) : '',
+            activeTab: tabId,
+            visible: !document.hidden,
+            ts: Date.now()
+          };
+        }
+        window.__collectMyDeviceHealth = collectMyDeviceHealth;
+
+        function stampMyHealthQuietly(pushSync) {
+          try {
+            const myR = (state && state.myRole) || 'suwan';
+            if (!state.profile) state.profile = {};
+            state.profile[myR + 'Health'] = collectMyDeviceHealth();
+            if (pushSync) saveState(true);
+          } catch (_) {}
+        }
+
+        function formatAgo(ts, isZh) {
+          const n = Number(ts || 0);
+          if (!n) return isZh ? '暂无记录' : '기록 없음';
+          const sec = Math.max(0, Math.floor((Date.now() - n) / 1000));
+          if (sec < 25) return isZh ? '刚刚' : '방금 전';
+          if (sec < 60) return isZh ? `${sec}秒前` : `${sec}초 전`;
+          const min = Math.floor(sec / 60);
+          if (min < 60) return isZh ? `${min}分钟前` : `${min}분 전`;
+          const hr = Math.floor(min / 60);
+          if (hr < 24) return isZh ? `${hr}小时前` : `${hr}시간 전`;
+          return new Date(n).toLocaleString(isZh ? 'zh-CN' : 'ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderPartnerHealthUi() {
+          const box = document.getElementById('partnerHealthSummaryBox');
+          const badge = document.getElementById('partnerHealthBadge');
+          const title = document.getElementById('partnerHealthTitle');
+          if (!box || !badge) return;
+          const isZh = state && state.lang === 'zh';
+          const myR = (state && state.myRole) || 'suwan';
+          const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
+          const pName = pR === 'jingchan' ? (isZh ? '靖灿(灿)' : '징찬(灿)') : (isZh ? '秀完(完)' : '수완(完)');
+          if (title) title.textContent = isZh ? `📡 ${pName} 手机运行状态远程监控` : `📡 ${pName} 폰 작동 상태 원격 모니터`;
+
+          const h = state && state.profile ? state.profile[pR + 'Health'] : null;
+          if (!h || !h.ts) {
+            badge.textContent = isZh ? '等待连接' : '첫 접속 대기';
+            badge.style.background = 'var(--surface-2)';
+            badge.style.color = 'var(--text-muted)';
+            box.innerHTML = `<div class="text-mut">${isZh
+              ? `${pName} 打开新版网页后，这里会自动显示TA手机的浏览器、版本、中国直连与错误状态 ✨`
+              : `${pName}님이 새 버전 웹앱을 한 번 열면 기기·버전·중국 직통망·오류 유무가 여기에 실시간으로 표시돼요 ✨`}</div>`;
+            return;
+          }
+
+          const ageSec = Math.max(0, Math.floor((Date.now() - Number(h.ts || 0)) / 1000));
+          const isLiveNow = (h.visible && ageSec < 55) || (h.livePongAt && (Date.now() - Number(h.livePongAt)) < 25000);
+          const isSameVer = h.ver === APP_VER_NOW;
+          const allNetOk = !!(h.emqxOk || h.sbOk);
+          const healthy = allNetOk && Number(h.errCnt || 0) === 0;
+
+          if (isLiveNow && healthy) {
+            badge.textContent = isZh ? '🟢 实时在线 · 正常' : '🟢 실시간 작동 정상';
+            badge.style.background = 'rgba(16,185,129,0.15)';
+            badge.style.color = '#059669';
+          } else if (healthy) {
+            badge.textContent = isZh ? `🟢 最近正常 (${formatAgo(h.ts, true)})` : `🟢 정상 확인 (${formatAgo(h.ts, false)})`;
+            badge.style.background = 'var(--accent-royal-soft)';
+            badge.style.color = 'var(--accent-royal)';
+          } else {
+            badge.textContent = isZh ? '🟡 需留意状态' : '🟡 상태 확인 필요';
+            badge.style.background = 'rgba(245,158,11,0.16)';
+            badge.style.color = '#d97706';
+          }
+
+          const rttStr = (h.lastRttMs && h.livePongAt && (Date.now() - Number(h.livePongAt)) < 60000)
+            ? (isZh ? ` · 往返 ${h.lastRttMs}ms ⚡` : ` · 왕복 ${h.lastRttMs}ms ⚡`)
+            : '';
+          const verTag = isSameVer
+            ? `✅ ${escapeHtml(h.ver)}`
+            : `⚠️ ${escapeHtml(h.ver || '이전 버전')} (${isZh ? '可点右侧远程刷新' : '우측 하단 상대앱 갱신 가능'})`;
+          const netTag = `${h.emqxOk ? '🟢' : '🟡'} ${isZh ? '中国直连' : '중국직통'} · ${h.sbOk ? '🟢' : '🟡'} ${isZh ? '首尔主服' : '서울서버'} · ${h.audioOk ? '🟢' : '🟡'} ${isZh ? '语音引擎' : '음성엔진'}`;
+          const errTag = Number(h.errCnt || 0) === 0
+            ? (isZh ? '✅ 0条报错（运行顺畅）' : '✅ 오류 0건 (깨끗하게 작동 중)')
+            : `⚠️ ${isZh ? `捕获 ${h.errCnt} 条记录` : `오류기록 ${h.errCnt}건`}: ${escapeHtml(h.lastErr || '')}`;
+
+          box.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-bold text-main">${escapeHtml(h.browser || 'WebApp')} ${h.chinaMode ? (isZh ? '· 中国模式ON' : '· 중국모드ON') : ''}</span>
+              <span class="text-mut shrink-0">${formatAgo(h.ts, isZh)}${rttStr}</span>
+            </div>
+            <div><b>${isZh ? '版本' : '버전'}:</b> ${verTag}</div>
+            <div><b>${isZh ? '通道' : '연결'}:</b> ${netTag}${h.outboxCnt > 0 ? ` · 待发 ${h.outboxCnt}` : ''}</div>
+            <div><b>${isZh ? '诊断' : '오류'}:</b> ${errTag}</div>
+          `;
+        }
+        window.__renderPartnerHealthUi = renderPartnerHealthUi;
+
+        let pingWaitTimer = null;
+        window.__onPartnerHealthPong = function(rep, rttMs) {
+          if (pingWaitTimer) { clearTimeout(pingWaitTimer); pingWaitTimer = null; }
+          const btn = document.getElementById('pingPartnerHealthBtn');
+          const isZh = state && state.lang === 'zh';
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = isZh ? '📡 实时Ping检测' : '📡 실시간 핑 점검';
+          }
+          renderPartnerHealthUi();
+          showToast(isZh
+            ? `🟢 对方手机实时响应成功！（往返 ${rttMs}ms · ${rep.ver || ''}）✨`
+            : `🟢 상대방 폰 실시간 응답 성공! (왕복 ${rttMs}ms · ${rep.ver || ''}) ✨`);
+        };
+
+        document.getElementById('pingPartnerHealthBtn')?.addEventListener('click', async () => {
+          const btn = document.getElementById('pingPartnerHealthBtn');
+          const isZh = state && state.lang === 'zh';
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = isZh ? '📡 呼叫中...' : '📡 신호 확인 중...';
+          }
+          stampMyHealthQuietly(false);
+          if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false).catch(() => {});
+          sendChatSignal('ping_partner_health', { pingId: 'hp_' + Date.now() });
+          if (pingWaitTimer) clearTimeout(pingWaitTimer);
+          pingWaitTimer = setTimeout(() => {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = isZh ? '📡 实时Ping检测' : '📡 실시간 핑 점검';
+            }
+            renderPartnerHealthUi();
+            const myR = (state && state.myRole) || 'suwan';
+            const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
+            const h = state && state.profile ? state.profile[pR + 'Health'] : null;
+            if (h && h.ts) {
+              showToast(isZh
+                ? `💤 对方当前锁屏/未打开页面，已显示最近一次正常记录（${formatAgo(h.ts, true)}）💜`
+                : `💤 현재 상대방 화면이 꺼져 있어요 · 마지막 정상 작동 기록(${formatAgo(h.ts, false)})을 불러왔어요 💜`);
+            } else {
+              showToast(isZh
+                ? '💤 等待对方打开新版页面后即可自动回传状态 💜'
+                : '💤 징찬이가 새 버전 웹앱을 한 번 열면 그때부터 상태가 자동 기록돼요 💜');
+            }
+          }, 3400);
+        });
+
+        document.getElementById('remoteRefreshPartnerBtn')?.addEventListener('click', () => {
+          const isZh = state && state.lang === 'zh';
+          const myR = (state && state.myRole) || 'suwan';
+          const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
+          sendChatSignal('remote_force_update', { targetRole: pR });
+          showToast(isZh
+            ? '🔄 已向对方手机发送最新版本缓存刷新信号 ✨'
+            : '🔄 상대방 폰으로 최신 버전 자동 새로고침 신호를 보냈어요 ✨');
+        });
+
+        document.getElementById('testChinaEnvSimBtn')?.addEventListener('click', async () => {
+          const btn = document.getElementById('testChinaEnvSimBtn');
+          const out = document.getElementById('chinaSimResultBox');
+          const isZh = state && state.lang === 'zh';
+          if (!out) return;
+          out.classList.remove('hidden');
+          out.textContent = isZh ? '⏳ 正在检测中国直连通道、免翻墙翻译与首尔云库...' : '⏳ 징찬이가 중국에서 쓰는 직통 통신망·번역·클라우드 경로를 점검 중...';
+          if (btn) btn.disabled = true;
+          try {
+            const t0 = Date.now();
+            const room = getSyncRoomCode();
+            const [sbCheck, stCheck, npmCheck] = await Promise.allSettled([
+              fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=updated_at`, { headers: sbHeaders() }, 6000).then(r => r.ok ? (Date.now() - t0) : -1),
+              fetchWithTimeout('https://api.simplytranslate.ai/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: '보고 싶어', from: 'ko', to: 'zh-cn' })
+              }, 5000).then(async r => r.ok ? ((await r.json())?.result || '') : ''),
+              fetchWithTimeout('https://registry.npmmirror.com/@supabase/supabase-js/latest', {}, 5000).then(r => r.ok ? (Date.now() - t0) : -1)
+            ]);
+            const emqxState = emqxConnected ? '🟢 정상 연결됨' : '🟡 재연결 중';
+            const sbMs = sbCheck.status === 'fulfilled' && sbCheck.value >= 0 ? `🟢 정상 (${sbCheck.value}ms)` : '⚠️ 지연';
+            const trOk = stCheck.status === 'fulfilled' && stCheck.value ? `🟢 정상 ("${stCheck.value}")` : '🟡 백업(MyMemory) 대기';
+            const cdnOk = npmCheck.status === 'fulfilled' && npmCheck.value >= 0 ? `🟢 정상 (${npmCheck.value}ms)` : '🟡 대체 CDN 사용';
+            out.innerHTML = `
+              <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境模拟自检结果' : '🌏 중국(칭다오) 징찬이 환경 직통 점검 결과'}</div>
+              <div>• EMQX 중국 직통 웹소켓: <b>${emqxState}</b></div>
+              <div>• 서울 메인 DB 동기화: <b>${sbMs}</b></div>
+              <div>• 중국 무VPN 신경망 번역: <b>${trOk}</b></div>
+              <div>• 알리바바(npmmirror) 중국 CDN: <b>${cdnOk}</b></div>
+            `;
+          } catch (_) {
+            out.textContent = isZh ? '⚠️ 检测过程中网络波动，请重试' : '⚠️ 점검 중 일시적인 네트워크 지연이 있었어요. 다시 눌러주세요.';
+          } finally {
+            if (btn) btn.disabled = false;
+          }
+        });
+
+        setTimeout(() => {
+          stampMyHealthQuietly(true);
+          renderPartnerHealthUi();
+        }, 2200);
+        setInterval(() => {
+          if (!document.hidden) {
+            stampMyHealthQuietly(false);
+            renderPartnerHealthUi();
+          }
+        }, 25000);
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            setTimeout(() => { stampMyHealthQuietly(true); renderPartnerHealthUi(); }, 800);
+          }
+        });
+      })();
+
       /* ==================== SELF-HEAL & AUTO ERROR MEMO CONTROLLER (PRIME 3) ==================== */
       (function initSelfHealAndErrorMemo() {
         const ERR_KEY = 'cw_auto_error_memo_v1';
@@ -29340,7 +29706,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v84 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v87 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
@@ -31204,6 +31570,30 @@ ${target.translated || ''}`.trim() : (target.original || ''));
     document.head.appendChild(s);
   }
   setTimeout(tryLoad, 120);
+
+  // Zero-Blocking Post-Paint Web Font Loader (Korea: Pretendard + Google Fonts; Mainland China: China-direct loli.net mirror; 0ms render block!)
+  setTimeout(function loadDualRegionWebFonts() {
+    try {
+      if (document.getElementById('cwAsyncWebFonts')) return;
+      var appendNonBlockingCss = function(id, href) {
+        var lk = document.createElement('link');
+        lk.id = id;
+        lk.rel = 'stylesheet';
+        lk.media = 'print';
+        lk.href = href;
+        lk.onload = function() { lk.media = 'all'; };
+        lk.onerror = function() { try { lk.remove(); } catch (_) {} };
+        document.body.appendChild(lk);
+      };
+      var fontQuery = 'css2?family=Gaegu:wght@400;700&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Jua&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@500;700&family=ZCOOL+KuaiLe&display=swap';
+      if (isCnTz) {
+        appendNonBlockingCss('cwAsyncWebFonts', 'https://fonts.loli.net/' + fontQuery);
+      } else {
+        appendNonBlockingCss('cwAsyncWebFonts', 'https://fonts.googleapis.com/' + fontQuery);
+        appendNonBlockingCss('cwAsyncPretendard', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+      }
+    } catch (_) {}
+  }, 260);
 })();
 </script>
 </body>

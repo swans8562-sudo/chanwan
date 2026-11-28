@@ -1,4 +1,4 @@
-#Sat Nov 28 03:27:58 UTC 2026
+#Sat Nov 28 03:56:39 UTC 2026
 base.1=/home/runner/work/chanwan/chanwan/android-apk/app/build/intermediates/dex/debug/mergeProjectDexDebug/5/classes.dex
 path.1=5/classes.dex
 base.0=/home/runner/work/chanwan/chanwan/android-apk/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
