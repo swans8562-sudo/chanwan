@@ -6,13 +6,18 @@
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="灿完时光" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="full-screen" content="yes" />
+  <meta name="browsermode" content="application" />
+  <meta name="x5-fullscreen" content="true" />
+  <meta name="x5-page-mode" content="app" />
+  <meta name="screen-orientation" content="portrait" />
   <meta name="format-detection" content="telephone=no" />
   <meta id="colorSchemeMeta" name="color-scheme" content="light dark" />
   <meta id="themeColorMeta" name="theme-color" content="#120d1f" />
-  <link rel="manifest" href="./manifest_clean.json?v=22" />
+  <link rel="manifest" href="./manifest_clean.json?v=24" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
@@ -2535,7 +2540,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v87: App-Wide Couture Boutique Elevation
+       Prime 4 · v89: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2779,7 +2784,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v87: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v89: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -2905,6 +2910,22 @@
       .sm\:px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
       .sm\:w-auto { width: auto !important; }
     }
+    /* Borderless Fullscreen & Standalone WebApp Polish (v89) */
+    html:fullscreen, html:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-base);
+    }
+    html:fullscreen body, html:-webkit-full-screen body {
+      width: 100%;
+      min-height: 100dvh;
+      background: var(--bg-base);
+    }
+    @media all and (display-mode: standalone), all and (display-mode: fullscreen) {
+      #cwWebAppPromptBar, #chatFullscreenToggleBtn {
+        display: none !important;
+      }
+    }
 </style>
 </head>
 <body style="padding-bottom: 0 !important;">
@@ -2949,6 +2970,19 @@
       </div>
     </div>
   </header>
+
+  <!-- Web-Browser Only: 1-Tap Hide Top/Bottom Bars & Install as Borderless App (Hidden in APK & Standalone PWA) -->
+  <div id="cwWebAppPromptBar" class="hidden px-3 py-1.5 border-b flex items-center justify-between gap-2 text-[11px]" style="background: var(--accent-royal-soft); border-color: var(--border-accent);">
+    <div class="flex items-center gap-1.5 min-w-0 flex-1">
+      <span class="shrink-0">📱</span>
+      <span id="cwWebAppPromptText" class="font-bold truncate" style="color: var(--text-primary);">隐藏上下白框 · 像 App 一样全屏使用</span>
+    </div>
+    <div class="flex items-center gap-1 shrink-0">
+      <button id="cwTopFullscreenBtn" type="button" class="btn-royal px-2.5 py-1 rounded-full text-[10.5px] font-bold whitespace-nowrap">⛶ 全屏</button>
+      <button id="cwTopInstallGuideBtn" type="button" class="btn-gold px-2.5 py-1 rounded-full text-[10.5px] font-bold whitespace-nowrap">📲 变身App</button>
+      <button id="cwTopPromptCloseBtn" type="button" class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] opacity-70 hover:opacity-100" title="닫기">✕</button>
+    </div>
+  </div>
 
         <div id="notifBackdrop" class="hidden" style="position:fixed;left:0;right:0;top:calc(64px + env(safe-area-inset-top, 0px));bottom:calc(68px + env(safe-area-inset-bottom, 0px));z-index:9990;background:rgba(15,10,28,0.42);"></div>
         <div id="notifPanel" class="hidden cw-notif-sheet space-y-3" style="position:fixed;left:10px;right:10px;max-width:560px;margin:0 auto;top:calc(72px + env(safe-area-inset-top, 0px));z-index:9995;border-radius:24px;padding:16px;max-height:calc(100dvh - 165px);overflow-y:auto;box-shadow:0 18px 48px rgba(46,16,101,0.28);">
@@ -3773,6 +3807,7 @@
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
+            <button id="chatFullscreenToggleBtn" type="button" class="hidden btn-ghost w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="위아래 웹창 숨기기 (전체화면)" aria-label="전체화면 전환"><svg id="chatFsIconSvg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-royal)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
             <button id="chatRoomThemeBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition" title="대화방 테마 변경 (기본·위챗·카카오톡)" aria-label="대화방 테마"><span class="w-4 h-4 rounded-full border-2 border-white shadow-sm inline-block" id="chatRoomThemeDot" style="background: linear-gradient(135deg, #7c59bd, #9b7ae2);"></span></button>
             <button id="toggleChatSearchBtn" type="button" class="btn-ghost w-8 h-8 rounded-full flex items-center justify-center shrink-0" title="대화 검색"><span class="cw-ico-slot inline-flex items-center justify-center" data-ico="search"></span></button>
             <button id="openChatBgBtn" type="button" class="btn-ghost w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center text-xs shrink-0 transition" title="채팅방 배경 꾸미기" aria-label="채팅방 배경"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-royal)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.1" fill="var(--accent-royal)"/><circle cx="17.5" cy="10.5" r="1.1" fill="var(--accent-royal)"/><circle cx="8.5" cy="7.5" r="1.1" fill="var(--accent-royal)"/><circle cx="6.5" cy="12.5" r="1.1" fill="var(--accent-royal)"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-1 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9z"/></svg></button>
@@ -4808,6 +4843,21 @@
           <p class="text-xs text-sec mt-0.5" data-i18n="appSuiteDesc">휴대폰 알림, 앱 파일 다운로드, 중국 직통 사용을 한곳에서 관리해요.</p>
         </div>
 
+        <!-- Borderless Fullscreen & Home-Screen App Mode Card (Especially for Jingchan's Huawei Browser) -->
+        <div id="webAppModeSettingCard" class="royal-subcard rounded-2xl p-3.5 space-y-2.5" style="border: 1px solid var(--border-accent);">
+          <div class="flex items-center justify-between gap-2">
+            <div class="text-xs font-bold flex items-center gap-1.5 min-w-0">
+              <span id="webAppCardTitle">📱 위아래 웹창 없이 진짜 앱처럼 사용하기</span>
+            </div>
+            <span id="webAppCardBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap" style="background: var(--accent-royal-soft); color: var(--accent-royal);">전체화면 지원</span>
+          </div>
+          <div id="webAppCardDesc" class="text-[11px] text-sec leading-snug">브라우저 주소창과 하단 메뉴바를 숨기고 화면 전체를 꽉 채워 진짜 전용 앱처럼 쓸 수 있어요.</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="settingToggleFsBtn" type="button" class="btn-royal py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap">⛶ 지금 전체화면 켜기</button>
+            <button id="settingOpenAppGuideBtn" type="button" class="btn-gold py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap">📲 바탕화면 앱 설치</button>
+          </div>
+        </div>
+
         <!-- Notification Sound & Closed-App Banner Settings -->
         <div class="royal-subcard rounded-2xl p-3.5 space-y-2.5">
           <div class="flex items-center justify-between text-[11px]">
@@ -5053,7 +5103,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v87</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v89</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5061,6 +5111,20 @@
       </div>
     </section>
   </main>
+
+  <!-- Borderless App-Mode & Huawei Browser Home-Screen Visual Guide Modal (v89) -->
+  <div id="cwAppModeModal" class="hidden fixed inset-0 z-[10050] flex items-center justify-center p-4" style="background: rgba(12, 8, 24, 0.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);">
+    <div class="royal-card rounded-3xl w-full max-w-md p-4 sm:p-5 space-y-3.5 shadow-2xl border max-h-[88vh] overflow-y-auto" style="background: var(--surface-1); border-color: var(--border-accent);">
+      <div class="flex items-center justify-between gap-2 pb-2 border-b" style="border-color: var(--border-subtle);">
+        <div class="font-bold text-sm flex items-center gap-1.5">
+          <span>📱</span>
+          <span id="cwAppModalTitle">隐藏上下网页框 · 变身专属 App</span>
+        </div>
+        <button id="cwAppModalCloseBtn" type="button" class="btn-ghost w-7 h-7 rounded-full flex items-center justify-center text-xs">✕</button>
+      </div>
+      <div id="cwAppModalBody" class="space-y-3 text-xs leading-relaxed"></div>
+    </div>
+  </div>
 
   <!-- Prime 3 v45: WeChat-Style Long-Press Floating Message Context Menu -->
   <div id="cwMsgContextBackdrop" class="hidden fixed inset-0 z-[9990]" style="background: rgba(10,8,20,0.22); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);"></div>
@@ -8176,6 +8240,8 @@
           { rx: /^(?:欧巴|哥哥)[,，\s]*(?:吃饭了吗|吃了吗|吃过饭了吗)$/, ko: '오빠, 밥 먹었어?', alt: '오빠 식사했어?' },
           { rx: /^(?:我刚下班|刚下班呀?|下班啦|下班了)$/, ko: '나 방금 퇴근했어!', alt: '이제 막 일 끝났어!' },
           { rx: /^(?:还在店里|我还在店里呢?)$/, ko: '아직 가게에 있어!', alt: '나 아직 가게야' },
+          { rx: /^(?:又不可以了|又不行了|怎么又不行了|又用不了了)[!！。.~]*$/, ko: '또 안 돼', alt: '또 안 되네' },
+          { rx: /^(?:不可以了|不行了)[!！。.~]*$/, ko: '안 돼', alt: '안 되네' },
           { rx: /^(?:到家啦|到家了|我到家啦|安全到家啦?)$/, ko: '집에 잘 도착했어!', alt: '나 집 도착했어!' },
           { rx: /^(?:好累呀|好累啊|今天好累呀?)$/, ko: '오늘 너무 피곤해 ㅠㅠ', alt: '아구 힘들다 ㅠ' },
           { rx: /^(?:抱抱|求抱抱|抱抱我)$/, ko: '꼬옥 안아줘 🤗', alt: '안아줘!' },
@@ -16557,6 +16623,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           window.visualViewport.addEventListener('resize', scheduleViewportSync, { passive: true });
         }
         window.addEventListener('resize', scheduleViewportSync, { passive: true });
+        const onFsViewportReset = () => {
+          [30, 220].forEach(ms => setTimeout(() => {
+            const vv = window.visualViewport;
+            cwBaseVh = vv ? Math.round(vv.height) : (window.innerHeight || 700);
+            __prevObservedVh = cwBaseVh;
+            __lastAppliedVvh = 0;
+            syncChatKeyboardViewport(false);
+          }, ms));
+        };
+        document.addEventListener('fullscreenchange', onFsViewportReset);
+        document.addEventListener('webkitfullscreenchange', onFsViewportReset);
 
         // Typing signal (off-thread, throttled 3.2s), zero compositionupdate overhead!
         let lastTypingSigTs = 0;
@@ -17150,7 +17227,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v87',
+          ver: 'Prime 4 · v89',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17172,7 +17249,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v87 更新日志' : '📜 灿完时光 Prime 4 · v87 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v89 更新日志' : '📜 灿完时光 Prime 4 · v89 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -20194,28 +20271,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               renderAll();
               refreshBothCityWeathers();
 
-        // Gentle 1-line "Add to Home Screen (添加到桌面)" tip for Jingchan's Huawei Browser so she can use full-screen without browser bars!
-        setTimeout(() => {
-          try {
-            if (typeof window.ChanwanNative !== 'undefined') return;
-            const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
-            if (isStandalone || !isMainlandChinaClient()) return;
-            if (localStorage.getItem('cw_hide_china_pwa_tip_v1') === '1') return;
-            const homeTab = document.getElementById('tab-home');
-            if (!homeTab || document.getElementById('cwChinaPwaTipBar')) return;
-            const isWechat = /MicroMessenger/i.test(navigator.userAgent || '');
-            const bar = document.createElement('div');
-            bar.id = 'cwChinaPwaTipBar';
-            bar.className = 'royal-card rounded-2xl px-3.5 py-2.5 mb-2.5 flex items-center justify-between gap-2 text-xs';
-            bar.style.border = '1px solid var(--border-accent)';
-            bar.innerHTML = `<div class="leading-snug">${isWechat ? '💡 点右上角「<b>⋯ → 在浏览器打开</b>」并<b>添加到桌面</b>，即可像 App 一样全屏秒开收发消息 💜' : '💡 点浏览器右下角菜单「<b>添加到桌面 / 主屏幕</b>」，全屏无边框更流畅 💜'}</div><button type="button" id="cwCloseChinaTipBtn" class="btn-ghost w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[11px]">✕</button>`;
-            homeTab.insertBefore(bar, homeTab.firstChild);
-            document.getElementById('cwCloseChinaTipBtn')?.addEventListener('click', () => {
-              try { localStorage.setItem('cw_hide_china_pwa_tip_v1', '1'); } catch (_) {}
-              bar.remove();
-            });
-          } catch (_) {}
-        }, 1400);
+
 
               if (typeof window.__syncCloudLearnVaultNow === 'function') window.__syncCloudLearnVaultNow();
               if (typeof window.__pushFullCloudSync === 'function') window.__pushFullCloudSync();
@@ -20258,6 +20314,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           deferredInstallPrompt = e;
+          window.__cwDeferredPwaPrompt = e;
+          if (typeof window.__refreshBorderlessAppUi === 'function') window.__refreshBorderlessAppUi();
           const btn = document.getElementById('installAppBtn');
           if (btn) btn.textContent = state.lang === 'zh' ? '📲 一键安装 App' : '📲 원터치 앱 설치';
         });
@@ -20270,7 +20328,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               // Reset to Home tab cleanly so downloaded file ALWAYS opens on Home (never Settings!)
               clone.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-home'));
               clone.querySelectorAll('.dock-item').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === 'home'));
-              ['notifPanel', 'cityModal', 'customMoodModal', 'patchNotesModal', 'confirmModal', 'pwaInstallGuide'].forEach(id => {
+              ['notifPanel', 'cityModal', 'customMoodModal', 'patchNotesModal', 'confirmModal', 'pwaInstallGuide', 'cwAppModeModal', 'cwWebAppPromptBar'].forEach(id => {
                 const el = clone.querySelector('#' + id);
                 if (el) el.classList.add('hidden');
               });
@@ -20599,7 +20657,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         const SYNC_DEVICE_KEY = 'chanwan_device_id_v15';
         const SYNC_CURSOR_KEY = 'chanwan_sb_cursor_v15';
         const SYNC_OUTBOX_KEY = 'chanwan_sb_outbox_v15';
-        const SYNC_FETCH_TIMEOUT_MS = 5500;
+        const SYNC_FETCH_TIMEOUT_MS = isMainlandChinaClient() ? 14000 : 7500;
 
         let sbClient = null;
         let sbChannel = null;
@@ -21102,6 +21160,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             state.chat.messages = sortChatMessagesStable(mergeById(filteredCur, cleanIncomingMsgs, false, true));
             if (state.chat.messages.length !== beforeCount) { changed = true; chatChanged = true; }
             if (__mediaHydratedInMerge) { try { persistMediaVaultsNow(true); } catch (_) {} }
+            // Auto-hydrate any voice message whose audioUrl is still arriving separately so voice NEVER stays empty!
+            const missingVoiceMsgs = (state.chat.messages || []).filter(m => m && m.id && !m.audioUrl && (m.hasVoice || String(m.id).startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))).slice(-6);
+            if (missingVoiceMsgs.length) {
+              setTimeout(() => {
+                missingVoiceMsgs.forEach(mv => {
+                  if (mv && mv.id && !mv.audioUrl && typeof window.__recoverMissingVoiceNow === 'function') {
+                    window.__recoverMissingVoiceNow(mv.id, true);
+                  }
+                });
+              }, 350);
+            }
             setTimeout(() => { if (typeof autoResolvePendingTranslations === 'function') autoResolvePendingTranslations();
               try { if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.update().catch(() => {}))); } catch (_) {} }, 600);
           }
@@ -21826,6 +21895,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // ---- 3rd Server: Zero-Dependency China-Direct EMQX MQTT over WSS (wss://broker.emqx.io:8084/mqtt) ----
         const __cwBootEpoch = Date.now();
         let emqxWs = null;
+        let emqxRxBuf = new Uint8Array(0);
         let emqxConnected = false;
         let emqxLastOkTs = 0;
         let emqxPingTimer = null;
@@ -21901,27 +21971,39 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             ws.binaryType = 'arraybuffer';
             emqxWs = ws;
             ws.onopen = () => {
+              emqxRxBuf = new Uint8Array(0);
               const cid = 'cw_' + myDeviceClientId.slice(-10) + '_' + Math.random().toString(36).slice(2, 6);
               const vh = new Uint8Array([0, 4, 77, 81, 84, 84, 4, 2, 0, 30]); // MQTT 3.1.1, clean, keepalive 30s
               ws.send(mqttPacket(0x10, [vh, mqttStr(cid)]));
             };
             ws.onmessage = (ev) => {
               try {
-                const u = new Uint8Array(ev.data);
+                const chunk = new Uint8Array(ev.data);
+                let u;
+                if (emqxRxBuf.length > 0) {
+                  u = new Uint8Array(emqxRxBuf.length + chunk.length);
+                  u.set(emqxRxBuf, 0);
+                  u.set(chunk, emqxRxBuf.length);
+                } else {
+                  u = chunk;
+                }
                 let pos = 0;
                 while (pos < u.length) {
+                  const pktStart = pos;
                   const type = u[pos] >> 4;
                   const flags = u[pos] & 0x0f;
                   pos++;
-                  let mult = 1, remLen = 0, b = 0;
+                  let mult = 1, remLen = 0, b = 0, lenComplete = false;
                   do {
-                    if (pos >= u.length) return;
+                    if (pos >= u.length) { pos = pktStart; break; }
                     b = u[pos++];
                     remLen += (b & 127) * mult;
                     mult *= 128;
-                  } while ((b & 128) !== 0);
+                    if ((b & 128) === 0) lenComplete = true;
+                  } while ((b & 128) !== 0 && mult <= 2097152);
+                  if (!lenComplete) { pos = pktStart; break; }
                   const endPos = pos + remLen;
-                  if (endPos > u.length) return;
+                  if (endPos > u.length) { pos = pktStart; break; }
                   if (type === 2) { // CONNACK
                     emqxConnected = true;
                     emqxLastOkTs = Date.now();
@@ -21983,7 +22065,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   }
                   pos = endPos;
                 }
-              } catch (_) {}
+                emqxRxBuf = pos < u.length ? u.slice(pos) : new Uint8Array(0);
+                if (emqxRxBuf.length > 1200000) emqxRxBuf = new Uint8Array(0);
+              } catch (_) { emqxRxBuf = new Uint8Array(0); }
             };
             ws.onclose = () => {
               emqxConnected = false;
@@ -22128,26 +22212,19 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             chat: {
               pinnedMsg: coreObj.chat?.pinnedMsg || null,
               messages: (() => {
-                const liveMap = new Map(((state && state.chat && state.chat.messages) || []).map(x => [x && x.id, x]));
-                const slice8 = (coreObj.chat?.messages || []).slice(-8);
-                let voiceEmbedCnt = 0;
-                return slice8.map((m, idx) => {
-                  const liveM = liveMap.get(m.id) || (__cwChatMediaCache && __cwChatMediaCache[m.id]) || m;
-                  const rawAud = (liveM && liveM.audioUrl) ? String(liveM.audioUrl) : '';
-                  const embedAud = (rawAud && rawAud.length <= 170000 && idx >= slice8.length - 4 && voiceEmbedCnt < 3) ? (++voiceEmbedCnt, normalizeAudioDataUrl(rawAud)) : '';
-                  return {
-                    id: m.id, ts: m.ts, sender: m.sender, time: m.time,
-                    original: String(m.original || '').slice(0, 500),
-                    translated: String(m.translated || '').slice(0, 500),
-                    altTranslated: String(m.altTranslated || '').slice(0, 400),
-                    pronunciation: String(m.pronunciation || '').slice(0, 220),
-                    tone: m.tone || '', toneZh: m.toneZh || '', nuance: String(m.nuance || '').slice(0, 180), nuanceZh: String(m.nuanceZh || '').slice(0, 180),
-                    engine: m.engine || '', tgtLang: m.tgtLang || '',
-                    accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
-                    replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx,
-                    audioUrl: embedAud || undefined
-                  };
-                });
+                const slice12 = (coreObj.chat?.messages || []).slice(-12);
+                return slice12.map((m) => ({
+                  id: m.id, ts: m.ts, sender: m.sender, time: m.time,
+                  original: String(m.original || '').slice(0, 500),
+                  translated: String(m.translated || '').slice(0, 500),
+                  altTranslated: String(m.altTranslated || '').slice(0, 400),
+                  pronunciation: String(m.pronunciation || '').slice(0, 220),
+                  tone: m.tone || '', toneZh: m.toneZh || '', nuance: String(m.nuance || '').slice(0, 180), nuanceZh: String(m.nuanceZh || '').slice(0, 180),
+                  engine: m.engine || '', tgtLang: m.tgtLang || '',
+                  accuracy: m.accuracy || 0, editedAt: m.editedAt || 0, readByPartner: !!m.readByPartner, reactions: m.reactions || [],
+                  replyTo: m.replyTo || null, sticker: m.sticker || '', stickerIdx: m.stickerIdx,
+                  hasVoice: !!(m.hasVoice || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')))
+                }));
               })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, 3)
             },
@@ -22596,14 +22673,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               }));
 
             const recentChatMedia = (state.chat?.messages || [])
-              .filter(m => m && m.id && !delMsg.has(m.id) && ((m.photoUrl && String(m.photoUrl).length <= 210000) || (m.audioUrl && String(m.audioUrl).length <= 750000)))
+              .filter(m => m && m.id && !delMsg.has(m.id) && ((m.photoUrl && String(m.photoUrl).length <= 210000) || (m.audioUrl && String(m.audioUrl).length <= 160000)))
               .slice(-12)
               .map(m => ({
                 id: m.id, ts: m.ts, sender: m.sender, time: m.time,
                 original: m.original || '', translated: m.translated || '', tgtLang: m.tgtLang || '',
                 photoCat: m.photoCat || '✨ 일상 순간',
                 photoUrl: (m.photoUrl && String(m.photoUrl).length <= 210000) ? m.photoUrl : '',
-                audioUrl: (m.audioUrl && String(m.audioUrl).length <= 750000) ? normalizeAudioDataUrl(m.audioUrl) : ''
+                audioUrl: (m.audioUrl && String(m.audioUrl).length <= 160000) ? normalizeAudioDataUrl(m.audioUrl) : ''
               }));
 
             const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
@@ -22962,7 +23039,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Large files (>340KB, e.g. videos up to 10MB) are automatically split into 260KB chunks so China<->Korea sync NEVER times out!
         async function sendEmqxMediaPaced(room, kind, mediaId, meta, rawStr, nowTs) {
           if (!room || !rawStr) return false;
-          if (rawStr.length <= 165000) {
+          if (rawStr.length <= 28000) {
             return publishEmqxBackup(room, JSON.stringify({
               v: 'pro2_media',
               kind,
@@ -22974,7 +23051,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               meta: meta || {}
             }));
           }
-          const EMQX_CHUNK = 150000;
+          const EMQX_CHUNK = 28000;
           const totalChunks = Math.ceil(rawStr.length / EMQX_CHUNK);
           let okCnt = 0;
           for (let i = 0; i < totalChunks; i++) {
@@ -22992,7 +23069,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               meta: i === 0 ? (meta || {}) : {}
             };
             if (publishEmqxBackup(room, JSON.stringify(cPkt))) okCnt++;
-            if (i + 1 < totalChunks) await new Promise(r => setTimeout(r, 95));
+            if (i + 1 < totalChunks) await new Promise(r => setTimeout(r, 45));
           }
           return okCnt === totalChunks;
         }
@@ -23603,17 +23680,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               pinnedMsg: coreObj.chat?.pinnedMsg || null,
               messages: (() => {
                 const liveMap = new Map(((state && state.chat && state.chat.messages) || []).map(x => [x && x.id, x]));
-                const arr = (coreObj.chat?.messages || []).slice(-lim.msg);
-                const voiceIdsKeep = new Set(
-                  arr.filter(x => {
-                    const lm = liveMap.get(x && x.id) || (__cwChatMediaCache && __cwChatMediaCache[x && x.id]);
-                    return !!(lm && lm.audioUrl && String(lm.audioUrl).length <= 260000);
-                  }).slice(-10).map(x => x.id)
-                );
-                return arr.map(m => {
-                  if (!m || !voiceIdsKeep.has(m.id)) return m;
+                return (coreObj.chat?.messages || []).slice(-lim.msg).map(m => {
+                  if (!m) return m;
                   const lm = liveMap.get(m.id) || (__cwChatMediaCache && __cwChatMediaCache[m.id]);
-                  return (lm && lm.audioUrl) ? { ...m, audioUrl: normalizeAudioDataUrl(lm.audioUrl) } : m;
+                  const hasV = !!(lm && lm.audioUrl) || !!(m.hasVoice || String(m.id || '').startsWith('msg_v_') || /음성|보이스|语音/.test(String(m.tone || '')));
+                  return hasV ? { ...m, hasVoice: true } : m;
                 });
               })(),
               qaAnswers: (coreObj.chat?.qaAnswers || []).slice(0, lim.qa)
@@ -23914,6 +23985,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           pullCloudSync(false);
         }
         window.__reconnectLiveSync = connectLiveSyncStream;
+        window.__cwSyncDiagBridge = {
+          getRoom: () => getSyncRoomCode(),
+          getSupabaseUrl: () => SUPABASE_URL,
+          getSbHeaders: (extra) => sbHeaders(extra),
+          fetchT: (url, opts, ms) => fetchWithTimeout(url, opts, ms),
+          sendSignal: (kind, payload) => sendChatSignal(kind, payload),
+          pullNow: (manual) => pullCloudSync(manual),
+          pushFull: () => pushFullCloudSync(),
+          getNetStats: () => ({
+            emqxOk: !!emqxConnected,
+            sbOk: !!(sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime',
+            ntfyOk: !!(ntfyLastOkTs > 0 && (Date.now() - ntfyLastOkTs) < 180000),
+            mode: syncTransportMode,
+            outboxCnt: loadSyncOutbox().length
+          })
+        };
 
         async function pullCloudSync(manual) {
           if (isPullingCloud && !manual) return;
@@ -24049,7 +24136,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             lastSyncOkTs = Date.now();
             if (syncTransportMode !== 'realtime') syncTransportMode = 'rest';
             await flushSyncOutbox();
-            if (window.__cwPendingPostPullSync || (wasFirstPull && loadSyncOutbox().length > 0)) {
+            const needSlimSnap = !localStorage.getItem('cw_slim_cloud_snap_v88');
+            if (needSlimSnap) {
+              try { localStorage.setItem('cw_slim_cloud_snap_v88', '1'); } catch (_) {}
+              try {
+                ((state && state.chat && state.chat.messages) || []).slice(-10).forEach(vm => {
+                  const aud = (vm && vm.audioUrl) || (__cwChatMediaCache && vm && __cwChatMediaCache[vm.id] && __cwChatMediaCache[vm.id].audioUrl);
+                  if (vm && vm.id && aud && String(aud).startsWith('data:')) {
+                    const vk = deriveDeterministicVaultKey('chat_voice', vm, vm.id);
+                    saveVaultItemToCloudState(room, vk, 'chat_voice', vm, normalizeAudioDataUrl(String(aud))).catch(() => {});
+                  }
+                });
+              } catch (_) {}
+            }
+            if (needSlimSnap || window.__cwPendingPostPullSync || (wasFirstPull && loadSyncOutbox().length > 0)) {
               window.__cwPendingPostPullSync = false;
               pushFullCloudSync().catch(() => {});
             }
@@ -24094,7 +24194,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`;
             const [evRes, snapRes] = await Promise.allSettled([
               fetchSbEventsCompat(fastUrl, 3500).then(r => r.ok ? r.json() : null),
-              fetchWithTimeout(snapUrl, { headers: sbHeaders() }, 3500).then(r => r.ok ? r.json() : null)
+              fetchWithTimeout(snapUrl, { headers: sbHeaders() }, isMainlandChinaClient() ? 11000 : 5500).then(r => r.ok ? r.json() : null)
             ]);
             let changed = false;
             if (evRes.status === 'fulfilled' && Array.isArray(evRes.value)) {
@@ -24887,7 +24987,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         }
         window.__requestPartnerVaultSync = requestPartnerVaultSync;
 
-        window.__recoverMissingVoiceNow = async function(msgId) {
+        window.__recoverMissingVoiceNow = async function(msgId, silent) {
           const isZh = state.lang === 'zh';
           showToast(isZh ? '🎙️ 正在高速拉取对方语音...' : '🎙️ 상대방 음성을 불러오는 중...');
           const room = getSyncRoomCode();
@@ -28004,8 +28104,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v87)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v87';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v89)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v89';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29121,9 +29221,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       })();
 
       
-      /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v86) ==================== */
+      /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v87';
+        const APP_VER_NOW = 'Prime 4 · v89';
+        const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
           const ua = navigator.userAgent || '';
@@ -29149,18 +29250,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const tabId = activeTabEl ? activeTabEl.id.replace('tab-', '') : 'home';
           const canRec = !!(window.ChanwanNative || (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function'));
           const AC = window.AudioContext || window.webkitAudioContext;
+          const net = getBridge() ? getBridge().getNetStats() : { emqxOk: false, sbOk: false, outboxCnt: 0 };
           return {
             ver: APP_VER_NOW,
             browser: detectBrowserShort(),
             chinaMode: !!(state.settings && state.settings.chinaMode) || isMainlandChinaClient(),
             lang: state.lang || 'ko',
-            emqxOk: !!emqxConnected,
-            sbOk: !!(sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 120000) || syncTransportMode === 'realtime',
+            emqxOk: !!net.emqxOk,
+            sbOk: !!net.sbOk,
             audioOk: !!(AC && canRec),
-            outboxCnt: loadSyncOutbox().length,
+            outboxCnt: Number(net.outboxCnt || 0),
             errCnt: Array.isArray(errLogs) ? errLogs.length : 0,
             lastErr: (Array.isArray(errLogs) && errLogs[0] && errLogs[0].msg) ? String(errLogs[0].msg).slice(0, 70) : '',
             activeTab: tabId,
+            appMode: !!(window.ChanwanNative || document.fullscreenElement || document.webkitFullscreenElement || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true),
             visible: !document.hidden,
             ts: Date.now()
           };
@@ -29169,6 +29272,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         function stampMyHealthQuietly(pushSync) {
           try {
+            if (!getBridge()) return;
             const myR = (state && state.myRole) || 'suwan';
             if (!state.profile) state.profile = {};
             state.profile[myR + 'Health'] = collectMyDeviceHealth();
@@ -29189,6 +29293,18 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           return new Date(n).toLocaleString(isZh ? 'zh-CN' : 'ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
 
+        function getPartnerFallbackActivity(pR) {
+          const lsTs = Number((state && state.profile && state.profile[pR + 'LastSeen']) || (window.__cwPartnerPresence && window.__cwPartnerPresence[pR] && window.__cwPartnerPresence[pR].lastSeen) || 0);
+          const pMsgs = ((state && state.chat && state.chat.messages) || []).filter(m => {
+            if (!m) return false;
+            const s = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+            return s === pR;
+          });
+          const lastM = pMsgs.length ? pMsgs[pMsgs.length - 1] : null;
+          const mTs = Number(lastM && lastM.ts || 0);
+          return { lastSeenTs: Math.max(lsTs, mTs), lastMsg: lastM };
+        }
+
         function renderPartnerHealthUi() {
           const box = document.getElementById('partnerHealthSummaryBox');
           const badge = document.getElementById('partnerHealthBadge');
@@ -29202,12 +29318,29 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           const h = state && state.profile ? state.profile[pR + 'Health'] : null;
           if (!h || !h.ts) {
-            badge.textContent = isZh ? '等待连接' : '첫 접속 대기';
-            badge.style.background = 'var(--surface-2)';
-            badge.style.color = 'var(--text-muted)';
-            box.innerHTML = `<div class="text-mut">${isZh
-              ? `${pName} 打开新版网页后，这里会自动显示TA手机的浏览器、版本、中国直连与错误状态 ✨`
-              : `${pName}님이 새 버전 웹앱을 한 번 열면 기기·버전·중국 직통망·오류 유무가 여기에 실시간으로 표시돼요 ✨`}</div>`;
+            const fb = getPartnerFallbackActivity(pR);
+            if (fb.lastSeenTs > 0) {
+              const onlineNow = !!(window.__cwPartnerPresence && window.__cwPartnerPresence[pR] && window.__cwPartnerPresence[pR].online && (Date.now() - fb.lastSeenTs) < 60000);
+              badge.textContent = onlineNow
+                ? (isZh ? '🟢 当前在线（旧版缓存）' : '🟢 현재 접속 중 (이전 버전)')
+                : (isZh ? `最近活动 ${formatAgo(fb.lastSeenTs, true)}` : `최근 활동 ${formatAgo(fb.lastSeenTs, false)}`);
+              badge.style.background = 'var(--accent-royal-soft)';
+              badge.style.color = 'var(--accent-royal)';
+              const msgPreview = fb.lastMsg ? escapeHtml(String(fb.lastMsg.original || '').slice(0, 28)) : '';
+              box.innerHTML = `
+                <div><b>${isZh ? '最近通信' : '마지막 수신 확인'}:</b> ${formatAgo(fb.lastSeenTs, isZh)}${msgPreview ? ` ("${msgPreview}")` : ''}</div>
+                <div class="text-mut">${isZh
+                  ? `💡 ${pName} 刷新一次网页升级到新版(${APP_VER_NOW})后，将自动显示浏览器型号、中国直连与报错监控（也可点下方「远程刷新」推送更新）✨`
+                  : `💡 ${pName}님이 웹앱을 한 번 새로고침해 최신 버전(${APP_VER_NOW})으로 올라오면 기기·중국 직통망·오류 0건 상세 진단이 자동 연결돼요 (우측 하단 [🔄 상대앱 갱신] 클릭 가능) ✨`}</div>
+              `;
+            } else {
+              badge.textContent = isZh ? '等待连接' : '첫 접속 대기';
+              badge.style.background = 'var(--surface-2)';
+              badge.style.color = 'var(--text-muted)';
+              box.innerHTML = `<div class="text-mut">${isZh
+                ? `${pName} 打开新版网页后，这里会自动显示TA手机的浏览器、版本、中国直连与错误状态 ✨`
+                : `${pName}님이 새 버전 웹앱을 한 번 열면 기기·버전·중국 직통망·오류 유무가 여기에 실시간으로 표시돼요 ✨`}</div>`;
+            }
             return;
           }
 
@@ -29244,7 +29377,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           box.innerHTML = `
             <div class="flex items-center justify-between gap-2">
-              <span class="font-bold text-main">${escapeHtml(h.browser || 'WebApp')} ${h.chinaMode ? (isZh ? '· 中国模式ON' : '· 중국모드ON') : ''}</span>
+              <span class="font-bold text-main">${escapeHtml(h.browser || 'WebApp')}${h.appMode ? (isZh ? ' · 📱全屏App' : ' · 📱앱모드') : ''} ${h.chinaMode ? (isZh ? '· 中国模式ON' : '· 중국모드ON') : ''}</span>
               <span class="text-mut shrink-0">${formatAgo(h.ts, isZh)}${rttStr}</span>
             </div>
             <div><b>${isZh ? '版本' : '버전'}:</b> ${verTag}</div>
@@ -29269,16 +29402,19 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             : `🟢 상대방 폰 실시간 응답 성공! (왕복 ${rttMs}ms · ${rep.ver || ''}) ✨`);
         };
 
-        document.getElementById('pingPartnerHealthBtn')?.addEventListener('click', async () => {
+        document.getElementById('pingPartnerHealthBtn')?.addEventListener('click', () => {
           const btn = document.getElementById('pingPartnerHealthBtn');
           const isZh = state && state.lang === 'zh';
+          const br = getBridge();
           if (btn) {
             btn.disabled = true;
             btn.textContent = isZh ? '📡 呼叫中...' : '📡 신호 확인 중...';
           }
           stampMyHealthQuietly(false);
-          if (typeof window.__pullCloudSync === 'function') window.__pullCloudSync(false).catch(() => {});
-          sendChatSignal('ping_partner_health', { pingId: 'hp_' + Date.now() });
+          if (br) {
+            try { br.pullNow(false); } catch (_) {}
+            try { br.sendSignal('ping_partner_health', { pingId: 'hp_' + Date.now() }); } catch (_) {}
+          }
           if (pingWaitTimer) clearTimeout(pingWaitTimer);
           pingWaitTimer = setTimeout(() => {
             if (btn) {
@@ -29289,26 +29425,35 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const myR = (state && state.myRole) || 'suwan';
             const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
             const h = state && state.profile ? state.profile[pR + 'Health'] : null;
+            const fb = getPartnerFallbackActivity(pR);
             if (h && h.ts) {
               showToast(isZh
-                ? `💤 对方当前锁屏/未打开页面，已显示最近一次正常记录（${formatAgo(h.ts, true)}）💜`
-                : `💤 현재 상대방 화면이 꺼져 있어요 · 마지막 정상 작동 기록(${formatAgo(h.ts, false)})을 불러왔어요 💜`);
+                ? `💤 对方当前未打开画面，已显示最近一次正常记录（${formatAgo(h.ts, true)}）💜`
+                : `💤 현재 징찬이 앱 화면이 닫혀 있어요 · 마지막 정상 기록(${formatAgo(h.ts, false)})을 불러왔어요 💜`);
+            } else if (fb.lastSeenTs > 0) {
+              showToast(isZh
+                ? `💡 对方尚未刷新到新版(${APP_VER_NOW})，最后活动：${formatAgo(fb.lastSeenTs, true)} 💜`
+                : `💡 현재 징찬이 화면이 닫혀 있거나 이전 버전을 사용 중이에요 (최근 활동: ${formatAgo(fb.lastSeenTs, false)}) 💜`);
             } else {
               showToast(isZh
                 ? '💤 等待对方打开新版页面后即可自动回传状态 💜'
-                : '💤 징찬이가 새 버전 웹앱을 한 번 열면 그때부터 상태가 자동 기록돼요 💜');
+                : '💤 징찬이가 웹앱을 열면 실시간 상태가 바로 표시돼요 💜');
             }
-          }, 3400);
+          }, 2800);
         });
 
         document.getElementById('remoteRefreshPartnerBtn')?.addEventListener('click', () => {
           const isZh = state && state.lang === 'zh';
           const myR = (state && state.myRole) || 'suwan';
           const pR = myR === 'suwan' ? 'jingchan' : 'suwan';
-          sendChatSignal('remote_force_update', { targetRole: pR });
+          const br = getBridge();
+          if (br) {
+            try { br.sendSignal('remote_force_update', { targetRole: pR }); } catch (_) {}
+            try { br.pushFull(); } catch (_) {}
+          }
           showToast(isZh
-            ? '🔄 已向对方手机发送最新版本缓存刷新信号 ✨'
-            : '🔄 상대방 폰으로 최신 버전 자동 새로고침 신호를 보냈어요 ✨');
+            ? '🔄 已向对方手机发送最新版本刷新与全量同步信号 ✨'
+            : '🔄 징찬이 폰으로 최신 버전 새로고침 + 전체 대화 동기화 신호를 보냈어요 ✨');
         });
 
         document.getElementById('testChinaEnvSimBtn')?.addEventListener('click', async () => {
@@ -29317,33 +29462,66 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state && state.lang === 'zh';
           if (!out) return;
           out.classList.remove('hidden');
-          out.textContent = isZh ? '⏳ 正在检测中国直连通道、免翻墙翻译与首尔云库...' : '⏳ 징찬이가 중국에서 쓰는 직통 통신망·번역·클라우드 경로를 점검 중...';
+          out.textContent = isZh ? '⏳ 正在检测中国直连通道、免翻墙翻译与首尔云库...' : '⏳ 칭다오(징찬이) 직통 통신망·번역·동기화 용량을 실제 점검 중...';
           if (btn) btn.disabled = true;
+
+          const fetchSafe = async (url, opts, ms) => {
+            const ctrl = new AbortController();
+            const tm = setTimeout(() => ctrl.abort(), ms || 5500);
+            try {
+              const r = await fetch(url, { ...(opts || {}), signal: ctrl.signal });
+              clearTimeout(tm);
+              return r;
+            } catch (_) {
+              clearTimeout(tm);
+              return null;
+            }
+          };
+
           try {
-            const t0 = Date.now();
-            const room = getSyncRoomCode();
-            const [sbCheck, stCheck, npmCheck] = await Promise.allSettled([
-              fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=updated_at`, { headers: sbHeaders() }, 6000).then(r => r.ok ? (Date.now() - t0) : -1),
-              fetchWithTimeout('https://api.simplytranslate.ai/translate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: '보고 싶어', from: 'ko', to: 'zh-cn' })
-              }, 5000).then(async r => r.ok ? ((await r.json())?.result || '') : ''),
-              fetchWithTimeout('https://registry.npmmirror.com/@supabase/supabase-js/latest', {}, 5000).then(r => r.ok ? (Date.now() - t0) : -1)
-            ]);
-            const emqxState = emqxConnected ? '🟢 정상 연결됨' : '🟡 재연결 중';
-            const sbMs = sbCheck.status === 'fulfilled' && sbCheck.value >= 0 ? `🟢 정상 (${sbCheck.value}ms)` : '⚠️ 지연';
-            const trOk = stCheck.status === 'fulfilled' && stCheck.value ? `🟢 정상 ("${stCheck.value}")` : '🟡 백업(MyMemory) 대기';
-            const cdnOk = npmCheck.status === 'fulfilled' && npmCheck.value >= 0 ? `🟢 정상 (${npmCheck.value}ms)` : '🟡 대체 CDN 사용';
+            const br = getBridge();
+            const room = br ? br.getRoom() : 'chanwan-suwan-jingchan-live2026';
+            const sbUrl = br ? br.getSupabaseUrl() : 'https://zdqkyftqogfgbfcxdmfh.supabase.co';
+            const hdrs = br ? br.getSbHeaders() : {};
+            const net = br ? br.getNetStats() : { emqxOk: false };
+
+            const tSb = Date.now();
+            const sbP = fetchSafe(`${sbUrl}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload,updated_at`, { headers: hdrs }, 6500)
+              .then(async r => {
+                if (!r || !r.ok) return { ok: false };
+                const txt = await r.text();
+                return { ok: true, ms: Date.now() - tSb, kb: Math.max(1, Math.round(txt.length / 1024)) };
+              }).catch(() => ({ ok: false }));
+
+            const tMm = Date.now();
+            const mmP = fetchSafe('https://api.mymemory.translated.net/get?q=' + encodeURIComponent('보고 싶어') + '&langpair=ko|zh-CN', {}, 5500)
+              .then(async r => {
+                if (!r || !r.ok) return { ok: false };
+                const j = await r.json();
+                const tr = (j && j.responseData && j.responseData.translatedText) ? String(j.responseData.translatedText).trim() : '';
+                return { ok: !!tr, tr, ms: Date.now() - tMm };
+              }).catch(() => ({ ok: false }));
+
+            const tNpm = Date.now();
+            const npmP = fetchSafe('https://registry.npmmirror.com/@supabase/supabase-js/2.49.4', {}, 5500)
+              .then(r => ({ ok: !!(r && r.ok), ms: Date.now() - tNpm }))
+              .catch(() => ({ ok: false }));
+
+            const [sbRes, mmRes, npmRes] = await Promise.all([sbP, mmP, npmP]);
+            const emqxStr = net.emqxOk ? '🟢 실시간 연결 정상' : '🟡 재연결 중';
+            const sbStr = sbRes.ok ? `🟢 정상 (${sbRes.ms}ms · 동기화 패킷 ${sbRes.kb}KB 경량)` : '⚠️ 응답 지연';
+            const mmStr = mmRes.ok ? `🟢 정상 (${mmRes.ms}ms · "${escapeHtml(mmRes.tr)}")` : '🟡 내장 사전 백업 대기';
+            const cdnStr = npmRes.ok ? `🟢 정상 (${npmRes.ms}ms)` : '🟡 백업 CDN 사용';
+
             out.innerHTML = `
-              <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境模拟自检结果' : '🌏 중국(칭다오) 징찬이 환경 직통 점검 결과'}</div>
-              <div>• EMQX 중국 직통 웹소켓: <b>${emqxState}</b></div>
-              <div>• 서울 메인 DB 동기화: <b>${sbMs}</b></div>
-              <div>• 중국 무VPN 신경망 번역: <b>${trOk}</b></div>
-              <div>• 알리바바(npmmirror) 중국 CDN: <b>${cdnOk}</b></div>
+              <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境实测结果' : '🌏 중국(칭다오) 징찬이 경로 실측 결과'}</div>
+              <div>• EMQX 중국 직통 웹소켓: <b>${emqxStr}</b></div>
+              <div>• 서울 DB 동기화 속도·용량: <b>${sbStr}</b></div>
+              <div>• 중국 무VPN 번역 서버: <b>${mmStr}</b></div>
+              <div>• 알리바바(npmmirror) 중국 CDN: <b>${cdnStr}</b></div>
             `;
-          } catch (_) {
-            out.textContent = isZh ? '⚠️ 检测过程中网络波动，请重试' : '⚠️ 점검 중 일시적인 네트워크 지연이 있었어요. 다시 눌러주세요.';
+            // Also push slimmed <35KB snapshot right now so any old bloated snapshot in Supabase is cleaned immediately!
+            if (br) { try { br.pushFull(); } catch (_) {} }
           } finally {
             if (btn) btn.disabled = false;
           }
@@ -29358,13 +29536,308 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             stampMyHealthQuietly(false);
             renderPartnerHealthUi();
           }
-        }, 25000);
+        }, 20000);
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden) {
             setTimeout(() => { stampMyHealthQuietly(true); renderPartnerHealthUi(); }, 800);
           }
         });
       })();
+
+      /* ==================== BORDERLESS WEBAPP FULLSCREEN & HUAWEI HOME-SCREEN INSTALLER (v89) ==================== */
+      (function initBorderlessWebAppMode() {
+        const isNativeApk = () => typeof window.ChanwanNative !== 'undefined';
+        const isStandalonePwa = () => {
+          try {
+            if (window.navigator.standalone === true) return true;
+            if (window.matchMedia && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches || window.matchMedia('(display-mode: minimal-ui)').matches)) return true;
+            if (location.search.indexOf('standalone=1') !== -1 && window.outerHeight && (window.outerHeight - window.innerHeight) < 45) return true;
+          } catch (_) {}
+          return false;
+        };
+        const isFsNow = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+        const canRequestFs = () => {
+          const el = document.documentElement;
+          return !!(el && (el.requestFullscreen || el.webkitRequestFullscreen));
+        };
+
+        async function toggleAppFullscreen() {
+          const isZh = state && state.lang === 'zh';
+          try {
+            if (isFsNow()) {
+              if (document.exitFullscreen) await document.exitFullscreen();
+              else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            } else {
+              const el = document.documentElement;
+              if (el.requestFullscreen) {
+                await el.requestFullscreen({ navigationUI: 'hide' });
+              } else if (el.webkitRequestFullscreen) {
+                el.webkitRequestFullscreen();
+              } else {
+                openAppModeModal();
+                return;
+              }
+              showToast(isZh ? '✨ 已隐藏上下网页框，进入全屏 App 模式 💜' : '✨ 위아래 웹창을 숨기고 전체화면 앱 모드로 전환했어요 💜');
+            }
+          } catch (_) {
+            openAppModeModal();
+          }
+          setTimeout(refreshBorderlessAppUi, 120);
+        }
+
+        function buildModalContentHtml() {
+          const isZh = state && state.lang === 'zh';
+          const ua = navigator.userAgent || '';
+          const isWechat = /MicroMessenger/i.test(ua);
+          const isHuawei = /HuaweiBrowser|ArkWeb|HBPC|HarmonyOS|HONOR/i.test(ua);
+          const isIos = /iPhone|iPad|iPod/i.test(ua);
+          const hasOneTapPwa = !!window.__cwDeferredPwaPrompt;
+          const fsSupported = canRequestFs();
+
+          if (isZh) {
+            let stepHtml = '';
+            if (isWechat) {
+              stepHtml = `
+                <div class="space-y-1.5">
+                  <div><b>①</b> 点击微信右上角 <b>「⋯」</b>，选择 <b>「在浏览器打开」</b>（推荐华为/系统浏览器）</div>
+                  <div><b>②</b> 在浏览器右下角点 <b>「⋯」→「工具箱」→「添加到桌面」</b></div>
+                  <div><b>③</b> 从手机桌面点击紫色 <b>「灿完时光」</b> 图标打开，上下白框永久消失 💜</div>
+                </div>`;
+            } else if (isIos) {
+              stepHtml = `
+                <div class="space-y-1.5">
+                  <div><b>①</b> 点击 Safari 底部中间的 <b>「分享 ⬆️」</b> 按钮</div>
+                  <div><b>②</b> 向下滑找到并点击 <b>「添加到主屏幕 (Add to Home Screen)」</b> → 右上角 <b>「添加」</b></div>
+                  <div><b>③</b> 从手机桌面打开 <b>「灿完时光」</b> 图标，即享 100% 无边框全屏 App 体验 💜</div>
+                </div>`;
+            } else if (isHuawei) {
+              stepHtml = `
+                <div class="space-y-1.5">
+                  <div><b>①</b> 点击华为浏览器最右下角 <b>「⋯」（四个点菜单）</b></div>
+                  <div><b>②</b> 点击 <b>「工具箱」→「添加到桌面」</b>（或直接点菜单里的 <b>「添加至桌面 / 主屏幕」</b>）</div>
+                  <div><b>③</b> 回到手机桌面点紫色的 <b>「灿完时光」</b> 图标打开，上下白色地址栏与工具栏彻底消失 💜</div>
+                  <div class="text-[11px] text-mut pt-1">💡 华为浏览器小技巧：在 <b>「⋯ → 工具箱 → 全屏」</b> 打勾，在浏览器里也能自动隐藏上下栏！</div>
+                </div>`;
+            } else {
+              stepHtml = `
+                <div class="space-y-1.5">
+                  <div><b>①</b> 点击浏览器右下角或右上角菜单 <b>「⋯ / ⋮」</b></div>
+                  <div><b>②</b> 选择 <b>「添加到主屏幕 / 添加到桌面 / 安装应用」</b></div>
+                  <div><b>③</b> 从手机桌面点 <b>「灿完时光」</b> 图标打开，即可无边框全屏使用 💜</div>
+                </div>`;
+            }
+
+            return `
+              ${fsSupported ? `
+              <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--accent-royal-soft); border-color: var(--border-accent);">
+                <div class="font-bold text-xs" style="color: var(--accent-royal);">⚡ 方式一：现在立刻隐藏上下白框（0秒生效）</div>
+                <div class="text-[11px] text-sec">无需安装，点一下立刻收起顶部的网址栏和底部的工具栏：</div>
+                <button id="cwModalFsNowBtn" type="button" class="btn-royal w-full py-2.5 rounded-xl text-xs font-bold">⛶ ${isFsNow() ? '退出全屏模式' : '立即开启无边框全屏'}</button>
+              </div>` : ''}
+
+              <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--surface-2); border-color: var(--border-subtle);">
+                <div class="font-bold text-xs" style="color: var(--text-primary);">📲 方式二：添加到手机桌面（永久像 App 一样打开 · 最推荐）</div>
+                ${hasOneTapPwa ? `<button id="cwModalOneTapPwaBtn" type="button" class="btn-gold w-full py-2.5 rounded-xl text-xs font-bold">📲 一键添加到手机桌面</button>` : ''}
+                ${stepHtml}
+              </div>
+
+              ${!isIos ? `
+              <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--surface-2); border-color: var(--border-subtle);">
+                <div class="font-bold text-xs" style="color: var(--text-primary);">📦 方式三：华为鸿蒙 / 安卓直接安装原生 App (.apk)</div>
+                <div class="text-[11px] text-sec">如果你的手机支持安装 APK（鸿蒙 2/3/4 或安卓手机免翻墙直装），安装后与秀完的原生 App 完全一致，无任何网页框并支持后台消息提醒：</div>
+                <button id="cwModalDownloadApkBtn" type="button" class="btn-ghost w-full py-2 rounded-xl text-xs font-bold" style="border-color: var(--border-accent);">📦 直接下载灿完时光原生 App (.apk)</button>
+              </div>` : ''}
+            `;
+          }
+
+          // Korean UI (for Suwan checking or testing)
+          return `
+            ${fsSupported ? `
+            <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--accent-royal-soft); border-color: var(--border-accent);">
+              <div class="font-bold text-xs" style="color: var(--accent-royal);">⚡ 방법 1 · 지금 즉시 위아래 웹창 숨기기 (0초 적용)</div>
+              <div class="text-[11px] text-sec">설치 없이 버튼 한 번으로 상단 주소창과 하단 브라우저 메뉴바를 즉시 숨겨요:</div>
+              <button id="cwModalFsNowBtn" type="button" class="btn-royal w-full py-2.5 rounded-xl text-xs font-bold">⛶ ${isFsNow() ? '전체화면 종료하기' : '지금 바로 전체화면 켜기'}</button>
+            </div>` : ''}
+
+            <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--surface-2); border-color: var(--border-subtle);">
+              <div class="font-bold text-xs" style="color: var(--text-primary);">📲 방법 2 · 휴대폰 바탕화면에 앱으로 추가 (영구 전체화면 · 추천)</div>
+              ${hasOneTapPwa ? `<button id="cwModalOneTapPwaBtn" type="button" class="btn-gold w-full py-2.5 rounded-xl text-xs font-bold">📲 원터치 바탕화면 앱 설치</button>` : ''}
+              <div class="space-y-1.5 text-[11.5px]">
+                <div><b>• 징찬이 화웨이 브라우저:</b> 우측 하단 <b>「⋯」</b> → <b>「工具箱(도구상자)」→「添加到桌面(홈 화면에 추가)」</b> 클릭 후 바탕화면의 보라색 <b>灿完时光</b> 아이콘으로 실행 (또는 <b>「⋯ → 工具箱 → 全屏」</b> 체크)</div>
+                <div><b>• 아이폰 Safari:</b> 하단 <b>「공유 ⬆️」</b> → <b>「홈 화면에 추가」</b></div>
+                <div><b>• 크롬 / 삼성 인터넷:</b> 메뉴 <b>「⋮」</b> → <b>「홈 화면에 추가 / 앱 설치」</b></div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl p-3 space-y-2 border" style="background: var(--surface-2); border-color: var(--border-subtle);">
+              <div class="font-bold text-xs" style="color: var(--text-primary);">📦 방법 3 · 화웨이(하모니OS 4 이하) / 안드로이드 전용 APK 설치</div>
+              <div class="text-[11px] text-sec">징찬이 폰이 APK 설치를 지원하는 화웨이·안드로이드 기기라면 VPN 없이 전용 앱(.apk)을 바로 내려받아 수완님처럼 순정 앱으로도 쓸 수 있어요:</div>
+              <button id="cwModalDownloadApkBtn" type="button" class="btn-ghost w-full py-2 rounded-xl text-xs font-bold" style="border-color: var(--border-accent);">📦 전용 앱(.apk) 바로 다운로드</button>
+            </div>
+          `;
+        }
+
+        function openAppModeModal() {
+          const modal = document.getElementById('cwAppModeModal');
+          const ttl = document.getElementById('cwAppModalTitle');
+          const body = document.getElementById('cwAppModalBody');
+          if (!modal || !body) return;
+          const isZh = state && state.lang === 'zh';
+          if (ttl) ttl.textContent = isZh ? '隐藏上下网页框 · 变身专属 App' : '위아래 웹창 숨기기 · 전용 앱 모드';
+          body.innerHTML = buildModalContentHtml();
+          modal.classList.remove('hidden');
+
+          document.getElementById('cwModalFsNowBtn')?.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            toggleAppFullscreen();
+          });
+          document.getElementById('cwModalOneTapPwaBtn')?.addEventListener('click', async () => {
+            const p = window.__cwDeferredPwaPrompt;
+            if (!p) return;
+            try {
+              p.prompt();
+              await p.userChoice;
+              window.__cwDeferredPwaPrompt = null;
+              modal.classList.add('hidden');
+              refreshBorderlessAppUi();
+            } catch (_) {}
+          });
+          document.getElementById('cwModalDownloadApkBtn')?.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.getElementById('directApkDownloadBtn')?.click();
+          });
+        }
+        window.__openAppModeModal = openAppModeModal;
+
+        function refreshBorderlessAppUi() {
+          const isZh = state && state.lang === 'zh';
+          const nativeApk = isNativeApk();
+          const standalone = isStandalonePwa();
+          const fsActive = isFsNow();
+          const dismissedTop = sessionStorage.getItem('cw_hide_top_app_bar_v89') === '1';
+
+          // 1. Top Slim Bar (Web browser only, hidden in APK / Standalone / Fullscreen / Dismissed)
+          const topBar = document.getElementById('cwWebAppPromptBar');
+          if (topBar) {
+            const showTop = !nativeApk && !standalone && !fsActive && !dismissedTop;
+            topBar.classList.toggle('hidden', !showTop);
+            const txt = document.getElementById('cwWebAppPromptText');
+            const fsBtn = document.getElementById('cwTopFullscreenBtn');
+            const gdBtn = document.getElementById('cwTopInstallGuideBtn');
+            if (txt) txt.textContent = isZh ? '隐藏上下白框 · 像 App 一样全屏使用' : '위아래 웹창 숨기기 · 앱처럼 전체화면';
+            if (fsBtn) {
+              fsBtn.classList.toggle('hidden', !canRequestFs());
+              fsBtn.textContent = isZh ? '⛶ 立即全屏' : '⛶ 전체화면';
+            }
+            if (gdBtn) {
+              gdBtn.textContent = window.__cwDeferredPwaPrompt
+                ? (isZh ? '📲 一键安装' : '📲 즉시설치')
+                : (isZh ? '📲 装到桌面' : '📲 앱모드 방법');
+            }
+          }
+
+          // 2. Messenger Top-Right Fullscreen Icon (Web browser only, hidden in APK / Standalone)
+          const chatFsBtn = document.getElementById('chatFullscreenToggleBtn');
+          if (chatFsBtn) {
+            const showChatFs = !nativeApk && !standalone && canRequestFs();
+            chatFsBtn.classList.toggle('hidden', !showChatFs);
+            chatFsBtn.title = fsActive
+              ? (isZh ? '退出全屏' : '전체화면 종료')
+              : (isZh ? '隐藏上下网页栏（全屏模式）' : '위아래 웹창 숨기기 (전체화면)');
+            const svg = document.getElementById('chatFsIconSvg');
+            if (svg) {
+              svg.innerHTML = fsActive
+                ? '<path d="M4 14h4v4m12-4h-4v4M4 10h4V6m12 4h-4V6"/>'
+                : '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>';
+            }
+          }
+
+          // 3. Setting Card (Hidden in Suwan's Native APK unless viewing guide; tailored in Web Browser)
+          const setCard = document.getElementById('webAppModeSettingCard');
+          if (setCard) {
+            const cTitle = document.getElementById('webAppCardTitle');
+            const cBadge = document.getElementById('webAppCardBadge');
+            const cDesc = document.getElementById('webAppCardDesc');
+            const sFsBtn = document.getElementById('settingToggleFsBtn');
+            const sGdBtn = document.getElementById('settingOpenAppGuideBtn');
+
+            if (nativeApk) {
+              if (cTitle) cTitle.textContent = isZh ? '📱 靖灿网页无边框 App 模式指南' : '📱 징찬이 웹앱 위아래 창 숨기기 안내';
+              if (cBadge) cBadge.textContent = isZh ? '全屏专属模式' : '수완님은 전용APK 사용중';
+              if (cDesc) cDesc.textContent = isZh
+                ? '靖灿在华为浏览器点顶部的「⛶ 立即全屏」或「📲 装到桌面」，即可去掉上下白色浏览器栏。'
+                : '징찬이 폰 화면 상단에 뜬 「⛶ 立即全屏(전체화면)」 또는 「📲 装到桌面(바탕화면 추가)」만 누르면 위아래 하얀 웹창이 사라져요.';
+              if (sFsBtn) sFsBtn.classList.add('hidden');
+              if (sGdBtn) {
+                sGdBtn.className = 'btn-royal py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap col-span-full';
+                sGdBtn.textContent = isZh ? '📖 查看靖灿手机设置步骤' : '📖 징찬이 폰 적용 방법 보기';
+              }
+            } else {
+              if (cTitle) cTitle.textContent = isZh ? '📱 隐藏上下网页栏 · 像原生 App 一样使用' : '📱 위아래 웹창 없이 진짜 앱처럼 사용하기';
+              if (cBadge) {
+                cBadge.textContent = (standalone || fsActive)
+                  ? (isZh ? '🟢 已开启无边框模式' : '🟢 전체화면 사용 중')
+                  : (isZh ? '一键去白框' : '전체화면 지원');
+              }
+              if (cDesc) cDesc.textContent = isZh
+                ? '一键收起浏览器顶部网址栏与底部工具栏，或添加到手机桌面永久全屏秒开。'
+                : '브라우저 상단 주소창과 하단 툴바를 즉시 숨기거나 바탕화면에 진짜 앱 아이콘으로 설치해요.';
+              if (sFsBtn) {
+                sFsBtn.classList.toggle('hidden', standalone || !canRequestFs());
+                sFsBtn.textContent = fsActive
+                  ? (isZh ? '⛶ 退出全屏' : '⛶ 전체화면 끄기')
+                  : (isZh ? '⛶ 立即全屏去白框' : '⛶ 지금 전체화면 켜기');
+              }
+              if (sGdBtn) {
+                sGdBtn.textContent = window.__cwDeferredPwaPrompt
+                  ? (isZh ? '📲 一键装到桌面' : '📲 원터치 앱 설치')
+                  : (isZh ? '📲 添加到桌面指南' : '📲 바탕화면 앱 설치');
+              }
+            }
+          }
+        }
+        window.__refreshBorderlessAppUi = refreshBorderlessAppUi;
+
+        document.getElementById('cwTopFullscreenBtn')?.addEventListener('click', toggleAppFullscreen);
+        document.getElementById('chatFullscreenToggleBtn')?.addEventListener('click', toggleAppFullscreen);
+        document.getElementById('settingToggleFsBtn')?.addEventListener('click', toggleAppFullscreen);
+
+        const handleInstallOrGuide = async () => {
+          if (window.__cwDeferredPwaPrompt) {
+            try {
+              window.__cwDeferredPwaPrompt.prompt();
+              await window.__cwDeferredPwaPrompt.userChoice;
+              window.__cwDeferredPwaPrompt = null;
+              refreshBorderlessAppUi();
+              return;
+            } catch (_) {}
+          }
+          openAppModeModal();
+        };
+        document.getElementById('cwTopInstallGuideBtn')?.addEventListener('click', handleInstallOrGuide);
+        document.getElementById('settingOpenAppGuideBtn')?.addEventListener('click', handleInstallOrGuide);
+
+        document.getElementById('cwTopPromptCloseBtn')?.addEventListener('click', () => {
+          try { sessionStorage.setItem('cw_hide_top_app_bar_v89', '1'); } catch (_) {}
+          refreshBorderlessAppUi();
+        });
+        document.getElementById('cwAppModalCloseBtn')?.addEventListener('click', () => {
+          document.getElementById('cwAppModeModal')?.classList.add('hidden');
+        });
+        document.getElementById('cwAppModeModal')?.addEventListener('click', (e) => {
+          if (e.target && e.target.id === 'cwAppModeModal') {
+            document.getElementById('cwAppModeModal')?.classList.add('hidden');
+          }
+        });
+
+        document.addEventListener('fullscreenchange', refreshBorderlessAppUi);
+        document.addEventListener('webkitfullscreenchange', refreshBorderlessAppUi);
+        document.getElementById('langToggleBtn')?.addEventListener('click', () => setTimeout(refreshBorderlessAppUi, 60));
+
+        setTimeout(refreshBorderlessAppUi, 150);
+        setTimeout(refreshBorderlessAppUi, 1200);
+      })();
+
 
       /* ==================== SELF-HEAL & AUTO ERROR MEMO CONTROLLER (PRIME 3) ==================== */
       (function initSelfHealAndErrorMemo() {
@@ -29706,7 +30179,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v87 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v89 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';

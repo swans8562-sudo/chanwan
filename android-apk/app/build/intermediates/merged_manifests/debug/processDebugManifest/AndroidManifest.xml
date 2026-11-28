@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chanwan.shiguang"
-    android:versionCode="60"
-    android:versionName="60.0-prime4-v87" >
+    android:versionCode="62"
+    android:versionName="62.0-prime4-v89" >
 
     <uses-sdk
         android:minSdkVersion="24"
