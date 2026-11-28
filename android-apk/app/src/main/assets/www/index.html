@@ -2540,7 +2540,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v89: App-Wide Couture Boutique Elevation
+       Prime 4 · v90: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2784,7 +2784,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v89: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v90: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5103,7 +5103,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v89</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v90</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -17131,9 +17131,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           if (t.closest('#cwInAppUpdInstallBtn') || t.closest('#directApkDownloadBtn')) {
             e.preventDefault();
             const isZh = state.lang === 'zh';
-            const apkUrl = 'https://swans8562-sudo.github.io/chanwan/chanwan-shiguang.apk?t=' + Date.now();
+            const apkUrl = (!isMainlandChinaClient() ? 'https://raw.githubusercontent.com/swans8562-sudo/chanwan/main/chanwan-shiguang.apk?t=' : 'https://swans8562-sudo.github.io/chanwan/chanwan-shiguang.apk?t=') + Date.now();
             showToast(isZh ? '⏳ 正在检查最新安装包...' : '⏳ 최신 앱 설치 파일을 확인하는 중...');
-            fetch('./chanwan-shiguang.apk?_chk=' + Date.now(), { method: 'HEAD', cache: 'no-store' })
+            fetch(apkUrl, { method: 'HEAD', cache: 'no-store' })
               .then((r) => {
                 if (r && r.ok) {
                   document.getElementById('cwInAppUpdateModal')?.classList.add('hidden');
@@ -17227,7 +17227,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v89',
+          ver: 'Prime 4 · v90',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17249,7 +17249,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v89 更新日志' : '📜 灿完时光 Prime 4 · v89 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v90 更新日志' : '📜 灿完时光 Prime 4 · v90 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -28104,8 +28104,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v89)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v89';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v90)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v90';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -28204,7 +28204,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }, 2200);
         }
 
-        if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        if (typeof window.ChanwanNative !== 'undefined' && 'serviceWorker' in navigator) {
+          // Native APK uses bundled assets + live versioned WebView loader; purge any stale SW cache so updates are instant!
+          navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister().catch(() => {}))).catch(() => {});
+          if (typeof caches !== 'undefined' && caches.keys) {
+            caches.keys().then(ks => ks.forEach(k => caches.delete(k).catch(() => {}))).catch(() => {});
+          }
+        } else if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
           const hadInitialController = !!navigator.serviceWorker.controller;
           navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then((reg) => {
             try {
@@ -29223,7 +29229,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v89';
+        const APP_VER_NOW = 'Prime 4 · v90';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -30179,7 +30185,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v89 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v90 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';

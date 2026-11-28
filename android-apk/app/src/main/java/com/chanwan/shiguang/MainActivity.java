@@ -49,7 +49,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://swans8562-sudo.github.io/chanwan/";
-    private static final int APK_BUILD_VER = 55;
+    private static final int APK_BUILD_VER = 63;
     private static final int FILE_CHOOSER_REQ = 1001;
     private static final int PERM_REQ = 1002;
     private static final int MIC_PERM_REQ = 1003;
@@ -157,6 +157,73 @@ public class MainActivity extends Activity {
                 return "application/octet-stream";
             }
 
+            private byte[] readAssetBytes(String assetName) {
+                InputStream is = null;
+                try {
+                    is = getAssets().open("www/" + assetName);
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    byte[] buf = new byte[8192];
+                    int n;
+                    while ((n = is.read(buf)) != -1) bos.write(buf, 0, n);
+                    return bos.toByteArray();
+                } catch (Exception e) {
+                    return null;
+                } finally {
+                    if (is != null) { try { is.close(); } catch (Exception ignored) {} }
+                }
+            }
+
+            private byte[] fetchHtmlBytes(String urlStr, int connTimeout, int readTimeout) {
+                HttpURLConnection conn = null;
+                try {
+                    URL netUrl = new URL(urlStr);
+                    conn = (HttpURLConnection) netUrl.openConnection();
+                    conn.setConnectTimeout(connTimeout);
+                    conn.setReadTimeout(readTimeout);
+                    conn.setRequestProperty("Cache-Control", "no-cache, no-store");
+                    if (conn.getResponseCode() == 200) {
+                        InputStream in = conn.getInputStream();
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        byte[] buf = new byte[8192];
+                        int n;
+                        while ((n = in.read(buf)) != -1) bos.write(buf, 0, n);
+                        byte[] bytes = bos.toByteArray();
+                        String checkEnd = new String(bytes, Math.max(0, bytes.length - 128), Math.min(128, bytes.length), "UTF-8");
+                        if (checkEnd.contains("</html>")) return bytes;
+                    }
+                } catch (Exception ignored) {
+                } finally {
+                    if (conn != null) { try { conn.disconnect(); } catch (Exception ignored) {} }
+                }
+                return null;
+            }
+
+            private int extractPrimeVer(byte[] bytes) {
+                if (bytes == null || bytes.length == 0) return 0;
+                try {
+                    String s = new String(bytes, "UTF-8");
+                    String marker = "Prime 4 · v";
+                    int idx = s.indexOf(marker);
+                    if (idx < 0) return 0;
+                    int p = idx + marker.length();
+                    int num = 0;
+                    boolean found = false;
+                    while (p < s.length()) {
+                        char c = s.charAt(p);
+                        if (c >= '0' && c <= '9') {
+                            num = num * 10 + (c - '0');
+                            found = true;
+                            p++;
+                        } else {
+                            break;
+                        }
+                    }
+                    return found ? num : 0;
+                } catch (Exception e) {
+                    return 0;
+                }
+            }
+
             private WebResourceResponse openAssetResp(String assetName) {
                 try {
                     InputStream is = getAssets().open("www/" + assetName);
@@ -192,6 +259,15 @@ public class MainActivity extends Activity {
                 if (rel == null) return null;
                 if (rel.isEmpty() || rel.equals("/")) rel = "index.html";
 
+                if ("sw.js".equals(rel)) {
+                    // Inside Native APK, prevent ServiceWorker CacheStorage from ever trapping WebView on an older HTML version!
+                    String unregSw = "self.addEventListener('install',function(){self.skipWaiting();});"
+                            + "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}).then(function(){return self.registration.unregister();}));});";
+                    try {
+                        return new WebResourceResponse("application/javascript", "UTF-8", new ByteArrayInputStream(unregSw.getBytes("UTF-8")));
+                    } catch (Exception ignored) {}
+                }
+
                 boolean isIndex = "index.html".equals(rel);
                 boolean isBundleAsset = isIndex || rel.startsWith("cw-app-") || rel.equals("manifest_clean.json") || rel.endsWith(".png");
                 if (!isBundleAsset) return null;
@@ -202,29 +278,32 @@ public class MainActivity extends Activity {
                 }
 
                 if (isIndex) {
-                    HttpURLConnection conn = null;
-                    try {
-                        URL netUrl = new URL(u.toString());
-                        conn = (HttpURLConnection) netUrl.openConnection();
-                        conn.setConnectTimeout(2600);
-                        conn.setReadTimeout(3200);
-                        conn.setRequestProperty("Cache-Control", "no-cache");
-                        if (conn.getResponseCode() == 200) {
-                            InputStream in = conn.getInputStream();
-                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            byte[] buf = new byte[8192];
-                            int n;
-                            while ((n = in.read(buf)) != -1) bos.write(buf, 0, n);
-                            byte[] bytes = bos.toByteArray();
-                            String checkEnd = new String(bytes, Math.max(0, bytes.length - 128), Math.min(128, bytes.length), "UTF-8");
-                            if (checkEnd.contains("</html>")) {
-                                useBundledAssets = false;
-                                return new WebResourceResponse("text/html", "UTF-8", new ByteArrayInputStream(bytes));
-                            }
+                    byte[] bestBytes = readAssetBytes("index.html");
+                    int bestVer = extractPrimeVer(bestBytes);
+                    boolean usedNet = false;
+
+                    // 1) Try instant GitHub main branch raw first (0s delay after Actions build; bypasses 10-min CDN cache!)
+                    String rawUrl = "https://raw.githubusercontent.com/swans8562-sudo/chanwan/main/index.html?_t=" + System.currentTimeMillis();
+                    byte[] rawBytes = fetchHtmlBytes(rawUrl, 2400, 3000);
+                    int rawVer = extractPrimeVer(rawBytes);
+                    if (rawBytes != null && rawVer >= bestVer) {
+                        bestBytes = rawBytes;
+                        bestVer = rawVer;
+                        usedNet = true;
+                    } else {
+                        // 2) Fallback to GitHub Pages (works in Mainland China too!)
+                        byte[] pagesBytes = fetchHtmlBytes(u.toString(), 2600, 3200);
+                        int pagesVer = extractPrimeVer(pagesBytes);
+                        if (pagesBytes != null && pagesVer >= bestVer) {
+                            bestBytes = pagesBytes;
+                            bestVer = pagesVer;
+                            usedNet = true;
                         }
-                    } catch (Exception ignored) {
-                    } finally {
-                        if (conn != null) { try { conn.disconnect(); } catch (Exception ignored) {} }
+                    }
+
+                    if (bestBytes != null) {
+                        useBundledAssets = !usedNet;
+                        return new WebResourceResponse("text/html", "UTF-8", new ByteArrayInputStream(bestBytes));
                     }
                     useBundledAssets = true;
                     WebResourceResponse fallback = openAssetResp("index.html");
