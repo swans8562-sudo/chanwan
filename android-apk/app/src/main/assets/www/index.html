@@ -17,7 +17,7 @@
   <meta name="format-detection" content="telephone=no" />
   <meta id="colorSchemeMeta" name="color-scheme" content="light dark" />
   <meta id="themeColorMeta" name="theme-color" content="#120d1f" />
-  <link rel="manifest" href="./manifest_clean.json?v=30" />
+  <link rel="manifest" href="./manifest_clean.json?v=31" />
   <link rel="apple-touch-icon" href="./icon-192.png?v=21" />
     <link rel="preconnect" href="https://zdqkyftqogfgbfcxdmfh.supabase.co" crossorigin />
   <link rel="preconnect" href="https://ntfy.sh" crossorigin />
@@ -1808,13 +1808,14 @@
     h1, h2, h3, .brand-title {
       letter-spacing: -0.025em;
     }
-    /* Refined Top Header Glass */
+    /* Refined Top Header (Zero-Blur 120fps Hardware Layer) */
     header {
-      backdrop-filter: saturate(155%) blur(12px) !important;
-      -webkit-backdrop-filter: saturate(155%) blur(12px) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       border-bottom: 1px solid rgba(139, 92, 246, 0.08) !important;
-      box-shadow: 0 4px 24px rgba(30, 20, 60, 0.03) !important;
+      box-shadow: 0 4px 20px rgba(30, 20, 60, 0.03) !important;
     }
+    .cw-msg-row { contain: layout style; }
     .header-icon-btn {
       box-shadow: 0 2px 10px rgba(45, 25, 90, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
       border-width: 1px !important;
@@ -1885,19 +1886,20 @@
       padding: 5px 9px !important;
       font-size: 9.8px !important;
       letter-spacing: -0.01em;
-      backdrop-filter: blur(6px);
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
     .cw-delivery-badge span {
       font-weight: 600 !important;
       letter-spacing: -0.01em;
     }
 
-    /* Frosted Luxury Bottom 5-Tab Dock */
+    /* Crisp Zero-Blur 120fps Bottom 5-Tab Dock */
     .dock-bar {
-      backdrop-filter: saturate(190%) blur(22px) !important;
-      -webkit-backdrop-filter: saturate(190%) blur(22px) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       border-top: 1px solid rgba(139, 92, 246, 0.1) !important;
-      box-shadow: 0 -6px 26px rgba(30, 20, 60, 0.05) !important;
+      box-shadow: 0 -6px 22px rgba(30, 20, 60, 0.05) !important;
     }
     .dock-item {
       border-radius: 16px !important;
@@ -2646,7 +2648,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v104: App-Wide Couture Boutique Elevation
+       Prime 4 · v105: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2890,7 +2892,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v104: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v105: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5268,7 +5270,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v104</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v105</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -13923,6 +13925,23 @@
         const visibleMsgs = hiddenOlderCount > 0 ? allFilteredMsgs.slice(-window.__chatVisibleLimit) : allFilteredMsgs;
         const cntEl = document.getElementById('chatSearchCount');
         if (cntEl) cntEl.textContent = qSearch ? `${allFilteredMsgs.length}${state.lang === 'zh' ? '条' : '건'}` : '';
+        const __activeTypRole = (window.__cwPartnerTypingRole && Date.now() < (window.__cwPartnerTypingUntil || 0)) ? window.__cwPartnerTypingRole : '';
+        const __pinObj = state.chat && state.chat.pinnedMsg;
+        const __pinSig = __pinObj ? `${__pinObj.id || ''}:${__pinObj.updatedAt || 0}:${state.lang || 'ko'}` : '';
+        const __avSig = `${(state.profile && state.profile.suwanAvatar ? state.profile.suwanAvatar.length : 0)}:${(state.profile && state.profile.jingchanAvatar ? state.profile.jingchanAvatar.length : 0)}`;
+        const __istyleSig = localStorage.getItem('chanwan_icon_style_v1') || (state.settings && state.settings.iconStyle) || 'pastel';
+        const __posterCnt = (typeof __cwVideoPosterCache !== 'undefined' && __cwVideoPosterCache) ? __cwVideoPosterCache.size : 0;
+        const __nowRenderMs = Date.now();
+        const __cwRenderSig = `${state.myRole || 'suwan'}|${state.lang || 'ko'}|${state.chat.activeSender || ''}|${__istyleSig}|${qSearch}|${hiddenOlderCount}|${__activeTypRole}|${__pinSig}|${__avSig}|${__posterCnt}|` + visibleMsgs.map(m => {
+          if (!m) return '';
+          const pendSlow = (/^(⏳ 번역 중\.\.\.|⏳ 正在翻译\.\.\.)$/.test(String(m.translated || '').trim()) && (__nowRenderMs - Number(m.ts || 0)) > 3500) ? 1 : 0;
+          return `${m.id}:${m.ts || 0}:${m.sender || ''}:${String(m.original || '').length}:${m.translated || ''}:${String(m.altTranslated || '').length}:${m.editedAt || 0}:${m.readByPartner ? 1 : 0}:${m.deliveryStatus || 'sent'}:${(m.reactions || []).join('')}:${m.polishOpen ? 1 : 0}:${m.audioUrl ? m.audioUrl.length : 0}:${m.photoUrl ? m.photoUrl.length : 0}:${m.videoUrl ? m.videoUrl.length : 0}:${Array.isArray(m.photoUrls) ? m.photoUrls.length : 0}:${pendSlow}`;
+        }).join('~');
+        if (listEl && __cwHadMsgs && !window.__cwForceScrollBottom && typeof window.__cwPreserveChatScroll !== 'number' && window.__cwLastChatRenderSig === __cwRenderSig) {
+          if (typeof renderChatPinnedBanner === 'function') renderChatPinnedBanner();
+          return;
+        }
+        window.__cwLastChatRenderSig = __cwRenderSig;
         if (!visibleMsgs.length) {
           listEl.innerHTML = `<div class="text-xs text-mut text-center py-12">${qSearch ? (state.lang === 'zh' ? '没有找到匹配的聊天记录 🔎' : '검색 결과가 없어요 🔎') : (state.lang === 'zh' ? '还没有聊天记录，发第一条消息吧 ✨' : '작성된 대화가 없습니다. 첫 메시지를 보내보세요 ✨')}</div>`;
         } else {
@@ -18075,9 +18094,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v104',
+          ver: 'Prime 4 · v105',
           date: '2026-11-26',
-          koTitle: 'Prime 4 · v104 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
+          koTitle: 'Prime 4 · v105 무중단 4중 포트443 메신저 엔진 · 중국 무CDN 서울직통 완성',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
           koItems: [
             '⚡ 초고속 Gemini 3.5 Flash-Lite 번역: 추론 최소화·즉시 번역 중 표시·캐시 0ms 응답, 수완·징찬(俊灿 포함)·자기·오빠 커플 호칭 완벽 교정',
@@ -18097,7 +18116,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v104 更新日志' : '📜 灿完时光 Prime 4 · v104 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v105 更新日志' : '📜 灿完时光 Prime 4 · v105 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -19105,15 +19124,24 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             if (pack[key]) el.innerHTML = pack[key];
           });
           syncAllTabIconsToStyle(m, document.querySelector('header'));
-          syncAllTabIconsToStyle(m);
+          const __actTabNow = document.querySelector('.tab-panel.active');
+          if (__actTabNow) {
+            syncAllTabIconsToStyle(m, __actTabNow);
+            __actTabNow.dataset.cwIconSynced = m + ':' + (state.lang || 'ko');
+          }
           document.querySelectorAll('.icon-style-btn').forEach(btn => {
             const act = btn.getAttribute('data-istyle') === m;
             btn.style.borderColor = act ? 'var(--accent-royal)' : 'var(--border-subtle)';
             btn.style.background = act ? 'var(--accent-royal-soft)' : '';
           });
           if (!silent) {
+            window.__cwLastChatRenderSig = '';
             try { renderChat(); renderLearn(); } catch (_) {}
-            syncAllTabIconsToStyle(m);
+            const __actAfter = document.querySelector('.tab-panel.active');
+            if (__actAfter) {
+              syncAllTabIconsToStyle(m, __actAfter);
+              __actAfter.dataset.cwIconSynced = m + ':' + (state.lang || 'ko');
+            }
             saveState();
             const isZh = state.lang === 'zh';
             const names = {
@@ -23278,7 +23306,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               else if (data.v === 'pro2_signal') {
                 if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
                   publishEmqxRetained(room, 'sync', '');
-                  if (data.minVer === 'Prime 4 · v104') return;
+                  if (data.minVer === 'Prime 4 · v105') return;
                 }
                 handleIncomingChatSignal(data);
               }
@@ -24170,9 +24198,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
         }
 
+        const __cwSkippedVaultKeys = (() => {
+          const s = new Set();
+          try {
+            const raw = sessionStorage.getItem('cw_skip_vk_v105');
+            if (raw) JSON.parse(raw).forEach(x => { if (x) s.add(x); });
+          } catch (_) {}
+          return s;
+        })();
+        window.__cwSkippedVaultKeys = __cwSkippedVaultKeys;
+        function markVaultKeySkippedSession(k) {
+          if (!k) return;
+          __cwSkippedVaultKeys.add(k);
+          try {
+            sessionStorage.setItem('cw_skip_vk_v105', JSON.stringify(Array.from(__cwSkippedVaultKeys).slice(-500)));
+          } catch (_) {}
+        }
+
         function isVaultEntryAlreadyLocal(entry) {
           if (!entry || !entry.key) return false;
           const k = entry.key;
+          if (!window.__cwForceDeepVaultRestore && __cwSkippedVaultKeys.has(k)) return true;
           const delAlb = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
           const delVl = new Set(Array.isArray(state.deletedVoiceIds) ? state.deletedVoiceIds : []);
           if (entry.kind === 'album_photo' || entry.kind === 'album_video') {
@@ -24193,7 +24239,13 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const rawMid = k.replace(/^cm_/, '').replace(/_\d+$/, '');
             const delMsg = new Set(Array.isArray(state.deletedMsgIds) ? state.deletedMsgIds : []);
             if (delMsg.has(rawMid)) return true;
-            return (state.chat?.messages || []).some(m => m && (m.id === rawMid || cwSafeVaultKey('cm_' + m.id) === k) && !!(m.photoUrl || m.videoUrl || m.audioUrl));
+            const msgsArr = (state.chat && Array.isArray(state.chat.messages)) ? state.chat.messages : [];
+            const matchedMsg = msgsArr.find(m => m && (m.id === rawMid || cwSafeVaultKey('cm_' + m.id) === k));
+            if (!matchedMsg && msgsArr.length > 0 && !window.__cwForceDeepVaultRestore) {
+              markVaultKeySkippedSession(k);
+              return true;
+            }
+            return !!(matchedMsg && (matchedMsg.photoUrl || matchedMsg.videoUrl || matchedMsg.audioUrl));
           }
           if (entry.kind === 'custom_voice') {
             for (const [phr, u] of Object.entries(state.customVoices || {})) {
@@ -24447,11 +24499,20 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           try {
             const headRoom = `${room}__vm__${entry.key}`;
             const hRes = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(headRoom)}&select=payload`, { headers: sbHeaders() }, 16000);
-            if (!hRes.ok) return false;
+            if (!hRes.ok) {
+              if (hRes.status === 404) markVaultKeySkippedSession(entry.key);
+              return false;
+            }
             const hArr = await hRes.json();
-            if (!Array.isArray(hArr) || !hArr[0] || !hArr[0].payload) return false;
+            if (!Array.isArray(hArr) || !hArr[0] || !hArr[0].payload) {
+              markVaultKeySkippedSession(entry.key);
+              return false;
+            }
             const head = await e2eeUnwrapPayload(hArr[0].payload);
-            if (!head || head.v === 'cw_vm_deleted_v1') return false;
+            if (!head || head.v === 'cw_vm_deleted_v1') {
+              markVaultKeySkippedSession(entry.key);
+              return false;
+            }
 
             let fullDataUrl = '';
             if (head.v === 'cw_vm_v1' && head.dataUrl) {
@@ -24481,7 +24542,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             markVaultKeyUploaded(entry.key);
             const resolvedKind = head.kind || entry.kind;
             const fallbackRole = resolvedKind === 'custom_voice' ? 'suwan' : 'jingchan';
-            return await handleIncomingMediaPacket({
+            const appliedOk = await handleIncomingMediaPacket({
               v: 'pro2_media',
               kind: resolvedKind,
               mediaId: entry.key,
@@ -24490,6 +24551,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               dataUrl: fullDataUrl,
               meta: head.meta || {}
             }, false, true);
+            markVaultKeySkippedSession(entry.key);
+            return appliedOk;
           } catch (_) {
             return false;
           }
@@ -25768,9 +25831,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 }
               } catch (_) {}
             }
+            const nativeHasOtherRealtime = !!(window.ChanwanNative && (seoulDirectJoined || emqxConnected));
             const sseHealthy = !!(__ntfyLiveSse && __ntfySseConnected && __ntfySseRoom === rm && __ntfyLiveSse.readyState === 1);
             let pulledMissed = false;
-            if (!softAuto || (!document.hidden && !sseHealthy)) {
+            if (!softAuto || (!document.hidden && !sseHealthy && !nativeHasOtherRealtime)) {
               try { if (__ntfyLiveSse) __ntfyLiveSse.close(); } catch (_) {}
               __ntfyLiveSse = null;
               __ntfySseConnected = false;
@@ -25790,7 +25854,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v104', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v105', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               publishEmqxRetained(rm, 'sync', pkt);
             } catch (_) {}
           },
@@ -25798,7 +25862,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try {
               const rm = getSyncRoomCode();
               if (!rm) return;
-              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v104', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v105', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
               const wire = await e2eeWrapString(pkt);
               await fetchWithTimeout(`https://ntfy.sh/${encodeURIComponent(getNtfyTopic(rm))}`, {
                 method: 'POST',
@@ -25918,22 +25982,33 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
             if (mediaPull.status === 'fulfilled' && Array.isArray(mediaPull.value)) {
               sbLastOkTs = Date.now(); anyServerOk = true;
-              const needSelfRecover = manual || (state.albums || []).length === 0 || (state.voiceLetters || []).length === 0 || (state.chat?.messages || []).some(x => x && !x.photoUrl && !x.videoUrl && !x.audioUrl && /사진을 보냈어요|동영상을 보냈어요|음성 메시지|发来|照片|视频/.test(String(x.original || '')));
+              if (!window.__cwTriedMediaEventIds) window.__cwTriedMediaEventIds = new Set();
+              const isExplicitManual = (manual === true);
+              const rawMissingNeed = !window.__cwAutoMediaRecoverDone && ((state.albums || []).length === 0 || (state.voiceLetters || []).length === 0 || (state.chat?.messages || []).slice(-25).some(x => x && !x.photoUrl && !x.videoUrl && !x.audioUrl && /사진을 보냈어요|동영상을 보냈어요|음성 메시지|发来|照片|视频/.test(String(x.original || ''))));
+              const needSelfRecover = isExplicitManual || rawMissingNeed;
+              if (rawMissingNeed) window.__cwAutoMediaRecoverDone = true;
               const idxRows = mediaPull.value.slice().reverse();
               const idsToFetch = [];
               for (const r of idxRows) {
                 const rid = Number(r && r.id || 0);
                 if (!rid) continue;
+                if (!isExplicitManual && window.__cwTriedMediaEventIds.has(rid)) continue;
                 const isSelfR = !!(r.client_id && r.client_id === myDeviceClientId);
-                if (isSelfR && !needSelfRecover) continue;
-                if (!needSelfRecover && processedEventIds.has(rid)) continue;
+                if (isSelfR && !needSelfRecover) {
+                  window.__cwTriedMediaEventIds.add(rid);
+                  continue;
+                }
+                if (!needSelfRecover && processedEventIds.has(rid)) {
+                  window.__cwTriedMediaEventIds.add(rid);
+                  continue;
+                }
                 idsToFetch.push(rid);
               }
-              // Fetch media payloads in small 4-row batches with generous 22s timeout so videos & photos NEVER time out!
-              const batchCap = needSelfRecover ? 400 : 180;
+              const batchCap = isExplicitManual ? 180 : (needSelfRecover ? 90 : 36);
               const targetIds = idsToFetch.slice(-batchCap);
               for (let bi = 0; bi < targetIds.length; bi += 6) {
                 const chunkIds = targetIds.slice(bi, bi + 6);
+                chunkIds.forEach(cid => window.__cwTriedMediaEventIds.add(cid));
                 try {
                   const bUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&id=in.(${chunkIds.join(',')})&order=id.asc`;
                   const bRes = await fetchWithTimeout(bUrl, { headers: sbHeaders() }, 22000);
@@ -26010,13 +26085,22 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
         // Ultra-fast (~100ms) 4-channel delta pull for notification open, foreground nudge & visibility resume!
         async function pullFastChatDeltaNow(isLiveNudge) {
+          if (window.__cwFastDeltaInFlight) return false;
+          const nowFast = Date.now();
+          if (!isLiveNudge && (nowFast - (window.__cwLastFastDeltaTs || 0)) < 2500) return false;
+          if ((nowFast - __cwBootEpoch) < 2800 && isPullingCloud) return false;
+          window.__cwFastDeltaInFlight = true;
+          window.__cwLastFastDeltaTs = nowFast;
           try {
             const room = getSyncRoomCode();
             if (!room) return false;
-            connectSeoulDirectPhoenixWs();
+            if (!seoulDirectJoined) connectSeoulDirectPhoenixWs();
             if (!emqxConnected) connectEmqxChinaDirect();
-            connectNtfyLiveSse();
-            try { sendChatSignal('request_peer_catchup', { latestTs: Date.now() }); } catch (_) {}
+            if (!window.ChanwanNative && !__ntfySseConnected) connectNtfyLiveSse();
+            if ((nowFast - (window.__cwLastCatchupSigTs || 0)) > 20000) {
+              window.__cwLastCatchupSigTs = nowFast;
+              try { sendChatSignal('request_peer_catchup', { latestTs: nowFast }); } catch (_) {}
+            }
             const lastId = loadLastEventId();
             const safeFrom = Math.max(0, lastId - 10);
             const fastUrl = lastId > 0
@@ -26052,28 +26136,39 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (typeof window.__emitChatReadIfVisible === 'function') window.__emitChatReadIfVisible(false);
             }
             return changed;
-          } catch (_) { return false; }
+          } catch (_) {
+            return false;
+          } finally {
+            window.__cwFastDeltaInFlight = false;
+          }
         }
         window.__pullFastChatDeltaNow = pullFastChatDeltaNow;
 
-        // Direct 0.0s Native Push Service -> WebView Injection Bridge (when app screen is open!)
+        // Direct 0.0s Native Push Service -> WebView Injection Bridge (Zero Self-Echo Cascade!)
         window.__onNativeServiceIncoming = async function(pushTitle, pushBody, rawPro2Json) {
           try {
             let mergedFromRaw = false;
             if (rawPro2Json && String(rawPro2Json).trim()) {
               const data = await e2eeUnwrapString(String(rawPro2Json));
-              if (data && data.clientId !== myDeviceClientId) {
-                if (data.v === 'pro2') {
-                  mergedFromRaw = !!mergeIncomingCoupleData(data, true);
-                } else if (data.v === 'pro2_signal') {
-                  handleIncomingChatSignal(data);
-                  return;
-                }
+              if (!data || typeof data !== 'object') return;
+              // CRITICAL: Drop self-echo packets immediately — NEVER fall through to pullFastChatDeltaNow!
+              const myRNow = (state && state.myRole) || 'suwan';
+              if (data.clientId === myDeviceClientId || (data.myRole && data.myRole === myRNow)) {
+                return;
               }
+              if (data.v === 'pro2_signal') {
+                handleIncomingChatSignal(data);
+                return;
+              }
+              if (data.v === 'pro2') {
+                mergeIncomingCoupleData(data, true);
+                return;
+              }
+              return;
             }
-            if (!mergedFromRaw) {
-              mergedFromRaw = await pullFastChatDeltaNow(true);
-            }
+            const cleanBCheck = String(pushBody || '').trim();
+            if (!cleanBCheck && (Date.now() - (window.__cwLastFastDeltaTs || 0)) < 2500) return;
+            mergedFromRaw = await pullFastChatDeltaNow(!!cleanBCheck);
             // If a direct push arrived while user is on Home/Study/Setting and message hasn't arrived on sync channel yet, show banner immediately!
             const cleanB = String(pushBody || '').trim();
             if (!mergedFromRaw && cleanB && !/^⏳/.test(cleanB)) {
@@ -27673,6 +27768,10 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const allRealtimeDead = !emqxConnected && !seoulDirectJoined && !__ntfySseConnected && (typeof navigator === 'undefined' || navigator.onLine !== false);
             if ((o.forceNetReset || (isAuto && allRealtimeDead)) && br && typeof br.forceReconnectMyNet === 'function') {
               await br.forceReconnectMyNet();
+            } else if (isAuto) {
+              if (!seoulDirectJoined && typeof connectSeoulDirectPhoenixWs === 'function') connectSeoulDirectPhoenixWs();
+              if (!emqxConnected && typeof connectEmqxChinaDirect === 'function') connectEmqxChinaDirect();
+              if (!window.ChanwanNative && !__ntfySseConnected && typeof connectNtfyLiveSse === 'function') connectNtfyLiveSse();
             } else if (typeof connectLiveSyncStream === 'function') {
               connectLiveSyncStream();
             }
@@ -30661,8 +30760,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v104)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v104';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v105)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v105';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -30997,7 +31096,12 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             renderFoodRouletteMeta();
             renderCoupleQuizzes();
             if (typeof renderChatLearnBook === 'function') renderChatLearnBook();
-            if (typeof window.syncAllTabIconsToStyle === 'function') window.syncAllTabIconsToStyle();
+            if (typeof window.syncAllTabIconsToStyle === 'function') {
+              const __hdr = document.querySelector('header');
+              const __actP = document.querySelector('.tab-panel.active');
+              if (__hdr) window.syncAllTabIconsToStyle(null, __hdr);
+              if (__actP) window.syncAllTabIconsToStyle(null, __actP);
+            }
           } catch (_) {}
         }, 120);
         updateClocks();
@@ -31795,7 +31899,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v104';
+        const APP_VER_NOW = 'Prime 4 · v105';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -32191,7 +32295,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
           if (br) {
             const sendForceBurst = () => {
-              try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v104' }); } catch (_) {}
+              try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v105' }); } catch (_) {}
             };
             sendForceBurst();
             setTimeout(sendForceBurst, 1500);
@@ -33059,7 +33163,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v104 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v105 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';

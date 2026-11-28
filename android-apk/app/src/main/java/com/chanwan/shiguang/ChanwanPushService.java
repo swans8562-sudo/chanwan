@@ -315,6 +315,10 @@ public class ChanwanPushService extends Service {
         if (rawMsg == null || rawMsg.isEmpty() || !rawMsg.startsWith("{")) return;
         try {
             JSONObject pObj = new JSONObject(rawMsg);
+            String pktRole = pObj.optString("myRole", "");
+            if (!pktRole.isEmpty() && pktRole.equals(role)) {
+                return;
+            }
             if (pObj.optInt("__e2ee", 0) == 1) {
                 if (MainActivity.isActivelyVisibleOnScreen()) {
                     MainActivity.deliverIncomingFromService("", "", rawMsg);
