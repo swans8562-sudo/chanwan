@@ -2540,7 +2540,7 @@
     #chatMessagesList { overflow-anchor: auto; }
 
     /* ============================================================
-       Prime 4 · v92: App-Wide Couture Boutique Elevation
+       Prime 4 · v94: App-Wide Couture Boutique Elevation
        (60fps Zero-Blur Silk Gradients, Pearl Specular Rims & Asymmetric Bubbles)
        ============================================================ */
     .cw-msg-bubble * {
@@ -2784,7 +2784,7 @@
     }
 
     /* ============================================================
-       Prime 4 · v92: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
+       Prime 4 · v94: Complete Zero-CDN CSS Utility Coverage & Pixel Audit Polish
        (Fixes every missing arbitrary [px]/[rem] size, absolute offset, z-index & modal cap)
        ============================================================ */
     .text-\[9px\] { font-size: 9px !important; line-height: 1.25 !important; }
@@ -5103,7 +5103,7 @@
             <span data-i18n="appVersionLabel" class="shrink-0">앱 버전 · 업데이트</span>
           </div>
           <div class="grid grid-cols-3 gap-1.5 items-center">
-            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v92</span>
+            <span id="appVersionBadgePill" class="h-8 px-2 rounded-xl font-bold text-[10.5px] inline-flex items-center justify-center whitespace-nowrap truncate" style="background: var(--accent-royal-soft); color: var(--accent-royal);">Prime 4 · v94</span>
             <button id="forceAppUpdateBtn" type="button" class="btn-ghost h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate" title="캐시를 비우고 서버의 최신 버전을 바로 불러와요">🔄 최신 업데이트</button>
             <button id="directApkDownloadBtn" type="button" class="btn-gold h-8 px-2 rounded-xl text-[10.5px] font-bold inline-flex items-center justify-center gap-1 whitespace-nowrap truncate">📲 앱 업데이트</button>
           </div>
@@ -5446,8 +5446,8 @@
     </div>
   </div>
 
-  <div id="toastBox" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-2" style="z-index: 10200;">
-    <div id="toastInner" class="px-4 py-2.5 rounded-full text-xs font-medium shadow-xl border whitespace-nowrap" style="background: var(--surface-elevated); border-color: var(--border-accent); color: var(--text-primary);"></div>
+  <div id="toastBox" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-2" style="z-index: 10200; width: max-content; max-width: min(92vw, 420px);">
+    <div id="toastInner" class="px-4 py-2.5 rounded-2xl text-xs font-semibold shadow-xl border text-center leading-relaxed" style="background: var(--surface-elevated); border-color: var(--border-accent); color: var(--text-primary); white-space: normal; word-break: keep-all; overflow-wrap: break-word;"></div>
   </div>
 
   
@@ -6491,14 +6491,16 @@
         const box = document.getElementById('toastBox');
         const inner = document.getElementById('toastInner');
         if (!box || !inner) return;
-        inner.textContent = msg;
+        const str = String(msg || '');
+        inner.textContent = str;
         box.style.opacity = '1';
         box.style.transform = 'translate(-50%, 0)';
         if (toastTimer) clearTimeout(toastTimer);
+        const autoDur = str.length > 30 ? 3800 : 2600;
         toastTimer = setTimeout(() => {
           box.style.opacity = '0';
           box.style.transform = 'translate(-50%, 8px)';
-        }, Number(durationMs) > 0 ? Number(durationMs) : 2600);
+        }, Number(durationMs) > 0 ? Number(durationMs) : autoDur);
       }
 
       const CUSTOM_SOUND_KEY = 'chanwan_custom_sound_data_v1';
@@ -11489,7 +11491,7 @@
           if (typeof renderChatStickers === 'function') renderChatStickers();
           if (typeof renderAnniversary === 'function') renderAnniversary();
         };
-        if (document.getElementById('tab-space')?.classList.contains('active')) {
+        if (document.getElementById('tab-diary')?.classList.contains('active')) {
           __runDeferredRenders();
         } else {
           setTimeout(__runDeferredRenders, 60);
@@ -17236,7 +17238,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         // Patch Notes (Bilingual Changelog History — updated every release)
         const PATCH_NOTES_HISTORY = [
         {
-          ver: 'Prime 4 · v92',
+          ver: 'Prime 4 · v94',
           date: '2026-11-26',
           koTitle: 'Prime 4 정식 완성 · 초고속 Gemini 3.5 번역 · 무제한 동영상 · 명품 부티크 UI',
           zhTitle: 'Prime 4 正式版 · 极速 Gemini 3.5 翻译 · 无限大视频 · 精品奢华界面',
@@ -17258,7 +17260,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const isZh = state.lang === 'zh';
           const titleEl = document.getElementById('patchNotesTitle');
           const bodyEl = document.getElementById('patchNotesBody');
-          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v92 更新日志' : '📜 灿完时光 Prime 4 · v92 업데이트 소식';
+          if (titleEl) titleEl.textContent = isZh ? '📜 灿完时光 Prime 4 · v94 更新日志' : '📜 灿完时光 Prime 4 · v94 업데이트 소식';
           if (!bodyEl) return;
           const latestOnly = PATCH_NOTES_HISTORY.slice(0, 1);
           bodyEl.innerHTML = latestOnly.map((entry) => `
@@ -18544,7 +18546,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         ];
 
         let miniGamesBooted = false;
-        let gameDirection = 'learn-ko'; // 'learn-ko' (징찬: 한국어 맞추기) or 'learn-zh' (수완: 중국어 맞추기)
+        let gameDirection = 'learn-ko';
+        window.__getGameDirection = () => gameDirection; // 'learn-ko' (징찬: 한국어 맞추기) or 'learn-zh' (수완: 중국어 맞추기)
         let gameDifficulty = 'starter'; // 'starter' | 'beginner' | 'intermediate' | 'advanced'
         let memCards = [], memFlipped = [], memLock = false, memMovesCount = 0, memMatchedCount = 0;
         let puzzleIdx = 0, puzzleSelected = [], puzzlePoolOrder = [];
@@ -20598,7 +20601,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           // Sync mini-game default mode so Suwan's practice never affects Jingchan's XP
           const targetDirBtn = document.getElementById(isJc ? 'gameDirKoBtn' : 'gameDirZhBtn');
-          if (targetDirBtn && typeof gameDirection !== 'undefined' && gameDirection !== (isJc ? 'learn-ko' : 'learn-zh')) {
+          if (targetDirBtn && typeof window.__getGameDirection === 'function' && window.__getGameDirection() !== (isJc ? 'learn-ko' : 'learn-zh')) {
             targetDirBtn.click();
           }
 
@@ -21385,6 +21388,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                 setTimeout(() => window.__executeRemoteConnectionHeal(__incHealTs), 150);
               }
             }
+            const __pRoleNeed = __myRoleHeal === 'suwan' ? 'jingchan' : 'suwan';
+            const __pNeedIds = Array.isArray(inc.profile[__pRoleNeed + 'NeedMediaIds']) ? inc.profile[__pRoleNeed + 'NeedMediaIds'] : [];
+            if (__pNeedIds.length && typeof window.__respondToPartnerVaultRequest === 'function') {
+              const __haveRequestedLocally = (state.chat?.messages || []).some(m => m && __pNeedIds.includes(m.id) && (m.videoUrl || m.audioUrl || m.photoUrl || (__cwChatMediaCache && __cwChatMediaCache[m.id] && (__cwChatMediaCache[m.id].videoUrl || __cwChatMediaCache[m.id].audioUrl || __cwChatMediaCache[m.id].photoUrl))));
+              if (__haveRequestedLocally) {
+                setTimeout(() => {
+                  try { window.__respondToPartnerVaultRequest({ priorityMsgId: __pNeedIds[0], haveChatMedia: [] }); } catch (_) {}
+                }, 400);
+              }
+            }
             if (inc.profile.suwanSleep && Number(inc.profile.suwanSleep.updatedAt || 0) > Number(state.profile.suwanSleep?.updatedAt || 0)) {
               state.profile.suwanSleep = { ...inc.profile.suwanSleep };
               changed = true;
@@ -21957,9 +21970,140 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           for (const p of parts) { buf.set(p, off); off += p.length; }
           return buf;
         }
-        function getEmqxTopic(room) {
-          return 'chanwan/v16/' + String(room || DEFAULT_COUPLE_ROOM).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48) + '/sync';
+        let __sbStateUnavailable = false;
+        try { if (sessionStorage.getItem('cw_sb_state_unavail_v1') === '1') __sbStateUnavailable = true; } catch (_) {}
+
+        function getEmqxRoomPrefix(room) {
+          return 'chanwan/v16/' + String(room || DEFAULT_COUPLE_ROOM).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48);
         }
+        function getEmqxTopic(room) {
+          return getEmqxRoomPrefix(room) + '/sync';
+        }
+        function publishEmqxRetained(room, subName, jsonStr) {
+          if (!room || !subName) return false;
+          if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) return false;
+          try {
+            const topicBytes = mqttStr(getEmqxRoomPrefix(room) + '/' + subName);
+            if (!jsonStr) {
+              // Empty payload with 0x31 clears retained message on broker
+              emqxWs.send(mqttPacket(0x31, [topicBytes, new Uint8Array(0)]));
+              return true;
+            }
+            const sendRetainedWire = (wireStr) => {
+              if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1 || !wireStr) return false;
+              const payloadBytes = emqxEnc.encode(wireStr);
+              if (payloadBytes.length > 240000) return false;
+              emqxWs.send(mqttPacket(0x31, [topicBytes, payloadBytes]));
+              emqxLastOkTs = Date.now();
+              return true;
+            };
+            if (window.__isE2eeActive && window.__isE2eeActive()) {
+              e2eeWrapString(jsonStr).then(encStr => sendRetainedWire(encStr)).catch(() => {});
+              return true;
+            }
+            return sendRetainedWire(jsonStr);
+          } catch (_) { return false; }
+        }
+        const __cwRetainedVidRx = {};
+        let __lastRetainedVidUploadedId = '';
+        async function publishEmqxRetainedVideoVault(room, senderRole, msgId, meta, rawDataUrl) {
+          if (!room || !msgId || !rawDataUrl || !String(rawDataUrl).startsWith('data:video/')) return false;
+          if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) return false;
+          const str = String(rawDataUrl);
+          if (str.length > 4200000) return false; // Up to ~3.1MB binary video stored in EMQX Retained Cloud!
+          const CHUNK = 115000;
+          const total = Math.max(1, Math.ceil(str.length / CHUNK));
+          if (total > 36) return false;
+          const roleSlot = senderRole === 'jingchan' ? 'jc' : 'sw';
+          const nowTs = Date.now();
+          for (let i = 0; i < total; i++) {
+            const cJson = JSON.stringify({
+              v: 'cw_rvid_chunk',
+              msgId,
+              idx: i,
+              total,
+              ts: nowTs,
+              clientId: myDeviceClientId,
+              myRole: senderRole,
+              data: str.slice(i * CHUNK, (i + 1) * CHUNK)
+            });
+            publishEmqxRetained(room, `vidc_${roleSlot}_${i}`, cJson);
+            if (i + 1 < total) await new Promise(r => setTimeout(r, 38));
+          }
+          // Clear any leftover higher-index chunks from an older larger video
+          for (let k = total; k < Math.min(total + 4, 36); k++) {
+            publishEmqxRetained(room, `vidc_${roleSlot}_${k}`, '');
+          }
+          publishEmqxRetained(room, `vidc_${roleSlot}_head`, JSON.stringify({
+            v: 'cw_rvid_head',
+            msgId,
+            total,
+            ts: nowTs,
+            clientId: myDeviceClientId,
+            myRole: senderRole,
+            meta: meta || {}
+          }));
+          __lastRetainedVidUploadedId = msgId;
+          return true;
+        }
+
+        async function tryAssembleRetainedVid(msgId) {
+          const entry = __cwRetainedVidRx[msgId];
+          if (!entry || !entry.total || !entry.headReady) return false;
+          if (entry.parts.length < entry.total) return false;
+          for (let i = 0; i < entry.total; i++) {
+            if (typeof entry.parts[i] !== 'string') return false;
+          }
+          const fullDataUrl = entry.parts.join('');
+          delete __cwRetainedVidRx[msgId];
+          if (!fullDataUrl.startsWith('data:video/')) return false;
+          // Remove from my NeedMediaIds wishlist once received!
+          try {
+            const myR = (state && state.myRole) || 'suwan';
+            const k = myR + 'NeedMediaIds';
+            if (state && state.profile && Array.isArray(state.profile[k]) && state.profile[k].includes(msgId)) {
+              state.profile[k] = state.profile[k].filter(x => x !== msgId);
+              saveState(true);
+            }
+          } catch (_) {}
+          return await handleIncomingMediaPacket({
+            v: 'pro2_media',
+            kind: 'chat_video',
+            mediaId: 'rvid_' + msgId,
+            ts: entry.ts || Date.now(),
+            myRole: entry.myRole || 'jingchan',
+            dataUrl: fullDataUrl,
+            meta: { ...(entry.meta || {}), msgId }
+          }, false, true);
+        }
+
+        function handleIncomingRetainedVidPkt(data) {
+          if (!data || !data.msgId) return;
+          const mid = String(data.msgId);
+          // Skip assembling if we ALREADY have this video locally!
+          const alreadyHave = (state && state.chat && Array.isArray(state.chat.messages))
+            && state.chat.messages.some(m => m && m.id === mid && m.videoUrl);
+          if (alreadyHave) {
+            delete __cwRetainedVidRx[mid];
+            return;
+          }
+          if (!__cwRetainedVidRx[mid]) {
+            __cwRetainedVidRx[mid] = { total: 0, headReady: false, parts: [], meta: {}, myRole: data.myRole || 'jingchan', ts: data.ts || Date.now() };
+          }
+          const entry = __cwRetainedVidRx[mid];
+          if (data.v === 'cw_rvid_head') {
+            entry.total = Number(data.total || 0);
+            entry.meta = data.meta || {};
+            entry.myRole = data.myRole || entry.myRole;
+            entry.ts = data.ts || entry.ts;
+            entry.headReady = true;
+          } else if (data.v === 'cw_rvid_chunk' && typeof data.idx === 'number' && typeof data.data === 'string') {
+            if (data.total && !entry.total) entry.total = Number(data.total);
+            entry.parts[data.idx] = data.data;
+          }
+          tryAssembleRetainedVid(mid).catch(() => {});
+        }
+
         function publishEmqxBackup(room, jsonStr) {
           if (!jsonStr) return false;
           if (!emqxWs || !emqxConnected || emqxWs.readyState !== 1) {
@@ -22036,8 +22180,27 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                     emqxConnected = true;
                     emqxLastOkTs = Date.now();
                     lastSyncOkTs = Math.max(lastSyncOkTs, emqxLastOkTs);
-                    const subTopic = mqttStr(getEmqxTopic(room));
-                    ws.send(mqttPacket(0x82, [new Uint8Array([0, 1]), subTopic, new Uint8Array([0])]));
+                    const subWildcard = mqttStr(getEmqxRoomPrefix(room) + '/#');
+                    ws.send(mqttPacket(0x82, [new Uint8Array([0, 1]), subWildcard, new Uint8Array([0])]));
+                    setTimeout(() => {
+                      try {
+                        const myR = (state && state.myRole) || 'suwan';
+                        const snapBody = buildEmqxFastPacket(extractLightweightCore(state));
+                        if (snapBody) publishEmqxRetained(room, 'state_' + myR, snapBody);
+                        // Also vault our newest local chat video into EMQX Retained Cloud Slots so offline partner receives it automatically!
+                        const myLatestVidMsg = ((state && state.chat && state.chat.messages) || []).slice().reverse().find(m => {
+                          if (!m || !m.id) return false;
+                          const s = (m.sender === 'jingchan' || String(m.sender || '').includes('靖灿')) ? 'jingchan' : 'suwan';
+                          const vid = m.videoUrl || (__cwChatMediaCache && __cwChatMediaCache[m.id] && __cwChatMediaCache[m.id].videoUrl);
+                          return s === myR && vid && String(vid).startsWith('data:video/') && String(vid).length <= 4200000;
+                        });
+                        if (myLatestVidMsg && myLatestVidMsg.id !== __lastRetainedVidUploadedId) {
+                          const vUrl = myLatestVidMsg.videoUrl || (__cwChatMediaCache[myLatestVidMsg.id] && __cwChatMediaCache[myLatestVidMsg.id].videoUrl);
+                          const vMeta = { msgId: myLatestVidMsg.id, sender: myLatestVidMsg.sender, time: myLatestVidMsg.time, original: myLatestVidMsg.original || '동영상을 보냈어요 🎬', translated: myLatestVidMsg.translated || '', tgtLang: myLatestVidMsg.tgtLang || '', category: myLatestVidMsg.photoCat || '✨ 일상 순간' };
+                          publishEmqxRetainedVideoVault(room, myR, myLatestVidMsg.id, vMeta, vUrl).catch(() => {});
+                        }
+                      } catch (_) {}
+                    }, 900);
                     if (emqxPingTimer) clearInterval(emqxPingTimer);
                     emqxPingTimer = setInterval(() => {
                       if (document.hidden) return;
@@ -22085,7 +22248,16 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                           const pktTs = Number(data.ts || 0);
                           const isFresh = !isRetainedMqtt && (!pktTs || (Date.now() - pktTs) <= 60000) && (Date.now() - __cwBootEpoch) > 3500;
                           if (data.v === 'pro2') mergeIncomingCoupleData(data, isFresh);
-                          else if (data.v === 'pro2_signal') handleIncomingChatSignal(data);
+                          else if (data.v === 'cw_rvid_head' || data.v === 'cw_rvid_chunk') handleIncomingRetainedVidPkt(data);
+                          else if (data.v === 'cw_recent_media_v1' && typeof window.__applyIncomingRecentMediaPack === 'function') window.__applyIncomingRecentMediaPack(data, false);
+                          else if (data.v === 'pro2_signal') {
+                            if (isRetainedMqtt && data.kind === 'remote_force_update' && data.targetRole === (state.myRole || 'suwan')) {
+                              // Clear retained upgrade signal on /sync once received so it never repeats!
+                              publishEmqxRetained(room, 'sync', '');
+                              if (data.minVer === 'Prime 4 · v94') return;
+                            }
+                            handleIncomingChatSignal(data);
+                          }
                           else if (data.v === 'pro2_media') handleIncomingMediaPacket(data, isFresh);
                           else if (data.v === 'pro2_media_chunk') handleIncomingMediaChunk(data, isFresh);
                         }
@@ -22146,7 +22318,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
               jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
               suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
-              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined,
+              suwanNeedMediaIds: Array.isArray(coreObj.profile?.suwanNeedMediaIds) && coreObj.profile.suwanNeedMediaIds.length ? coreObj.profile.suwanNeedMediaIds.slice(-8) : undefined,
+              jingchanNeedMediaIds: Array.isArray(coreObj.profile?.jingchanNeedMediaIds) && coreObj.profile.jingchanNeedMediaIds.length ? coreObj.profile.jingchanNeedMediaIds.slice(-8) : undefined
             },
             hugs: coreObj.hugs || null,
             lavender: coreObj.lavender || null,
@@ -22234,7 +22408,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
               jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
               suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
-              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined,
+              suwanNeedMediaIds: Array.isArray(coreObj.profile?.suwanNeedMediaIds) && coreObj.profile.suwanNeedMediaIds.length ? coreObj.profile.suwanNeedMediaIds.slice(-8) : undefined,
+              jingchanNeedMediaIds: Array.isArray(coreObj.profile?.jingchanNeedMediaIds) && coreObj.profile.jingchanNeedMediaIds.length ? coreObj.profile.jingchanNeedMediaIds.slice(-8) : undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -22299,7 +22475,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         async function pushNtfyBackup(room, bodyStr) {
           if (!room || !bodyStr) return false;
           // Reserve ntfy.sh quota strictly for OS push notifications unless BOTH EMQX and Supabase have failed!
-          if (emqxConnected || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
+          if ((!__sbStateUnavailable && emqxConnected) || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
           if ((Date.now() - __lastEmergencyNtfySyncTs) < 45000) return false;
           __lastEmergencyNtfySyncTs = Date.now();
           try {
@@ -22323,7 +22499,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
         async function pollNtfyBackup(room, isLive) {
           if (!room) return false;
           // Never poll ntfy.sh while Supabase or EMQX is healthy (prevents HTTP 429 IP ban on ChanwanPushService!)
-          if (emqxConnected || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
+          if ((!__sbStateUnavailable && emqxConnected) || (sbLastOkTs > 0 && (Date.now() - sbLastOkTs) < 35000)) return false;
           if ((Date.now() - __lastEmergencyNtfyPollTs) < 60000) return false;
           __lastEmergencyNtfyPollTs = Date.now();
           try {
@@ -22451,6 +22627,11 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               payload: wirePayload
             })
           }, customTimeoutMs || Math.max(SYNC_FETCH_TIMEOUT_MS, 10000));
+          if ([400, 401, 403, 404, 422, 500, 502, 503, 540].includes(res.status)) {
+            __sbStateUnavailable = true;
+            try { sessionStorage.setItem('cw_sb_state_unavail_v1', '1'); } catch (_) {}
+            return false;
+          }
           if (!res.ok) throw new Error('sb_upsert_' + res.status);
           sbLastOkTs = Date.now();
           lastSyncOkTs = Date.now();
@@ -22732,14 +22913,31 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const sig = `${avatars.suwan ? avatars.suwan.length : 0}|${avatars.jingchan ? avatars.jingchan.length : 0}|${recentAlbums.map(x => x.id).join(',')}|${recentChatMedia.map(x => x.id).join(',')}|${recentVoices.map(x => x.id).join(',')}`;
             if (sig === __lastRecentPackPushSig) return true;
             __lastRecentPackPushSig = sig;
-            await upsertSupabaseStateSnapshot(`${room}__recent_media_v1`, {
+            const packObj = {
               v: 'cw_recent_media_v1',
               updatedAt: Date.now(),
               avatars,
               albums: recentAlbums,
               chatMedia: recentChatMedia,
               voices: recentVoices
-            }, 18000);
+            };
+            // Publish compact media pack to EMQX Retained slot if <= 210KB so offline voices/photos arrive in 0.2s even without Supabase DB!
+            try {
+              const compactPackStr = JSON.stringify({
+                v: 'cw_recent_media_v1',
+                updatedAt: packObj.updatedAt,
+                avatars,
+                albums: recentAlbums.slice(0, 3),
+                chatMedia: recentChatMedia.slice(-4),
+                voices: recentVoices.slice(0, 2)
+              });
+              if (compactPackStr.length <= 215000) {
+                publishEmqxRetained(room, 'mpack_' + (state.myRole || 'suwan'), compactPackStr);
+              }
+            } catch (_) {}
+            if (!__sbStateUnavailable) {
+              await upsertSupabaseStateSnapshot(`${room}__recent_media_v1`, packObj, 18000);
+            }
             return true;
           } catch (_) { return false; }
         }
@@ -22749,16 +22947,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const rm = getSyncRoomCode();
           if (rm) setTimeout(() => { pushRecentMediaPack(rm).catch(() => {}); }, 250);
         };
-        async function pullRecentMediaPack(room, showFeedback) {
-          if (!room) room = getSyncRoomCode();
-          if (!room) return false;
+        async function applyIncomingRecentMediaPack(pack, showFeedback) {
+          if (!pack || pack.v !== 'cw_recent_media_v1') return false;
           try {
-            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room + '__recent_media_v1')}&select=payload`, { headers: sbHeaders() }, 12000);
-            if (!res.ok) return false;
-            const arr = await res.json();
-            if (!Array.isArray(arr) || !arr[0] || !arr[0].payload) return false;
-            const pack = await e2eeUnwrapPayload(arr[0].payload);
-            if (!pack || pack.v !== 'cw_recent_media_v1') return false;
 
             let changed = false;
             const delAlb = new Set(Array.isArray(state.deletedAlbumIds) ? state.deletedAlbumIds : []);
@@ -22818,6 +23009,21 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               if (showFeedback) showToast(state.lang === 'zh' ? '📷 已加载最新照片与语音 ✨' : '📷 최신 사진과 음성을 불러왔어요 ✨');
             }
             return changed;
+          } catch (_) { return false; }
+        }
+        window.__applyIncomingRecentMediaPack = applyIncomingRecentMediaPack;
+
+        async function pullRecentMediaPack(room, showFeedback) {
+          if (__sbStateUnavailable) return false;
+          if (!room) room = getSyncRoomCode();
+          if (!room) return false;
+          try {
+            const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room + '__recent_media_v1')}&select=payload`, { headers: sbHeaders() }, 12000);
+            if (!res.ok) return false;
+            const arr = await res.json();
+            if (!Array.isArray(arr) || !arr[0] || !arr[0].payload) return false;
+            const pack = await e2eeUnwrapPayload(arr[0].payload);
+            return await applyIncomingRecentMediaPack(pack, showFeedback);
           } catch (_) { return false; }
         }
         window.__pullRecentMediaNow = (fb) => pullRecentMediaPack(getSyncRoomCode(), !!fb);
@@ -23122,6 +23328,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
           // Channel 1: Instant China-Direct EMQX P2P (150KB paced frames so Qingdao<->Korea never drops packets!)
           const emqxPromise = sendEmqxMediaPaced(room, kind, mediaId, meta, rawStr, nowTs).catch(() => false);
+          if (kind === 'chat_video' && meta && meta.msgId) { publishEmqxRetainedVideoVault(room, (meta.sender || state.myRole || 'suwan'), meta.msgId, meta, rawStr).catch(() => {}); }
           // Channel 2: Permanent Cloud Vault inside proven couple_sync_state table!
           const vaultPromise = saveVaultItemToCloudState(room, vaultKey, kind, meta, rawStr).catch(() => false);
 
@@ -23700,7 +23907,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               suwanHealth: coreObj.profile?.suwanHealth || undefined,
               jingchanHealth: coreObj.profile?.jingchanHealth || undefined,
               suwanHealCmdTs: Number(coreObj.profile?.suwanHealCmdTs || 0) || undefined,
-              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined
+              jingchanHealCmdTs: Number(coreObj.profile?.jingchanHealCmdTs || 0) || undefined,
+              suwanNeedMediaIds: Array.isArray(coreObj.profile?.suwanNeedMediaIds) && coreObj.profile.suwanNeedMediaIds.length ? coreObj.profile.suwanNeedMediaIds.slice(-8) : undefined,
+              jingchanNeedMediaIds: Array.isArray(coreObj.profile?.jingchanNeedMediaIds) && coreObj.profile.jingchanNeedMediaIds.length ? coreObj.profile.jingchanNeedMediaIds.slice(-8) : undefined
             },
             hugs: coreObj.hugs || null,
             makerLayout: coreObj.makerLayout || null,
@@ -23778,6 +23987,9 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           // Priority #1 (China Direct): Fire EMQX immediately with full never-null fast packet!
           if (!emqxConnected) connectEmqxChinaDirect();
           const emqxOk = emqxBody ? publishEmqxBackup(room, emqxBody) : false;
+          if (emqxBody) {
+            publishEmqxRetained(room, 'state_' + (state.myRole || 'suwan'), emqxBody);
+          }
           if (emqxOk) {
             lastSyncOkTs = Date.now();
             updateLiveSyncIndicators(true, room);
@@ -23791,7 +24003,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             (Array.isArray(coreObj.memos) && coreObj.memos.length > 0) ||
             (Array.isArray(coreObj.anniversaries) && coreObj.anniversaries.length > 0)
           );
-          const __canUpsertSnap = !!window.__cwInitialPullDone && __hasRealLocalData;
+          const __canUpsertSnap = !__sbStateUnavailable && !!window.__cwInitialPullDone && __hasRealLocalData;
 
           // Broadcast delta instantaneously over Seoul Supabase Realtime WebSocket (0.08s!) if subscribed
           let sbRealtimeSent = false;
@@ -24042,6 +24254,14 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             try { await flushSyncOutbox(); } catch (_) {}
             try { await pullCloudSync(false); } catch (_) {}
           },
+          sendRetainedUpgradeSignal: (targetRole, cmdTs) => {
+            try {
+              const rm = getSyncRoomCode();
+              if (!rm) return;
+              const pkt = JSON.stringify({ v: 'pro2_signal', kind: 'remote_force_update', targetRole, cmdTs, minVer: 'Prime 4 · v94', ts: Date.now(), clientId: myDeviceClientId, myRole: state.myRole || 'suwan' });
+              publishEmqxRetained(rm, 'sync', pkt);
+            } catch (_) {}
+          },
           sendEmergencyNtfyHeal: async (targetRole, cmdTs) => {
             try {
               const rm = getSyncRoomCode();
@@ -24088,7 +24308,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
                   : `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&order=id.desc&limit=30`);
             const snapUrl = `${SUPABASE_URL}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`;
             const bothRealtimeHealthy = !!(emqxConnected && syncTransportMode === 'realtime' && (Date.now() - lastSyncOkTs) < 25000);
-            const shouldPullSnap = !isLivePull || manual || !bothRealtimeHealthy || (window.__sbPollTick % 5 === 1);
+            const shouldPullSnap = !__sbStateUnavailable && (!isLivePull || manual || !bothRealtimeHealthy || (window.__sbPollTick % 5 === 1));
             const shouldPullMedia = !isLivePull || manual || (window.__sbPollTick % 6 === 1);
             // Lightweight index query ONLY (id, client_id) so it NEVER times out even when videos are stored!
             const mediaIdxUrl = `${SUPABASE_URL}/rest/v1/couple_sync_events?room_id=eq.${encodeURIComponent(room)}&kind=eq.media&select=id,client_id&order=id.desc&limit=400`;
@@ -24097,6 +24317,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const [ntfyPull, snapPull, evPull, mediaPull] = await Promise.allSettled([
               (!bothRealtimeHealthy || manual || (window.__sbPollTick % 4 === 1)) ? pollNtfyBackup(room, isLivePull) : Promise.resolve(false),
               shouldPullSnap ? fetchWithTimeout(snapUrl, { headers: sbHeaders() }, Math.max(SYNC_FETCH_TIMEOUT_MS, 9500)).then(async r => {
+                if ([400, 401, 403, 404, 422, 500, 502, 503, 540].includes(r.status)) { __sbStateUnavailable = true; try { sessionStorage.setItem('cw_sb_state_unavail_v1', '1'); } catch (_) {} return null; }
                 if (!r.ok) return null;
                 sbLastOkTs = Date.now();
                 return await r.json();
@@ -25126,6 +25347,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             }
           }
           if (!target || !target.videoUrl) {
+            try {
+              const myR = (state && state.myRole) || 'suwan';
+              if (!state.profile) state.profile = {};
+              const nk = myR + 'NeedMediaIds';
+              const curNeed = Array.isArray(state.profile[nk]) ? state.profile[nk].filter(Boolean) : [];
+              if (!curNeed.includes(msgId)) {
+                curNeed.push(msgId);
+                state.profile[nk] = curNeed.slice(-8);
+                saveState(true);
+              }
+            } catch (_) {}
             try { requestPartnerVaultSync('manual_restore', msgId); } catch (_) {}
             const directKey = cwSafeVaultKey('cm_' + msgId);
             await Promise.allSettled([
@@ -25204,6 +25436,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               } else if (cm.videoUrl && String(cm.videoUrl).startsWith('data:video/')) {
                 const meta = { msgId: cm.id, sender: cm.sender, time: cm.time, original: cm.original || '동영상을 보냈어요 🎬', translated: cm.translated || '', tgtLang: cm.tgtLang || '', category: cm.photoCat || '✨ 일상 순간' };
                 await sendEmqxMediaPaced(room, 'chat_video', `p2p_cvid_${cm.id}`, meta, cm.videoUrl, cm.ts || Date.now());
+                await publishEmqxRetainedVideoVault(room, (cm.sender || state.myRole || 'jingchan'), cm.id, meta, cm.videoUrl);
                 await saveVaultItemToCloudState(room, deriveDeterministicVaultKey('chat_video', meta, cm.id), 'chat_video', meta, cm.videoUrl);
               }
               await new Promise(r => setTimeout(r, 90));
@@ -28223,8 +28456,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
 
       async function init() {
 
-        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v92)
-        const RUNNING_SW_VER = 'chanwan-sw-prime4-v92';
+        // 1-Tap Force Live Update & Automatic Stale-Cache Buster (Prime 4 · v94)
+        const RUNNING_SW_VER = 'chanwan-sw-prime4-v94';
         try {
           if (!localStorage.getItem('cw_clean_auto_wechat_v83')) {
             localStorage.setItem('cw_clean_auto_wechat_v83', '1');
@@ -29348,7 +29581,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
       
       /* ==================== PARTNER PHONE REMOTE HEALTH MONITOR & CHINA ROUTE DIAGNOSTICS (v88) ==================== */
       (function initPartnerHealthMonitor() {
-        const APP_VER_NOW = 'Prime 4 · v92';
+        const APP_VER_NOW = 'Prime 4 · v94';
         const getBridge = () => window.__cwSyncDiagBridge || null;
 
         function detectBrowserShort() {
@@ -29498,7 +29731,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           const verTag = isSameVer
             ? `✅ ${escapeHtml(h.ver)}`
             : `⚠️ ${escapeHtml(h.ver || '이전 버전')} (${isZh ? '可点右侧远程刷新' : '우측 하단 상대앱 갱신 가능'})`;
-          const netTag = `${h.emqxOk ? '🟢' : '🟡'} ${isZh ? '中国直连' : '중국직통'} · ${h.sbOk ? '🟢' : '🟡'} ${isZh ? '首尔主服' : '서울서버'} · ${h.audioOk ? '🟢' : '🟡'} ${isZh ? '语音引擎' : '음성엔진'}`;
+          const cloudVaultOk = !!(h.sbOk || h.emqxOk);
+          const netTag = `${h.emqxOk ? '🟢' : '🟡'} ${isZh ? '中国直连' : '중국직통'} · ${cloudVaultOk ? '🟢' : '🟡'} ${isZh ? '云端同步库' : '클라우드보관'} · ${h.audioOk ? '🟢' : '🟡'} ${isZh ? '语音引擎' : '음성엔진'}`;
           const errTag = Number(h.errCnt || 0) === 0
             ? (isZh ? '✅ 0条报错（运行顺畅）' : '✅ 오류 0건 (깨끗하게 작동 중)')
             : `⚠️ ${isZh ? `捕获 ${h.errCnt} 条记录` : `오류기록 ${h.errCnt}건`}: ${escapeHtml(h.lastErr || '')}`;
@@ -29665,7 +29899,8 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           }
 
           if (br) {
-            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs }); } catch (_) {}
+            try { br.sendSignal('remote_force_update', { targetRole: pR, cmdTs, minVer: 'Prime 4 · v94' }); } catch (_) {}
+            try { if (br.sendRetainedUpgradeSignal) br.sendRetainedUpgradeSignal(pR, cmdTs); } catch (_) {}
             try { br.sendEmergencyNtfyHeal(pR, cmdTs); } catch (_) {}
             try { br.requestVaultNow(); } catch (_) {}
             try { br.pushFull(); } catch (_) {}
@@ -29718,12 +29953,17 @@ ${target.translated || ''}`.trim() : (target.original || ''));
             const net = br ? br.getNetStats() : { emqxOk: false };
 
             const tSb = Date.now();
-            const sbP = fetchSafe(`${sbUrl}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`, { headers: hdrs }, 9500)
+            const sbP = fetchSafe(`${sbUrl}/rest/v1/couple_sync_state?room_id=eq.${encodeURIComponent(room)}&select=payload`, { headers: hdrs }, 5500)
               .then(async r => {
                 if (!r || !r.ok) return { ok: false, status: r ? r.status : 0 };
                 const txt = await r.text();
                 return { ok: true, ms: Date.now() - tSb, kb: Math.max(1, Math.round(txt.length / 1024)) };
               }).catch(() => ({ ok: false, status: 0 }));
+
+            const tNt = Date.now();
+            const ntP = fetchSafe(`https://ntfy.sh/${encodeURIComponent(room + '-sync')}/json?poll=1&since=1m`, {}, 5500)
+              .then(r => ({ ok: !!(r && r.ok), ms: Date.now() - tNt }))
+              .catch(() => ({ ok: false }));
 
             const tMm = Date.now();
             const mmP = fetchSafe('https://api.mymemory.translated.net/get?q=' + encodeURIComponent('보고 싶어') + '&langpair=ko|zh-CN', {}, 5500)
@@ -29739,18 +29979,24 @@ ${target.translated || ''}`.trim() : (target.original || ''));
               .then(r => ({ ok: !!(r && r.ok), ms: Date.now() - tNpm }))
               .catch(() => ({ ok: false }));
 
-            const [sbRes, mmRes, npmRes] = await Promise.all([sbP, mmP, npmP]);
-            const emqxStr = net.emqxOk ? '🟢 실시간 연결 정상' : '🟡 재연결 중';
-            const sbStr = sbRes.ok ? `🟢 정상 (${sbRes.ms}ms · 동기화 패킷 ${sbRes.kb}KB 경량)` : '⚠️ 응답 지연';
-            const mmStr = mmRes.ok ? `🟢 정상 (${mmRes.ms}ms · "${escapeHtml(mmRes.tr)}")` : '🟡 내장 사전 백업 대기';
-            const cdnStr = npmRes.ok ? `🟢 정상 (${npmRes.ms}ms)` : '🟡 백업 CDN 사용';
+            const [sbRes, ntRes, mmRes, npmRes] = await Promise.all([sbP, ntP, mmP, npmP]);
+            const emqxStr = net.emqxOk
+              ? (isZh ? '🟢 实时直连 + 离线云缓存正常' : '🟢 실시간 직통 + 오프라인 보관 정상')
+              : (isZh ? '🟡 重连中' : '🟡 재연결 중');
+            const sbStr = sbRes.ok
+              ? (isZh ? `🟢 首尔主库正常 (${sbRes.ms}ms · ${sbRes.kb}KB)` : `🟢 서울 DB 정상 (${sbRes.ms}ms · ${sbRes.kb}KB 경량)`)
+              : ((net.emqxOk || ntRes.ok)
+                  ? (isZh ? `🟢 直连云缓存 + ntfy双备份正常 (${ntRes.ok ? ntRes.ms + 'ms' : '自动守护'})` : `🟢 직통 보관소 + ntfy 백업 정상 (${ntRes.ok ? ntRes.ms + 'ms' : '자동 가동'} · 별도 DB 불필요)`)
+                  : (isZh ? '⚠️ 响应延迟' : '⚠️ 응답 지연'));
+            const mmStr = mmRes.ok ? `🟢 ${isZh ? '正常' : '정상'} (${mmRes.ms}ms · "${escapeHtml(mmRes.tr)}")` : (isZh ? '🟡 内置词典待命' : '🟡 내장 사전 백업 대기');
+            const cdnStr = npmRes.ok ? `🟢 ${isZh ? '正常' : '정상'} (${npmRes.ms}ms)` : (isZh ? '🟡 备用源' : '🟡 백업 CDN 사용');
 
             out.innerHTML = `
               <div class="font-bold mb-1" style="color: var(--accent-royal);">${isZh ? '🌏 中国（青岛）环境实测结果' : '🌏 중국(칭다오) 징찬이 경로 실측 결과'}</div>
-              <div>• EMQX 중국 직통 웹소켓: <b>${emqxStr}</b></div>
-              <div>• 서울 DB 동기화 속도·용량: <b>${sbStr}</b></div>
-              <div>• 중국 무VPN 번역 서버: <b>${mmStr}</b></div>
-              <div>• 알리바바(npmmirror) 중국 CDN: <b>${cdnStr}</b></div>
+              <div>• ${isZh ? 'EMQX 中国直连通道' : 'EMQX 중국 직통 웹소켓'}: <b>${emqxStr}</b></div>
+              <div>• ${isZh ? '云端消息与离线存储' : '클라우드 메시지·오프라인 보관'}: <b>${sbStr}</b></div>
+              <div>• ${isZh ? '中国免翻墙翻译引擎' : '중국 무VPN 번역 서버'}: <b>${mmStr}</b></div>
+              <div>• ${isZh ? '阿里云(npmmirror)加速' : '알리바바(npmmirror) 중국 CDN'}: <b>${cdnStr}</b></div>
             `;
             // Also push slimmed <35KB snapshot right now so any old bloated snapshot in Supabase is cleaned immediately!
             if (br) { try { br.pushFull(); } catch (_) {} }
@@ -30409,7 +30655,7 @@ ${target.translated || ''}`.trim() : (target.original || ''));
           copyBtn.addEventListener('click', async () => {
             const isZh = state && state.lang === 'zh';
             const logs = loadErrLogs();
-            const header = `[灿完时光 Prime 4 · v92 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
+            const header = `[灿完时光 Prime 4 · v94 오류 메모] role=${state.myRole || 'suwan'} | lang=${state.lang} | theme=${state.theme} | msgs=${(state.chat?.messages || []).length} | errors=${logs.length}`;
             const body = logs.length
               ? logs.map((l, i) => `${i + 1}. (${l.time}) [${l.tab}/${l.source}] ${l.msg} ${l.detail || ''} (x${l.count || 1})`).join('\n')
               : 'No errors logged.';
